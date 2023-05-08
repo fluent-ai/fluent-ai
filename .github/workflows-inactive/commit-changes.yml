@@ -1,0 +1,39 @@
+# Remember to give github actions permission to write to the repo 
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#setting-the-permissions-of-the-github_token-for-your-repository
+name: Manage TODOs
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  manage_todos:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: Run script
+        run: node -e "console.log(`🚨 This script commits changes back to the repo! 🚨`)"
+
+      - name: Set up Git credentials
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git remote set-url origin https://${GITHUB_TOKEN}@github.com/${{ github.repository }}
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git diff --quiet && git diff --staged --quiet || git commit -m "bot: add a better message here"
+          git push
