@@ -1,12 +1,12 @@
 import styles from './AuthDetails.module.css';
 import React, {useEffect, useState} from 'react'
-import  {auth } from '../../../firebase-init';
-import { onAuthStateChanged,signOut } from 'firebase/auth';
+import { onAuthStateChanged,signOut,getAuth } from 'firebase/auth';
 
 /* eslint-disable-next-line */
 export interface AuthDetailsProps {}
 
 export function AuthDetails(props: AuthDetailsProps) {
+  const auth = getAuth();
   interface userData {
   email: string |null;
 }
