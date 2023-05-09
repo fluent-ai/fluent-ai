@@ -1,0 +1,55 @@
+
+.dndnode {
+  height: 20px;
+  padding: 4px;
+  /* border: 1px solid #1a192b;
+  border-radius: 2px; */
+  margin-bottom: 10px;
+  align-items: center;
+  cursor: grab;
+}
+
+.dndnode.input {
+  border-color: #0041d0;
+}
+
+.dndnode.output {
+  border-color: #ff0072;
+}
+
+.reactflowWrapper {
+  flex-grow: 1;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  z-index: 0;
+}
+
+
+.selectall {
+  margin-top: 10px;
+}
+
+.sidebar-icon svg{
+  width: 30px;
+  height: 30px
+}
+
+@media screen and (min-width: 768px) {
+  aside {
+    /* width: 20%;
+    max-width: 250px; */
+  }
+}
+
+
+.TabsList {
+  position: relative;
+  justify-self: flex-end;
+}
+
+
+.TabsTrigger[data-state='active'] {
+  color: var(--violet11);
+  box-shadow: inset 0 -1px 0 0 currentColor, 0 1px 0 0 currentColor;
+}

@@ -18,6 +18,7 @@
         "assets": ["apps/toolai/src/favicon.ico", "apps/toolai/src/assets"],
         "styles": ["apps/toolai/src/styles.css"],
         "scripts": [],
+        "postcssConfig": "apps/toolai/postcss.config.js",
         "isolatedConfig": true,
         "webpackConfig": "apps/toolai/webpack.config.js"
       },
@@ -49,7 +50,8 @@
       "defaultConfiguration": "development",
       "options": {
         "buildTarget": "toolai:build",
-        "hmr": true
+        "hmr": true,
+        "postcssConfig": "apps/toolai/postcss.config.js"
       },
       "configurations": {
         "development": {
