@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@libs/auth": ["libs/auth/src/index.ts"]
+      "@libs/auth": ["libs/auth/src/index.ts"],
+      "@tool-ai/firebase-init": ["libs/firebase-init/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
