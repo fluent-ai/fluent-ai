@@ -130,12 +130,13 @@ const DnDFlow = () => {
 
   return (
     <>
-      <div>
-        {/* <NxWelcome title="toolai" /> */}
+      <div style={{ marginLeft: 500 }}>
+        {/* Purely Practical Approach - need to refactor for Logout and create a separate View for Logging/Signing In */}
         <SignIn />
         <SignUp />
         <AuthDetails />
       </div>
+
       <Header />
       <div className="dndflow">
         <ReactFlowProvider>
