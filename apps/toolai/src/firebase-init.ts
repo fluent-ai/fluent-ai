@@ -1,7 +1,5 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-//import * as dotenv from 'dotenv';
-//dotenv.config();
 
 const config = {
   firebase: {
@@ -15,7 +13,6 @@ const config = {
     measurementId: process.env.NX_FIREBASE_MEASUREMENT_ID,
   },
 };
-console.log(config.firebase);
 
 // Initialize Firebase
 const app = initializeApp(config.firebase);
