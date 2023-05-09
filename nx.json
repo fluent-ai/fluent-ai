@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "npmScope": "app",
+  "npmScope": "tool-ai",
   "tasksRunnerOptions": {
     "default": {
       "runner": "nx-cloud",
@@ -11,7 +11,7 @@
           "test",
           "e2e"
         ],
-        "accessToken": "MzgzMThjMDMtODgzNC00NjE3LWI1NTEtOTk2NzJmNGI5YjJmfHJlYWQtd3JpdGU="
+        "accessToken": "NzZkYjA4NjMtZmRlNi00OGI4LWE3ZGYtYzIxNDdiOGQzZmNmfHJlYWQtd3JpdGU="
       }
     }
   },
@@ -31,17 +31,18 @@
         "^production"
       ]
     },
-    "test": {
-      "inputs": [
-        "default",
-        "^production"
-      ]
-    },
     "lint": {
       "inputs": [
         "default",
         "{workspaceRoot}/.eslintrc.json",
         "{workspaceRoot}/.eslintignore"
+      ]
+    },
+    "test": {
+      "inputs": [
+        "default",
+        "^production",
+        "{workspaceRoot}/jest.preset.js"
       ]
     }
   },
@@ -52,18 +53,21 @@
     ],
     "production": [
       "default",
+      "!{projectRoot}/.eslintrc.json",
       "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
       "!{projectRoot}/tsconfig.spec.json",
-      "!{projectRoot}/.eslintrc.json"
+      "!{projectRoot}/jest.config.[jt]s"
     ],
-    "sharedGlobals": []
+    "sharedGlobals": [
+      "{workspaceRoot}/babel.config.json"
+    ]
   },
   "generators": {
     "@nx/react": {
       "application": {
         "style": "css",
         "linter": "eslint",
-        "bundler": "vite",
+        "bundler": "webpack",
         "babel": true
       },
       "component": {
