@@ -1,10 +1,11 @@
 import styles from './SignIn.module.css';
 import React, {useState} from 'react';
-import { auth } from '@libs/auth';
-import {signInWithEmailAndPassowrd} from '@libs/firebase';
+// import  {auth } from '../../../firebase-init';
+import {signInWithEmailAndPassword,getAuth} from 'firebase/auth';
 
 /* eslint-disable-next-line */
 export interface SignInProps {}
+const auth = getAuth();
 
 export function SignIn(props: SignInProps) {
   const [email, setEmail] = useState('');

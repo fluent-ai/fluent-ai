@@ -1,12 +1,14 @@
 import styles from './SignIn.module.css';
 import React, {useState} from 'react';
-import { auth } from '@libs/auth';
-import {createUserWithEmailAndPassowrd} from '@libs/firebase';
+// import  {auth } from '../../../firebase-init';
+import {createUserWithEmailAndPassword,getAuth} from 'firebase/auth';
+
 
 /* eslint-disable-next-line */
-export interface SignUPProps {}
+export interface SignUpProps {}
+const auth = getAuth();
 
-export function SignUp(props: SignInProps) {
+export function SignUp(props: SignUpProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const signUp = (e:React.FormEvent<HTMLFormElement>) => {
