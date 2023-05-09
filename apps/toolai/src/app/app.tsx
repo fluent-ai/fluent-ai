@@ -1,8 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import styles from './app.module.css';
-import { SignIn } from '@libs/auth';
-import { SignUp } from '@libs/auth';
-import { AuthDetails } from '@libs/auth';
+import { SignIn, SignUp, AuthDetails } from '@libs/auth';
 import React, { useState, useRef, useCallback } from 'react';
 import ReactFlow, {
   ReactFlowProvider,
