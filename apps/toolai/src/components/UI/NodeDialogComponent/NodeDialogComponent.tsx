@@ -1,9 +1,8 @@
 import styles from './NodeDialogComponent.module.css';
-
 import React, {useState} from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { Cross2Icon } from '@radix-ui/react-icons';
-import './NodeDialogComponent.module.css';
+
 
 interface NodeDialogProps {
   isOpen: boolean;
@@ -14,8 +13,9 @@ const NodeDialogComponent = (props: NodeDialogProps) => {
   return (
     <>
       {props.isOpen &&
-      <div className='DialogContent border-2 border-inherit rounded-md'>
+      <div className={`${styles.DialogContent} border-2 border-inherit rounded-md`}>
       <button onClick={() => props.onClose(false)}>X</button>
+      <div>This is going to hold dynamic children depending on the node we click on</div>
       </div>
     }
     </>
