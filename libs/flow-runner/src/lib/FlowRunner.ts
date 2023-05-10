@@ -11,13 +11,28 @@ import { json as methodJson } from './nodeMethods/json.js'
 import { userFunction as methodUserFunction } from './nodeMethods/userFunction.js'
 
 export class FlowRunner {
-  private nodes: IExecutionNode[]
-  private edges: Edge[]
+  private _nodes: IExecutionNode[]
+  private _edges: Edge[]
+
 
   constructor() {
-    this.nodes = []
-    this.edges = []
+    this._nodes = []
+    this._edges = []
   }
+
+  public get nodes(): IExecutionNode[] {
+    return this._nodes
+  }
+  private set nodes(value: IExecutionNode[]) {
+    this._nodes = value
+  }
+  public get edges(): Edge[] {
+    return this._edges
+  }
+  private set edges(value: Edge[]) {
+    this._edges = value
+  }
+  
 
   /**
    * Syncs the FlowRunner state with the provided nodes and edges.
@@ -26,6 +41,7 @@ export class FlowRunner {
     this.edges = edges
 
     // initialize the nodes with callbacks and load the process method
+    this.nodes = []
     nodes.forEach(node => {
       this.nodes.push({
         ...node,
@@ -54,7 +70,7 @@ export class FlowRunner {
   /**
    * Execute a node.
    */
-  private async executeNode(node: IExecutionNode, msg: Record<string, unknown>) {
+  public async executeNode(node: IExecutionNode, msg: Record<string, unknown>) {
     console.log(`🏃 Running ${node.type} node with id ${node.id}`)
     node.method(msg, node.data).then(msg => {
       node.callbacks.forEach(callback => callback(msg))
@@ -81,11 +97,11 @@ export class FlowRunner {
     })
   }
 
-  private findNode(id: string): IExecutionNode | undefined {
+  public findNode(id: string): IExecutionNode | undefined {
     return this.nodes.find(node => node.id === id)
   }
 
-  private isRootNode(node: IExecutionNode): boolean {
+  public isRootNode(node: IExecutionNode): boolean {
     return !this.edges.find(edge => edge.target === node.id)
   }
 
