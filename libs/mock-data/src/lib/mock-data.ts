@@ -1,7 +1,6 @@
 import * as types from '@libs/custom-types';
 
 export const client: types.Client = {
-  id: 'testId',
   email: 'test@test.com',
   name: 'Jeff Bezos',
   initials: 'JB',
@@ -15,7 +14,7 @@ export const client: types.Client = {
 };
 
 export const mockNodes: types.FlowNode = {
-  id: 'testId',
+  id: '1',
   type: types.NodeType.Custom,
   stringifiedData: 'dataPlaceHolder',
   position: {

@@ -1,9 +1,9 @@
 import { getFirestore } from 'firebase/firestore';
-import { addDoc, collection, deleteDoc, doc } from 'firebase/firestore';
+import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
 import { getIDsFromDB } from './firestore-get';
 
-// retrieve all data
 export async function writeToDB(collectionName: string, document: any) {
+  // check if exists
   try {
     const db = getFirestore();
     const docRef = await addDoc(collection(db, collectionName), document);

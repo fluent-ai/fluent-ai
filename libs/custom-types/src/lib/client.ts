@@ -1,5 +1,4 @@
 export interface Client {
-  id: string;
   email: string;
   name: string;
   initials: string;
@@ -10,4 +9,5 @@ export interface Client {
       owner: boolean;
     }
   ];
+  profileImg?: string;
 }

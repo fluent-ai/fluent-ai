@@ -5,18 +5,19 @@ import { Client } from '@libs/custom-types';
 import * as mockData from '@libs/mock-data';
 
 describe('Testing Firestore Functionality', () => {
+  const testCollectionClients = 'testClients';
   it('should write a document to a collection in firestore', async () => {
     expect(
-      await firestoreService.writeToDB('testClients', mockData.client)
+      await firestoreService.writeToDB(testCollectionClients, mockData.client)
     ).toEqual(true);
     expect(
-      await firestoreService.writeToDB('testClients', 'not an object')
+      await firestoreService.writeToDB(testCollectionClients, 'not an object')
     ).toEqual(false);
   });
 
   it('should read IDs from firestore', async () => {
     expect(
-      (await firestoreService.getIDsFromDB('testClients')).length
+      (await firestoreService.getIDsFromDB(testCollectionClients)).length
     ).toBeGreaterThan(0);
     expect(
       (await firestoreService.getIDsFromDB('not-an-existing-collection')).length
@@ -24,16 +25,21 @@ describe('Testing Firestore Functionality', () => {
   });
 
   it('should read a whole collection from firestore', async () => {
-    const collectionData: Client[] = await firestoreService.getAllFromDB(
-      'testClients'
-    );
+    const collectionData: Client[] = (await firestoreService.getAllFromDB(
+      testCollectionClients
+    )) as Client[];
     expect(collectionData.length).toBeGreaterThan(0);
     expect(collectionData[0]).toEqual(mockData.client);
   });
 
-  // it('should retrieve selected documents from a firestore collection', async () => {
-  //   const collectionData = await firestoreService.getAllFromDB('messages');
-  //   expect(collectionData.length).toBeGreaterThan(0);
-  //   expect(collectionData[0].original).toEqual('localTesting');
-  // });
+  it('should retrieve selected documents from a firestore collection', async () => {
+    const collectionData: Client[] = (await firestoreService.getSomeFromDB(
+      testCollectionClients,
+      'name',
+      '==',
+      mockData.client.name
+    )) as Client[];
+    expect(collectionData.length).toBeGreaterThan(0);
+    expect(collectionData[0]).toEqual(mockData.client);
+  });
 });
