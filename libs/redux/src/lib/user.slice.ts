@@ -14,7 +14,6 @@ export const USER_FEATURE_KEY = 'user';
  */
 export interface UserEntity {
   id: number;
-  email: string;
 }
 
 export interface UserState extends EntityState<UserEntity> {
