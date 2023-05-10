@@ -34,8 +34,8 @@ export const nodes = [
   },
   {
     id: '4',
-    type: 'textToUpperCase',
-    data: { label: 'To Uppercase' },
+    type: 'preview',
+    data: { label: 'Preview' },
     position: { x: 300, y: 50 },
   },
   {

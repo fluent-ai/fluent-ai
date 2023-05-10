@@ -5,10 +5,10 @@ import { Node, Edge } from 'reactflow'
 
 import { input as methodInput } from './nodeMethods/input.js'
 import { output as methodOutput } from './nodeMethods/output.js'
-import { textToUpperCase as methodTextToUpperCase } from './nodeMethods/textToUpperCase.js'
 import { template as methodTemplate } from './nodeMethods/template.js'
 import { json as methodJson } from './nodeMethods/json.js'
 import { userFunction as methodUserFunction } from './nodeMethods/userFunction.js'
+import { preview as methodPreview } from './nodeMethods/preview.js'
 
 export class FlowRunner {
   private _nodes: IExecutionNode[]
@@ -62,7 +62,7 @@ export class FlowRunner {
 
     // Start the execution by triggering executeNode on each root
     rootNodes.forEach(rootNode => {
-      console.log(`🌳 Triggering root node ${rootNode.id}`)
+      // console.log(`🌳 Triggering root node ${rootNode.id}`)
       this.executeNode(rootNode, {})
     })
   }
@@ -71,7 +71,7 @@ export class FlowRunner {
    * Execute a node.
    */
   public async executeNode(node: IExecutionNode, msg: Record<string, unknown>) {
-    console.log(`🏃 Running ${node.type} node with id ${node.id}`)
+    // console.log(`🏃 Running ${node.type} node with id ${node.id}`)
     node.method(msg, node.data).then(msg => {
       node.callbacks.forEach(callback => callback(msg))
     })
@@ -86,9 +86,9 @@ export class FlowRunner {
       const targetNode = this.findNode(edge.target)
 
       if (sourceNode && targetNode) {
-        console.log(`🔗 Registering callback for node ${targetNode.id} with node ${sourceNode.id}`)
+        // console.log(`🔗 Registering callback for node ${targetNode.id} with node ${sourceNode.id}`)
         sourceNode.callbacks.push((msg: Record<string, unknown>) => {
-          console.log(`✨ Triggering node ${targetNode.id}`)
+          // console.log(`✨ Triggering node ${targetNode.id}`)
           this.executeNode(targetNode, msg)
         })
       } else {
@@ -111,14 +111,14 @@ export class FlowRunner {
       return methodInput
     case 'output':
       return methodOutput
-    case 'textToUpperCase':
-      return methodTextToUpperCase
     case 'template':
       return methodTemplate
     case 'json':
       return methodJson
     case 'userFunction':
       return methodUserFunction
+    case 'preview':
+      return methodPreview
     default:
       throw new Error(`Node type ${type} not found`)
     }
