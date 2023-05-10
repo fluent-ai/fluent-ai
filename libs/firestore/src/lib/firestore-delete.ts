@@ -1,6 +1,10 @@
-import { getFirestore, WhereFilterOp } from 'firebase/firestore';
-import { deleteDoc, doc } from 'firebase/firestore';
-import { getIDsFromDB, getSomeFromDB } from './firestore-get';
+import {
+  getFirestore,
+  WhereFilterOp,
+  deleteDoc,
+  doc,
+} from 'firebase/firestore';
+import { getIDsFromDB, getSomeIDsFromDB } from './firestore-get';
 
 export async function deleteDocuments(
   collectionName: string,
@@ -9,15 +13,21 @@ export async function deleteDocuments(
   criteria: string
 ) {
   try {
-    await getSomeFromDB(collectionName, field, equalitySymbol, criteria).then(
-      (entries) => {
-        const db = getFirestore();
-        entries.forEach(async (data) => {
-          await deleteDoc(doc(db, collectionName, data['id']));
-        });
-      }
+    const IDs = await getSomeIDsFromDB(
+      collectionName,
+      field,
+      equalitySymbol,
+      criteria
     );
-    console.log('successfully deleted collection: ', collectionName);
+    if (IDs.length === 0) {
+      console.error(`document doens't exist and cannot be deleted`);
+      return false;
+    }
+    const db = getFirestore();
+    IDs.forEach(async (id) => {
+      await deleteDoc(doc(db, collectionName, id));
+    });
+    console.log('successfully deleted documents with IDs: ', IDs);
 
     return true;
   } catch (err) {

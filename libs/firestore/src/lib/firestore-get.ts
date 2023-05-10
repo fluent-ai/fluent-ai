@@ -1,11 +1,39 @@
-import { getFirestore, WhereFilterOp, DocumentData } from 'firebase/firestore';
-import { getDocs, collection, query, where } from 'firebase/firestore';
+import {
+  getFirestore,
+  WhereFilterOp,
+  DocumentData,
+  getDocs,
+  collection,
+  query,
+  where,
+} from 'firebase/firestore';
 
 // retrieve IDs
 export async function getIDsFromDB(collectionName: string): Promise<string[]> {
   const db = getFirestore();
   const IDs: string[] = [];
   const querySnapshot = await getDocs(collection(db, collectionName));
+  querySnapshot.forEach((doc) => {
+    IDs.push(doc.id);
+  });
+  return IDs;
+}
+
+// retrieve IDs
+export async function getSomeIDsFromDB(
+  collectionName: string,
+  field: string,
+  equalitySymbol: WhereFilterOp,
+  criteria: string | boolean
+): Promise<string[]> {
+  const db = getFirestore();
+  const IDs: string[] = [];
+  const q = query(
+    collection(db, collectionName),
+    where(field, equalitySymbol, criteria)
+  );
+  const querySnapshot = await getDocs(q);
+
   querySnapshot.forEach((doc) => {
     IDs.push(doc.id);
   });

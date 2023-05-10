@@ -42,4 +42,40 @@ describe('Testing Firestore Functionality', () => {
     expect(collectionData.length).toBeGreaterThan(0);
     expect(collectionData[0]).toEqual(mockData.client);
   });
+
+  it('should update a document in a collection in firestore', async () => {
+    expect(
+      await firestoreService.updateFirestoreDocument(
+        testCollectionClients,
+        mockData.client,
+        { email: 'jeffbezos@example.com' }
+      )
+    ).toEqual(true);
+
+    expect(
+      await firestoreService.updateFirestoreDocument(
+        testCollectionClients,
+        mockData.client,
+        'not an object'
+      )
+    ).toEqual(false);
+  });
+
+  it('should delete documents in a collection', async () => {
+    expect(
+      await firestoreService.deleteDocuments(
+        testCollectionClients,
+        'email',
+        '==',
+        'jeffbezos@example.com'
+      )
+    ).toEqual(true);
+  });
+
+  it('should delete a collection', async () => {
+    await firestoreService.writeToDB(testCollectionClients, mockData.client);
+    expect(
+      await firestoreService.deleteCollection(testCollectionClients)
+    ).toEqual(true);
+  });
 });
