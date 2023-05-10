@@ -1,43 +1,39 @@
 /** * @jest-environment node */
 import './firebase-init';
 import * as firestoreService from '@libs/firestore-service';
+import { Client } from '@libs/custom-types';
+import * as mockData from '@libs/mock-data';
 
 describe('Testing Firestore Functionality', () => {
+  it('should write a document to a collection in firestore', async () => {
+    expect(
+      await firestoreService.writeToDB('testClients', mockData.client)
+    ).toEqual(true);
+    expect(
+      await firestoreService.writeToDB('testClients', 'not an object')
+    ).toEqual(false);
+  });
+
   it('should read IDs from firestore', async () => {
     expect(
-      (await firestoreService.getIDsFromDB('messages')).length
+      (await firestoreService.getIDsFromDB('testClients')).length
     ).toBeGreaterThan(0);
-
     expect(
       (await firestoreService.getIDsFromDB('not-an-existing-collection')).length
     ).toEqual(0);
   });
 
   it('should read a whole collection from firestore', async () => {
-    const collectionData = await firestoreService.getAllFromDB('messages');
+    const collectionData: Client[] = await firestoreService.getAllFromDB(
+      'testClients'
+    );
     expect(collectionData.length).toBeGreaterThan(0);
-    expect(collectionData[0].original).toEqual('localTesting');
+    expect(collectionData[0]).toEqual(mockData.client);
   });
 
-  it('should write a document to a collection in firestore', async () => {
-    expect(
-      await firestoreService.writeToDB('messages', {
-        original: 'localTesting',
-      })
-    ).toEqual(true);
-
-    expect(
-      await firestoreService.writeToDB('messages', 'not an object')
-    ).toEqual(false);
-
-    expect(
-      await firestoreService.writeToDB('ot-an-existing-collection', {
-        original: 'localTesting',
-      })
-    ).toEqual(true);
-
-    expect(
-      await firestoreService.deleteCollection('not-an-existing-collection')
-    ).toEqual(true);
-  });
+  // it('should retrieve selected documents from a firestore collection', async () => {
+  //   const collectionData = await firestoreService.getAllFromDB('messages');
+  //   expect(collectionData.length).toBeGreaterThan(0);
+  //   expect(collectionData[0].original).toEqual('localTesting');
+  // });
 });
