@@ -8,6 +8,7 @@ tmp
 # dependencies
 node_modules
 .env
+*.lock
 
 # IDEs and editors
 /.idea
