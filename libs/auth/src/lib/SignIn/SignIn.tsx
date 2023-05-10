@@ -1,7 +1,7 @@
 import styles from './SignIn.module.css';
 import React, {useState} from 'react';
 // import  {auth } from '../../../firebase-init';
-import {signInWithEmailAndPassword,getAuth} from 'firebase/auth';
+import {signInWithEmailAndPassword, getAuth} from 'firebase/auth';
 
 /* eslint-disable-next-line */
 export interface SignInProps {}
