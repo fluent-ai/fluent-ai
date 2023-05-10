@@ -18,7 +18,9 @@
     "baseUrl": ".",
     "paths": {
       "@libs/auth": ["libs/auth/src/index.ts"],
-      "@tool-ai/ui": ["libs/ui/src/index.ts"]
+      "@tool-ai/ui": ["libs/ui/src/index.ts"],
+      "@libs/firestore-service": ["libs/firestore/src/index.ts"],
+      "@tool-ai/flow-runner": ["libs/flow-runner/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
