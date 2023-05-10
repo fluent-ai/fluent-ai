@@ -59,6 +59,15 @@ export const nodes = [
     data: { label: 'Output' },
     position: { x: 650, y: 25 },
   },
+  {
+    id: '8',
+    type: 'template',
+    data: {
+      label: 'Template',
+      template: `Im a redundant template!`,
+    },
+    position: { x: 300, y: 50 },
+  },
 ];
 
 export const edges = [

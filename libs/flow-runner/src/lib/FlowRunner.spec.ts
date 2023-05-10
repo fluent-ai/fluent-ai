@@ -18,13 +18,13 @@ describe('FlowRunner', () => {
   });
 
   it('should have nodes & edges after syncing', () => {
-    expect(flowRunner.nodes.length).toBe(7)
+    expect(flowRunner.nodes.length).toBe(8)
     expect(flowRunner.edges.length).toBe(7)
   })
 
   it('should overwrite existing data on sync', () => {
     flowRunner.sync({ nodes, edges })
-    expect(flowRunner.nodes.length).toBe(7)
+    expect(flowRunner.nodes.length).toBe(8)
     expect(flowRunner.edges.length).toBe(7)
   })
 
@@ -62,14 +62,30 @@ describe('FlowRunner', () => {
   })
 
   it('should be able to execute a node', async () => {
-    const node1 = flowRunner.findNode('1')!
+    const node7 = flowRunner.findNode('7')!
+  
 
     const mockMethod = jest.fn().mockResolvedValue({})
 
-    node1.method = mockMethod
+    node7.method = mockMethod
 
-    await flowRunner.executeNode(node1, {})
+    await flowRunner.executeNode(node7, {})
 
     expect(mockMethod).toHaveBeenCalledTimes(1)
   })
+
+  it('should trigger root nodes on execution', async () => {
+    const rootNode1 = flowRunner.findNode('1')!
+    const rootNode2 = flowRunner.findNode('8')!
+  
+    const mockExecuteNode = jest.spyOn(flowRunner, 'executeNode')
+  
+    await flowRunner.executeFlow()
+  
+    expect(mockExecuteNode).toHaveBeenCalledTimes(2)
+    expect(mockExecuteNode).toHaveBeenCalledWith(rootNode1, {})
+    expect(mockExecuteNode).toHaveBeenCalledWith(rootNode2, {})
+  })
+  
+
 });
