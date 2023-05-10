@@ -16,6 +16,7 @@
     "firebase": "9.21.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-router-dom": "^6.11.1",
     "reactflow": "^11.7.0",
     "tailwind": "^4.0.0",
     "tslib": "^2.3.0"

@@ -2671,6 +2671,11 @@
     "classcat" "^5.0.3"
     "zustand" "^4.3.1"
 
+"@remix-run/router@1.6.1":
+  "integrity" "sha512-YUkWj+xs0oOzBe74OgErsuR3wVn+efrFhXBWrit50kOiED+pvQe2r6MWY0iJMQU/mSVKxvNzL4ZaYvjdX+G7ZA=="
+  "resolved" "https://registry.npmjs.org/@remix-run/router/-/router-1.6.1.tgz"
+  "version" "1.6.1"
+
 "@sinclair/typebox@^0.25.16":
   "integrity" "sha512-XJfwUVUKDHF5ugKwIcxEgc9k8b7HbznCp6eUfWgu710hMPNIO4aw4/zB5RogDQz8nd6gyCDpU9O/m6qYEWY6yQ=="
   "resolved" "https://registry.npmjs.org/@sinclair/typebox/-/typebox-0.25.24.tgz"
@@ -3322,10 +3327,10 @@
   "resolved" "https://registry.npmjs.org/@types/mime/-/mime-1.3.2.tgz"
   "version" "1.3.2"
 
-"@types/node@*", "@types/node@>=12.12.47", "@types/node@>=13.7.0", "@types/node@18.14.2":
-  "integrity" "sha512-1uEQxww3DaghA0RxqHx0O0ppVlo43pJhepY51OxuQIKHpjbnYLA7vcdwioNPzIqmC2u3I/dmylcqjlh0e7AyUA=="
-  "resolved" "https://registry.npmjs.org/@types/node/-/node-18.14.2.tgz"
-  "version" "18.14.2"
+"@types/node@*", "@types/node@^20.1.1", "@types/node@>=12.12.47", "@types/node@>=13.7.0":
+  "integrity" "sha512-uKBEevTNb+l6/aCQaKVnUModfEMjAl98lw2Si9P5y4hLu9tm6AlX2ZIoXZX6Wh9lJueYPrGPKk5WMCNHg/u6/A=="
+  "resolved" "https://registry.npmjs.org/@types/node/-/node-20.1.1.tgz"
+  "version" "20.1.1"
 
 "@types/node@^14.14.31":
   "integrity" "sha512-n4yVT5FuY5NCcGHCosQSGvvCT74HhowymPN2OEcsHPw6U1NuxV9dvxWbrM2dnBukWjdMYzig1WfIkWdTTQJqng=="
@@ -5575,6 +5580,11 @@
     "dom-serializer" "^1.0.1"
     "domelementtype" "^2.2.0"
     "domhandler" "^4.2.0"
+
+"dotenv@^16.0.3":
+  "integrity" "sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ=="
+  "resolved" "https://registry.npmjs.org/dotenv/-/dotenv-16.0.3.tgz"
+  "version" "16.0.3"
 
 "dotenv@~10.0.0":
   "integrity" "sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q=="
@@ -9821,7 +9831,7 @@
     "iconv-lite" "0.4.24"
     "unpipe" "1.0.0"
 
-"react-dom@^16.8 || ^17.0 || ^18.0", "react-dom@^18.0.0", "react-dom@>=16.8.0", "react-dom@>=17", "react-dom@18.2.0":
+"react-dom@^16.8 || ^17.0 || ^18.0", "react-dom@^18.0.0", "react-dom@>=16.8", "react-dom@>=16.8.0", "react-dom@>=17", "react-dom@18.2.0":
   "integrity" "sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g=="
   "resolved" "https://registry.npmjs.org/react-dom/-/react-dom-18.2.0.tgz"
   "version" "18.2.0"
@@ -9867,6 +9877,21 @@
     "tslib" "^2.1.0"
     "use-callback-ref" "^1.3.0"
     "use-sidecar" "^1.1.2"
+
+"react-router-dom@^6.11.1":
+  "integrity" "sha512-dPC2MhoPeTQ1YUOt5uIK376SMNWbwUxYRWk2ZmTT4fZfwlOvabF8uduRKKJIyfkCZvMgiF0GSCQckmkGGijIrg=="
+  "resolved" "https://registry.npmjs.org/react-router-dom/-/react-router-dom-6.11.1.tgz"
+  "version" "6.11.1"
+  dependencies:
+    "@remix-run/router" "1.6.1"
+    "react-router" "6.11.1"
+
+"react-router@6.11.1":
+  "integrity" "sha512-OZINSdjJ2WgvAi7hgNLazrEV8SGn6xrKA+MkJe9wVDMZ3zQ6fdJocUjpCUCI0cNrelWjcvon0S/QK/j0NzL3KA=="
+  "resolved" "https://registry.npmjs.org/react-router/-/react-router-6.11.1.tgz"
+  "version" "6.11.1"
+  dependencies:
+    "@remix-run/router" "1.6.1"
 
 "react-shallow-renderer@^16.15.0":
   "integrity" "sha512-oScf2FqQ9LFVQgA73vr86xl2NaOIX73rh+YFqcOp68CWj56tSfgtGKrEbyhCj0rSijyG9M1CYprTh39fBi5hzA=="

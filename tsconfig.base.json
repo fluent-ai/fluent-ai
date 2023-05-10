@@ -17,7 +17,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@libs/auth": ["libs/auth/src/index.ts"]
+      "@libs/auth": ["libs/auth/src/index.ts"],
+      "@tool-ai/ui": ["libs/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
