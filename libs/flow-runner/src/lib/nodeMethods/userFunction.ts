@@ -14,9 +14,10 @@ async function runUserScript(
     'alert',
     'document',
   ];
+
   for (const word of disallowedWords) {
     if (userScript.includes(word)) {
-      return `"${word}" is not allowed in user scripts`;
+      return { error: `"${word}" is not allowed in user scripts` };
     }
   }
 
@@ -32,7 +33,7 @@ async function runUserScript(
   try {
     result = await scriptFunction(context.msg, context.data);
   } catch (error) {
-    console.log('💥 Error running userFunction', error);
+    return { error: 'Error in user script\n' + error };
   }
   return result;
 }
@@ -46,19 +47,13 @@ export async function userFunction(
   msg: Record<string, unknown>,
   data: UserFunctionData
 ): Promise<Record<string, unknown>> {
-  console.log('🧮 Running userFunction node');
   return new Promise((resolve, reject) => {
-    if (!data.userFunction || typeof data.userFunction !== 'string') {
-      reject(new Error('data.userFunction is not a string'));
-    }
-    try {
-      runUserScript(data.userFunction as string, { msg, data }).then(
-        (result) => {
-          resolve({ ...msg, ...result });
-        }
-      );
-    } catch (error) {
-      reject(error);
+    if (typeof data.userFunction === 'string') {
+      runUserScript(data.userFunction, { msg, data }).then((result) => {
+        resolve({ ...msg, ...result });
+      });
+    } else {
+      reject('data.userFunction is not a string');
     }
   });
 }
