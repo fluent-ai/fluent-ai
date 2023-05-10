@@ -1,1 +1,2 @@
-export * from './lib/firestore';
+export * from './lib/firestore-get';
+export * from './lib/firestore-write';
