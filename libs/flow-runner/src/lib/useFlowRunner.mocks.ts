@@ -5,12 +5,12 @@ export const nodes = [
     data: {
       label: 'Text input',
       input: `{
-        "name" : "Mr Wiggles",
-        "color" : "pink",
-        "number" : 3,
-        "balloons" : true
-      }
-      `,
+          "name" : "Mr Wiggles",
+          "color" : "pink",
+          "number" : 3,
+          "balloons" : true
+        }
+        `,
     },
     position: { x: 0, y: 50 },
   },
@@ -28,7 +28,7 @@ export const nodes = [
     data: {
       label: 'Template',
       template: `Hello {{msg.payload.name}}!
-      Here! have {{msg.payload.number}} {{msg.payload.color}} balloons.`,
+        Here! have {{msg.payload.number}} {{msg.payload.color}} balloons.`,
     },
     position: { x: 300, y: 50 },
   },

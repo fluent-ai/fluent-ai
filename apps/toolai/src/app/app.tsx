@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import styles from './app.module.css';
 import { SignIn, SignUp, AuthDetails } from '@libs/auth';
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import ReactFlow, {
   ReactFlowProvider,
   addEdge,
@@ -18,6 +18,7 @@ import TemplateNode from '../components/Nodes/TemplateNode/TemplateNode';
 
 import './app.module.css';
 import Header from '../components/Navigation/Header/Header';
+import { useFlowRunner } from '@tool-ai/flow-runner';
 
 const nodeTypes = {
   templateNode: TemplateNode,
@@ -27,7 +28,7 @@ const initialNodes = [
   {
     id: '1',
     type: 'input',
-    data: { label: 'input node' },
+    data: { label: 'input node', input:"Hi mom!" },
     position: { x: 250, y: 5 },
   },
   {
@@ -46,6 +47,12 @@ const DnDFlow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
+
+  const { sync, executeFlow } = useFlowRunner();
+  useEffect(() => {
+    sync({ nodes, edges });
+  }, [nodes, edges, sync]);
+
 
   const onConnect = useCallback(
     (params: any) => setEdges((eds) => addEdge(params, eds)),
@@ -135,6 +142,7 @@ const DnDFlow = () => {
         <SignIn />
         <SignUp />
         <AuthDetails />
+        <button onClick={() => executeFlow()}>Execute Flow</button>
       </div>
 
       <Header />

@@ -1,3 +1,15 @@
+import { render } from '@testing-library/react';
+
+import FlowRunner from './useFlowRunner';
+
+describe('FlowRunner', () => {
+  it('should render successfully', () => {
+    const { baseElement } = render(<FlowRunner />);
+    expect(baseElement).toBeTruthy();
+  });
+});
+
+
 import { IExecutionNode } from '@tool-ai/flow-runner'
 import { nodes, edges } from './FlowRunner.mocks';
 import { FlowRunner } from './FlowRunner';
