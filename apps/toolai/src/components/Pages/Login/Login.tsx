@@ -1,4 +1,4 @@
-/* eslint-disable-next-line */
+
 import { SignIn, AuthDetails } from '@libs/auth';
 
 // export interface LoginProps {}
