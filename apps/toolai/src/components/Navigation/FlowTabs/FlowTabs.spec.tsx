@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import Auth from './auth';
+import FlowTabs from './FlowTabs';
 
-describe('Auth', () => {
+describe('FlowTabs', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<Auth />);
+    const { baseElement } = render(<FlowTabs />);
     expect(baseElement).toBeTruthy();
   });
 });
