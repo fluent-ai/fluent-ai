@@ -1,5 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import styles from './app.module.css';
+import { SignIn, SignUp, AuthDetails } from '@libs/auth';
 import React, { useState, useRef, useCallback } from 'react';
 import ReactFlow, {
   ReactFlowProvider,
@@ -46,7 +47,10 @@ const DnDFlow = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
 
-  const onConnect = useCallback((params: any) => setEdges((eds) => addEdge(params, eds)), []);
+  const onConnect = useCallback(
+    (params: any) => setEdges((eds) => addEdge(params, eds)),
+    []
+  );
 
   const onDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
@@ -57,7 +61,8 @@ const DnDFlow = () => {
     (event: any) => {
       event.preventDefault();
 
-      const reactFlowBounds = reactFlowWrapper?.current?.getBoundingClientRect();
+      const reactFlowBounds =
+        reactFlowWrapper?.current?.getBoundingClientRect();
       const type = event.dataTransfer.getData('application/reactflow');
 
       // check if the dropped element is valid
@@ -83,51 +88,66 @@ const DnDFlow = () => {
 
   const flowCharts = [
     {
-      value: "tab1",
-      title: "Flow 1",
-      colaborators: [{
-        id: "1",
-        name: 'John Doe',
-        initials: 'JD'
-      },
-      {
-        id: "2",
-        name: 'Jane Doe',
-        initials: 'DJ'
-      }]
+      value: 'tab1',
+      title: 'Flow 1',
+      colaborators: [
+        {
+          id: '1',
+          name: 'John Doe',
+          initials: 'JD',
+        },
+        {
+          id: '2',
+          name: 'Jane Doe',
+          initials: 'DJ',
+        },
+      ],
     },
     {
-      value: "tab2",
-      title: "Flow 3",
-      colaborators:[{
-        id: "4",
-        name: 'Mark Smith',
-        initials: 'MS'
-      }]
-    }
-  ]
+      value: 'tab2',
+      title: 'Flow 3',
+      colaborators: [
+        {
+          id: '4',
+          name: 'Mark Smith',
+          initials: 'MS',
+        },
+      ],
+    },
+  ];
 
   const FlowTabsProps = {
-      nodes:nodes,
-      edges:edges,
-      onNodesChange:onNodesChange,
-      onEdgesChange:onEdgesChange,
-      onConnect:onConnect,
-      onInit:setReactFlowInstance,
-      onDrop:onDrop,
-      onDragOver:onDragOver,
-      nodeTypes:nodeTypes,
-  }
+    nodes: nodes,
+    edges: edges,
+    onNodesChange: onNodesChange,
+    onEdgesChange: onEdgesChange,
+    onConnect: onConnect,
+    onInit: setReactFlowInstance,
+    onDrop: onDrop,
+    onDragOver: onDragOver,
+    nodeTypes: nodeTypes,
+  };
 
   return (
     <>
-    <Header />
-    <div className="dndflow">
-      <ReactFlowProvider>
-      <NodeSideBar />
-        <FlowTabs flowCharts={flowCharts} reactFlowWrapper={reactFlowWrapper} {...FlowTabsProps}  />
-      </ReactFlowProvider>
-    </div>
+      <div style={{ marginLeft: 500 }}>
+        {/* Purely Practical Approach - need to refactor for Logout and create a separate View for Logging/Signing In */}
+        <SignIn />
+        <SignUp />
+        <AuthDetails />
+      </div>
+
+      <Header />
+      <div className="dndflow">
+        <ReactFlowProvider>
+          <NodeSideBar />
+          <FlowTabs
+            flowCharts={flowCharts}
+            reactFlowWrapper={reactFlowWrapper}
+            {...FlowTabsProps}
+          />
+        </ReactFlowProvider>
+      </div>
     </>
   );
 };

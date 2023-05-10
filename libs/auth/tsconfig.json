@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-     "forceConsistentCasingInFileNames": true,
     "jsx": "react-jsx",
     "allowJs": false,
     "esModuleInterop": false,
@@ -11,7 +10,7 @@
   "include": [],
   "references": [
     {
-      "path": "./tsconfig.app.json"
+      "path": "./tsconfig.lib.json"
     },
     {
       "path": "./tsconfig.spec.json"

@@ -24,4 +24,4 @@ getFirestore(app);
 // Initialize functions
 getFunctions(app);
 // Initialize Firebase Authentication and get a reference to the service
-getAuth(app);
+export const auth = getAuth(app);
