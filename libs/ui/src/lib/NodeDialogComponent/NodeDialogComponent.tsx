@@ -1,7 +1,7 @@
 import styles from './NodeDialogComponent.module.css';
 import React, {useState} from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
-import { Cross2Icon } from '@radix-ui/react-icons';
+
 
 
 interface NodeDialogProps {
@@ -9,7 +9,7 @@ interface NodeDialogProps {
   onClose: (boolean:boolean) => void;
 }
 
-const NodeDialogComponent = (props: NodeDialogProps) => {
+function NodeDialogComponent (props: NodeDialogProps) {
   return (
     <>
       {props.isOpen &&
@@ -22,7 +22,7 @@ const NodeDialogComponent = (props: NodeDialogProps) => {
   )
 };
 
-export default NodeDialogComponent;
+export {NodeDialogComponent};
 
  {/* <Dialog.Root >
     <Dialog.Trigger>{props.label}</Dialog.Trigger>

@@ -1,6 +1,6 @@
 /* eslint-disable-next-line */
 import * as Form from '@radix-ui/react-form';
-
+import { SetStateAction, Dispatch } from 'react';
 export interface Validation {
   match: "badInput" | "patternMismatch" | "rangeOverflow" | "rangeUnderflow" | "stepMismatch" | "tooLong" | "tooShort" | "typeMismatch" | "valid" | "valueMissing" | Form.CustomMatcher | undefined,
   message: string
@@ -11,12 +11,12 @@ export interface FormFieldProps {
   validations?: Validation[],
   type:string,
   required?: boolean,
-  value?: string,
-  onChange: ()=>void,
+  value?: any,
+  onChange: any,
   placeholder?:string
 }
 
-export function FormFieldComponent (props: FormFieldProps) {
+function FormFieldComponent (props: FormFieldProps) {
   return (
     <Form.Field className="grid mb-[10px]" name="password">
       <div className="flex items-baseline justify-between">
@@ -32,7 +32,7 @@ export function FormFieldComponent (props: FormFieldProps) {
           type={props.type}
           required={props.required}
           value={props.value}
-          onChange={props.onChange}
+          onChange={(e)=>props.onChange(e)}
           placeholder={props.placeholder}
         />
       </Form.Control>
@@ -40,4 +40,4 @@ export function FormFieldComponent (props: FormFieldProps) {
   );
 }
 
-export default FormFieldComponent;
+export {FormFieldComponent};

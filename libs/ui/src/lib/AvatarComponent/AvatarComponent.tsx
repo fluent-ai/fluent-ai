@@ -17,4 +17,4 @@ const AvatarComponent = (props: AvatarProps) => (
   </Avatar.Root>
 );
 
-export default AvatarComponent;
+export {AvatarComponent};

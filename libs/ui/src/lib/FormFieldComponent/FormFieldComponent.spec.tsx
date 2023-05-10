@@ -1,11 +1,11 @@
 import { render } from '@testing-library/react';
 
-import FormField from './FormFieldComponent';
+import {FormFieldComponent} from './FormFieldComponent';
 
 describe('FormField', () => {
   it('should render successfully', () => {
     const { baseElement } = render(
-    <FormField
+    <FormFieldComponent
       label="test input"
       onChange={()=>{console.log('hello')}}
       type="text"

@@ -32,4 +32,4 @@ const AlertComponent = (props: AlertProps) => (
   </AlertDialog.Root>
 );
 
-export default AlertComponent;
+export {AlertComponent};
