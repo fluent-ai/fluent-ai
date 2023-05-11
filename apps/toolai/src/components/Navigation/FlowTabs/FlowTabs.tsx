@@ -64,7 +64,8 @@ return (
       />
       <Tabs.Root className="flex flex-col" defaultValue="tab1">
         <Tabs.List
-          className="absolute my-2.5 mx-2.5 z-10 bg-white w-50 border-2 border-inherit rounded-md right-0 flex items-center"
+          className="absolute my-2.5 mx-2.5 z-10 bg-white w-50 rounded-md shadow-md
+          right-0 flex items-center"
           aria-label="Flow Tabs"
         >
           {/*each tab would be dynamic in the real version*/}
