@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import * as Tabs from '@radix-ui/react-tabs';
 import {ReactFlow, Node, Edge, Controls, Background, BackgroundVariant } from 'reactflow';
 import { PlusIcon } from '@radix-ui/react-icons';
@@ -36,10 +36,10 @@ interface FlowChart {
   colaborators: User[]
 }
 const FlowTabs = (props: FlowTabsProps) => {
-
-const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [activeDialog, setActiveDialog] = useState('');
 return (
-  <Context.Provider value={{isDialogOpen, setIsDialogOpen}}>
+  <Context.Provider value={{isDialogOpen, setIsDialogOpen, setActiveDialog}}>
       <ReactFlow
         ref={props.reactFlowWrapper}
         nodes={props.nodes}
@@ -92,10 +92,10 @@ return (
         </Tabs.Content>
       })
       }
-    <NodeDialogComponent isOpen={isDialogOpen} onClose={setIsDialogOpen} />
+    <NodeDialogComponent isOpen={isDialogOpen} onClose={setIsDialogOpen} activeDialog={activeDialog} />
 
   </Tabs.Root>
-  </Context.Provider>
+</Context.Provider>
 
 )
 }
