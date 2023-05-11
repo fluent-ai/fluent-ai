@@ -5,7 +5,7 @@ import { FormFieldProps, Validation } from '../../types';
 
 function FormFieldComponent(props: FormFieldProps) {
   return (
-    <Form.Field className="grid mb-[10px]" name="password">
+    <Form.Field className="relative grid mb-[10px]" name="password">
       <div className="flex items-baseline justify-between">
         <Form.Label className="">{props.label}</Form.Label>
         {props.validations?.map((validation: Validation) => (
@@ -16,11 +16,12 @@ function FormFieldComponent(props: FormFieldProps) {
       </div>
       <Form.Control asChild>
         <input
-          className="border-2 border-solid border-inherit rounded-md text-black h-9"
+          className="border-1 border-solid p-1 h-8 w-ful border-gray-light rounded-md text-black "
           type={props.type}
           required={props.required}
           value={props.value}
-          onChange={(e) => props.onChange(e)}
+          //TODO: Fix this up julien
+          onChange={(e)=>props.onChange(e)}
           placeholder={props.placeholder}
         />
       </Form.Control>
