@@ -4,9 +4,9 @@ import {SignUp, AuthDetails } from '@libs/auth';
 
 export function Register() {
   return (
-    <div className='mx-auto'>
+    <div className='mx-auto h-screen flex flex-col items-center justify-center'>
+      <h1>New User</h1>
       <SignUp />
-      <AuthDetails />
     </div>
   );
 }
