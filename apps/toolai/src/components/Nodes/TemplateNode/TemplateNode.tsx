@@ -1,6 +1,5 @@
 import React, { memo, useContext } from 'react';
 import { Handle, Position } from 'reactflow';
-import NodeDialogComponent from '../../UI/NodeDialogComponent/NodeDialogComponent';
 import '../CustomNodesStyles.css';
 import * as Dialog from '@radix-ui/react-dialog';
 import Context from '../../context/context';
