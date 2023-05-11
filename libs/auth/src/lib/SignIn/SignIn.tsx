@@ -1,4 +1,4 @@
-import styles from './SignIn.module.css';
+// import styles from './SignIn.module.css';
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword, getAuth } from 'firebase/auth';
 
@@ -13,7 +13,7 @@ export function SignIn(props: SignInProps) {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log(userCredential);
+        console.log( userCredential);
       })
       .catch((error) => {
         console.log(error);
