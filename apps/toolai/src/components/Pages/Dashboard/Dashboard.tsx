@@ -6,31 +6,37 @@ import {
   addEdge,
   useNodesState,
   useEdgesState,
+  Node
 
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import NodeSideBar from '../../Navigation/NodeSideBar/NodeSideBar';
 import FlowTabs from '../../Navigation/FlowTabs/FlowTabs';
 import TemplateNode from '../../Nodes/TemplateNode/TemplateNode';
-
+//import { NodeWrapperComponent } from '@tool-ai/ui';
 import Header from '../../Navigation/Header/Header';
 
 const nodeTypes = {
-  templateNode: TemplateNode,
+  textInput: TemplateNode,
+  template: TemplateNode,
+  json: TemplateNode,
+  userFunction: TemplateNode,
+  preview: TemplateNode,
 };
 
-const initialNodes = [
+const initialNodes:Node[] = [
   {
     id: '1',
-    type: 'input',
-    data: { label: 'input node' },
+    type: 'textInput',
+    data: { label: 'textInput' },
     position: { x: 250, y: 5 },
   },
   {
     id: '2',
-    type: 'templateNode',
-    data: { label: 'template node' },
+    type: 'template',
+    data: { label: 'template' },
     position: { x: 300, y: 50 },
+
   },
 ];
 
@@ -74,7 +80,7 @@ const Dashboard = () => {
         id: getId(),
         type,
         position,
-        data: { label: `${type} node` },
+        data: { label: `${type}` },
       };
 
       setNodes((nds) => nds.concat(newNode));

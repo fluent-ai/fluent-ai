@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as Form from '@radix-ui/react-form';
 import { signInWithEmailAndPassword, getAuth } from 'firebase/auth';
+import * as firestoreService from '@libs/firestore-service';
 import { FormFieldComponent, Validation, ButtonComponent } from '@tool-ai/ui';
 
 const auth = getAuth();
@@ -8,11 +10,22 @@ const auth = getAuth();
 export function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
   const signIn = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log(userCredential);
+        // fetch user from firestore
+        firestoreService
+          .getSomeFromDB('users', 'id', '==', userCredential.user.uid)
+          .then((users) => {
+            if (users.length > 0) {
+              // TODO: store user state in redux
+
+              // redirect user to dashboard
+              navigate('/');
+            }
+          });
       })
       .catch((error) => {
         console.log(error);
@@ -32,7 +45,7 @@ export function SignIn() {
     ],
     type: 'email',
     required: true,
-    onChange: { setEmail },
+    onChange: setEmail,
     placeholder: 'Enter your email',
   };
   const PasswordInput = {
@@ -49,7 +62,7 @@ export function SignIn() {
     ],
     type: 'password',
     required: true,
-    onChange: { setPassword },
+    onChange: setPassword,
     placeholder: 'Enter your password',
   };
   return (

@@ -25,6 +25,13 @@ export interface FormFieldProps {
   placeholder?: string;
 }
 
+export interface NodeWrapperComponentProps {
+  isConnectable: boolean;
+  data: any,
+  isDialogOpen: boolean;
+  setIsDialogOpen: (arg: boolean) => void;
+}
+
 interface TooltipProps {
   buttonContent?: JSX.Element | string;
   text: string;
@@ -33,14 +40,22 @@ interface TooltipProps {
 interface NodeDialogProps {
   isOpen: boolean;
   onClose: (boolean: boolean) => void;
+  activeDialog: string;
 }
 
 interface User {
   id: string;
+  name: string;
   initials: string;
-  name?: string;
-  url?: string;
-  alt?: string;
+  email: string;
+  flows?: [
+    {
+      id: string;
+      stringifiedFlowData: string;
+      owner: boolean;
+    }
+  ];
+  profileImg?: string;
 }
 
 interface FlowTabsDropdownProps {
