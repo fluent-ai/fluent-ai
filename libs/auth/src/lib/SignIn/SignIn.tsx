@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import * as Form from '@radix-ui/react-form';
 import { signInWithEmailAndPassword, getAuth } from 'firebase/auth';
-import {FormFieldComponent, Validation, ButtonComponent} from '@tool-ai/ui';
-
+import { FormFieldComponent, Validation, ButtonComponent } from '@tool-ai/ui';
 
 const auth = getAuth();
 
@@ -33,7 +32,7 @@ export function SignIn() {
     ],
     type: 'email',
     required: true,
-    onChange: { setEmail },
+    onChange: setEmail,
     placeholder: 'Enter your email',
   };
   const PasswordInput = {
@@ -50,23 +49,21 @@ export function SignIn() {
     ],
     type: 'password',
     required: true,
-    onChange: { setPassword },
+    onChange: setPassword,
     placeholder: 'Enter your password',
   };
   return (
-  <Form.Root
-    onSubmit={signIn}
-    className='w-full'>
-    <FormFieldComponent {...EmailInput} value={email} />
-    <FormFieldComponent {...PasswordInput} value={password} />
-    <Form.Submit asChild>
-      <ButtonComponent
-        type='submit'
-        ariaLabel='sign in button'
-        buttonContent='Log in'
-      />
-    </Form.Submit>
-  </Form.Root>
+    <Form.Root onSubmit={signIn} className="w-full">
+      <FormFieldComponent {...EmailInput} value={email} />
+      <FormFieldComponent {...PasswordInput} value={password} />
+      <Form.Submit asChild>
+        <ButtonComponent
+          type="submit"
+          ariaLabel="sign in button"
+          buttonContent="Log in"
+        />
+      </Form.Submit>
+    </Form.Root>
   );
 }
 
