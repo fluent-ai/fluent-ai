@@ -114,7 +114,7 @@ return (
         {/* <Background variant="dots" gap={12} size={1} /> */}
         </div>
         </Tabs.Content>
-      })
+        )})
       }
     <NodeDialogComponent isOpen={isDialogOpen} onClose={setIsDialogOpen} activeDialog={activeDialog} />
 
