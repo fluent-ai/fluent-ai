@@ -1,22 +1,22 @@
 import Mustache from 'mustache';
 
-export interface TemplateData {
+export interface TemplateProps {
   template: string;
   [key: string]: unknown;
 }
 
 export async function template(
   msg: Record<string, unknown>,
-  data: TemplateData
+  props: TemplateProps
 ): Promise<Record<string, unknown>> {
   return new Promise((resolve, reject) => {
-    if (!data.template || typeof data.template !== 'string') {
-      reject(new Error('data.template is not a string'));
+    if (!props.template || typeof props.template !== 'string') {
+      reject(new Error('props.template is not a string'));
     }
     try {
       resolve({
         ...msg,
-        payload: Mustache.render(data.template as string, { msg, data }),
+        payload: Mustache.render(props.template as string, { msg, props }),
       });
     } catch (error) {
       reject(error);

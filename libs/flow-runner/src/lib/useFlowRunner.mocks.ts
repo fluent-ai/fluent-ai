@@ -4,6 +4,8 @@ export const nodes = [
     type: 'input',
     data: {
       label: 'Text input',
+    },
+    props:{
       input: `{
           "name" : "Mr Wiggles",
           "color" : "pink",
@@ -11,6 +13,7 @@ export const nodes = [
           "balloons" : true
         }
         `,
+
     },
     position: { x: 0, y: 50 },
   },
@@ -27,6 +30,8 @@ export const nodes = [
     type: 'template',
     data: {
       label: 'Template',
+    },
+    props: {
       template: `Hello {{msg.payload.name}}!
         Here! have {{msg.payload.number}} {{msg.payload.color}} balloons.`,
     },
@@ -49,8 +54,9 @@ export const nodes = [
     type: 'userFunction',
     data: {
       label: 'Function',
-      userFunction: 'msg.payload.number = msg.payload.number * 2; return msg',
     },
+    props:{
+      userFunction: 'msg.payload.number = msg.payload.number * 2; return msg',},
     position: { x: 650, y: 25 },
   },
   {
@@ -64,6 +70,8 @@ export const nodes = [
     type: 'template',
     data: {
       label: 'Template',
+    },
+    props: {
       template: `Im a redundant template!`,
     },
     position: { x: 300, y: 50 },
