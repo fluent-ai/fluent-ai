@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import AlertComponent from './AlertComponent';
+import Register from './Register';
 
-describe('AlertComponent', () => {
+describe('Register', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<AlertComponent />);
+    const { baseElement } = render(<Register />);
     expect(baseElement).toBeTruthy();
   });
 });

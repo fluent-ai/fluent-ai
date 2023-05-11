@@ -4,6 +4,7 @@ import './firebase-init';
 import App from './app/app';
 import { FlowStateProvider } from '@tool-ai/state';
 // import * as auth from '@libs/auth';
+import { BrowserRouter } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -11,7 +12,9 @@ const root = ReactDOM.createRoot(
 root.render(
     <StrictMode>
       <FlowStateProvider>
+      <BrowserRouter>
         <App />
+    </BrowserRouter>
       </FlowStateProvider>
-    </StrictMode>
+  </StrictMode>
 );
