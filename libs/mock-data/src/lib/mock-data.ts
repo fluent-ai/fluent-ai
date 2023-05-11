@@ -11,6 +11,7 @@ export const client: types.Client = {
       owner: true,
     },
   ],
+  profileImg: '',
 };
 
 export const mockNodes: types.FlowNode = {
