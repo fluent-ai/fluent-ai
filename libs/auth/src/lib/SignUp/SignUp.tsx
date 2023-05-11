@@ -1,14 +1,11 @@
-
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import React, { useState } from 'react';
 import * as Form from '@radix-ui/react-form';
 import {FormFieldComponent, Validation, ButtonComponent} from '@tool-ai/ui';
 
-/* eslint-disable-next-line */
-export interface SignUpProps {}
 const auth = getAuth();
 
-export function SignUp(props: SignUpProps) {
+export function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const signUp = (e: React.FormEvent<HTMLFormElement>) => {
@@ -24,15 +21,17 @@ export function SignUp(props: SignUpProps) {
 
   const EmailInput = {
     label: 'Email',
-    validations: [{
-      match: 'valueMissing',
-      message: 'Please enter your email'
-    }as Validation,
-    {
-      match: 'typeMismatch',
-      message: 'Please provide a valid email'
-    }as Validation],
-    type:'email',
+    validations: [
+      {
+        match: 'valueMissing',
+        message: 'Please enter your email',
+      } as Validation,
+      {
+        match: 'typeMismatch',
+        message: 'Please provide a valid email',
+      } as Validation,
+    ],
+    type: 'email',
     required: true,
      // TODO: related to FormFieldComponent, maybe the change has to be here?
     onChange: {setEmail},
@@ -40,15 +39,17 @@ export function SignUp(props: SignUpProps) {
    }
    const PasswordInput = {
     label: 'Password',
-    validations: [{
-      match: 'valueMissing',
-      message: 'Please enter a Password'
-    } as Validation,
-    {
-      match: 'typeMismatch',
-      message: 'Please provide a valid Password'
-    }as Validation],
-    type:'password',
+    validations: [
+      {
+        match: 'valueMissing',
+        message: 'Please enter a Password',
+      } as Validation,
+      {
+        match: 'typeMismatch',
+        message: 'Please provide a valid Password',
+      } as Validation,
+    ],
+    type: 'password',
     required: true,
     // TODO: related to FormFieldComponent, maybe the change has to be here?
     onChange: {setPassword},

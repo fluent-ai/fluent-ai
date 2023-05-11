@@ -9,3 +9,4 @@ export * from './lib/ButtonComponent/ButtonComponent';
 
 
 
+export * from './types.d';
