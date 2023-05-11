@@ -19,6 +19,6 @@ export const store = configureStore({
   enhancers: [],
 });
 
-export function FlowStateProvider({ children }: { children: React.ReactNode }) {
+export function StateProvider({ children }: { children: React.ReactNode }) {
   return <Provider store={store}>{children}</Provider>;
 }

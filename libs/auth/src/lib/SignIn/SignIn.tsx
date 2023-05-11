@@ -5,13 +5,29 @@ import { signInWithEmailAndPassword, getAuth } from 'firebase/auth';
 import * as firestoreService from '@libs/firestore-service';
 import { FormFieldComponent, Validation, ButtonComponent } from '@tool-ai/ui';
 
+import { useSelector } from 'react-redux';
+import {
+  selectAllFlowRunner,
+  selectFlowRunnerEntities,
+  store,
+  userActions,
+  UserState,
+} from '@tool-ai/state';
+
 const auth = getAuth();
 
 export function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+
+  const loadingStatus = useSelector(
+    (state: any) => state.flowRunner.loadingStatus
+  );
+  console.log('🌈', loadingStatus, store.getState().user.userData);
+
   const signIn = (e: React.FormEvent<HTMLFormElement>) => {
+    store.dispatch(userActions.setLoadingStatus('loading'));
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -21,6 +37,9 @@ export function SignIn() {
           .then((users) => {
             if (users.length > 0) {
               // TODO: store user state in redux
+              store.dispatch(userActions.setLoadingStatus('loading'));
+              store.dispatch(userActions.updateUserData(users[0] as UserState));
+              console.log(store.getState().user.userData);
 
               // redirect user to dashboard
               navigate('/');
@@ -29,6 +48,7 @@ export function SignIn() {
       })
       .catch((error) => {
         console.log(error);
+        store.dispatch(userActions.setLoadingStatus('error'));
       });
   };
   const EmailInput = {

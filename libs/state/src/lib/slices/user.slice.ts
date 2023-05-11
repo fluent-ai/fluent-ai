@@ -13,11 +13,23 @@ export const USER_FEATURE_KEY = 'user';
  * Update these interfaces according to your requirements.
  */
 export interface UserEntity {
-  id: number;
+  id?: string;
+  name?: string;
+  initials?: string;
+  email?: string;
+  flows?: [
+    {
+      id: string;
+      stringifiedFlowData: string;
+      owner: boolean;
+    }
+  ];
+  profileImg?: string;
 }
 
 export interface UserState extends EntityState<UserEntity> {
   loadingStatus: 'not loaded' | 'loading' | 'loaded' | 'error';
+  userData: UserEntity;
   error?: string | null;
 }
 
@@ -54,6 +66,7 @@ export const fetchUser = createAsyncThunk(
 
 export const initialUserState: UserState = userAdapter.getInitialState({
   loadingStatus: 'not loaded',
+  userData: {},
   error: null,
 });
 
@@ -61,9 +74,16 @@ export const userSlice = createSlice({
   name: USER_FEATURE_KEY,
   initialState: initialUserState,
   reducers: {
-    add: userAdapter.addOne,
-    remove: userAdapter.removeOne,
-    // ...
+    setLoadingStatus: (
+      state,
+      action: PayloadAction<'not loaded' | 'loading' | 'loaded' | 'error'>
+    ) => {
+      state.loadingStatus = action.payload;
+    },
+    updateUserData: (state: any, action: PayloadAction<UserState>) => {
+      state.userData = action.payload;
+      console.log(state.userData);
+    },
   },
   extraReducers: (builder) => {
     builder
