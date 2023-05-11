@@ -1,14 +1,11 @@
-
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import React, { useState } from 'react';
 import * as Form from '@radix-ui/react-form';
-import {FormFieldComponent, Validation} from '@tool-ai/ui';
+import { FormFieldComponent, Validation } from '@tool-ai/ui';
 
-/* eslint-disable-next-line */
-export interface SignUpProps {}
 const auth = getAuth();
 
-export function SignUp(props: SignUpProps) {
+export function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const signUp = (e: React.FormEvent<HTMLFormElement>) => {
@@ -24,48 +21,49 @@ export function SignUp(props: SignUpProps) {
 
   const EmailInput = {
     label: 'Email',
-    validations: [{
-      match: 'valueMissing',
-      message: 'Please enter your email'
-    }as Validation,
-    {
-      match: 'typeMismatch',
-      message: 'Please provide a valid email'
-    }as Validation],
-    type:'email',
+    validations: [
+      {
+        match: 'valueMissing',
+        message: 'Please enter your email',
+      } as Validation,
+      {
+        match: 'typeMismatch',
+        message: 'Please provide a valid email',
+      } as Validation,
+    ],
+    type: 'email',
     required: true,
-    onChange: {setEmail},
-    placeholder:'Enter your email'
-   }
-   const PasswordInput = {
+    onChange: { setEmail },
+    placeholder: 'Enter your email',
+  };
+  const PasswordInput = {
     label: 'Password',
-    validations: [{
-      match: 'valueMissing',
-      message: 'Please enter a Password'
-    } as Validation,
-    {
-      match: 'typeMismatch',
-      message: 'Please provide a valid Password'
-    }as Validation],
-    type:'password',
+    validations: [
+      {
+        match: 'valueMissing',
+        message: 'Please enter a Password',
+      } as Validation,
+      {
+        match: 'typeMismatch',
+        message: 'Please provide a valid Password',
+      } as Validation,
+    ],
+    type: 'password',
     required: true,
-    onChange: {setPassword},
-    placeholder:'Enter a password'
-   }
+    onChange: { setPassword },
+    placeholder: 'Enter a password',
+  };
 
   return (
-    <Form.Root
-      onSubmit={signUp}>
-    <FormFieldComponent {...EmailInput} value={email} />
-    <FormFieldComponent {...PasswordInput} value={password} />
-    <Form.Submit asChild>
-      <button
-        type="submit"
-        className="">
-        Log In
-      </button>
-    </Form.Submit>
-  </Form.Root>
+    <Form.Root onSubmit={signUp}>
+      <FormFieldComponent {...EmailInput} value={email} />
+      <FormFieldComponent {...PasswordInput} value={password} />
+      <Form.Submit asChild>
+        <button type="submit" className="">
+          Log In
+        </button>
+      </Form.Submit>
+    </Form.Root>
   );
 }
 
