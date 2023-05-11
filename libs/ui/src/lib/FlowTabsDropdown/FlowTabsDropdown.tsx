@@ -40,7 +40,7 @@ const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
           {props.users.map((user: User) => {
             return (
               <DropdownMenu.Item
-                key={user.id}
+                key={user.email}
                 className={styles.DropdownMenuItem}
               >
                 {user.name}

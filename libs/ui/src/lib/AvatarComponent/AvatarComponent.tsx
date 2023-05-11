@@ -7,7 +7,7 @@ const AvatarComponent = (props: AvatarProps) => (
     <Avatar.Image
       className={styles.AvatarImage}
       src={props.url}
-      alt={props.alt}
+      // alt={props.alt}
     />
     <Avatar.Fallback className={styles.AvatarFallback}>
       {props.initials}

@@ -1,8 +1,6 @@
 import {
   getFirestore,
   DocumentData,
-  addDoc,
-  collection,
   doc,
   setDoc,
   updateDoc,
@@ -17,16 +15,16 @@ export async function writeToDB(collectionName: string, document: any) {
     // IF client: check if email exists
     const existingDocs: DocumentData[] = await getSomeFromDB(
       collectionName,
-      'email',
+      'id',
       '==',
-      document.email
+      document.id
     );
     if (existingDocs.length > 0) {
       console.error('user already exists');
       return false;
     }
-    const docRef = await addDoc(collection(db, collectionName), document);
-    console.log('Document written with ID: ', docRef.id);
+    await setDoc(doc(db, collectionName, document.id), document);
+    console.log('Document written with ID: ', document.id);
     return true;
   } catch (e) {
     console.error('Error adding document: ', e);
