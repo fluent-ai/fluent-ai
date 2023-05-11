@@ -19,6 +19,9 @@
     "paths": {
       "@libs/auth": ["libs/auth/src/index.ts"],
       "@libs/redux": ["libs/redux/src/index.ts"],
+      "@libs/custom-types": ["libs/custom-types/src/index.ts"],
+      "@libs/firestore-service": ["libs/firestore/src/index.ts"],
+      "@libs/mock-data": ["libs/mock-data/src/index.ts"],
       "@tool-ai/flow-runner": ["libs/flow-runner/src/index.ts"]
     }
   },
