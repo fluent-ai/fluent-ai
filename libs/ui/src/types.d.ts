@@ -45,10 +45,17 @@ interface NodeDialogProps {
 
 interface User {
   id: string;
+  name: string;
   initials: string;
-  name?: string;
-  url?: string;
-  alt?: string;
+  email: string;
+  flows?: [
+    {
+      id: string;
+      stringifiedFlowData: string;
+      owner: boolean;
+    }
+  ];
+  profileImg?: string;
 }
 
 interface FlowTabsDropdownProps {

@@ -1,14 +1,13 @@
 /** * @jest-environment node */
 import './firebase-init';
 import * as firestoreService from '@libs/firestore-service';
-import { Client } from '@libs/custom-types';
-import * as mockData from '@libs/mock-data';
+import { mockClient, User } from '@tool-ai/ui';
 
 describe('Testing Firestore Functionality', () => {
   const testCollectionClients = 'testClients';
   it('should write a document to a collection in firestore', async () => {
     expect(
-      await firestoreService.writeToDB(testCollectionClients, mockData.client)
+      await firestoreService.writeToDB(testCollectionClients, mockClient)
     ).toEqual(true);
     expect(
       await firestoreService.writeToDB(testCollectionClients, 'not an object')
@@ -25,29 +24,29 @@ describe('Testing Firestore Functionality', () => {
   });
 
   it('should read a whole collection from firestore', async () => {
-    const collectionData: Client[] = (await firestoreService.getAllFromDB(
+    const collectionData: User[] = (await firestoreService.getAllFromDB(
       testCollectionClients
-    )) as Client[];
+    )) as User[];
     expect(collectionData.length).toBeGreaterThan(0);
-    expect(collectionData[0]).toEqual(mockData.client);
+    expect(collectionData[0]).toEqual(mockClient);
   });
 
   it('should retrieve selected documents from a firestore collection', async () => {
-    const collectionData: Client[] = (await firestoreService.getSomeFromDB(
+    const collectionData: User[] = (await firestoreService.getSomeFromDB(
       testCollectionClients,
       'name',
       '==',
-      mockData.client.name
-    )) as Client[];
+      mockClient.name
+    )) as User[];
     expect(collectionData.length).toBeGreaterThan(0);
-    expect(collectionData[0]).toEqual(mockData.client);
+    expect(collectionData[0]).toEqual(mockClient);
   });
 
   it('should update a document in a collection in firestore', async () => {
     expect(
       await firestoreService.updateFirestoreDocument(
         testCollectionClients,
-        mockData.client,
+        mockClient,
         { email: 'jeffbezos@example.com' }
       )
     ).toEqual(true);
@@ -55,7 +54,7 @@ describe('Testing Firestore Functionality', () => {
     expect(
       await firestoreService.updateFirestoreDocument(
         testCollectionClients,
-        mockData.client,
+        mockClient,
         'not an object'
       )
     ).toEqual(false);
@@ -73,7 +72,7 @@ describe('Testing Firestore Functionality', () => {
   });
 
   it('should delete a collection', async () => {
-    await firestoreService.writeToDB(testCollectionClients, mockData.client);
+    await firestoreService.writeToDB(testCollectionClients, mockClient);
     expect(
       await firestoreService.deleteCollection(testCollectionClients)
     ).toEqual(true);

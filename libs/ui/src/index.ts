@@ -12,3 +12,4 @@ export * from './lib/NodeDialogComponent/NodeDialogComponent';
 export * from './lib/ButtonComponent/ButtonComponent';
 
 export * from './types.d';
+export * from './mocks';
