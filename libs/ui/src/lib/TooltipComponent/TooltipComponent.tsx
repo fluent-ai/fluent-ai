@@ -13,8 +13,9 @@ const TooltipComponent = (props: TooltipProps) => {
           w-9 inline-flex
           items-center
           justify-center
-         text-black bg-white rounded-full sidebar-icon
-         hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2"
+          text-black bg-white rounded-full sidebar-icon
+          hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2"
+            onClick={props.trigger}
           >
             {props.buttonContent}
           </button>

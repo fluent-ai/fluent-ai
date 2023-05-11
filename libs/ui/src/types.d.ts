@@ -27,7 +27,7 @@ export interface FormFieldProps {
 
 export interface NodeWrapperComponentProps {
   isConnectable: boolean;
-  data: any,
+  data: any;
   isDialogOpen: boolean;
   setIsDialogOpen: (arg: boolean) => void;
 }
@@ -35,15 +35,16 @@ export interface NodeWrapperComponentProps {
 interface TooltipProps {
   buttonContent?: JSX.Element | string;
   text: string;
+  trigger?: EventTrigger;
 }
 
 interface NodeDialogProps {
   isOpen: boolean;
   onClose: (boolean: boolean) => void;
   activeDialog: string;
-  nodes: Node<{ label: string; }, string | undefined>[],
-  setNodes: any,
-  activeNodeId: string
+  nodes: Node<{ label: string }, string | undefined>[];
+  setNodes: any;
+  activeNodeId: string;
 }
 
 interface User {

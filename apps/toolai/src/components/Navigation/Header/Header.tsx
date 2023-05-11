@@ -1,20 +1,10 @@
-import { useState, useEffect } from 'react';
 import { AvatarComponent, User } from '@tool-ai/ui';
-import { store } from '@tool-ai/state';
 
-const Header = (): JSX.Element => {
-  const [user, updateUser] = useState<User>({
-    id: '',
-    name: '',
-    email: '',
-    initials: '',
-  });
-  const currentUser = { ...user };
-  useEffect(() => {
-    const sessionUser = store.getState().user.userData;
-    updateUser(sessionUser as User);
-  }, []);
+interface UserProps {
+  user: User;
+}
 
+const Header = (currentUser: UserProps): JSX.Element => {
   if (Object.keys(currentUser).length === 0) {
     return <div></div>;
   } else {
@@ -23,8 +13,8 @@ const Header = (): JSX.Element => {
         <p>Tool AI</p>
         <div className="sidebar-icon">
           <AvatarComponent
-            initials={currentUser.initials}
-            url={currentUser.profileImg}
+            initials={currentUser.user.initials}
+            url={currentUser.user.profileImg}
           />
         </div>
       </div>

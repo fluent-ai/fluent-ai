@@ -1,13 +1,12 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import {
   ReactFlowProvider,
   addEdge,
   useNodesState,
   useEdgesState,
-  Node
-
+  Node,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import NodeSideBar from '../../Navigation/NodeSideBar/NodeSideBar';
@@ -15,6 +14,8 @@ import FlowTabs from '../../Navigation/FlowTabs/FlowTabs';
 import TemplateNode from '../../Nodes/TemplateNode/TemplateNode';
 //import { NodeWrapperComponent } from '@tool-ai/ui';
 import Header from '../../Navigation/Header/Header';
+import { store } from '@tool-ai/state';
+import { User } from '@tool-ai/ui';
 
 const nodeTypes = {
   textInput: TemplateNode,
@@ -24,7 +25,7 @@ const nodeTypes = {
   preview: TemplateNode,
 };
 
-const initialNodes:Node[] = [
+const initialNodes: Node[] = [
   {
     id: '1',
     type: 'textInput',
@@ -36,7 +37,6 @@ const initialNodes:Node[] = [
     type: 'template',
     data: { label: 'template' },
     position: { x: 300, y: 50 },
-
   },
 ];
 
@@ -48,6 +48,18 @@ const Dashboard = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
+  const [user, updateUser] = useState<User>({
+    id: '',
+    name: '',
+    email: '',
+    initials: '',
+  });
+
+  const currentUser = { ...user };
+  useEffect(() => {
+    const sessionUser = store.getState().user.userData;
+    updateUser(sessionUser as User);
+  }, []);
 
   const onConnect = useCallback(
     (params: any) => setEdges((eds) => addEdge(params, eds)),
@@ -133,7 +145,7 @@ const Dashboard = () => {
 
   return (
     <>
-    <Header />
+      <Header user={currentUser} />
       <div className="relative flex flex-col grow h-full md:flex-row">
         <ReactFlowProvider>
           <NodeSideBar />

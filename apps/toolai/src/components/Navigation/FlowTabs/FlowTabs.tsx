@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import * as Tabs from '@radix-ui/react-tabs';
 import {
   ReactFlow,
@@ -16,24 +16,25 @@ import {
   NodeDialogComponent,
   User,
 } from '@tool-ai/ui';
+
 import { mock } from 'node:test';
 
 import Context from '../../context/context';
 import styles from './FlowTabs.module.css';
 
 interface FlowTabsProps {
-  flowCharts: any,
-  reactFlowWrapper: any,
-  nodes: Node<{ label: string }, string | undefined>[],
-  edges: Edge<any>[],
-  onNodesChange: any,
-  onEdgesChange: any,
-  setNodes: any,
-  onConnect: any,
-  onInit: any,
-  onDrop: any,
-  onDragOver: any,
-  nodeTypes: any,
+  flowCharts: any;
+  reactFlowWrapper: any;
+  nodes: Node<{ label: string }, string | undefined>[];
+  edges: Edge<any>[];
+  onNodesChange: any;
+  onEdgesChange: any;
+  setNodes: any;
+  onConnect: any;
+  onInit: any;
+  onDrop: any;
+  onDragOver: any;
+  nodeTypes: any;
 }
 
 interface FlowChart {
@@ -46,12 +47,19 @@ const FlowTabs = (props: FlowTabsProps) => {
   const [activeDialog, setActiveDialog] = useState('');
   const [activeNodeId, setActiveNodeId] = useState('');
 
-return (
-  <Context.Provider value={{
-    isDialogOpen,
-    setIsDialogOpen,
-    setActiveDialog,
-    setActiveNodeId }}>
+  const handleClick = () => {
+    console.log('clicked');
+  };
+
+  return (
+    <Context.Provider
+      value={{
+        isDialogOpen,
+        setIsDialogOpen,
+        setActiveDialog,
+        setActiveNodeId,
+      }}
+    >
       <ReactFlow
         ref={props.reactFlowWrapper}
         nodes={props.nodes}
@@ -86,7 +94,12 @@ return (
               </Tabs.Trigger>
             );
           })}
-          <TooltipComponent text="add new flow" buttonContent={<PlusIcon />} />
+
+          <TooltipComponent
+            text="add new flow"
+            buttonContent={<PlusIcon />}
+            trigger={handleClick}
+          />
         </Tabs.List>
         {props.flowCharts.map((flowChart: FlowChart) => {
           return (
@@ -118,23 +131,22 @@ return (
                   <Controls position="bottom-right" />
                 </ReactFlow>
 
-        {/* <Background variant="dots" gap={12} size={1} /> */}
-        </div>
-        </Tabs.Content>
-        )})
-      }
-    <NodeDialogComponent
-      isOpen={isDialogOpen}
-      onClose={setIsDialogOpen}
-      activeDialog={activeDialog}
-      nodes={props.nodes}
-      setNodes={props.setNodes}
-      activeNodeId={activeNodeId} />
-
-  </Tabs.Root>
-</Context.Provider>
-
-)
-}
+                {/* <Background variant="dots" gap={12} size={1} /> */}
+              </div>
+            </Tabs.Content>
+          );
+        })}
+        <NodeDialogComponent
+          isOpen={isDialogOpen}
+          onClose={setIsDialogOpen}
+          activeDialog={activeDialog}
+          nodes={props.nodes}
+          setNodes={props.setNodes}
+          activeNodeId={activeNodeId}
+        />
+      </Tabs.Root>
+    </Context.Provider>
+  );
+};
 
 export default FlowTabs;

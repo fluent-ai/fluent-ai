@@ -4,11 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import * as firestoreService from '@libs/firestore-service';
 import { User } from '@tool-ai/ui';
 import { store, userActions, UserEntity } from '@tool-ai/state';
-// import provider from 'firebase/auth';
-
-/* eslint-disable-next-line */
-
-// export interface GoogleLoginProps {}
 
 const auth = getAuth();
 export function GoogleLogin() {
