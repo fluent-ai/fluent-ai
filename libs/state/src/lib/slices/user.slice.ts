@@ -125,8 +125,7 @@ export const userActions = userSlice.actions;
  */
 const { selectAll, selectEntities } = userAdapter.getSelectors();
 
-export const getUserState = (rootState: unknown): UserState =>
-  //@ts-expect-error TODO: Come back and fix after MVP presentation
+export const getUserState = (rootState: any): UserState =>
   rootState[USER_FEATURE_KEY];
 
 export const selectAllUser = createSelector(getUserState, selectAll);

@@ -62,10 +62,13 @@ export const flowRunnerSlice = createSlice({
   name: FLOW_RUNNER_FEATURE_KEY,
   initialState: initialFlowRunnerState,
   reducers: {
-    setLoadingStatus: (state, action: PayloadAction<'not loaded' | 'loading' | 'loaded' | 'error'>) => {
+    setLoadingStatus: (
+      state,
+      action: PayloadAction<'not loaded' | 'loading' | 'loaded' | 'error'>
+    ) => {
       state.loadingStatus = action.payload;
     },
-  }
+  },
 });
 
 /*
@@ -109,8 +112,7 @@ export const flowRunnerActions = flowRunnerSlice.actions;
  */
 const { selectAll, selectEntities } = flowRunnerAdapter.getSelectors();
 
-export const getFlowRunnerState = (rootState: unknown): FlowRunnerState =>
-  //@ts-expect-error TODO: Come back and fix after MVP presentation
+export const getFlowRunnerState = (rootState: any): FlowRunnerState =>
   rootState[FLOW_RUNNER_FEATURE_KEY];
 
 export const selectAllFlowRunner = createSelector(
