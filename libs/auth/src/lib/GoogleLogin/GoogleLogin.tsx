@@ -16,8 +16,6 @@ export function GoogleLogin() {
   const navigate = useNavigate();
   provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
   const signInWithGoogle = () => {
-    console.log('sign in with google');
-    console.log('auth', auth, provider);
     signInWithPopup(auth, provider)
       .then((result) => {
         console.log('result', result);
