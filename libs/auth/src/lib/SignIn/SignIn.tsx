@@ -13,7 +13,7 @@ export function SignIn() {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log( userCredential);
+        console.log(userCredential);
       })
       .catch((error) => {
         console.log(error);
