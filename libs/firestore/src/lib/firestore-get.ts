@@ -73,7 +73,5 @@ export async function getSomeFromDB(
   querySnapshot.forEach((doc) => {
     collectionData.push(doc.data());
   });
-  console.log(collectionData);
-
   return collectionData;
 }
