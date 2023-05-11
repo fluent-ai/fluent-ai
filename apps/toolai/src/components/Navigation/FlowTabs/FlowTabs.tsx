@@ -22,17 +22,18 @@ import Context from '../../context/context';
 import styles from './FlowTabs.module.css';
 
 interface FlowTabsProps {
-  flowCharts: any;
-  reactFlowWrapper: any;
-  nodes: Node<{ label: string }, string | undefined>[];
-  edges: Edge<any>[];
-  onNodesChange: any;
-  onEdgesChange: any;
-  onConnect: any;
-  onInit: any;
-  onDrop: any;
-  onDragOver: any;
-  nodeTypes: any;
+  flowCharts: any,
+  reactFlowWrapper: any,
+  nodes: Node<{ label: string }, string | undefined>[],
+  edges: Edge<any>[],
+  onNodesChange: any,
+  onEdgesChange: any,
+  setNodes: any,
+  onConnect: any,
+  onInit: any,
+  onDrop: any,
+  onDragOver: any,
+  nodeTypes: any,
 }
 
 interface FlowChart {
@@ -43,8 +44,14 @@ interface FlowChart {
 const FlowTabs = (props: FlowTabsProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [activeDialog, setActiveDialog] = useState('');
+  const [activeNodeId, setActiveNodeId] = useState('');
+
 return (
-  <Context.Provider value={{isDialogOpen, setIsDialogOpen, setActiveDialog}}>
+  <Context.Provider value={{
+    isDialogOpen,
+    setIsDialogOpen,
+    setActiveDialog,
+    setActiveNodeId }}>
       <ReactFlow
         ref={props.reactFlowWrapper}
         nodes={props.nodes}
@@ -116,7 +123,13 @@ return (
         </Tabs.Content>
         )})
       }
-    <NodeDialogComponent isOpen={isDialogOpen} onClose={setIsDialogOpen} activeDialog={activeDialog} />
+    <NodeDialogComponent
+      isOpen={isDialogOpen}
+      onClose={setIsDialogOpen}
+      activeDialog={activeDialog}
+      nodes={props.nodes}
+      setNodes={props.setNodes}
+      activeNodeId={activeNodeId} />
 
   </Tabs.Root>
 </Context.Provider>

@@ -1,11 +1,26 @@
+import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
+import { NodeDialogProps } from "../../types";
+import { handleChange } from "../functions";
 /* eslint-disable-next-line */
-export interface TemplateDialogProps {}
+// export interface TemplateDialogProps {}
 
-function TemplateDialog(props: TemplateDialogProps) {
+function TemplateDialog(props: NodeDialogProps) {
   return (
-    <div>
-      <h1>Welcome to TemplateDialog!</h1>
-    </div>
+    <InnerDialogStructure
+    title="Template"
+    description="template description" >
+      <textarea
+        className="border-2 border-gray-light border-solid rounded-md w-full"
+        placeholder="Write your template here..."
+        rows={10}
+        cols={100}
+        onChange={(event) => handleChange(
+          props.nodes,
+          props.setNodes,
+          props.activeNodeId,
+          event.target.value,
+          'template')}/>
+    </InnerDialogStructure>
   );
 }
 

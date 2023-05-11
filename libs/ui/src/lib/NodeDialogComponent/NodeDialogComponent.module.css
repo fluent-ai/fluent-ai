@@ -8,7 +8,8 @@ input {
   background-color: white;
   position: fixed;
   top: 80px;
-  right: 0;
+  right: 10px;
+  height: 100%;
   width: 90vw;
   max-width: 450px;
   max-height: 85vh;
