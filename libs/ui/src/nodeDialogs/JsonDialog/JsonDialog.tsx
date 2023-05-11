@@ -1,11 +1,13 @@
+import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
 /* eslint-disable-next-line */
 export interface JsonDialogProps {}
 
 function JsonDialog(props: JsonDialogProps) {
   return (
-    <div>
-      <h1>Welcome to JsonDialog!</h1>
-    </div>
+    <InnerDialogStructure
+    title="JSON"
+    description="json description">
+    </InnerDialogStructure>
   );
 }
 
