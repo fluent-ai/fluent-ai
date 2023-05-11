@@ -9,7 +9,8 @@ interface MemoProps {
   data: any
 }
 export default memo (({data, isConnectable}: MemoProps) => {
-  const {setIsDialogOpen} = useContext(Context);
+  const {setIsDialogOpen, setActiveDialog} = useContext(Context);
+
   return (
     <>
       <Handle
@@ -19,7 +20,7 @@ export default memo (({data, isConnectable}: MemoProps) => {
         onConnect={(params) => console.log('handle onConnect', params)}
         isConnectable={isConnectable}
       />
-      <div onClick={()=>setIsDialogOpen(true)}>{data.label}</div>
+      <div onClick={()=>{setIsDialogOpen(true); setActiveDialog(data.label)}}>{data.label}</div>
 
       <Handle
         type="source"

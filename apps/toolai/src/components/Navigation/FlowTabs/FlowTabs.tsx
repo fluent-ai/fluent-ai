@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import * as Tabs from '@radix-ui/react-tabs';
 import {
   ReactFlow,
@@ -41,9 +41,10 @@ interface FlowChart {
   colaborators: User[];
 }
 const FlowTabs = (props: FlowTabsProps) => {
-  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
-  return (
-    <Context.Provider value={{ isDialogOpen, setIsDialogOpen }}>
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [activeDialog, setActiveDialog] = useState('');
+return (
+  <Context.Provider value={{isDialogOpen, setIsDialogOpen, setActiveDialog}}>
       <ReactFlow
         ref={props.reactFlowWrapper}
         nodes={props.nodes}
@@ -110,15 +111,17 @@ const FlowTabs = (props: FlowTabsProps) => {
                   <Controls position="bottom-right" />
                 </ReactFlow>
 
-                {/* <Background variant="dots" gap={12} size={1} /> */}
-              </div>
-            </Tabs.Content>
-          );
-        })}
-        <NodeDialogComponent isOpen={isDialogOpen} onClose={setIsDialogOpen} />
-      </Tabs.Root>
-    </Context.Provider>
-  );
-};
+        {/* <Background variant="dots" gap={12} size={1} /> */}
+        </div>
+        </Tabs.Content>
+        )})
+      }
+    <NodeDialogComponent isOpen={isDialogOpen} onClose={setIsDialogOpen} activeDialog={activeDialog} />
+
+  </Tabs.Root>
+</Context.Provider>
+
+)
+}
 
 export default FlowTabs;
