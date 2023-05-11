@@ -17,14 +17,6 @@ code {
     monospace;
 }
 
-.dndflow {
-  flex-direction: column;
-  display: flex;
-  flex-grow: 1;
-  height: 100%;
-  position: relative;
-}
-
 @media screen and (min-width: 768px) {
   .dndflow {
     flex-direction: row;

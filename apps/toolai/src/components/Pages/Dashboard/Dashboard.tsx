@@ -123,6 +123,7 @@ const Dashboard = () => {
     edges: edges,
     onNodesChange: onNodesChange,
     onEdgesChange: onEdgesChange,
+    setNodes: setNodes,
     onConnect: onConnect,
     onInit: setReactFlowInstance,
     onDrop: onDrop,
