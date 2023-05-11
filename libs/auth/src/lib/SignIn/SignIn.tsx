@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import * as Form from '@radix-ui/react-form';
 import { signInWithEmailAndPassword, getAuth } from 'firebase/auth';
-import {FormFieldComponent, Validation} from '@tool-ai/ui';
+import {FormFieldComponent, Validation, ButtonComponent} from '@tool-ai/ui';
 
 
 /* eslint-disable-next-line */
@@ -53,15 +53,16 @@ export function SignIn(props: SignInProps) {
  }
   return (
   <Form.Root
-    onSubmit={signIn}>
+    onSubmit={signIn}
+    className='w-full'>
     <FormFieldComponent {...EmailInput} value={email} />
     <FormFieldComponent {...PasswordInput} value={password} />
     <Form.Submit asChild>
-      <button
-        type="submit"
-        className="">
-        Log In
-      </button>
+      <ButtonComponent
+        type='submit'
+        ariaLabel='sign in button'
+        buttonContent='Log in'
+      />
     </Form.Submit>
   </Form.Root>
   );

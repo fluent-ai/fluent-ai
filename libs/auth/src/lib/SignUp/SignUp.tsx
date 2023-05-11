@@ -2,7 +2,7 @@
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import React, { useState } from 'react';
 import * as Form from '@radix-ui/react-form';
-import {FormFieldComponent, Validation} from '@tool-ai/ui';
+import {FormFieldComponent, Validation, ButtonComponent} from '@tool-ai/ui';
 
 /* eslint-disable-next-line */
 export interface SignUpProps {}
@@ -34,6 +34,7 @@ export function SignUp(props: SignUpProps) {
     }as Validation],
     type:'email',
     required: true,
+     // TODO: related to FormFieldComponent, maybe the change has to be here?
     onChange: {setEmail},
     placeholder:'Enter your email'
    }
@@ -49,6 +50,7 @@ export function SignUp(props: SignUpProps) {
     }as Validation],
     type:'password',
     required: true,
+    // TODO: related to FormFieldComponent, maybe the change has to be here?
     onChange: {setPassword},
     placeholder:'Enter a password'
    }
@@ -59,11 +61,11 @@ export function SignUp(props: SignUpProps) {
     <FormFieldComponent {...EmailInput} value={email} />
     <FormFieldComponent {...PasswordInput} value={password} />
     <Form.Submit asChild>
-      <button
-        type="submit"
-        className="">
-        Log In
-      </button>
+    <ButtonComponent
+        type='submit'
+        ariaLabel='sign up button'
+        buttonContent='Register'
+      />
     </Form.Submit>
   </Form.Root>
   );
