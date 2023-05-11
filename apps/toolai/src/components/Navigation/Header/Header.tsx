@@ -5,13 +5,14 @@ import * as mockData from '@libs/mock-data';
 
 const Header = (): JSX.Element => {
   const [user, updateUser] = useState<User>({
+    id: '',
     name: '',
     email: '',
     initials: '',
   });
   const currentUser = { ...user };
   firestoreService
-    .getSomeFromDB('users', 'email', '==', mockData.client.email)
+    .getSomeFromDB('users', 'id', '==', mockData.client.id)
     .then((users) => {
       if (users.length > 0) {
         updateUser(users[0] as User);

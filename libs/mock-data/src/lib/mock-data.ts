@@ -1,6 +1,7 @@
 import * as types from '@libs/custom-types';
 
 export const client: types.Client = {
+  id: 'testId',
   email: 'test@test.com',
   name: 'Jeff Bezos',
   initials: 'JB',

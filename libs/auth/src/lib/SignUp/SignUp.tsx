@@ -1,18 +1,43 @@
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as Form from '@radix-ui/react-form';
-import { FormFieldComponent, Validation, ButtonComponent } from '@tool-ai/ui';
+import * as firestoreService from '@libs/firestore-service';
+import * as mockData from '@libs/mock-data';
+import {
+  FormFieldComponent,
+  Validation,
+  ButtonComponent,
+  User,
+} from '@tool-ai/ui';
 
 const auth = getAuth();
 
 export function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
   const signUp = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log(userCredential);
+        if (userCredential.user.email) {
+          const newUser: User = {
+            id: userCredential.user.uid,
+            email: userCredential.user.email,
+            // TODO: we need to ask for a username on signup and regex the initials from it
+            name: mockData.client.name,
+            initials: mockData.client.name.slice(0, 2).toUpperCase(),
+          };
+          // write new user to firestore & store auth UUID as user ID/ document ID
+          firestoreService.writeToDB('users', newUser);
+
+          // TODO: fetch user from firestore and store user state in redux
+
+          // redirect to dashboard
+          navigate('/');
+        }
       })
       .catch((error) => {
         console.log(error);

@@ -1,8 +1,9 @@
 export interface Client {
+  id: string;
   email: string;
   name: string;
   initials: string;
-  flows: [
+  flows?: [
     {
       id: string;
       stringifiedFlowData: string;

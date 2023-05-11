@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import * as Form from '@radix-ui/react-form';
 import { signInWithEmailAndPassword, getAuth } from 'firebase/auth';
+import * as firestoreService from '@libs/firestore-service';
+import * as mockData from '@libs/mock-data';
 import { FormFieldComponent, Validation, ButtonComponent } from '@tool-ai/ui';
 
 const auth = getAuth();
@@ -13,6 +15,15 @@ export function SignIn() {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log(userCredential);
+        // TODO: fetch user from firestore and store user state in redux
+        firestoreService
+          .getSomeFromDB('users', 'email', '==', mockData.client.email)
+          .then((users) => {
+            if (users.length > 0) {
+              // TODO: redirect user to dashboard
+              //updateUser(users[0] as User);
+            }
+          });
       })
       .catch((error) => {
         console.log(error);
