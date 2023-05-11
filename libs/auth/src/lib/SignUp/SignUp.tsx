@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Form from '@radix-ui/react-form';
 import * as firestoreService from '@libs/firestore-service';
-import * as mockData from '@libs/mock-data';
+import { mockClient } from '@tool-ai/ui';
 import {
   FormFieldComponent,
   Validation,
@@ -27,8 +27,8 @@ export function SignUp() {
             id: userCredential.user.uid,
             email: userCredential.user.email,
             // TODO: we need to ask for a username on signup and regex the initials from it
-            name: mockData.client.name,
-            initials: mockData.client.name.slice(0, 2).toUpperCase(),
+            name: mockClient.name,
+            initials: mockClient.name.slice(0, 2).toUpperCase(),
           };
           // write new user to firestore & store auth UUID as user ID/ document ID
           firestoreService.writeToDB('users', newUser);

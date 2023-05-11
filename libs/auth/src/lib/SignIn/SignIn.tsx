@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import * as Form from '@radix-ui/react-form';
 import { signInWithEmailAndPassword, getAuth } from 'firebase/auth';
 import * as firestoreService from '@libs/firestore-service';
-import * as mockData from '@libs/mock-data';
 import { FormFieldComponent, Validation, ButtonComponent } from '@tool-ai/ui';
 
 const auth = getAuth();
@@ -16,7 +15,6 @@ export function SignIn() {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log(userCredential);
         // fetch user from firestore
         firestoreService
           .getSomeFromDB('users', 'id', '==', userCredential.user.uid)
