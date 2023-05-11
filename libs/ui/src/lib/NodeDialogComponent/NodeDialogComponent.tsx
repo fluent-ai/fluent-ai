@@ -8,14 +8,13 @@ import { TemplateDialog } from '../../nodeDialogs/TemplateDialog/TemplateDialog'
 import { UserFunctionDialog } from '../../nodeDialogs/UserFunctionDialog/UserFunctionDialog';
 
 function NodeDialogComponent(props: NodeDialogProps) {
-  console.log(props.activeDialog);
   const shownDialog = () => {
     switch (props.activeDialog) {
       case 'textInput':
         return <InputDialog {...props} />;
       case 'json':
         return <JsonDialog {...props} />;
-      case 'userFucntion':
+      case 'userFunction':
         return <UserFunctionDialog {...props} />;
       case 'template':
         return <TemplateDialog {...props} />;
@@ -29,7 +28,11 @@ function NodeDialogComponent(props: NodeDialogProps) {
         <div
           className={`${styles.DialogContent} border-2 border-inherit rounded-md`}
         >
-          <button onClick={() => props.onClose(false)}>X</button>
+          <button
+           className='absolute right-2 top-2'
+           onClick={() => props.onClose(false)}>
+            X
+           </button>
           <div>
             {shownDialog()}
           </div>

@@ -41,6 +41,9 @@ interface NodeDialogProps {
   isOpen: boolean;
   onClose: (boolean: boolean) => void;
   activeDialog: string;
+  nodes: Node<{ label: string; }, string | undefined>[],
+  setNodes: any,
+  activeNodeId: string
 }
 
 interface User {
