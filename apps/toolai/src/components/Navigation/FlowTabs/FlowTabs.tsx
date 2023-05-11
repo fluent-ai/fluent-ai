@@ -2,11 +2,11 @@ import React from 'react';
 import * as Tabs from '@radix-ui/react-tabs';
 import {ReactFlow, Node, Edge, Controls, Background, BackgroundVariant } from 'reactflow';
 import { PlusIcon } from '@radix-ui/react-icons';
-import TooltipComponent from '../../UI/Tooltip/Tooltip';
-import FlowTabsDropdown from '../../UI/FlowTabsDropdown/FlowTabsDropdown';
+import {TooltipComponent} from '@tool-ai/ui';
+import {FlowTabsDropdown} from '@tool-ai/ui';
 import { mock } from 'node:test';
-import AvatarComponent from '../../UI/AvatarComponent/AvatarComponent';
-import NodeDialogComponent from '../../UI/NodeDialogComponent/NodeDialogComponent';
+import { AvatarComponent } from '@tool-ai/ui';
+import { NodeDialogComponent } from '@tool-ai/ui';
 import Context from '../../context/context';
 import styles from './FlowTabs.module.css'
 

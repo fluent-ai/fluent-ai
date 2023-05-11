@@ -1,5 +1,5 @@
 import React from 'react';
-import TooltipComponent from '../../UI/Tooltip/Tooltip';
+import {TooltipComponent} from '@tool-ai/ui';
 
 interface NodeItemSideBarProps {
   classes?: string,

@@ -4,7 +4,7 @@ import {
   ArrowDownIcon,
 } from '@radix-ui/react-icons';
 import './FlowTabsDropdown.module.css';
-import AlertComponent from '../AlertComponent/AlertComponent';
+import {AlertComponent} from '../AlertComponent/AlertComponent';
 import styles from '../AlertComponent/AlertComponent.module.css';
 
 interface User {
@@ -63,5 +63,5 @@ const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
   );
 };
 
-export default FlowTabsDropdown;
+export {FlowTabsDropdown};
 

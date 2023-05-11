@@ -38,4 +38,4 @@ const TooltipComponent = (props: TooltipProps) => {
   );
 };
 
-export default TooltipComponent;
+export {TooltipComponent};
