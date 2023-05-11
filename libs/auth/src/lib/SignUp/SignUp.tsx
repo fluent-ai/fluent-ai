@@ -1,7 +1,7 @@
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import React, { useState } from 'react';
 import * as Form from '@radix-ui/react-form';
-import { FormFieldComponent, Validation } from '@tool-ai/ui';
+import {FormFieldComponent, Validation, ButtonComponent} from '@tool-ai/ui';
 
 const auth = getAuth();
 
@@ -33,10 +33,11 @@ export function SignUp() {
     ],
     type: 'email',
     required: true,
-    onChange: { setEmail },
-    placeholder: 'Enter your email',
-  };
-  const PasswordInput = {
+     // TODO: related to FormFieldComponent, maybe the change has to be here?
+    onChange: {setEmail},
+    placeholder:'Enter your email'
+   }
+   const PasswordInput = {
     label: 'Password',
     validations: [
       {
@@ -50,20 +51,24 @@ export function SignUp() {
     ],
     type: 'password',
     required: true,
-    onChange: { setPassword },
-    placeholder: 'Enter a password',
-  };
+    // TODO: related to FormFieldComponent, maybe the change has to be here?
+    onChange: {setPassword},
+    placeholder:'Enter a password'
+   }
 
   return (
-    <Form.Root onSubmit={signUp}>
-      <FormFieldComponent {...EmailInput} value={email} />
-      <FormFieldComponent {...PasswordInput} value={password} />
-      <Form.Submit asChild>
-        <button type="submit" className="">
-          Log In
-        </button>
-      </Form.Submit>
-    </Form.Root>
+    <Form.Root
+      onSubmit={signUp}>
+    <FormFieldComponent {...EmailInput} value={email} />
+    <FormFieldComponent {...PasswordInput} value={password} />
+    <Form.Submit asChild>
+    <ButtonComponent
+        type='submit'
+        ariaLabel='sign up button'
+        buttonContent='Register'
+      />
+    </Form.Submit>
+  </Form.Root>
   );
 }
 

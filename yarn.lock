@@ -3327,6 +3327,11 @@
   "resolved" "https://registry.npmjs.org/@types/mime/-/mime-1.3.2.tgz"
   "version" "1.3.2"
 
+"@types/mustache@^4.2.2":
+  "integrity" "sha512-MUSpfpW0yZbTgjekDbH0shMYBUD+X/uJJJMm9LXN1d5yjl5lCY1vN/eWKD6D1tOtjA6206K0zcIPnUaFMurdNA=="
+  "resolved" "https://registry.npmjs.org/@types/mustache/-/mustache-4.2.2.tgz"
+  "version" "4.2.2"
+
 "@types/node@*", "@types/node@^20.1.1", "@types/node@>=12.12.47", "@types/node@>=13.7.0":
   "integrity" "sha512-uKBEevTNb+l6/aCQaKVnUModfEMjAl98lw2Si9P5y4hLu9tm6AlX2ZIoXZX6Wh9lJueYPrGPKk5WMCNHg/u6/A=="
   "resolved" "https://registry.npmjs.org/@types/node/-/node-20.1.1.tgz"
@@ -4847,6 +4852,11 @@
   "integrity" "sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg=="
   "resolved" "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz"
   "version" "0.0.1"
+
+"confetti-js@^0.0.18":
+  "integrity" "sha512-0B7pYmZGBZuBkN32ydjWRpJLfRUT9KZYkQKkC4SGrAsUq0XE2DLY5foCWBXMXXVg7sFKs3qIb+qsDx1eFTeSvA=="
+  "resolved" "https://registry.npmjs.org/confetti-js/-/confetti-js-0.0.18.tgz"
+  "version" "0.0.18"
 
 "confusing-browser-globals@^1.0.9":
   "integrity" "sha512-JsPKdmh8ZkmnHxDk55FZ1TqVLvEQTvoByJZRN9jzI0UjxK/QgAmsphz7PGtqgPieQZ/CQcHWXCR7ATDNhGe+YA=="
@@ -7724,7 +7734,7 @@
     "jest-util" "^29.5.0"
     "jsdom" "^20.0.0"
 
-"jest-environment-node@^29.5.0":
+"jest-environment-node@^29.4.1", "jest-environment-node@^29.5.0":
   "integrity" "sha512-ExxuIK/+yQ+6PRGaHkKewYtg6hto2uGCgvKdb2nfJfKXgZ17DfXjvbZ+jA1Qt9A8EQSfPnt5FKIfnOO3u1h9qw=="
   "resolved" "https://registry.npmjs.org/jest-environment-node/-/jest-environment-node-29.5.0.tgz"
   "version" "29.5.0"
@@ -8725,6 +8735,11 @@
   dependencies:
     "dns-packet" "^5.2.2"
     "thunky" "^1.0.2"
+
+"mustache@^4.2.0":
+  "integrity" "sha512-71ippSywq5Yb7/tVYyGbkBggbU8H3u5Rz56fH60jGFgr8uHwxs+aSKeqmluIVzM0m0kB7xQjKS6qPfd0b2ZoqQ=="
+  "resolved" "https://registry.npmjs.org/mustache/-/mustache-4.2.0.tgz"
+  "version" "4.2.0"
 
 "mz@^2.7.0":
   "integrity" "sha512-z81GNO7nnYMEhrGh9LeymoE4+Yr0Wn5McHIZMK5cfQCl+NDX08sCZgUc9/6MHni9IWuFLm1Z3HTCXu2z9fN62Q=="
