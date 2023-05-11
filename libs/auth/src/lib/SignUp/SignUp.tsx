@@ -35,9 +35,9 @@ export function SignUp() {
           // write new user to firestore & store auth UUID as user ID/ document ID
           firestoreService.writeToDB('users', newUser);
 
-          // TODO: fetch user from firestore and store user state in redux
-          store.dispatch(userActions.setLoadingStatus('loading'));
+          // store user state in redux
           store.dispatch(userActions.updateUserData(newUser as UserEntity));
+          store.dispatch(userActions.setLoadingStatus('loaded'));
           console.log(store.getState().user.userData);
           // redirect to dashboard
           navigate('/');

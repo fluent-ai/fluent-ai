@@ -24,10 +24,10 @@ export function SignIn() {
           .then((users) => {
             if (users.length > 0) {
               // store user state in redux
-              store.dispatch(userActions.setLoadingStatus('loading'));
               store.dispatch(
                 userActions.updateUserData(users[0] as UserEntity)
               );
+              store.dispatch(userActions.setLoadingStatus('loaded'));
               console.log(store.getState().user.userData);
               // redirect user to dashboard
               navigate('/');

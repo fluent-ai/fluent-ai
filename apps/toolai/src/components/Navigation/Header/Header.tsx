@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { AvatarComponent, User } from '@tool-ai/ui';
-import * as firestoreService from '@libs/firestore-service';
-import { mockClient } from '@tool-ai/ui';
+import { store } from '@tool-ai/state';
 
 const Header = (): JSX.Element => {
   const [user, updateUser] = useState<User>({
@@ -12,13 +11,8 @@ const Header = (): JSX.Element => {
   });
   const currentUser = { ...user };
   useEffect(() => {
-    firestoreService
-      .getSomeFromDB('users', 'id', '==', mockClient.id)
-      .then((users) => {
-        if (users.length > 0) {
-          updateUser(users[0] as User);
-        }
-      });
+    const sessionUser = store.getState().user.userData;
+    updateUser(sessionUser as User);
   }, []);
 
   if (Object.keys(currentUser).length === 0) {
