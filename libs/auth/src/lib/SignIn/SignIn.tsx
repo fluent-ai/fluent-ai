@@ -4,15 +4,7 @@ import * as Form from '@radix-ui/react-form';
 import { signInWithEmailAndPassword, getAuth } from 'firebase/auth';
 import * as firestoreService from '@libs/firestore-service';
 import { FormFieldComponent, Validation, ButtonComponent } from '@tool-ai/ui';
-
-import { useSelector } from 'react-redux';
-import {
-  selectAllFlowRunner,
-  selectFlowRunnerEntities,
-  store,
-  userActions,
-  UserState,
-} from '@tool-ai/state';
+import { store, userActions, UserEntity } from '@tool-ai/state';
 
 const auth = getAuth();
 
@@ -21,14 +13,9 @@ export function SignIn() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const loadingStatus = useSelector(
-    (state: any) => state.flowRunner.loadingStatus
-  );
-  console.log('🌈', loadingStatus, store.getState().user.userData);
-
   const signIn = (e: React.FormEvent<HTMLFormElement>) => {
-    store.dispatch(userActions.setLoadingStatus('loading'));
     e.preventDefault();
+    store.dispatch(userActions.setLoadingStatus('loading'));
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // fetch user from firestore
@@ -36,11 +23,12 @@ export function SignIn() {
           .getSomeFromDB('users', 'id', '==', userCredential.user.uid)
           .then((users) => {
             if (users.length > 0) {
-              // TODO: store user state in redux
+              // store user state in redux
               store.dispatch(userActions.setLoadingStatus('loading'));
-              store.dispatch(userActions.updateUserData(users[0] as UserState));
+              store.dispatch(
+                userActions.updateUserData(users[0] as UserEntity)
+              );
               console.log(store.getState().user.userData);
-
               // redirect user to dashboard
               navigate('/');
             }

@@ -80,27 +80,9 @@ export const userSlice = createSlice({
     ) => {
       state.loadingStatus = action.payload;
     },
-    updateUserData: (state: any, action: PayloadAction<UserState>) => {
+    updateUserData: (state: UserState, action: PayloadAction<UserEntity>) => {
       state.userData = action.payload;
-      console.log(state.userData);
     },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchUser.pending, (state: UserState) => {
-        state.loadingStatus = 'loading';
-      })
-      .addCase(
-        fetchUser.fulfilled,
-        (state: UserState, action: PayloadAction<UserEntity[]>) => {
-          userAdapter.setAll(state, action.payload);
-          state.loadingStatus = 'loaded';
-        }
-      )
-      .addCase(fetchUser.rejected, (state: UserState, action) => {
-        state.loadingStatus = 'error';
-        state.error = action.error.message;
-      });
   },
 });
 

@@ -10,6 +10,7 @@ import {
   ButtonComponent,
   User,
 } from '@tool-ai/ui';
+import { store, userActions, UserEntity } from '@tool-ai/state';
 
 const auth = getAuth();
 
@@ -20,6 +21,7 @@ export function SignUp() {
 
   const signUp = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    store.dispatch(userActions.setLoadingStatus('loading'));
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         if (userCredential.user.email) {
@@ -34,7 +36,9 @@ export function SignUp() {
           firestoreService.writeToDB('users', newUser);
 
           // TODO: fetch user from firestore and store user state in redux
-
+          store.dispatch(userActions.setLoadingStatus('loading'));
+          store.dispatch(userActions.updateUserData(newUser as UserEntity));
+          console.log(store.getState().user.userData);
           // redirect to dashboard
           navigate('/');
         }
