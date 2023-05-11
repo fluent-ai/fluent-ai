@@ -75,11 +75,11 @@ return (
                 value={flowChart.value}
               >
                 {flowChart.title}
-                <div className="flex gap-x-2">
+                <div className="flex gap-x-2 items-center">
                   {flowChart.colaborators.map((user: User) => {
                     return <AvatarComponent initials={user.initials} />;
                   })}
-                  <div>
+                  <div className="flex gap-x-2 items-center">
                     <FlowTabsDropdown users={flowChart.colaborators} />
                   </div>
                 </div>
