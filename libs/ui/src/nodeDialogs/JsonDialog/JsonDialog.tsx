@@ -1,7 +1,7 @@
 /* eslint-disable-next-line */
 export interface JsonDialogProps {}
 
-export function JsonDialog(props: JsonDialogProps) {
+function JsonDialog(props: JsonDialogProps) {
   return (
     <div>
       <h1>Welcome to JsonDialog!</h1>
@@ -9,4 +9,4 @@ export function JsonDialog(props: JsonDialogProps) {
   );
 }
 
-export default JsonDialog;
+export {JsonDialog};

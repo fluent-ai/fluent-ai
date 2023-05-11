@@ -1,7 +1,7 @@
 /* eslint-disable-next-line */
 export interface TemplateDialogProps {}
 
-export function TemplateDialog(props: TemplateDialogProps) {
+function TemplateDialog(props: TemplateDialogProps) {
   return (
     <div>
       <h1>Welcome to TemplateDialog!</h1>
@@ -9,4 +9,4 @@ export function TemplateDialog(props: TemplateDialogProps) {
   );
 }
 
-export default TemplateDialog;
+export {TemplateDialog};

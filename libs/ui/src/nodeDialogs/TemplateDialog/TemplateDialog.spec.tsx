@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 
-import TemplateDialog from './TemplateDialog';
+import {TemplateDialog} from './TemplateDialog';
 
 describe('TemplateDialog', () => {
   it('should render successfully', () => {
