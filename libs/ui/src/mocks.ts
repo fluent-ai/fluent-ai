@@ -11,5 +11,6 @@ export const mockClient: User = {
       owner: true,
     },
   ],
-  profileImg: '',
+  profileImg:
+    'https://lh3.googleusercontent.com/a/AGNmyxbYjdO34l9YBDRRFclrO7qM3cjlmxQY6F9eZ4w_Qw=s96-c',
 };
