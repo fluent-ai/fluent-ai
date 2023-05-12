@@ -7,6 +7,7 @@ import { JsonDialog } from '../../nodeDialogs/JsonDialog/JsonDialog';
 import { TemplateDialog } from '../../nodeDialogs/TemplateDialog/TemplateDialog';
 import { UserFunctionDialog } from '../../nodeDialogs/UserFunctionDialog/UserFunctionDialog';
 import { PreviewDialog } from '../../nodeDialogs/PreviewDialog/PreviewDialog';
+import { OpenAIDialog } from '../../nodeDialogs/OpenAIDialog/OpenAIDialog';
 function NodeDialogComponent(props: NodeDialogProps) {
   const shownDialog = () => {
     switch (props.activeDialog) {
@@ -20,6 +21,8 @@ function NodeDialogComponent(props: NodeDialogProps) {
         return <TemplateDialog {...props} />;
       case 'preview':
         return <PreviewDialog {...props} />;
+      case 'openAi':
+        return <OpenAIDialog {...props} />;
       default:
         return null;
     }
