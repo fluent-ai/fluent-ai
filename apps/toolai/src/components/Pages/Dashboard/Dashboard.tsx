@@ -1,13 +1,14 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import {
   ReactFlowProvider,
   addEdge,
   useNodesState,
   useEdgesState,
   Node,
-  Edge
+  Edge,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import NodeSideBar from '../../Navigation/NodeSideBar/NodeSideBar';
@@ -15,6 +16,8 @@ import FlowTabs from '../../Navigation/FlowTabs/FlowTabs';
 import TemplateNode from '../../Nodes/TemplateNode/TemplateNode';
 //import { NodeWrapperComponent } from '@tool-ai/ui';
 import Header from '../../Navigation/Header/Header';
+import { store } from '@tool-ai/state';
+import { User } from '@tool-ai/ui';
 import { ButtonComponent } from '@tool-ai/ui';
 import { useFlowRunner } from '@tool-ai/flow-runner';
 
@@ -24,9 +27,8 @@ const nodeTypes = {
   json: TemplateNode,
   userFunction: TemplateNode,
   preview: TemplateNode,
-  openAi: TemplateNode
+  openAi: TemplateNode,
 };
-
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
@@ -36,6 +38,21 @@ const Dashboard = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
+  const [user, updateUser] = useState<User>({
+    id: '',
+    name: '',
+    email: '',
+    initials: '',
+    flows: [],
+  });
+
+  const flowTabs = useSelector((state: any) => state.flowtabs.tabs);
+  const currentUser = { ...user };
+
+  useEffect(() => {
+    const sessionUser = store.getState().user.userData;
+    updateUser(sessionUser as User);
+  }, []);
 
   const onConnect = useCallback(
     (params: any) => setEdges((eds) => addEdge(params, eds)),
@@ -76,36 +93,6 @@ const Dashboard = () => {
     [reactFlowInstance]
   );
 
-  const flowCharts = [
-    {
-      value: 'tab1',
-      title: 'Flow 1',
-      colaborators: [
-        {
-          id: '1',
-          name: 'John Doe',
-          initials: 'JD',
-        },
-        {
-          id: '2',
-          name: 'Jane Doe',
-          initials: 'DJ',
-        },
-      ],
-    },
-    {
-      value: 'tab2',
-      title: 'Flow 3',
-      colaborators: [
-        {
-          id: '4',
-          name: 'Mark Smith',
-          initials: 'MS',
-        },
-      ],
-    },
-  ];
-
   const FlowTabsProps = {
     nodes: nodes,
     edges: edges,
@@ -119,34 +106,34 @@ const Dashboard = () => {
     nodeTypes: nodeTypes,
   };
 
-
-  const { flow, setFlow, executeFlow,  } = useFlowRunner();
+  const { flow, setFlow, executeFlow } = useFlowRunner();
 
   useEffect(() => {
     console.log('flow', flow);
   }, [flow]);
 
-
-  function runFlow () {console.log('Running')}
-
+  function runFlow() {
+    console.log('Running');
+  }
 
   return (
     <>
-    <Header />
-    <div className='h-10 w-32 mt-2.5 ml-72 bg-white absolute shadow-md rounded-md z-10 text-black flex justify-between items-center'>
-    <ButtonComponent
-      buttonContent='RUN'
-      type='button'
-      classes='icons'
-      ariaLabel='run flow'
-      clickHandler={runFlow} />
+      <Header currentUser={currentUser} />
+      <div className="h-10 w-32 mt-2.5 ml-72 bg-white absolute shadow-md rounded-md z-10 text-black flex justify-between items-center">
+        <ButtonComponent
+          buttonContent="RUN"
+          type="button"
+          classes="icons"
+          ariaLabel="run flow"
+          clickHandler={runFlow}
+        />
       </div>
 
       <div className="relative flex flex-col grow h-full md:flex-row">
         <ReactFlowProvider>
           <NodeSideBar />
           <FlowTabs
-            flowCharts={flowCharts}
+            flowCharts={flowTabs}
             reactFlowWrapper={reactFlowWrapper}
             {...FlowTabsProps}
           />

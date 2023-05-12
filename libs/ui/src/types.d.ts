@@ -27,7 +27,7 @@ export interface FormFieldProps {
 
 export interface NodeWrapperComponentProps {
   isConnectable: boolean;
-  data: any,
+  data: any;
   isDialogOpen: boolean;
   setIsDialogOpen: (arg: boolean) => void;
 }
@@ -42,9 +42,15 @@ interface NodeDialogProps {
   isOpen: boolean;
   onClose: (boolean: boolean) => void;
   activeDialog: string;
-  nodes: Node<{ label: string; }, string | undefined>[],
-  setNodes: any,
-  activeNodeId: string
+  nodes: Node<{ label: string }, string | undefined>[];
+  setNodes: any;
+  activeNodeId: string;
+}
+
+interface UserFlows {
+  id: string;
+  stringifiedFlowData: string;
+  owner: boolean;
 }
 
 interface User {
@@ -52,13 +58,7 @@ interface User {
   name: string;
   initials: string;
   email: string;
-  flows?: [
-    {
-      id: string;
-      stringifiedFlowData: string;
-      owner: boolean;
-    }
-  ];
+  flows: UserFlows[];
   profileImg?: string;
 }
 

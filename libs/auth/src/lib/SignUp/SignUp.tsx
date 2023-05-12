@@ -10,6 +10,7 @@ import {
   ButtonComponent,
   User,
 } from '@tool-ai/ui';
+import { store, userActions, UserEntity } from '@tool-ai/state';
 
 const auth = getAuth();
 
@@ -20,6 +21,7 @@ export function SignUp() {
 
   const signUp = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    store.dispatch(userActions.setLoadingStatus('loading'));
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         if (userCredential.user.email) {
@@ -29,12 +31,15 @@ export function SignUp() {
             // TODO: we need to ask for a username on signup and regex the initials from it
             name: mockClient.name,
             initials: mockClient.name.slice(0, 2).toUpperCase(),
+            flows: [],
           };
           // write new user to firestore & store auth UUID as user ID/ document ID
           firestoreService.writeToDB('users', newUser);
 
-          // TODO: fetch user from firestore and store user state in redux
-
+          // store user state in redux
+          store.dispatch(userActions.updateUserData(newUser as UserEntity));
+          store.dispatch(userActions.setLoadingStatus('loaded'));
+          console.log(store.getState().user.userData);
           // redirect to dashboard
           navigate('/');
         }
