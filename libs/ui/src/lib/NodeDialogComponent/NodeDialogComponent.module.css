@@ -7,8 +7,9 @@ input {
 .DialogContent {
   background-color: white;
   position: fixed;
-  top: 50%;
-  right: 0;
+  top: 80px;
+  right: 10px;
+  height: 100%;
   width: 90vw;
   max-width: 450px;
   max-height: 85vh;

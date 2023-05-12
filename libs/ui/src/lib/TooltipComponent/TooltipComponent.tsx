@@ -1,23 +1,19 @@
 import React from 'react';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import { TooltipProps } from '../../types';
-
+import { ButtonComponent } from '../ButtonComponent/ButtonComponent';
 const TooltipComponent = (props: TooltipProps) => {
   return (
     <Tooltip.Provider>
       <Tooltip.Root>
         <Tooltip.Trigger asChild>
-          <button
-            aria-label="iconbutton"
-            className="sidebar-icon h-9
-          w-9 inline-flex
-          items-center
-          justify-center
-         text-black bg-white rounded-full sidebar-icon
-         hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2"
-          >
-            {props.buttonContent}
-          </button>
+        <ButtonComponent
+          type="button"
+          ariaLabel="iconbutton"
+          buttonContent={props.buttonContent}
+          classes="sidebar-icon"
+          clickHandler={props.clickHandler}
+       />
         </Tooltip.Trigger>
         <Tooltip.Portal>
           <Tooltip.Content

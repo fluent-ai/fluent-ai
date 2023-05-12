@@ -20,8 +20,7 @@ function FormFieldComponent(props: FormFieldProps) {
           type={props.type}
           required={props.required}
           value={props.value}
-          //TODO: Fix this up julien
-          onChange={(e)=>props.onChange(e)}
+          onChange={(e) => props.onChange(e.target.value)}
           placeholder={props.placeholder}
         />
       </Form.Control>

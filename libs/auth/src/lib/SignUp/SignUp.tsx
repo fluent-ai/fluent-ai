@@ -1,18 +1,43 @@
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as Form from '@radix-ui/react-form';
-import {FormFieldComponent, Validation, ButtonComponent} from '@tool-ai/ui';
+import * as firestoreService from '@libs/firestore-service';
+import { mockClient } from '@tool-ai/ui';
+import {
+  FormFieldComponent,
+  Validation,
+  ButtonComponent,
+  User,
+} from '@tool-ai/ui';
 
 const auth = getAuth();
 
 export function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
   const signUp = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log(userCredential);
+        if (userCredential.user.email) {
+          const newUser: User = {
+            id: userCredential.user.uid,
+            email: userCredential.user.email,
+            // TODO: we need to ask for a username on signup and regex the initials from it
+            name: mockClient.name,
+            initials: mockClient.name.slice(0, 2).toUpperCase(),
+          };
+          // write new user to firestore & store auth UUID as user ID/ document ID
+          firestoreService.writeToDB('users', newUser);
+
+          // TODO: fetch user from firestore and store user state in redux
+
+          // redirect to dashboard
+          navigate('/');
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -33,11 +58,10 @@ export function SignUp() {
     ],
     type: 'email',
     required: true,
-     // TODO: related to FormFieldComponent, maybe the change has to be here?
-    onChange: {setEmail},
-    placeholder:'Enter your email'
-   }
-   const PasswordInput = {
+    onChange: setEmail,
+    placeholder: 'Enter your email',
+  };
+  const PasswordInput = {
     label: 'Password',
     validations: [
       {
@@ -51,24 +75,22 @@ export function SignUp() {
     ],
     type: 'password',
     required: true,
-    // TODO: related to FormFieldComponent, maybe the change has to be here?
-    onChange: {setPassword},
-    placeholder:'Enter a password'
-   }
+    onChange: setPassword,
+    placeholder: 'Enter a password',
+  };
 
   return (
-    <Form.Root
-      onSubmit={signUp}>
-    <FormFieldComponent {...EmailInput} value={email} />
-    <FormFieldComponent {...PasswordInput} value={password} />
-    <Form.Submit asChild>
-    <ButtonComponent
-        type='submit'
-        ariaLabel='sign up button'
-        buttonContent='Register'
-      />
-    </Form.Submit>
-  </Form.Root>
+    <Form.Root onSubmit={signUp}>
+      <FormFieldComponent {...EmailInput} value={email} />
+      <FormFieldComponent {...PasswordInput} value={password} />
+      <Form.Submit asChild>
+        <ButtonComponent
+          type="submit"
+          ariaLabel="sign up button"
+          buttonContent="Register"
+        />
+      </Form.Submit>
+    </Form.Root>
   );
 }
 

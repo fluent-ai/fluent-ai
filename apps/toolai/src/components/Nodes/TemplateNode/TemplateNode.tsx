@@ -5,11 +5,13 @@ import * as Dialog from '@radix-ui/react-dialog';
 import Context from '../../context/context';
 
 interface MemoProps {
-  isConnectable: boolean;
+  id: string,
+  isConnectable: boolean,
   data: any
 }
-export default memo (({data, isConnectable}: MemoProps) => {
-  const {setIsDialogOpen} = useContext(Context);
+export default memo (({id, data, isConnectable}: MemoProps) => {
+  const {setIsDialogOpen, setActiveDialog, setActiveNodeId} = useContext(Context);
+
   return (
     <>
       <Handle
@@ -19,7 +21,7 @@ export default memo (({data, isConnectable}: MemoProps) => {
         onConnect={(params) => console.log('handle onConnect', params)}
         isConnectable={isConnectable}
       />
-      <div onClick={()=>setIsDialogOpen(true)}>{data.label}</div>
+      <div onClick={()=>{setIsDialogOpen(true); setActiveDialog(data.label); setActiveNodeId(id)}}>{data.label}</div>
 
       <Handle
         type="source"

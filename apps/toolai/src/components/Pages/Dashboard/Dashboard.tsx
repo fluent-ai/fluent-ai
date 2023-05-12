@@ -6,70 +6,38 @@ import {
   addEdge,
   useNodesState,
   useEdgesState,
+  Node
 
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import NodeSideBar from '../../Navigation/NodeSideBar/NodeSideBar';
 import FlowTabs from '../../Navigation/FlowTabs/FlowTabs';
 import TemplateNode from '../../Nodes/TemplateNode/TemplateNode';
-
+//import { NodeWrapperComponent } from '@tool-ai/ui';
 import Header from '../../Navigation/Header/Header';
 import { useFlowRunner } from '@tool-ai/flow-runner';
 
 const nodeTypes = {
-  templateNode: TemplateNode,
+  textInput: TemplateNode,
   template: TemplateNode,
   json: TemplateNode,
   userFunction: TemplateNode,
   preview: TemplateNode,
 };
 
-const initialNodes = [
+const initialNodes:Node[] = [
   {
-    "id" : "1",
-    "type" : "input",
-    "data" : {
-      "label" : "Text input"
-    },
-    "props" : {
-      "input" : `{
-        "name" : "Mr Wiggles",
-        "color" : "pink",
-        "number" : 3,
-        "balloons" : true
-      }
-      `},
-    "position" : {
-      "x" : 248.16855753646684,
-      "y" : -176.77471636953
-    },
-    "width" : 150,
-    "height" : 40,
-    "selected" : false,
-    "positionAbsolute" : {
-      "x" : 248.16855753646684,
-      "y" : -176.77471636953
-    },
-    "dragging" : false
+    id: '1',
+    type: 'textInput',
+    data: { label: 'textInput' },
+    position: { x: 250, y: 5 },
   },
   {
-    "id" : "2",
-    "type" : "json",
-    "data" : {
-      "label" : "JSON"
-    },
-    "position" : {
-      "x" : 302.1393841166937,
-      "y" : -94.76499189627229
-    },
-    "width" : 42,
-    "height" : 23,
-    "selected" : true,
-    "positionAbsolute" : {
-      "x" : 302.1393841166937,
-      "y" : -94.76499189627229
-    },
-    "dragging" : false
+    id: '2',
+    type: 'template',
+    data: { label: 'template' },
+    position: { x: 300, y: 50 },
+
   },
   {
     "id" : "3",
@@ -281,7 +249,7 @@ const Dashboard = () => {
         id: getId(),
         type,
         position,
-        data: { label: `${type} node` },
+        data: { label: `${type}` },
       };
 
       setNodes((nds) => nds.concat(newNode));
@@ -324,6 +292,7 @@ const Dashboard = () => {
     edges: edges,
     onNodesChange: onNodesChange,
     onEdgesChange: onEdgesChange,
+    setNodes: setNodes,
     onConnect: onConnect,
     onInit: setReactFlowInstance,
     onDrop: onDrop,
