@@ -1,14 +1,16 @@
 import { User } from './types';
-export const mockClient: User = {
+export const mockUser: User = {
   id: 'testId',
   email: 'test@test.com',
   name: 'Jeff Bezos',
   initials: 'JB',
   flows: [
     {
-      id: 'testId',
-      stringifiedFlowData: 'flowPlaceHolder',
+      id: 'tab1',
+      title: 'Flow 1',
+      stringifiedFlowData: '',
       owner: true,
+      colaborators: [],
     },
   ],
   profileImg:

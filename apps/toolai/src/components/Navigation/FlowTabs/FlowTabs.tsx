@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import * as Tabs from '@radix-ui/react-tabs';
 import {
   ReactFlow,
@@ -14,7 +14,8 @@ import {
   FlowTabsDropdown,
   AvatarComponent,
   NodeDialogComponent,
-  User,
+  UserFlows,
+  FlowCollaborators,
 } from '@tool-ai/ui';
 
 import { mock } from 'node:test';
@@ -23,7 +24,7 @@ import Context from '../../context/context';
 import styles from './FlowTabs.module.css';
 
 interface FlowTabsProps {
-  flowCharts: any;
+  flowCharts: UserFlows[];
   reactFlowWrapper: any;
   nodes: Node<{ label: string }, string | undefined>[];
   edges: Edge<any>[];
@@ -38,9 +39,11 @@ interface FlowTabsProps {
 }
 
 interface FlowChart {
-  value: string;
+  id: string;
   title: string;
-  colaborators: User[];
+  colaborators: FlowCollaborators[];
+  owner: boolean;
+  stringifiedFlowData: string;
 }
 
 const FlowTabs = (props: FlowTabsProps) => {
@@ -73,18 +76,21 @@ const FlowTabs = (props: FlowTabsProps) => {
           right-0 flex items-center"
           aria-label="Flow Tabs"
         >
-          {/*each tab would be dynamic in the real version*/}
-          {props.flowCharts.map((flowChart: FlowChart) => {
+          {props.flowCharts.map((flowChart: UserFlows) => {
             return (
               <Tabs.Trigger
                 className={`${styles.TabsTrigger} w-52 p-1 text-left flex justify-between items-center border-r-2 border-inherit`}
-                value={flowChart.value}
+                value={flowChart.id}
               >
                 {flowChart.title}
                 <div className="flex gap-x-2 items-center">
-                  {flowChart.colaborators.map((user: User) => {
-                    return <AvatarComponent initials={user.initials} />;
-                  })}
+                  {flowChart.colaborators.map(
+                    (collaborator: FlowCollaborators) => {
+                      return (
+                        <AvatarComponent initials={collaborator.initials} />
+                      );
+                    }
+                  )}
                   <div className="flex gap-x-2 items-center">
                     <FlowTabsDropdown users={flowChart.colaborators} />
                   </div>
@@ -97,10 +103,7 @@ const FlowTabs = (props: FlowTabsProps) => {
         </Tabs.List>
         {props.flowCharts.map((flowChart: FlowChart) => {
           return (
-            <Tabs.Content
-              className={styles.TabsContent}
-              value={flowChart.value}
-            >
+            <Tabs.Content className={styles.TabsContent} value={flowChart.id}>
               <div
                 className={styles.reactflowWrapper}
                 ref={props.reactFlowWrapper}
