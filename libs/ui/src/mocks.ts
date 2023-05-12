@@ -6,9 +6,11 @@ export const mockClient: User = {
   initials: 'JB',
   flows: [
     {
-      id: 'testId',
-      stringifiedFlowData: 'flowPlaceHolder',
+      id: 'tab1',
+      title: 'Flow 1',
+      stringifiedFlowData: '',
       owner: true,
+      colaborators: [],
     },
   ],
   profileImg:

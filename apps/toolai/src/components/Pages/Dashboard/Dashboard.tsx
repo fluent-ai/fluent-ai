@@ -7,8 +7,6 @@ import {
   addEdge,
   useNodesState,
   useEdgesState,
-  Node,
-  Edge,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import NodeSideBar from '../../Navigation/NodeSideBar/NodeSideBar';
@@ -17,7 +15,7 @@ import TemplateNode from '../../Nodes/TemplateNode/TemplateNode';
 //import { NodeWrapperComponent } from '@tool-ai/ui';
 import Header from '../../Navigation/Header/Header';
 import { store } from '@tool-ai/state';
-import { User } from '@tool-ai/ui';
+import { User, UserFlows } from '@tool-ai/ui';
 import { ButtonComponent } from '@tool-ai/ui';
 import { useFlowRunner } from '@tool-ai/flow-runner';
 
@@ -46,8 +44,9 @@ const Dashboard = () => {
     flows: [],
   });
 
-  const flowTabs = useSelector((state: any) => state.flowtabs.tabs);
   const currentUser = { ...user };
+  currentUser.flows = useSelector((state: any) => state.user.userData.flows);
+  //console.log('dashboard component, current user', currentUser);
 
   useEffect(() => {
     const sessionUser = store.getState().user.userData;
@@ -115,7 +114,9 @@ const Dashboard = () => {
   function runFlow() {
     console.log('Running');
   }
-
+  if (currentUser.id === '') {
+    return <div></div>;
+  }
   return (
     <>
       <Header currentUser={currentUser} />
@@ -133,7 +134,7 @@ const Dashboard = () => {
         <ReactFlowProvider>
           <NodeSideBar />
           <FlowTabs
-            flowCharts={flowTabs}
+            flowCharts={currentUser.flows}
             reactFlowWrapper={reactFlowWrapper}
             {...FlowTabsProps}
           />
