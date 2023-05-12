@@ -19,6 +19,7 @@ const NodeSideBar = () => {
     <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'template')} title="Template" icon={<MixIcon />} />
     <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'userFunction')} title="User Function" icon={<DoubleArrowRightIcon />} />
     <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'preview')} title="Preview" icon={<DoubleArrowRightIcon />} />
+    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'openAi')} title="Open AI" icon={<DoubleArrowRightIcon />} />
   </aside>
   {open ?
   <div
