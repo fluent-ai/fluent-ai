@@ -56,7 +56,7 @@ interface UserFlows {
   title: string;
   stringifiedFlowData: string;
   owner: boolean;
-  colaborators?: FlowCollaborators[];
+  colaborators: FlowCollaborators[];
 }
 
 interface User {
@@ -69,7 +69,7 @@ interface User {
 }
 
 interface FlowTabsDropdownProps {
-  users: User[];
+  users: FlowCollaborators[];
 }
 
 interface AvatarProps {
