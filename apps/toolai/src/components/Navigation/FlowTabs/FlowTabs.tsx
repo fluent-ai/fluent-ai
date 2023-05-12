@@ -70,7 +70,7 @@ const FlowTabs = (props: FlowTabsProps) => {
             return (
               <Tabs.Trigger
                 className={`tabs-trigger w-52 p-1 text-left flex justify-between items-center border-r-2 border-inherit`}
-                value={flowChart.value}
+                value={flowChart.id}
               >
                 {flowChart.title}
                 <div className="flex gap-x-2 items-center">
@@ -96,7 +96,7 @@ const FlowTabs = (props: FlowTabsProps) => {
         </Tabs.List>
         {props.flowCharts.map((flowChart: FlowChart) => {
           return (
-            <Tabs.Content value={flowChart.value}>
+            <Tabs.Content value={flowChart.id}>
               {/*The div wrapping a flow must
               have a set height and width*/}
               <div

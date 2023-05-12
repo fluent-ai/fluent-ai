@@ -22,7 +22,6 @@ export interface FlowEntity {
   title: string;
   stringifiedFlowData: string;
   owner: boolean;
-  value:
   colaborators?: FlowCollaboratorsEntity[];
 }
 export interface UserEntity {
