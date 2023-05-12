@@ -3,7 +3,7 @@
 
 async function runUserScript(
   userScript: string,
-  context: { msg: Record<string, unknown>; data: Record<string, unknown> }
+  context: { msg: Record<string, unknown>; props: Record<string, unknown> }
 ) {
   // Check for disallowed words
   const disallowedWords = [
@@ -28,32 +28,32 @@ async function runUserScript(
   userScript = userScript.replace(/\/\/.*|\/\*[\s\S]*?\*\//g, '');
 
   // Execute the sanitized code in a sandboxed context
-  const scriptFunction = new Function('msg', 'data', userScript);
+  const scriptFunction = new Function('msg', 'props', userScript);
   let result;
   try {
-    result = await scriptFunction(context.msg, context.data);
+    result = await scriptFunction(context.msg, context.props);
   } catch (error) {
     return { error: 'Error in user script\n' + error };
   }
   return result;
 }
 
-export interface UserFunctionData {
+export interface UserFunctionProps {
   userFunction: string;
   [key: string]: unknown;
 }
 
 export async function userFunction(
   msg: Record<string, unknown>,
-  data: UserFunctionData
+  props: UserFunctionProps
 ): Promise<Record<string, unknown>> {
   return new Promise((resolve, reject) => {
-    if (typeof data.userFunction === 'string') {
-      runUserScript(data.userFunction, { msg, data }).then((result) => {
+    if (typeof props.userFunction === 'string') {
+      runUserScript(props.userFunction, { msg, props }).then((result) => {
         resolve({ ...msg, ...result });
       });
     } else {
-      reject('data.userFunction is not a string');
+      reject('props.userFunction is not a string');
     }
   });
 }

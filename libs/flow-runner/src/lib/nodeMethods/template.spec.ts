@@ -1,33 +1,33 @@
 import { template } from './template';
 
 describe('FlowRunner nodeMethods - Template', () => {
-  it('should render a Mustache template with the input message and data', async () => {
+  it('should render a Mustache template with the input message and props', async () => {
     const msg = { name: 'John', age: 30 };
-    const data = {
+    const props = {
       template: 'My name is {{msg.name}} and I am {{msg.age}} years old',
     };
-    const result = await template(msg, data);
+    const result = await template(msg, props);
     expect(result?.['payload']).toEqual(
       'My name is John and I am 30 years old'
     );
   });
 
-  it('should reject with an error if data.template is not a string', async () => {
+  it('should reject with an error if props.template is not a string', async () => {
     const msg = { name: 'John', age: 30 };
-    const data = { template: 123 }; // not a string
+    const props = { template: 123 }; // not a string
     //@ts-expect-error - testing invalid input
-    await expect(template(msg, data)).rejects.toThrow(
-      'data.template is not a string'
+    await expect(template(msg, props)).rejects.toThrow(
+      'props.template is not a string'
     );
   });
 
   // Mustache.render doesn't throw an error if a variable is missing
   // it('should reject with an error if Mustache render throws an error', async () => {
   //   const msg = {};
-  //   const data = {
+  //   const props = {
   //     template: 'My name is {{msg.name}} and I am {{msg.age}} years old',
   //   }; // missing variable
-  //   await expect(template(msg, data)).rejects.toThrow();
+  //   await expect(template(msg, props)).rejects.toThrow();
   // });
   // Use a helper like so
   // var template = "{{#exists foo}}{{foo}}{{/exists}}";
