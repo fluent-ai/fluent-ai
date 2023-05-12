@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import { AvatarComponent, User } from '@tool-ai/ui';
 import * as firestoreService from '@libs/firestore-service';
 import { mockClient } from '@tool-ai/ui';
-
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import { Link } from 'react-router-dom';
+import { ButtonComponent } from '@tool-ai/ui';
 const Header = (): JSX.Element => {
   const [user, updateUser] = useState<User>({
     id: '',
@@ -21,6 +23,10 @@ const Header = (): JSX.Element => {
       });
   }, []);
 
+  function handleLogout() {
+    console.log("logout")
+  }
+
   if (Object.keys(currentUser).length === 0) {
     return <div></div>;
   } else {
@@ -29,10 +35,27 @@ const Header = (): JSX.Element => {
       rounded-md z-10 text-black flex justify-between items-center">
         <p>Tool AI</p>
         <div className="sidebar-icon">
-          <AvatarComponent
-            initials={currentUser.initials}
-            url={currentUser.profileImg}
-          />
+          <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+              <AvatarComponent
+                initials={currentUser.initials}
+                url={currentUser.profileImg}
+              />
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Portal>
+          <DropdownMenu.Content>
+            <DropdownMenu.Item>
+             <button
+             aria-label='logout button'
+             type="button"
+              onClick={handleLogout}
+             >Log out</button>
+
+            </DropdownMenu.Item>
+          </DropdownMenu.Content>
+          </DropdownMenu.Portal>
+          </DropdownMenu.Root>
+
         </div>
       </div>
     );
