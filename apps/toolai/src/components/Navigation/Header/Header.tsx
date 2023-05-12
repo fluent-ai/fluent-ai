@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AvatarComponent, User } from '@tool-ai/ui';
 import * as firestoreService from '@libs/firestore-service';
 import { mockClient } from '@tool-ai/ui';
@@ -11,13 +11,15 @@ const Header = (): JSX.Element => {
     initials: '',
   });
   const currentUser = { ...user };
-  firestoreService
-    .getSomeFromDB('users', 'id', '==', mockClient.id)
-    .then((users) => {
-      if (users.length > 0) {
-        updateUser(users[0] as User);
-      }
-    });
+  useEffect(() => {
+    firestoreService
+      .getSomeFromDB('users', 'id', '==', mockClient.id)
+      .then((users) => {
+        if (users.length > 0) {
+          updateUser(users[0] as User);
+        }
+      });
+  }, []);
 
   if (Object.keys(currentUser).length === 0) {
     return <div></div>;
