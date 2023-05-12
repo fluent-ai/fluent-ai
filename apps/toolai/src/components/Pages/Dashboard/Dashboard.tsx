@@ -1,6 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import {
   ReactFlowProvider,
   addEdge,
@@ -55,7 +56,9 @@ const Dashboard = () => {
     initials: '',
   });
 
+  const flowTabs = useSelector((state: any) => state.flowtabs.tabs);
   const currentUser = { ...user };
+
   useEffect(() => {
     const sessionUser = store.getState().user.userData;
     updateUser(sessionUser as User);
@@ -100,36 +103,6 @@ const Dashboard = () => {
     [reactFlowInstance]
   );
 
-  const flowCharts = [
-    {
-      value: 'tab1',
-      title: 'Flow 1',
-      colaborators: [
-        {
-          id: '1',
-          name: 'John Doe',
-          initials: 'JD',
-        },
-        {
-          id: '2',
-          name: 'Jane Doe',
-          initials: 'DJ',
-        },
-      ],
-    },
-    {
-      value: 'tab2',
-      title: 'Flow 3',
-      colaborators: [
-        {
-          id: '4',
-          name: 'Mark Smith',
-          initials: 'MS',
-        },
-      ],
-    },
-  ];
-
   const FlowTabsProps = {
     nodes: nodes,
     edges: edges,
@@ -150,7 +123,7 @@ const Dashboard = () => {
         <ReactFlowProvider>
           <NodeSideBar />
           <FlowTabs
-            flowCharts={flowCharts}
+            flowCharts={flowTabs}
             reactFlowWrapper={reactFlowWrapper}
             {...FlowTabsProps}
           />
