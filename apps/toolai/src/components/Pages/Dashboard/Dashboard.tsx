@@ -13,7 +13,7 @@ import TemplateNode from '../../Nodes/TemplateNode/TemplateNode';
 //import { NodeWrapperComponent } from '@tool-ai/ui';
 import Header from '../../Navigation/Header/Header';
 import { store } from '@tool-ai/state';
-import { User } from '@tool-ai/ui';
+import { User, mockUser } from '@tool-ai/ui';
 import { ButtonComponent } from '@tool-ai/ui';
 import { useFlowRunner } from '@tool-ai/flow-runner';
 
@@ -48,7 +48,14 @@ const Dashboard = () => {
 
   useEffect(() => {
     const sessionUser = store.getState().user.userData;
-    updateUser(sessionUser as User);
+    console.log(sessionUser);
+
+    if (sessionUser.id === '') {
+      // for local development only
+      updateUser(mockUser);
+    } else {
+      updateUser(sessionUser as User);
+    }
   }, []);
 
   const onConnect = useCallback(

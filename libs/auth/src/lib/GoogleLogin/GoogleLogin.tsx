@@ -2,7 +2,7 @@ import styles from './GoogleLogin.module.css';
 import { signInWithPopup, GoogleAuthProvider, getAuth } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import * as firestoreService from '@libs/firestore-service';
-import { User, UserFlows } from '@tool-ai/ui';
+import { User } from '@tool-ai/ui';
 import { store, userActions, UserEntity } from '@tool-ai/state';
 
 const auth = getAuth();

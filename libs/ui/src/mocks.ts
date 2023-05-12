@@ -1,5 +1,5 @@
 import { User } from './types';
-export const mockClient: User = {
+export const mockUser: User = {
   id: 'testId',
   email: 'test@test.com',
   name: 'Jeff Bezos',
