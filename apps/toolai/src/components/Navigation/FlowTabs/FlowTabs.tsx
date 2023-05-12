@@ -14,7 +14,6 @@ import {
   FlowTabsDropdown,
   AvatarComponent,
   NodeDialogComponent,
-  User,
   UserFlows,
   FlowCollaborators,
 } from '@tool-ai/ui';

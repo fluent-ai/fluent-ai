@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -15,7 +13,7 @@ import TemplateNode from '../../Nodes/TemplateNode/TemplateNode';
 //import { NodeWrapperComponent } from '@tool-ai/ui';
 import Header from '../../Navigation/Header/Header';
 import { store } from '@tool-ai/state';
-import { User, UserFlows } from '@tool-ai/ui';
+import { User } from '@tool-ai/ui';
 import { ButtonComponent } from '@tool-ai/ui';
 import { useFlowRunner } from '@tool-ai/flow-runner';
 
