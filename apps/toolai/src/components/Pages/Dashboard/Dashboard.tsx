@@ -16,6 +16,7 @@ import TemplateNode from '../../Nodes/TemplateNode/TemplateNode';
 //import { NodeWrapperComponent } from '@tool-ai/ui';
 import Header from '../../Navigation/Header/Header';
 import { ButtonComponent } from '@tool-ai/ui';
+import { ButtonComponent } from '@tool-ai/ui';
 import { useFlowRunner } from '@tool-ai/flow-runner';
 
 const nodeTypes = {
@@ -282,13 +283,15 @@ const Dashboard = () => {
     nodeTypes: nodeTypes,
   };
 
-  function runFlow () {console.log('Running')}
 
   const { flow, setFlow, executeFlow,  } = useFlowRunner();
 
   useEffect(() => {
     console.log('flow', flow);
   }, [flow]);
+
+
+  function runFlow () {console.log('Running')}
 
 
   return (
