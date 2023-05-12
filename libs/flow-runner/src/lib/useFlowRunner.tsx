@@ -6,6 +6,7 @@ import { template as methodTemplate } from './nodeMethods/template'
 import { json as methodJson } from './nodeMethods/json'
 import { userFunction as methodUserFunction } from './nodeMethods/userFunction'
 import { preview as methodPreview } from './nodeMethods/preview'
+import { openAi as methodOpenAi } from './nodeMethods/openAi'
 
 // structuredClone pollyfill for Jest
 const structuredClone = (obj: Record<string, unknown>) => {
@@ -50,6 +51,8 @@ const lookupMethod = (type: string | undefined) => {
       return methodUserFunction
     case 'preview':
       return methodPreview
+    case 'openAI':
+      return methodOpenAi
     default:
       console.error(`🚨 useFlowRunner : Node type ${type} not found`)
   }
@@ -60,16 +63,15 @@ export const useFlowRunner = (): {
   flow: IFlow
   setFlow: ({ nodes, edges }: { nodes: Node[]; edges: Edge[] }) => void
   executeFlow: () => Promise<void>
-  runnerNodes: IExecutionNode[]
 } => {
   
-  const [runnerNodes, setRunnerNodes] = useState<IExecutionNode[]>([])
-  const [flow, setFlow] = useState<IFlow>({nodes: [], edges: []});
+  const [nodes, setNodes] = useState<IExecutionNode[]>([])
+  const [flowInternal, setFlowInternal] = useState<IFlow>({nodes: [], edges: []});
 
 
   useEffect(() => {
     // @ts-expect-error - pollyfill
-    let newNodes = structuredClone(flow.nodes) as unknown as IExecutionNode[];
+    let newNodes = structuredClone(flowInternal.nodes) as unknown as IExecutionNode[];
     newNodes = newNodes.map((node) => ({
       ...node,
       type: node.type,
@@ -79,7 +81,7 @@ export const useFlowRunner = (): {
     }) as unknown as IExecutionNode)
 
     //Register callbacks
-    flow.edges.forEach((edge) => {
+    flowInternal.edges.forEach((edge) => {
       const sourceNode = findNode(newNodes, edge.source)
       const targetNode = findNode(newNodes, edge.target)
 
@@ -94,8 +96,8 @@ export const useFlowRunner = (): {
       }
     })
 
-    setRunnerNodes(newNodes)
-  }, [flow])
+    setNodes(newNodes)
+  }, [flowInternal])
 
 
 
@@ -103,7 +105,7 @@ export const useFlowRunner = (): {
    * Execute the flow.
    */
   const executeFlow = async (): Promise<void> => {
-    const rootNodes = runnerNodes.filter((node) => isRootNode(flow, node.id))
+    const rootNodes = nodes.filter((node) => isRootNode(flowInternal, node.id))
 
     // Start the execution by triggering executeNode on each root
     await Promise.all(
@@ -120,12 +122,20 @@ export const useFlowRunner = (): {
   ): Promise<void> => {
     if(node.method) {
       await node.method(msg, node.props).then((msg) => {
+        //replace msg on node with new msg
+        setNodes((runnerNodes) => {
+          const newNodes = [...runnerNodes]
+          const nodeIndex = newNodes.findIndex((n) => n.id === node.id)
+          newNodes[nodeIndex].msg = structuredClone(msg)
+          // newNodes[nodeIndex].props = node.props
+          return newNodes
+        })
         node.msg =  structuredClone(msg);
         node.callbacks?.forEach((callback) => callback(structuredClone(msg)))
       });
     }
   }
 
-  return { flow, setFlow, executeFlow, runnerNodes }
+  return { flow: {nodes, edges: flowInternal.edges}, setFlow: setFlowInternal, executeFlow }
 }
 

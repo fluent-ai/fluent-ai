@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import {
   ReactFlowProvider,
   addEdge,
@@ -14,6 +14,7 @@ import FlowTabs from '../../Navigation/FlowTabs/FlowTabs';
 import TemplateNode from '../../Nodes/TemplateNode/TemplateNode';
 
 import Header from '../../Navigation/Header/Header';
+import { useFlowRunner } from '@tool-ai/flow-runner';
 
 const nodeTypes = {
   templateNode: TemplateNode,
@@ -330,14 +331,25 @@ const Dashboard = () => {
     nodeTypes: nodeTypes,
   };
 
-  
+  const { flow, setFlow, executeFlow,  } = useFlowRunner();
+
+  useEffect(() => {
+    console.log('flow', flow);
+  }, [flow]);
+ 
 
   return (
     <>
     <Header />
       <div className="relative flex flex-col grow h-full md:flex-row">
         <ReactFlowProvider>
-          <button onClick={() => console.log(JSON.stringify({nodes, edges}))}>my button</button>
+          <button onClick={() => {
+            console.log('executing flow');
+            setFlow({ nodes, edges });
+            setTimeout(() => {
+            executeFlow()
+            }, 100);
+          } }>my button</button>
           <NodeSideBar />
           <FlowTabs
             flowCharts={flowCharts}

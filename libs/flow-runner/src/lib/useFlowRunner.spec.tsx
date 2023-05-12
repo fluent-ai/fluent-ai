@@ -46,9 +46,9 @@ describe('useFlowRunner', () => {
 
 
 it('should create a msg prop on nodes', () => {  
-  const node1 = flowRunner.runnerNodes.find((node) => node.id === '1')
-  const node3 = flowRunner.runnerNodes.find((node) => node.id === '3')
-  const node5 = flowRunner.runnerNodes.find((node) => node.id === '5')
+  const node1 = flowRunner.flow.nodes.find((node) => node.id === '1')
+  const node3 = flowRunner.flow.nodes.find((node) => node.id === '3')
+  const node5 = flowRunner.flow.nodes.find((node) => node.id === '5')
 
   expect(node1?.msg).toBeDefined()
   expect(node3?.msg).toBeDefined()
@@ -58,9 +58,9 @@ it('should create a msg prop on nodes', () => {
 
 
   it('should assign callbacks for linked nodes', () => {
-    const node1 = flowRunner.runnerNodes.find((node) => node.id === '1')
-    const node3 = flowRunner.runnerNodes.find((node) => node.id === '3')
-    const node5 = flowRunner.runnerNodes.find((node) => node.id === '5')
+    const node1 = flowRunner.flow.nodes.find((node) => node.id === '1')
+    const node3 = flowRunner.flow.nodes.find((node) => node.id === '3')
+    const node5 = flowRunner.flow.nodes.find((node) => node.id === '5')
 
     // @ts-expect-error - callbacks are normally private
     expect(node1?.callbacks.length).toBe(1)
@@ -76,7 +76,7 @@ it('should create a msg prop on nodes', () => {
       await flowRunner.executeFlow()
     })
     
-    const node2 = flowRunner.runnerNodes.find((node) => node.id === '2')
+    const node2 = flowRunner.flow.nodes.find((node) => node.id === '2')
     // @ts-expect-error - msg is normally private
     expect(node2?.msg?.payload?.name).toBe('Mr Wiggles')
     // @ts-expect-error - msg is normally private
@@ -84,7 +84,7 @@ it('should create a msg prop on nodes', () => {
     // @ts-expect-error - msg is normally private
     expect(node2?.msg?.payload?.balloons).toBe(true)
 
-    const node7 = flowRunner.runnerNodes.find((node) => node.id === '7')
+    const node7 = flowRunner.flow.nodes.find((node) => node.id === '7')
     // @ts-expect-error - msg is normally private
     expect(node7?.msg?.payload?.number).toBe(6)
 

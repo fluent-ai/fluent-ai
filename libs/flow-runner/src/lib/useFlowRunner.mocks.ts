@@ -5,7 +5,7 @@ export const nodes = [
     data: {
       label: 'Text input',
     },
-    props:{
+    props: {
       input: `{
           "name" : "Mr Wiggles",
           "color" : "pink",
@@ -13,7 +13,6 @@ export const nodes = [
           "balloons" : true
         }
         `,
-
     },
     position: { x: 0, y: 50 },
   },
@@ -55,24 +54,25 @@ export const nodes = [
     data: {
       label: 'Function',
     },
-    props:{
-      userFunction: 'msg.payload.number = msg.payload.number * 2; return msg',},
+    props: {
+      userFunction: 'msg.payload.number = msg.payload.number * 2; return msg',
+    },
     position: { x: 650, y: 25 },
   },
   {
     id: '7',
-    type: 'output',
-    data: { label: 'Output' },
+    type: 'input',
+    data: { label: 'Input' },
+    props: {
+      input: `Please do a thing`,
+    },
     position: { x: 650, y: 25 },
   },
   {
     id: '8',
-    type: 'template',
+    type: 'openAi',
     data: {
-      label: 'Template',
-    },
-    props: {
-      template: `Im a redundant template!`,
+      label: 'OpenAI Chat Completion',
     },
     position: { x: 300, y: 50 },
   },
@@ -110,8 +110,8 @@ export const edges = [
     target: '6',
   },
   {
-    id: 'e6-7',
-    source: '6',
-    target: '7',
+    id: 'e7-8',
+    source: '7',
+    target: '8',
   },
 ];
