@@ -35,6 +35,7 @@ export interface NodeWrapperComponentProps {
 interface TooltipProps {
   buttonContent?: JSX.Element | string;
   text: string;
+  name?: string;
   clickHandler?: () => void;
 }
 

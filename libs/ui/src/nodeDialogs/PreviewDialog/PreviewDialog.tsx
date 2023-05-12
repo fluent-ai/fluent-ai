@@ -11,7 +11,7 @@ function PreviewDialog(props:NodeDialogProps) {
     <InnerDialogStructure
     title="Preview"
     description="preview description">
-      {node.msg? <div>{node.msg}</div> : null}
+      {node.msg? <div>{node.msg.payload}</div> : null}
     </InnerDialogStructure>
   );
 }
