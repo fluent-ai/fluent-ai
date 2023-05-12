@@ -16,6 +16,7 @@ export async function getIDsFromDB(collectionName: string): Promise<string[]> {
   querySnapshot.forEach((doc) => {
     IDs.push(doc.id);
   });
+  console.log('getIdsfromDB: I was called');
   return IDs;
 }
 
@@ -37,6 +38,7 @@ export async function getSomeIDsFromDB(
   querySnapshot.forEach((doc) => {
     IDs.push(doc.id);
   });
+  console.log('getSomeIDsFromDB: I was called');
   return IDs;
 }
 
@@ -50,6 +52,7 @@ export async function getAllFromDB(
   querySnapshot.forEach((doc) => {
     collectionData.push(doc.data());
   });
+  console.log('getAllFromDB: I was called');
 
   return collectionData;
 }
@@ -73,6 +76,6 @@ export async function getSomeFromDB(
   querySnapshot.forEach((doc) => {
     collectionData.push(doc.data());
   });
-
+  console.log('getSomeFromDB: I was called');
   return collectionData;
 }
