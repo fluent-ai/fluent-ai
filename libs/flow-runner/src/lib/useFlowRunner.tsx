@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Node, Edge } from 'reactflow'
-import { input as methodInput } from './nodeMethods/input'
+import { textInput as methodTextInput } from './nodeMethods/textInput'
 import { output as methodOutput } from './nodeMethods/output'
 import { template as methodTemplate } from './nodeMethods/template'
 import { json as methodJson } from './nodeMethods/json'
@@ -39,8 +39,8 @@ const isRootNode = (flow: IFlow, id:string): boolean => {
 
 const lookupMethod = (type: string | undefined) => {
   switch (type) {
-    case 'input':
-      return methodInput
+    case 'textInput':
+      return methodTextInput
     case 'output':
       return methodOutput
     case 'template':
