@@ -64,7 +64,8 @@ return (
       />
       <Tabs.Root className="flex flex-col" defaultValue="tab1">
         <Tabs.List
-          className="absolute my-2.5 mx-2.5 z-10 bg-white w-50 border-2 border-inherit rounded-md right-0 flex items-center"
+          className="absolute my-2.5 mx-2.5 z-10 bg-white w-50 rounded-md shadow-md
+          right-0 flex items-center"
           aria-label="Flow Tabs"
         >
           {/*each tab would be dynamic in the real version*/}
@@ -75,11 +76,11 @@ return (
                 value={flowChart.value}
               >
                 {flowChart.title}
-                <div className="flex gap-x-2">
+                <div className="flex gap-x-2 items-center">
                   {flowChart.colaborators.map((user: User) => {
                     return <AvatarComponent initials={user.initials} />;
                   })}
-                  <div>
+                  <div className="flex gap-x-2 items-center">
                     <FlowTabsDropdown users={flowChart.colaborators} />
                   </div>
                 </div>
