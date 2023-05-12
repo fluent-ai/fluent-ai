@@ -93,7 +93,10 @@ const FlowTabs = (props: FlowTabsProps) => {
             );
           })}
 
-          <TooltipComponent text="add new flow" buttonContent={<PlusIcon />} />
+          <TooltipComponent
+          text="add new flow"
+          buttonContent={<PlusIcon />}
+          name="add-flow" />
         </Tabs.List>
         {props.flowCharts.map((flowChart: FlowChart) => {
           return (

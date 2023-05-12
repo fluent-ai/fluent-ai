@@ -1,6 +1,6 @@
 import React from 'react';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { ArrowDownIcon } from '@radix-ui/react-icons';
+import { ArrowDownIcon, CaretDownIcon } from '@radix-ui/react-icons';
 import './FlowTabsDropdown.module.css';
 import { AlertComponent } from '../AlertComponent/AlertComponent';
 import styles from '../AlertComponent/AlertComponent.module.css';
@@ -11,7 +11,7 @@ const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
         <button className="IconButton sidebar-icon" aria-label="FlowTab Menu">
-          <ArrowDownIcon />
+          <CaretDownIcon />
         </button>
       </DropdownMenu.Trigger>
 
