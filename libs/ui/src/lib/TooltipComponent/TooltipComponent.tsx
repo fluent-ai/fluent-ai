@@ -48,7 +48,7 @@ const TooltipComponent = (props: TooltipProps) => {
             type="button"
             ariaLabel="iconbutton"
             buttonContent={props.buttonContent}
-            classes="sidebar-icon"
+            classes="icon"
             clickHandler={addNewFlowTab}
           />
         </Tooltip.Trigger>

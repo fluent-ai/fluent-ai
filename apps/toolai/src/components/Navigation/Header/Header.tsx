@@ -1,26 +1,48 @@
 import { AvatarComponent, User } from '@tool-ai/ui';
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import { Link } from 'react-router-dom';
+import { ButtonComponent } from '@tool-ai/ui';
 
 interface UserProps {
-  user: User;
+  currentUser: User;
 }
 
-const Header = (currentUser: UserProps): JSX.Element => {
-  if (Object.keys(currentUser).length === 0) {
-    return <div></div>;
-  } else {
-    return (
-      <div className="h-10 w-60 mt-2.5 ml-2.5 bg-white absolute shadow-md
-      rounded-md z-10 text-black flex justify-between items-center">
-        <p>Tool AI</p>
-        <div className="sidebar-icon">
-          <AvatarComponent
-            initials={currentUser.user.initials}
-            url={currentUser.user.profileImg}
-          />
-        </div>
-      </div>
-    );
+const Header = (userProps: UserProps): JSX.Element => {
+  function handleLogout() {
+    console.log('logout');
   }
+
+  return (
+    <div
+      className="h-10 w-60 mt-2.5 ml-2.5 bg-white absolute shadow-md
+      rounded-md z-10 text-black flex justify-between items-center"
+    >
+      <p>Tool AI</p>
+      <div className="sidebar-icon">
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            <AvatarComponent
+              initials={userProps.currentUser.initials}
+              url={userProps.currentUser.profileImg}
+            />
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Portal>
+            <DropdownMenu.Content>
+              <DropdownMenu.Item>
+                <button
+                  aria-label="logout button"
+                  type="button"
+                  onClick={handleLogout}
+                >
+                  Log out
+                </button>
+              </DropdownMenu.Item>
+            </DropdownMenu.Content>
+          </DropdownMenu.Portal>
+        </DropdownMenu.Root>
+      </div>
+    </div>
+  );
 };
 
 export default Header;
