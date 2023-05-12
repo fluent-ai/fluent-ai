@@ -37,8 +37,6 @@ describe('useFlowRunner', () => {
     
   })
 
-
-
   it('should have nodes & edges after syncing', () => {
     expect(flowRunner.flow.nodes.length).toBe(8)
     expect(flowRunner.flow.edges.length).toBe(7)
@@ -84,9 +82,9 @@ it('should create a msg prop on nodes', () => {
     // @ts-expect-error - msg is normally private
     expect(node2?.msg?.payload?.balloons).toBe(true)
 
-    const node7 = flowRunner.flow.nodes.find((node) => node.id === '7')
+    const node6 = flowRunner.flow.nodes.find((node) => node.id === '6')
     // @ts-expect-error - msg is normally private
-    expect(node7?.msg?.payload?.number).toBe(6)
+    expect(node6?.msg?.payload?.number).toBe(6)
 
     })
 

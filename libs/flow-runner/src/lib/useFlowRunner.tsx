@@ -51,7 +51,7 @@ const lookupMethod = (type: string | undefined) => {
       return methodUserFunction
     case 'preview':
       return methodPreview
-    case 'openAI':
+    case 'openAi':
       return methodOpenAi
     default:
       console.error(`🚨 useFlowRunner : Node type ${type} not found`)
