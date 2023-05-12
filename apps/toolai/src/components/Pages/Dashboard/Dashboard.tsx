@@ -7,7 +7,7 @@ import {
   useNodesState,
   useEdgesState,
   Node,
-  Edge
+  Edge,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import NodeSideBar from '../../Navigation/NodeSideBar/NodeSideBar';
@@ -59,12 +59,12 @@ const initialNodes = [
     data: {
       label: 'JSON',
     },
-    msg :{
-      name: "Mr Wiggles",
-      color: "pink",
+    msg: {
+      name: 'Mr Wiggles',
+      color: 'pink',
       number: 3,
-      balloons: true
-  },
+      balloons: true,
+    },
     position: { x: 300, y: 50 },
   },
   {
@@ -78,7 +78,7 @@ const initialNodes = [
         Here! have {{msg.payload.number}} {{msg.payload.color}} balloons.`,
     },
     msg: {
-      payload : "Hello Mr Wiggles!\n        Here! have 3 pink balloons."
+      payload: 'Hello Mr Wiggles!\n        Here! have 3 pink balloons.',
     },
     position: { x: 300, y: 50 },
   },
@@ -87,7 +87,7 @@ const initialNodes = [
     type: 'preview',
     data: { label: 'Preview' },
     msg: {
-      payload : "Hello Mr Wiggles!\n        Here! have 3 pink balloons."
+      payload: 'Hello Mr Wiggles!\n        Here! have 3 pink balloons.',
     },
     position: { x: 300, y: 50 },
   },
@@ -96,7 +96,7 @@ const initialNodes = [
     type: 'output',
     data: { label: 'Output' },
     msg: {
-      payload : "Hello Mr Wiggles!\n        Here! have 3 pink balloons."
+      payload: 'Hello Mr Wiggles!\n        Here! have 3 pink balloons.',
     },
     position: { x: 650, y: 25 },
   },
@@ -109,24 +109,24 @@ const initialNodes = [
     props: {
       userFunction: 'msg.payload.number = msg.payload.number * 2; return msg',
     },
-    msg :{
-      name: "Mr Wiggles",
-      color: "pink",
+    msg: {
+      name: 'Mr Wiggles',
+      color: 'pink',
       number: 6,
-      balloons: true
-  },
+      balloons: true,
+    },
     position: { x: 650, y: 25 },
   },
   {
     id: '7',
     type: 'output',
     data: { label: 'Output' },
-    msg :{
-      name: "Mr Wiggles",
-      color: "pink",
+    msg: {
+      name: 'Mr Wiggles',
+      color: 'pink',
       number: 6,
-      balloons: true
-  },
+      balloons: true,
+    },
     position: { x: 650, y: 25 },
   },
   {
@@ -182,174 +182,173 @@ const initialEdges = [
     target: '7',
   },
   {
-    "id" : "3",
-    "type" : "template",
-    "data" : {
-      "label" : "Template1"
+    id: '3',
+    type: 'template',
+    data: {
+      label: 'Template1',
     },
-    "props" : {
-      "template" : `Hello {{msg.payload.name}}!\n        Here! have {{msg.payload.number}} {{msg.payload.color}} balloons.`
+    props: {
+      template: `Hello {{msg.payload.name}}!\n        Here! have {{msg.payload.number}} {{msg.payload.color}} balloons.`,
     },
-    "position" : {
-      "x" : 180.90761750405184,
-      "y" : -21.312803889789308
+    position: {
+      x: 180.90761750405184,
+      y: -21.312803889789308,
     },
-    "width" : 72,
-    "height" : 23,
-    "selected" : false,
-    "positionAbsolute" : {
-      "x" : 180.90761750405184,
-      "y" : -21.312803889789308
+    width: 72,
+    height: 23,
+    selected: false,
+    positionAbsolute: {
+      x: 180.90761750405184,
+      y: -21.312803889789308,
     },
-    "dragging" : false
+    dragging: false,
   },
   {
-    "id" : "4",
-    "type" : "preview",
-    "data" : {
-      "label" : "Preview"
+    id: '4',
+    type: 'preview',
+    data: {
+      label: 'Preview',
     },
-    "position" : {
-      "x" : 188.7520259319287,
-      "y" : 49.2868719611021
+    position: {
+      x: 188.7520259319287,
+      y: 49.2868719611021,
     },
-    "width" : 56,
-    "height" : 23,
-    "selected" : false,
-    "positionAbsolute" : {
-      "x" : 188.7520259319287,
-      "y" : 49.2868719611021
+    width: 56,
+    height: 23,
+    selected: false,
+    positionAbsolute: {
+      x: 188.7520259319287,
+      y: 49.2868719611021,
     },
-    "dragging" : false
+    dragging: false,
   },
   {
-    "id" : "5",
-    "type" : "output",
-    "data" : {
-      "label" : "Output"
+    id: '5',
+    type: 'output',
+    data: {
+      label: 'Output',
     },
-    "position" : {
-      "x" : 140.8265802269043,
-      "y" : 133.39546191247976
+    position: {
+      x: 140.8265802269043,
+      y: 133.39546191247976,
     },
-    "width" : 150,
-    "height" : 40,
-    "selected" : false,
-    "positionAbsolute" : {
-      "x" : 140.8265802269043,
-      "y" : 133.39546191247976
+    width: 150,
+    height: 40,
+    selected: false,
+    positionAbsolute: {
+      x: 140.8265802269043,
+      y: 133.39546191247976,
     },
-    "dragging" : false
+    dragging: false,
   },
   {
-    "id" : "6",
-    "type" : "userFunction",
-    "data" : {
-      "label" : "Function"
+    id: '6',
+    type: 'userFunction',
+    data: {
+      label: 'Function',
     },
-    "props" : {
-      "userFunction" : "msg.payload.number = msg.payload.number * 2; return msg"
+    props: {
+      userFunction: 'msg.payload.number = msg.payload.number * 2; return msg',
     },
-    "position" : {
-      "x" : 366.88816855753635,
-      "y" : 15.729335494327406
+    position: {
+      x: 366.88816855753635,
+      y: 15.729335494327406,
     },
-    "width" : 62,
-    "height" : 23,
-    "selected" : false,
-    "positionAbsolute" : {
-      "x" : 366.88816855753635,
-      "y" : 15.729335494327406
+    width: 62,
+    height: 23,
+    selected: false,
+    positionAbsolute: {
+      x: 366.88816855753635,
+      y: 15.729335494327406,
     },
-    "dragging" : false
+    dragging: false,
   },
   {
-    "id" : "7",
-    "type" : "output",
-    "data" : {
-      "label" : "Output"
+    id: '7',
+    type: 'output',
+    data: {
+      label: 'Output',
     },
-    "position" : {
-      "x" : 319.82171799027543,
-      "y" : 135.53484602917342
+    position: {
+      x: 319.82171799027543,
+      y: 135.53484602917342,
     },
-    "width" : 150,
-    "height" : 40,
-    "selected" : false,
-    "positionAbsolute" : {
-      "x" : 319.82171799027543,
-      "y" : 135.53484602917342
+    width: 150,
+    height: 40,
+    selected: false,
+    positionAbsolute: {
+      x: 319.82171799027543,
+      y: 135.53484602917342,
     },
-    "dragging" : false
+    dragging: false,
   },
   {
-    "id" : "8",
-    "type" : "template",
-    "data" : {
-      "label" : "Template2"
+    id: '8',
+    type: 'template',
+    data: {
+      label: 'Template2',
     },
-    "props" : {
-      "template" : "Im a redundant template!"
+    props: {
+      template: 'Im a redundant template!',
     },
-    "position" : {
-      "x" : 504.66774716369525,
-      "y" : 7.2123176661264115
+    position: {
+      x: 504.66774716369525,
+      y: 7.2123176661264115,
     },
-    "width" : 75,
-    "height" : 23,
-    "selected" : false,
-    "positionAbsolute" : {
-      "x" : 504.66774716369525,
-      "y" : 7.2123176661264115
+    width: 75,
+    height: 23,
+    selected: false,
+    positionAbsolute: {
+      x: 504.66774716369525,
+      y: 7.2123176661264115,
     },
-    "dragging" : false
-  }
-]
+    dragging: false,
+  },
+];
 const initialEdges = [
   {
-    "source" : "1",
-    "sourceHandle" : null,
-    "target" : "2",
-    "targetHandle" : null,
-    "id" : "reactflow__edge-1-2"
+    source: '1',
+    sourceHandle: null,
+    target: '2',
+    targetHandle: null,
+    id: 'reactflow__edge-1-2',
   },
   {
-    "source" : "2",
-    "sourceHandle" : "b",
-    "target" : "3",
-    "targetHandle" : null,
-    "id" : "reactflow__edge-2b-3"
+    source: '2',
+    sourceHandle: 'b',
+    target: '3',
+    targetHandle: null,
+    id: 'reactflow__edge-2b-3',
   },
   {
-    "source" : "2",
-    "sourceHandle" : "b",
-    "target" : "6",
-    "targetHandle" : null,
-    "id" : "reactflow__edge-2b-6"
+    source: '2',
+    sourceHandle: 'b',
+    target: '6',
+    targetHandle: null,
+    id: 'reactflow__edge-2b-6',
   },
   {
-    "source" : "3",
-    "sourceHandle" : "b",
-    "target" : "4",
-    "targetHandle" : null,
-    "id" : "reactflow__edge-3b-4"
+    source: '3',
+    sourceHandle: 'b',
+    target: '4',
+    targetHandle: null,
+    id: 'reactflow__edge-3b-4',
   },
   {
-    "source" : "4",
-    "sourceHandle" : "b",
-    "target" : "5",
-    "targetHandle" : null,
-    "id" : "reactflow__edge-4b-5"
+    source: '4',
+    sourceHandle: 'b',
+    target: '5',
+    targetHandle: null,
+    id: 'reactflow__edge-4b-5',
   },
   {
-    "source" : "6",
-    "sourceHandle" : "b",
-    "target" : "7",
-    "targetHandle" : null,
-    "id" : "reactflow__edge-6b-7"
-  }
-]
-
+    source: '6',
+    sourceHandle: 'b',
+    target: '7',
+    targetHandle: null,
+    id: 'reactflow__edge-6b-7',
+  },
+];
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
@@ -442,37 +441,45 @@ const Dashboard = () => {
     nodeTypes: nodeTypes,
   };
 
+  function runFlow() {
+    console.log('Running');
+  }
 
-  function runFlow () {console.log('Running')}
+  const openAiKey = process.env.NX_OPENAI_API_KEY;
+  console.log('openAiKey', openAiKey);
 
-  const { flow, setFlow, executeFlow,  } = useFlowRunner();
+  const { flow, setFlow, executeFlow } = useFlowRunner();
 
   useEffect(() => {
     console.log('flow', flow);
   }, [flow]);
- 
 
   return (
     <>
-    <Header />
-    <div className='h-10 w-32 mt-2.5 ml-72 bg-white absolute shadow-md rounded-md z-10 text-black flex justify-between items-center'>
-    <ButtonComponent
-      buttonContent='RUN'
-      type='button'
-      classes='icons'
-      ariaLabel='run flow'
-      clickHandler={runFlow} />
+      <Header />
+      <div className="h-10 w-32 mt-2.5 ml-72 bg-white absolute shadow-md rounded-md z-10 text-black flex justify-between items-center">
+        <ButtonComponent
+          buttonContent="RUN"
+          type="button"
+          classes="icons"
+          ariaLabel="run flow"
+          clickHandler={runFlow}
+        />
       </div>
 
       <div className="relative flex flex-col grow h-full md:flex-row">
         <ReactFlowProvider>
-          <button onClick={() => {
-            console.log('executing flow');
-            setFlow({ nodes, edges });
-            setTimeout(() => {
-            executeFlow()
-            }, 100);
-          } }>my button</button>
+          <button
+            onClick={() => {
+              console.log('executing flow');
+              setFlow({ nodes, edges });
+              setTimeout(() => {
+                executeFlow();
+              }, 100);
+            }}
+          >
+            my button
+          </button>
           <NodeSideBar />
           <FlowTabs
             flowCharts={flowCharts}
