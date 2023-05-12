@@ -4,13 +4,15 @@ export const nodes = [
     type: 'input',
     data: {
       label: 'Text input',
+    },
+    props: {
       input: `{
-        "name" : "Mr Wiggles",
-        "color" : "pink",
-        "number" : 3,
-        "balloons" : true
-      }
-      `,
+          "name" : "Mr Wiggles",
+          "color" : "pink",
+          "number" : 3,
+          "balloons" : true
+        }
+        `,
     },
     position: { x: 0, y: 50 },
   },
@@ -27,8 +29,10 @@ export const nodes = [
     type: 'template',
     data: {
       label: 'Template',
+    },
+    props: {
       template: `Hello {{msg.payload.name}}!
-      Here! have {{msg.payload.number}} {{msg.payload.color}} balloons.`,
+        Here! have {{msg.payload.number}} {{msg.payload.color}} balloons.`,
     },
     position: { x: 300, y: 50 },
   },
@@ -49,22 +53,26 @@ export const nodes = [
     type: 'userFunction',
     data: {
       label: 'Function',
+    },
+    props: {
       userFunction: 'msg.payload.number = msg.payload.number * 2; return msg',
     },
     position: { x: 650, y: 25 },
   },
   {
     id: '7',
-    type: 'output',
-    data: { label: 'Output' },
+    type: 'input',
+    data: { label: 'Input' },
+    props: {
+      input: `Please do a thing`,
+    },
     position: { x: 650, y: 25 },
   },
   {
     id: '8',
-    type: 'template',
+    type: 'openAi',
     data: {
-      label: 'Template',
-      template: `Im a redundant template!`,
+      label: 'OpenAI Chat Completion',
     },
     position: { x: 300, y: 50 },
   },
@@ -102,8 +110,8 @@ export const edges = [
     target: '6',
   },
   {
-    id: 'e6-7',
-    source: '6',
-    target: '7',
+    id: 'e7-8',
+    source: '7',
+    target: '8',
   },
 ];

@@ -1,16 +1,16 @@
-export interface InputData {
+export interface inputProps {
   input: string;
   [key: string]: unknown;
 }
 
 export async function input(
   msg: Record<string, unknown>,
-  data: InputData
+  props: inputProps
 ): Promise<Record<string, unknown>> {
   return new Promise((resolve, reject) => {
-    if (!data.input || typeof data.input !== 'string') {
-      reject(new Error('data.input is not a string'));
+    if (!props.input || typeof props.input !== 'string') {
+      reject(new Error('props.input is not a string'));
     }
-    resolve({ ...msg, payload: data.input });
+    resolve({ ...msg, payload: props.input });
   });
 }
