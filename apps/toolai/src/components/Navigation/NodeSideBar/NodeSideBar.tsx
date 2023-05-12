@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import NodeItemSideBar from '../NodeItemSideBar/NodeItemSideBar';
-import { FileIcon, MixIcon, DoubleArrowRightIcon, ArrowRightIcon, ArrowLeftIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import { FileIcon, MixIcon, TextIcon, DoubleArrowRightIcon, ArrowRightIcon, ArrowLeftIcon, FrameIcon, MagnifyingGlassIcon, CameraIcon, GlobeIcon } from '@radix-ui/react-icons';
 
 const NodeSideBar = () => {
   const [open, setOpen] = useState(false);
@@ -14,12 +14,12 @@ const NodeSideBar = () => {
   <aside className={`px-2 py-2.5 rounded-md bg-white shadow-md
   ${open ? 'w-60': 'w-[45px] overflow-hidden'}`}>
     <div className='flex gap-x-3'><div className='sidebar-icon'><MagnifyingGlassIcon /></div><input className='w-100 border-2 border-inherit rounded-md' type="search" aria-label="search nodes" placeholder="Search nodes" ></input></div>
-    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'textInput')} title="Text Input" icon={<DoubleArrowRightIcon />} />
+    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'textInput')} title="Text Input" icon={<TextIcon />} />
     <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'json')} title="JSON" icon={<FileIcon />} />
-    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'template')} title="Template" icon={<MixIcon />} />
-    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'userFunction')} title="User Function" icon={<DoubleArrowRightIcon />} />
-    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'preview')} title="Preview" icon={<DoubleArrowRightIcon />} />
-    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'openAi')} title="Open AI" icon={<DoubleArrowRightIcon />} />
+    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'template')} title="Template" icon={<FrameIcon />} />
+    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'userFunction')} title="User Function" icon={<MixIcon />} />
+    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'preview')} title="Preview" icon={<CameraIcon />} />
+    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'openAi')} title="Open AI" icon={<GlobeIcon />} />
   </aside>
   {open ?
   <div
