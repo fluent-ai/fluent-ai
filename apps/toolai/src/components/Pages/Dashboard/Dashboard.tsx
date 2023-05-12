@@ -27,52 +27,16 @@ const nodeTypes = {
   json: TemplateNode,
   userFunction: TemplateNode,
   preview: TemplateNode,
+  openAi: TemplateNode,
 };
-
-const initialNodes = [
-  {
-    id: '1',
-    type: 'input',
-    data: {
-      label: 'Text input',
-    },
-    props: {
-      input: `{
-          "name" : "Mr Wiggles",
-          "color" : "pink",
-          "number" : 3,
-          "balloons" : true
-        }
-        `,
-    },
-    msg: {
-      payload: `{
-          "name" : "Mr Wiggles",
-          "color" : "pink",
-          "number" : 3,
-          "balloons" : true
-        }
-        `,
-    },
-    position: { x: 0, y: 50 },
-  },
-];
-
-const initialEdges = [
-  {
-    id: 'e1-2',
-    source: '1',
-    target: '2',
-  },
-];
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
 
 const Dashboard = () => {
   const reactFlowWrapper = useRef<any>(null);
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
   const [user, updateUser] = useState<User>({
     id: '',
@@ -142,15 +106,15 @@ const Dashboard = () => {
     nodeTypes: nodeTypes,
   };
 
-  function runFlow() {
-    console.log('Running');
-  }
-
   const { flow, setFlow, executeFlow } = useFlowRunner();
 
   useEffect(() => {
     console.log('flow', flow);
   }, [flow]);
+
+  function runFlow() {
+    console.log('Running');
+  }
 
   return (
     <>
@@ -167,17 +131,6 @@ const Dashboard = () => {
 
       <div className="relative flex flex-col grow h-full md:flex-row">
         <ReactFlowProvider>
-          <button
-            onClick={() => {
-              console.log('executing flow');
-              setFlow({ nodes, edges });
-              setTimeout(() => {
-                executeFlow();
-              }, 100);
-            }}
-          >
-            my button
-          </button>
           <NodeSideBar />
           <FlowTabs
             flowCharts={flowTabs}
