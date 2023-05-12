@@ -34,7 +34,7 @@ export async function writeToDB(collectionName: string, document: any) {
 
 export async function updateFirestoreDocument(
   collectionName: string,
-  document: any,
+  Id: string,
   updateProperties: any
 ) {
   try {
@@ -42,22 +42,22 @@ export async function updateFirestoreDocument(
     // TODO: check type of document
 
     // IF client: check if email exists
-    const existingIds: string[] = await getSomeIDsFromDB(
-      collectionName,
-      'email',
-      '==',
-      document.email
-    );
-    console.log(existingIds);
+    // const existingIds: string[] = await getSomeIDsFromDB(
+    //   collectionName,
+    //   'email',
+    //   '==',
+    //   document.email
+    // );
+    // console.log(existingIds);
 
-    if (existingIds.length === 0) {
-      console.error(`document does't exist and cannot be updated`);
-      return false;
-    }
-    const existingDocRef = doc(db, collectionName, existingIds[0]);
-    await updateDoc(existingDocRef, updateProperties);
+    // if (existingIds.length === 0) {
+    //   console.error(`document does't exist and cannot be updated`);
+    //   return false;
+    // }
+    //const existingDocRef = doc(db, collectionName, existingIds[0]);
+    await updateDoc(doc(db, collectionName, Id), updateProperties);
 
-    console.log('Document updated with ID: ', existingIds[0]);
+    console.log('Document updated with ID: ', Id);
     return true;
   } catch (e) {
     console.error('Error adding document: ', e);

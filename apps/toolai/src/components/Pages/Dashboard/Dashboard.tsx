@@ -54,6 +54,7 @@ const Dashboard = () => {
     name: '',
     email: '',
     initials: '',
+    flows: [],
   });
 
   const flowTabs = useSelector((state: any) => state.flowtabs.tabs);

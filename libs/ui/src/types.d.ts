@@ -47,18 +47,18 @@ interface NodeDialogProps {
   activeNodeId: string;
 }
 
+interface UserFlows {
+  id: string;
+  stringifiedFlowData: string;
+  owner: boolean;
+}
+
 interface User {
   id: string;
   name: string;
   initials: string;
   email: string;
-  flows?: [
-    {
-      id: string;
-      stringifiedFlowData: string;
-      owner: boolean;
-    }
-  ];
+  flows: UserFlows[];
   profileImg?: string;
 }
 

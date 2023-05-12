@@ -31,6 +31,7 @@ export function SignUp() {
             // TODO: we need to ask for a username on signup and regex the initials from it
             name: mockClient.name,
             initials: mockClient.name.slice(0, 2).toUpperCase(),
+            flows: [],
           };
           // write new user to firestore & store auth UUID as user ID/ document ID
           firestoreService.writeToDB('users', newUser);

@@ -16,7 +16,7 @@ import {
   NodeDialogComponent,
   User,
 } from '@tool-ai/ui';
-import { store, flowtabsActions } from '@tool-ai/state';
+
 import { mock } from 'node:test';
 
 import Context from '../../context/context';
@@ -47,27 +47,6 @@ const FlowTabs = (props: FlowTabsProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [activeDialog, setActiveDialog] = useState('');
   const [activeNodeId, setActiveNodeId] = useState('');
-
-  const handleClick = () => {
-    store.dispatch(flowtabsActions.setLoadingStatus('loading'));
-    const sessionTabs = store.getState().flowtabs.tabs;
-
-    // store new state in redux
-    store.dispatch(
-      flowtabsActions.addFlowTab({
-        value: 'tab' + (sessionTabs.length + 1), // this will count the existing tabs and assign tab number according to exisiting count
-        title: 'Flow ' + (sessionTabs.length + 1),
-        colaborators: [
-          {
-            id: '1',
-            name: 'John Doe',
-            initials: 'JD',
-          },
-        ],
-      })
-    );
-    store.dispatch(flowtabsActions.setLoadingStatus('loaded'));
-  };
 
   return (
     <Context.Provider
@@ -113,11 +92,7 @@ const FlowTabs = (props: FlowTabsProps) => {
             );
           })}
 
-          <TooltipComponent
-            text="add new flow"
-            buttonContent={<PlusIcon />}
-            trigger={handleClick}
-          />
+          <TooltipComponent text="add new flow" buttonContent={<PlusIcon />} />
         </Tabs.List>
         {props.flowCharts.map((flowChart: FlowChart) => {
           return (

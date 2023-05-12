@@ -12,18 +12,17 @@ export const USER_FEATURE_KEY = 'user';
 /*
  * Update these interfaces according to your requirements.
  */
+export interface FlowEntity {
+  id: string;
+  stringifiedFlowData: string;
+  owner: boolean;
+}
 export interface UserEntity {
-  id?: string;
-  name?: string;
-  initials?: string;
-  email?: string;
-  flows?: [
-    {
-      id: string;
-      stringifiedFlowData: string;
-      owner: boolean;
-    }
-  ];
+  id: string;
+  name: string;
+  initials: string;
+  email: string;
+  flows: FlowEntity[];
   profileImg?: string;
 }
 
@@ -66,7 +65,13 @@ export const fetchUser = createAsyncThunk(
 
 export const initialUserState: UserState = userAdapter.getInitialState({
   loadingStatus: 'not loaded',
-  userData: {},
+  userData: {
+    id: '',
+    name: '',
+    initials: '',
+    email: '',
+    flows: [],
+  },
   error: null,
 });
 
@@ -82,6 +87,10 @@ export const userSlice = createSlice({
     },
     updateUserData: (state: UserState, action: PayloadAction<UserEntity>) => {
       state.userData = action.payload;
+    },
+    updateUserFlows: (state: UserState, action: PayloadAction<FlowEntity>) => {
+      const user = state.userData;
+      user.flows = [...user.flows, action.payload];
     },
   },
 });

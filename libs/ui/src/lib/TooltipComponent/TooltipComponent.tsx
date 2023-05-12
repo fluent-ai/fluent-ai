@@ -1,8 +1,45 @@
 import React from 'react';
 import * as Tooltip from '@radix-ui/react-tooltip';
+import { store, flowtabsActions, userActions } from '@tool-ai/state';
+import * as firestoreService from '@libs/firestore-service';
 import { TooltipProps } from '../../types';
 
 const TooltipComponent = (props: TooltipProps) => {
+  const addNewFlowTab = () => {
+    store.dispatch(flowtabsActions.setLoadingStatus('loading'));
+    const sessionTabs = store.getState().flowtabs.tabs;
+
+    // store new state in redux
+    store.dispatch(
+      flowtabsActions.addFlowTab({
+        value: 'tab' + (sessionTabs.length + 1), // this will count the existing tabs and assign tab number according to exisiting count
+        title: 'Flow ' + (sessionTabs.length + 1),
+        colaborators: [
+          {
+            id: '1',
+            name: 'John Doe',
+            initials: 'JD',
+          },
+        ],
+      })
+    );
+
+    // reflect new flow in user state
+    const newFlow = {
+      id: 'Flow ' + (sessionTabs.length + 1),
+      owner: true,
+      stringifiedFlowData: '',
+    };
+    store.dispatch(userActions.updateUserFlows(newFlow));
+    const user = store.getState().user.userData;
+
+    // update firestore
+    firestoreService.updateFirestoreDocument('users', user.id, {
+      flows: [...user.flows],
+    });
+    store.dispatch(flowtabsActions.setLoadingStatus('loaded'));
+  };
+
   return (
     <Tooltip.Provider>
       <Tooltip.Root>
@@ -15,7 +52,7 @@ const TooltipComponent = (props: TooltipProps) => {
           justify-center
           text-black bg-white rounded-full sidebar-icon
           hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2"
-            onClick={props.trigger}
+            onClick={addNewFlowTab}
           >
             {props.buttonContent}
           </button>

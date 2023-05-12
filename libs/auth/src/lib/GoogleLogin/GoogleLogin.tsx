@@ -37,6 +37,7 @@ export function GoogleLogin() {
                   email: user.email,
                   name: user.displayName,
                   initials: user.displayName?.slice(0, 2).toUpperCase(),
+                  flows: [],
                   profileImg: user.photoURL,
                 };
 
