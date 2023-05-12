@@ -39,22 +39,6 @@ export async function updateFirestoreDocument(
 ) {
   try {
     const db = getFirestore();
-    // TODO: check type of document
-
-    // IF client: check if email exists
-    // const existingIds: string[] = await getSomeIDsFromDB(
-    //   collectionName,
-    //   'email',
-    //   '==',
-    //   document.email
-    // );
-    // console.log(existingIds);
-
-    // if (existingIds.length === 0) {
-    //   console.error(`document does't exist and cannot be updated`);
-    //   return false;
-    // }
-    //const existingDocRef = doc(db, collectionName, existingIds[0]);
     await updateDoc(doc(db, collectionName, Id), updateProperties);
 
     console.log('Document updated with ID: ', Id);
