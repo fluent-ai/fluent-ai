@@ -4,11 +4,7 @@ import { AvatarProps } from '../../types';
 
 const AvatarComponent = (props: AvatarProps) => (
   <Avatar.Root className={styles.AvatarRoot}>
-    <Avatar.Image
-      className={styles.AvatarImage}
-      src={props.url}
-      // alt={props.alt}
-    />
+    <Avatar.Image className={styles.AvatarImage} src={props.url} />
     <Avatar.Fallback className={styles.AvatarFallback}>
       {props.initials}
     </Avatar.Fallback>

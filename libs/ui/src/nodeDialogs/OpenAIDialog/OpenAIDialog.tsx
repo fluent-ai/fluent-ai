@@ -2,18 +2,18 @@ import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialog
 import { NodeDialogProps } from "../../types";
 
 /* eslint-disable-next-line */
-//export interface PreviewDialogProps {}
+export interface OpenAIDialogProps {}
 
-function PreviewDialog(props:NodeDialogProps) {
+export function OpenAIDialog(props: NodeDialogProps){
   const node = props.nodes.find(nodes => nodes.id === props.activeNodeId);
 
   return (
     <InnerDialogStructure
-    title="Preview"
-    description="preview description">
+    title="Open Ai"
+    description="Open AI description">
       {node.msg? <div>{node.msg}</div> : null}
     </InnerDialogStructure>
   );
 }
 
-export {PreviewDialog};
+export default OpenAIDialog;

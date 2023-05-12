@@ -7,21 +7,24 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 
-export const FLOW_RUNNER_FEATURE_KEY = 'flowRunner';
+export const FLOWTABS_FEATURE_KEY = 'flowtabs';
 
 /*
  * Update these interfaces according to your requirements.
  */
-export interface FlowRunnerEntity {
-  id: number;
+export interface FlowtabsEntity {
+  value: string;
+  title: string;
+  colaborators?: [{ id: string; name: string; initials: string }];
 }
 
-export interface FlowRunnerState extends EntityState<FlowRunnerEntity> {
+export interface FlowtabsState extends EntityState<FlowtabsEntity> {
   loadingStatus: 'not loaded' | 'loading' | 'loaded' | 'error';
-  error: string | null | undefined;
+  tabs: FlowtabsEntity[];
+  error?: string | null;
 }
 
-export const flowRunnerAdapter = createEntityAdapter<FlowRunnerEntity>();
+export const flowtabsAdapter = createEntityAdapter<FlowtabsEntity>();
 
 /**
  * Export an effect using createAsyncThunk from
@@ -36,31 +39,32 @@ export const flowRunnerAdapter = createEntityAdapter<FlowRunnerEntity>();
  *
  * const dispatch = useDispatch();
  * useEffect(() => {
- *   dispatch(fetchFlowRunner())
+ *   dispatch(fetchFlowtabs())
  * }, [dispatch]);
  * ```
  */
-export const fetchFlowRunner = createAsyncThunk(
-  'flowRunner/fetchStatus',
+export const fetchFlowtabs = createAsyncThunk(
+  'flowtabs/fetchStatus',
   async (_, thunkAPI) => {
     /**
      * Replace this with your custom fetch call.
-     * For example, `return myApi.getFlowRunners()`;
+     * For example, `return myApi.getFlowtabss()`;
      * Right now we just return an empty array.
      */
     return Promise.resolve([]);
   }
 );
 
-export const initialFlowRunnerState: FlowRunnerState =
-  flowRunnerAdapter.getInitialState({
+export const initialFlowtabsState: FlowtabsState =
+  flowtabsAdapter.getInitialState({
     loadingStatus: 'not loaded',
+    tabs: [],
     error: null,
   });
 
-export const flowRunnerSlice = createSlice({
-  name: FLOW_RUNNER_FEATURE_KEY,
-  initialState: initialFlowRunnerState,
+export const flowtabsSlice = createSlice({
+  name: FLOWTABS_FEATURE_KEY,
+  initialState: initialFlowtabsState,
   reducers: {
     setLoadingStatus: (
       state,
@@ -68,13 +72,20 @@ export const flowRunnerSlice = createSlice({
     ) => {
       state.loadingStatus = action.payload;
     },
+    addFlowTab: (
+      state: FlowtabsState,
+      action: PayloadAction<FlowtabsEntity>
+    ) => {
+      // TODO: we need to update collaborators in a nested array!
+      state.tabs = [...state.tabs, action.payload];
+    },
   },
 });
 
 /*
  * Export reducer for store configuration.
  */
-export const flowRunnerReducer = flowRunnerSlice.reducer;
+export const flowtabsReducer = flowtabsSlice.reducer;
 
 /*
  * Export action creators to be dispatched. For use with the `useDispatch` hook.
@@ -88,13 +99,13 @@ export const flowRunnerReducer = flowRunnerSlice.reducer;
  *
  * const dispatch = useDispatch();
  * useEffect(() => {
- *   dispatch(flowRunnerActions.add({ id: 1 }))
+ *   dispatch(flowtabsActions.add({ id: 1 }))
  * }, [dispatch]);
  * ```
  *
  * See: https://react-redux.js.org/next/api/hooks#usedispatch
  */
-export const flowRunnerActions = flowRunnerSlice.actions;
+export const flowtabsActions = flowtabsSlice.actions;
 
 /*
  * Export selectors to query state. For use with the `useSelector` hook.
@@ -105,22 +116,19 @@ export const flowRunnerActions = flowRunnerSlice.actions;
  *
  * // ...
  *
- * const entities = useSelector(selectAllFlowRunner);
+ * const entities = useSelector(selectAllFlowtabs);
  * ```
  *
  * See: https://react-redux.js.org/next/api/hooks#useselector
  */
-const { selectAll, selectEntities } = flowRunnerAdapter.getSelectors();
+const { selectAll, selectEntities } = flowtabsAdapter.getSelectors();
 
-export const getFlowRunnerState = (rootState: any): FlowRunnerState =>
-  rootState[FLOW_RUNNER_FEATURE_KEY];
+export const getFlowtabsState = (rootState: any): FlowtabsState =>
+  rootState[FLOWTABS_FEATURE_KEY];
 
-export const selectAllFlowRunner = createSelector(
-  getFlowRunnerState,
-  selectAll
-);
+export const selectAllFlowtabs = createSelector(getFlowtabsState, selectAll);
 
-export const selectFlowRunnerEntities = createSelector(
-  getFlowRunnerState,
+export const selectFlowtabsEntities = createSelector(
+  getFlowtabsState,
   selectEntities
 );
