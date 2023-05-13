@@ -1,13 +1,13 @@
 import { render } from '@testing-library/react';
 
-import {OpenAIDialog} from './OpenAIDialog';
+import {TxtFileInputDialog} from './TxtFileInputDialog';
 
-describe('OpenAIDialog', () => {
+describe('TxtFileInput', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<OpenAIDialog
+    const { baseElement } = render(<TxtFileInputDialog
       isOpen={true}
       onClose={()=>{console.log('onClose')}}
-      activeDialog='openAi'
+      activeDialog='txtFile'
       nodes={[]}
       setNodes={()=>console.log('setNodes')}
       activeNodeId='test'
