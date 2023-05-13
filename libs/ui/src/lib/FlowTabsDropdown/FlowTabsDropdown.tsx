@@ -19,7 +19,10 @@ const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
           className={styles.DropdownMenuContent}
           sideOffset={5}
         >
-          <DropdownMenu.Item className={styles.DropdownMenuItem}>
+          <DropdownMenu.Item
+            className={styles.DropdownMenuItem}
+            onClick={props.onSave}
+          >
             Save <div className={styles.RightSlot}>⌘+S</div>
           </DropdownMenu.Item>
           <DropdownMenu.Item className={styles.DropdownMenuItem}>

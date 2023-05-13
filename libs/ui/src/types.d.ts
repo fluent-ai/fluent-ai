@@ -72,6 +72,7 @@ interface User {
 
 interface FlowTabsDropdownProps {
   users: FlowCollaborators[];
+  onSave: () => void;
 }
 
 interface AvatarProps {

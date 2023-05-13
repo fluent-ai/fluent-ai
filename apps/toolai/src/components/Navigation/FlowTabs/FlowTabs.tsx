@@ -16,6 +16,7 @@ import {
   NodeDialogComponent,
   UserFlows,
   FlowCollaborators,
+  saveFlow,
 } from '@tool-ai/ui';
 
 import { mock } from 'node:test';
@@ -52,6 +53,10 @@ const FlowTabs = (props: FlowTabsProps) => {
   const [activeDialog, setActiveDialog] = useState('');
   const [activeNodeId, setActiveNodeId] = useState('');
 
+  const handleSave = function () {
+    saveFlow(props.nodes, props.edges);
+  };
+
   return (
     <Context.Provider
       value={{
@@ -84,7 +89,10 @@ const FlowTabs = (props: FlowTabsProps) => {
                     }
                   )}
                   <div className="flex gap-x-2 items-center">
-                    <FlowTabsDropdown users={flowChart.colaborators} />
+                    <FlowTabsDropdown
+                      users={flowChart.colaborators}
+                      onSave={handleSave}
+                    />
                   </div>
                 </div>
               </Tabs.Trigger>
