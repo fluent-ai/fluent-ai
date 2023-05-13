@@ -39,12 +39,20 @@ const TooltipComponent = (props: TooltipProps) => {
     <Tooltip.Provider>
       <Tooltip.Root>
         <Tooltip.Trigger asChild>
+          {/* <button
+          type="button"
+          className="icon"
+          aria-label="iconbutton"
+          onClick={addNewFlowTab}
+          >
+          {props.buttonContent}
+          </button> */}
           <ButtonComponent
             type="button"
             ariaLabel="iconbutton"
             buttonContent={props.buttonContent}
             classes="icon"
-            clickHandler={addNewFlowTab}
+            clickHandler={props.name === "add-flow" ? addNewFlowTab : undefined}
           />
         </Tooltip.Trigger>
         <Tooltip.Portal>

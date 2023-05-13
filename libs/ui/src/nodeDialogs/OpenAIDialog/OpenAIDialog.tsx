@@ -4,7 +4,7 @@ import { NodeDialogProps } from "../../types";
 /* eslint-disable-next-line */
 export interface OpenAIDialogProps {}
 
-export function OpenAIDialog(props: NodeDialogProps){
+function OpenAIDialog(props: NodeDialogProps){
   const node = props.nodes.find(nodes => nodes.id === props.activeNodeId);
 
   return (
@@ -16,4 +16,4 @@ export function OpenAIDialog(props: NodeDialogProps){
   );
 }
 
-export default OpenAIDialog;
+export {OpenAIDialog};

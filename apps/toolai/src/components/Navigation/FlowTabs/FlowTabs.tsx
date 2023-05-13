@@ -18,10 +18,7 @@ import {
   FlowCollaborators,
 } from '@tool-ai/ui';
 
-import { mock } from 'node:test';
-
 import Context from '../../context/context';
-import styles from './FlowTabs.module.css';
 
 interface FlowTabsProps {
   flowCharts: UserFlows[];
@@ -43,6 +40,7 @@ interface FlowChart {
   title: string;
   colaborators: FlowCollaborators[];
   owner: boolean;
+
   stringifiedFlowData: string;
 }
 
@@ -50,6 +48,8 @@ const FlowTabs = (props: FlowTabsProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [activeDialog, setActiveDialog] = useState('');
   const [activeNodeId, setActiveNodeId] = useState('');
+
+  // value
 
   return (
     <Context.Provider
@@ -60,16 +60,6 @@ const FlowTabs = (props: FlowTabsProps) => {
         setActiveNodeId,
       }}
     >
-      <ReactFlow
-        ref={props.reactFlowWrapper}
-        nodes={props.nodes}
-        edges={props.edges}
-        onConnect={props.onConnect}
-        onInit={props.onInit}
-        onDrop={props.onDrop}
-        onDragOver={props.onDragOver}
-        nodeTypes={props.nodeTypes}
-      />
       <Tabs.Root className="flex flex-col" defaultValue="tab1">
         <Tabs.List
           className="absolute my-2.5 mx-2.5 z-10 bg-white w-50 rounded-md shadow-md
@@ -79,7 +69,7 @@ const FlowTabs = (props: FlowTabsProps) => {
           {props.flowCharts.map((flowChart: UserFlows) => {
             return (
               <Tabs.Trigger
-                className={`${styles.TabsTrigger} w-52 p-1 text-left flex justify-between items-center border-r-2 border-inherit`}
+                className={`tabs-trigger w-52 p-1 text-left flex justify-between items-center border-r-2 border-inherit`}
                 value={flowChart.id}
               >
                 {flowChart.title}
@@ -99,13 +89,18 @@ const FlowTabs = (props: FlowTabsProps) => {
             );
           })}
 
-          <TooltipComponent text="add new flow" buttonContent={<PlusIcon />} />
+          <TooltipComponent
+          text="add new flow"
+          buttonContent={<PlusIcon />}
+          name="add-flow" />
         </Tabs.List>
         {props.flowCharts.map((flowChart: FlowChart) => {
           return (
-            <Tabs.Content className={styles.TabsContent} value={flowChart.id}>
+            <Tabs.Content value={flowChart.id}>
+              {/*The div wrapping a flow must
+              have a set height and width*/}
               <div
-                className={styles.reactflowWrapper}
+                className="flex-grow h-screen w-screen realtive z-0"
                 ref={props.reactFlowWrapper}
               >
                 <ReactFlow
