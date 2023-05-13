@@ -6,6 +6,8 @@ import { handleChange } from '../functions';
 
 
 function InputDialog(props: NodeDialogProps) {
+  const node = props.nodes.find(nodes => nodes.id === props.activeNodeId);
+
   return (
     <InnerDialogStructure
     title="Text Input"
@@ -15,6 +17,7 @@ function InputDialog(props: NodeDialogProps) {
         placeholder="input your text"
         rows={10}
         cols={100}
+        value={node?.props ? node.props.input : ''}
         onChange={(event) => handleChange(
           props.nodes,
           props.setNodes,

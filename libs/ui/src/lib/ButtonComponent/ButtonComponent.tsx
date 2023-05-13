@@ -5,7 +5,7 @@ export interface ButtonProps {
   type: "button" | "submit" | "reset" | undefined;
   ariaLabel: string;
   classes?: string;
-  clickHandler?: () => void;
+  clickHandler?: () => void | undefined;
 }
 function ButtonComponent (props: ButtonProps) {
 
@@ -29,8 +29,7 @@ function ButtonComponent (props: ButtonProps) {
     rounded-full
     hover:opacity-80
     focus:outline-none
-    focus:ring-2
-    focus:ring-offset-2`;
+    `;
 
   return(
     <button

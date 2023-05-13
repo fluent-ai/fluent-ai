@@ -5,6 +5,8 @@ import { handleChange } from "../functions";
 // export interface TemplateDialogProps {}
 
 function TemplateDialog(props: NodeDialogProps) {
+  const node = props.nodes.find(nodes => nodes.id === props.activeNodeId);
+
   return (
     <InnerDialogStructure
     title="Template"
@@ -14,6 +16,7 @@ function TemplateDialog(props: NodeDialogProps) {
         placeholder="Write your template here..."
         rows={10}
         cols={100}
+        value={node?.props ? node.props.template : ''}
         onChange={(event) => handleChange(
           props.nodes,
           props.setNodes,
