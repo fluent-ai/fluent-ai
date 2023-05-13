@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import * as firestoreService from '@libs/firestore-service';
 import { User } from '@tool-ai/ui';
 import { store, userActions, UserEntity } from '@tool-ai/state';
+import { current } from '@reduxjs/toolkit';
 
 const auth = getAuth();
 export function GoogleLogin() {
@@ -24,7 +25,6 @@ export function GoogleLogin() {
           .then((users) => {
             if (users.length > 0) {
               // store user state in redux
-
               store.dispatch(
                 userActions.updateUserData(users[0] as UserEntity)
               );

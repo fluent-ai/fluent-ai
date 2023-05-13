@@ -12,7 +12,7 @@ import FlowTabs from '../../Navigation/FlowTabs/FlowTabs';
 import TemplateNode from '../../Nodes/TemplateNode/TemplateNode';
 //import { NodeWrapperComponent } from '@tool-ai/ui';
 import Header from '../../Navigation/Header/Header';
-import { store, userActions } from '@tool-ai/state';
+import { store, userActions, flowTabActions } from '@tool-ai/state';
 import * as firestoreService from '@libs/firestore-service';
 import { User, mockUser } from '@tool-ai/ui';
 import { ButtonComponent } from '@tool-ai/ui';
@@ -56,7 +56,7 @@ const Dashboard = () => {
         store.dispatch(userActions.setLoadingStatus('loading'));
         const currentState = store.getState();
         const currentUser = currentState.user.userData;
-        const activeTab = currentState.activeTab.id;
+        const activeTab = currentState.flowTab.flowTabs.activeId;
 
         // store user state in redux
         const activeFlowIndex = currentUser.flows.findIndex(
@@ -97,23 +97,27 @@ const Dashboard = () => {
     [nodes, edges]
   );
 
-  // useEffect(() => {
-  //   console.log('adding a listener');
-  //   document.body.addEventListener('keydown', persistNewFlow);
-  //   return () => {
-  //     document.removeEventListener('keydown', persistNewFlow);
-  //   };
-  // }, [persistNewFlow]);
-
+  // This loads the initial user and flow data from the user
   useEffect(() => {
     const sessionUser = store.getState().user.userData;
-    // console.log(sessionUser);
 
     if (sessionUser.id === '') {
       // for local development only
       updateUser(mockUser);
     } else {
       updateUser(sessionUser as User);
+      sessionUser.flows.forEach((flow) => {
+        const flowEntity = {
+          id: flow.id,
+          nodes: JSON.parse(flow.stringifiedNodes),
+          edges: JSON.parse(flow.stringifiedEdges),
+        };
+        store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
+      });
+
+      store.dispatch(flowTabActions.setActiveFlowTab(sessionUser.flows[0].id));
+      setNodes(JSON.parse(sessionUser.flows[0].stringifiedNodes));
+      setEdges(JSON.parse(sessionUser.flows[0].stringifiedEdges));
     }
   }, []);
 
@@ -121,6 +125,36 @@ const Dashboard = () => {
     (params: any) => setEdges((eds) => addEdge(params, eds)),
     []
   );
+
+  // save & load the nodes and edges of the tabs that we switched
+  const changeTabState = useCallback(
+    (tabId: string) => {
+      // save current active state
+      const activeId = store.getState().flowTab.flowTabs.activeId;
+      if (tabId === activeId) return;
+      const flowTabToSave = {
+        id: activeId,
+        nodes: nodes,
+        edges: edges,
+      };
+      store.dispatch(flowTabActions.saveCurrentFlowTab(flowTabToSave));
+
+      // load new tab
+      store.dispatch(flowTabActions.setActiveFlowTab(tabId));
+
+      // useState on current node and edges
+      const currentFlowTab = store
+        .getState()
+        .flowTab.flowTabs.flows.find((flow) => flow.id === tabId);
+
+      if (currentFlowTab) {
+        setNodes(currentFlowTab.nodes);
+        setEdges(currentFlowTab.edges);
+      }
+    },
+    [nodes, edges, setNodes, setEdges]
+  );
+
   const onDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
@@ -155,6 +189,10 @@ const Dashboard = () => {
     [reactFlowInstance]
   );
 
+  useEffect(() => {
+    // console.log('updated flowState: ', nodes, edges);
+  }, [nodes, edges]); // Trigger the effect when nodes or edges change
+
   const FlowTabsProps = {
     nodes: nodes,
     edges: edges,
@@ -166,13 +204,14 @@ const Dashboard = () => {
     onDrop: onDrop,
     onDragOver: onDragOver,
     nodeTypes: nodeTypes,
+    onTabChange: changeTabState,
   };
 
   const { flow, setFlow, executeFlow } = useFlowRunner();
 
-  useEffect(() => {
-    console.log('flow', flow);
-  }, [flow]);
+  // useEffect(() => {
+  //   console.log('flow', flow);
+  // }, [flow]);
 
   function runFlow() {
     console.log('Running');
