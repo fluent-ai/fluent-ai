@@ -39,15 +39,9 @@ const Dashboard = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
-  const [user, updateUser] = useState<User>({
-    id: '',
-    name: '',
-    email: '',
-    initials: '',
-    flows: [],
-  });
 
-  const currentUser = { ...user };
+  const currentUser = useSelector((state: any) => state.user.userData);
+  // const flowTabs = useSelector((state: any) => state.flowTabs);
 
   const persistNewFlow = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -66,9 +60,9 @@ const Dashboard = () => {
 
     if (sessionUser.id === '') {
       // for local development only
-      updateUser(mockUser);
+      // updateUser(mockUser);
+      return;
     } else {
-      updateUser(sessionUser as User);
       sessionUser.flows.forEach((flow) => {
         const flowEntity = {
           id: flow.id,

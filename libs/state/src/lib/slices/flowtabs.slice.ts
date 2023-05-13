@@ -99,6 +99,24 @@ export const flowTabSlice = createSlice({
         state.flowTabs.flows = [...state.flowTabs.flows, action.payload];
       }
     },
+    removeActiveFlowTab: (state: FlowTabsState) => {
+      const flows = state.flowTabs.flows;
+      const activeTabIndex = flows.findIndex(
+        (f) => f.id === state.flowTabs.activeId
+      );
+      state.flowTabs.flows = [
+        ...flows.filter((f) => f.id !== state.flowTabs.activeId),
+      ];
+      if (flows.length > 1) {
+        let newTabIndex = 0;
+        if (activeTabIndex !== 0) {
+          newTabIndex = activeTabIndex - 1;
+        }
+        state.flowTabs.activeId = flows[newTabIndex].id;
+      } else {
+        state.flowTabs.activeId = '';
+      }
+    },
   },
 });
 

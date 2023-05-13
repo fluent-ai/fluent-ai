@@ -100,6 +100,12 @@ export const userSlice = createSlice({
       const user = state.userData;
       user.flows = [...user.flows, action.payload];
     },
+    removeUserFlow: (state: UserState, action: PayloadAction<string>) => {
+      const filteredFlows = state.userData.flows.filter(
+        (flow) => flow.id !== action.payload
+      );
+      state.userData.flows = [...filteredFlows];
+    },
   },
 });
 
