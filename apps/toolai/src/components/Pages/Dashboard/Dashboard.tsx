@@ -18,6 +18,7 @@ import { ButtonComponent } from '@tool-ai/ui';
 import { useFlowRunner } from '@tool-ai/flow-runner';
 
 const nodeTypes = {
+  txtFileInput: TemplateNode,
   textInput: TemplateNode,
   template: TemplateNode,
   json: TemplateNode,

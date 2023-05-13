@@ -1,5 +1,6 @@
 export * from './lib/NodeWrapperComponent/NodeWrapperComponent';
 export * from './nodeDialogs/UserFunctionDialog/UserFunctionDialog';
+export * from './nodeDialogs/TxtFileInputDialog/TxtFileInputDialog';
 export * from './nodeDialogs/TemplateDialog/TemplateDialog';
 export * from './nodeDialogs/JsonDialog/JsonDialog';
 export * from './nodeDialogs/InputDialog/InputDialog';

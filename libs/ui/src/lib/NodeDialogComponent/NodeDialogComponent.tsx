@@ -8,9 +8,12 @@ import { TemplateDialog } from '../../nodeDialogs/TemplateDialog/TemplateDialog'
 import { UserFunctionDialog } from '../../nodeDialogs/UserFunctionDialog/UserFunctionDialog';
 import { PreviewDialog } from '../../nodeDialogs/PreviewDialog/PreviewDialog';
 import { OpenAIDialog } from '../../nodeDialogs/OpenAIDialog/OpenAIDialog';
+import { TxtFileInputDialog } from '../../nodeDialogs/TxtFileInputDialog/TxtFileInputDialog';
 function NodeDialogComponent(props: NodeDialogProps) {
   const shownDialog = () => {
     switch (props.activeDialog) {
+      case 'txtFileInput':
+        return <TxtFileInputDialog {...props} />;
       case 'textInput':
         return <InputDialog {...props} />;
       case 'json':
