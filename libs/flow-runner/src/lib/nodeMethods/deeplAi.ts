@@ -1,35 +1,44 @@
-import { Configuration, OpenAIApi } from 'openai';
+import * as deepl from 'deepl-node';
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-const openai = new OpenAIApi(configuration);
+interface Message {
+  payload?: string;
+  detectedLang?: string;
+}
 
-export async function openAi(
-  msg: Record<string, unknown>
-): Promise<Record<string, unknown>> {
+interface Props {
+  language?: deepl.TargetLanguageCode;
+  deeplAiApiKey: string;
+}
+
+export async function deeplAi(msg: Message, props: Props): Promise<Message> {
+  const apiKey = props.deeplAiApiKey;
+  const translator = new deepl.Translator(apiKey);
   return new Promise((resolve, reject) => {
     if (!msg.payload || typeof msg.payload !== 'string') {
       reject(new Error('msg.payload is not a string'));
-    }
-    // try {
-    console.log('👉 making a call with msg.payload:', msg.payload);
-    openai
-      .createChatCompletion({
-        model: 'gpt-3.5-turbo',
-        // @ts-expect-error no custom types for one line
-        messages: [{ role: 'user', content: msg.payload }],
-      })
-      .then((response) => {
-        console.log('👉', response.data.choices[0].message?.content);
+    } else {
+      console.log('👉 making a call with msg.payload:', msg.payload);
 
-        resolve({
-          ...msg,
-          payload: response.data.choices[0].message?.content,
+      translator
+        .translateText(
+          msg.payload,
+          null,
+          props.language ? props.language : 'en-GB'
+        )
+        .then((response) => {
+          const result = response;
+          console.log('👉response', result);
+
+          resolve({
+            ...msg,
+            payload: result.text,
+            detectedLang: result.detectedSourceLang,
+          });
+        })
+        .catch((error: Error) => {
+          console.log('👉', error);
+          reject(error);
         });
-      });
-    // } catch (error) {
-    //   reject(error);
-    // }
+    }
   });
 }

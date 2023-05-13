@@ -16,6 +16,7 @@
     "@swc/helpers": "~0.5.0",
     "confetti-js": "^0.0.18",
     "deepl": "^1.0.13",
+    "deepl-node": "^1.9.0",
     "firebase": "9.21.0",
     "mustache": "^4.2.0",
     "openai": "^3.2.1",
