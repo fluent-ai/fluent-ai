@@ -35,7 +35,8 @@ export function SignUp() {
               {
                 id: 'tab1',
                 title: 'Flow 1',
-                stringifiedFlowData: '',
+                stringifiedNodes: '',
+                stringifiedEdges: '',
                 owner: true,
                 colaborators: [],
               },

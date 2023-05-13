@@ -11,7 +11,8 @@ export enum NodeType {
 export interface FlowNode {
   id: string;
   type: NodeType;
-  stringifiedData: string;
+  stringifiedNodes: string;
+  stringifiedEdges: string;
   position: {
     x: number;
     y: number;

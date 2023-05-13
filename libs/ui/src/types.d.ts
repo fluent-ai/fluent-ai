@@ -54,7 +54,8 @@ interface FlowCollaborators {
 interface UserFlows {
   id: string;
   title: string;
-  stringifiedFlowData: string;
+  stringifiedNodes: string;
+  stringifiedEdges: string;
   owner: boolean;
   colaborators: FlowCollaborators[];
 }

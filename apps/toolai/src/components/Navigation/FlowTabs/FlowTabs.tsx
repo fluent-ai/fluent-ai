@@ -19,7 +19,7 @@ import {
 } from '@tool-ai/ui';
 
 import { mock } from 'node:test';
-
+import { store, activeTabActions } from '@tool-ai/state';
 import Context from '../../context/context';
 import styles from './FlowTabs.module.css';
 
@@ -43,7 +43,8 @@ interface FlowChart {
   title: string;
   colaborators: FlowCollaborators[];
   owner: boolean;
-  stringifiedFlowData: string;
+  stringifiedNodes: string;
+  stringifiedEdges: string;
 }
 
 const FlowTabs = (props: FlowTabsProps) => {
@@ -51,6 +52,10 @@ const FlowTabs = (props: FlowTabsProps) => {
   const [activeDialog, setActiveDialog] = useState('');
   const [activeNodeId, setActiveNodeId] = useState('');
 
+  const makeActiveTab = (id: string) => {
+    console.log('make this tab active: ', id);
+    store.dispatch(activeTabActions.setActiveTab(id));
+  };
   return (
     <Context.Provider
       value={{
@@ -81,6 +86,7 @@ const FlowTabs = (props: FlowTabsProps) => {
               <Tabs.Trigger
                 className={`${styles.TabsTrigger} w-52 p-1 text-left flex justify-between items-center border-r-2 border-inherit`}
                 value={flowChart.id}
+                onClick={() => makeActiveTab(flowChart.id)}
               >
                 {flowChart.title}
                 <div className="flex gap-x-2 items-center">

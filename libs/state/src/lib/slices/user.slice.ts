@@ -20,7 +20,8 @@ export interface FlowCollaboratorsEntity {
 export interface FlowEntity {
   id: string;
   title: string;
-  stringifiedFlowData: string;
+  stringifiedNodes: string;
+  stringifiedEdges: string;
   owner: boolean;
   colaborators?: FlowCollaboratorsEntity[];
 }

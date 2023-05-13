@@ -15,7 +15,8 @@ const TooltipComponent = (props: TooltipProps) => {
         id: 'tab' + (sessionTabs.length + 1), // this will count the existing tabs and assign tab number according to exisiting count
         title: 'Flow ' + (sessionTabs.length + 1),
         owner: true,
-        stringifiedFlowData: '',
+        stringifiedNodes: '',
+        stringifiedEdges: '',
         colaborators: [
           {
             id: '1',
