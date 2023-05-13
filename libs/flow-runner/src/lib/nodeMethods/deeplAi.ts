@@ -8,6 +8,7 @@ interface Message {
 interface Props {
   language?: deepl.TargetLanguageCode;
   deeplAiApiKey: string;
+  formality: deepl.Formality;
 }
 
 export async function deeplAi(msg: Message, props: Props): Promise<Message> {
@@ -23,7 +24,8 @@ export async function deeplAi(msg: Message, props: Props): Promise<Message> {
         .translateText(
           msg.payload,
           null,
-          props.language ? props.language : 'en-GB'
+          props.language ? props.language : 'en-GB',
+          { formality: props.formality }
         )
         .then((response) => {
           const result = response;
