@@ -1,6 +1,6 @@
 import React from 'react';
 import * as Tooltip from '@radix-ui/react-tooltip';
-import { store, userActions } from '@tool-ai/state';
+import { flowTabActions, store, userActions } from '@tool-ai/state';
 import * as firestoreService from '@libs/firestore-service';
 import { TooltipProps } from '../../types';
 import { ButtonComponent } from '../ButtonComponent/ButtonComponent';
@@ -9,30 +9,30 @@ const TooltipComponent = (props: TooltipProps) => {
     store.dispatch(userActions.setLoadingStatus('loading'));
     const sessionTabs = store.getState().user.userData.flows;
 
+    const newFlow = {
+      id: 'tab' + (sessionTabs.length + 1), // this will count the existing tabs and assign tab number according to exisiting count
+      title: 'Flow ' + (sessionTabs.length + 1),
+      owner: true,
+      stringifiedNodes: '[]',
+      stringifiedEdges: '[]',
+      colaborators: [
+        {
+          id: '1',
+          name: 'John Doe',
+          initials: 'JD',
+        },
+      ],
+    };
     // store new state in redux
+    store.dispatch(userActions.updateUserFlows(newFlow));
     store.dispatch(
-      userActions.updateUserFlows({
-        id: 'tab' + (sessionTabs.length + 1), // this will count the existing tabs and assign tab number according to exisiting count
-        title: 'Flow ' + (sessionTabs.length + 1),
-        owner: true,
-        stringifiedNodes: '[]',
-        stringifiedEdges: '[]',
-        colaborators: [
-          {
-            id: '1',
-            name: 'John Doe',
-            initials: 'JD',
-          },
-        ],
-      })
+      flowTabActions.addNewFlowTab({ id: newFlow.id, nodes: [], edges: [] })
     );
 
-    const user = store.getState().user.userData;
-
     // update firestore
-    firestoreService.updateFirestoreDocument('users', user.id, {
-      flows: [...user.flows],
-    });
+    // firestoreService.updateFirestoreDocument('users', user.id, {
+    //   flows: [...user.flows],
+    // });
     store.dispatch(userActions.setLoadingStatus('loaded'));
   };
 
