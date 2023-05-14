@@ -14,20 +14,20 @@ export const inputs = [
   {
     id: '3',
     nodeInputs: {
+      userFunction: 'msg.payload.number = msg.payload.number * 2; return msg',
+    },
+  },
+  {
+    id: '4',
+    nodeInputs: {
       template: `Hello {{msg.payload.name}}!
         Here! have {{msg.payload.number}} {{msg.payload.color}} balloons.`,
     },
   },
   {
-    id: '6',
+    id: '5',
     nodeInputs: {
-      userFunction: 'msg.payload.number = msg.payload.number * 2; return msg',
-    },
-  },
-  {
-    id: '7',
-    nodeInputs: {
-      input: `Please do a thing`,
+      input: `Please respond with exactly 'Hello'`,
     },
   },
 ];
@@ -51,20 +51,6 @@ export const nodes = [
   },
   {
     id: '3',
-    type: 'template',
-    data: {
-      label: 'Template',
-    },
-    position: { x: 300, y: 50 },
-  },
-  {
-    id: '4',
-    type: 'preview',
-    data: { label: 'Preview' },
-    position: { x: 300, y: 50 },
-  },
-  {
-    id: '6',
     type: 'userFunction',
     data: {
       label: 'Function',
@@ -72,13 +58,21 @@ export const nodes = [
     position: { x: 650, y: 25 },
   },
   {
-    id: '7',
+    id: '4',
+    type: 'template',
+    data: {
+      label: 'Template',
+    },
+    position: { x: 300, y: 50 },
+  },
+  {
+    id: '5',
     type: 'textInput',
     data: { label: 'Input' },
     position: { x: 650, y: 25 },
   },
   {
-    id: '8',
+    id: '6',
     type: 'openAi',
     data: {
       label: 'OpenAI Chat Completion',
@@ -104,13 +98,8 @@ export const edges = [
     target: '4',
   },
   {
-    id: 'e2-6',
-    source: '2',
+    id: 'e5-6',
+    source: '5',
     target: '6',
-  },
-  {
-    id: 'e7-8',
-    source: '7',
-    target: '8',
   },
 ];

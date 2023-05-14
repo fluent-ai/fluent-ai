@@ -5,7 +5,7 @@ export function textInput({
   inputs,
   msg,
 }: IMethodArguments): Promise<Record<string, unknown>> {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     if (!inputs?.input || typeof inputs.input !== 'string') {
       resolve({
         ...msg,

@@ -49,7 +49,7 @@ export interface IMethodArguments {
 
 export const useFlowRunner = (): {
   setFlow: ({ nodes, edges }: { nodes: Node[]; edges: Edge[] }) => void
-  executeFlow: () => void
+  executeFlow: () => Promise<void>
   setInputs: (inputs: IFlowRunnerInputs[]) => void
   setGlobals: (globals: Record<string, unknown>) => void
   globals: Record<string, unknown>

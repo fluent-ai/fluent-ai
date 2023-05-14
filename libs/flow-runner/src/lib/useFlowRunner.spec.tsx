@@ -56,8 +56,17 @@ describe('useFlowRunner', () => {
     await act(async () => {
       await flowRunner.executeFlow()
     })
-      console.log(`🌈 flowRunner`, JSON.stringify(flowRunner, null, 2))
-    },20000)
+    
+    flowRunner.outputs.forEach((output) => {
+      if (output.id === '4') {
+        expect(output.nodeOutputs.payload).toContain("6 pink balloons")
+      }
+      if (output.id === '6') {
+        expect(output.nodeOutputs.payload).toContain("Hello")
+      }
+    })
+
+    },10000)
 
 
         
