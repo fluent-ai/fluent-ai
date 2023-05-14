@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
 import * as Tabs from '@radix-ui/react-tabs';
 import {
   ReactFlow,
