@@ -3,9 +3,17 @@ import { CaretDownIcon } from '@radix-ui/react-icons';
 import './FlowTabsDropdown.module.css';
 import { AlertComponent } from '../AlertComponent/AlertComponent';
 import styles from '../AlertComponent/AlertComponent.module.css';
+
+import { store } from '@tool-ai/state';
 import { FlowCollaborators, FlowTabsDropdownProps } from '../../types';
 
 const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
+  const handleShare = () => {
+    const activeId = store.getState().flowTab.flowTabs.activeId;
+    const link = 'http://localhost:4200/login?link=' + activeId;
+    console.log("Here's your sharing link: ", link);
+  };
+
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
@@ -25,7 +33,10 @@ const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
           >
             Save <div className={styles.RightSlot}>⌘+S</div>
           </DropdownMenu.Item>
-          <DropdownMenu.Item className={styles.DropdownMenuItem}>
+          <DropdownMenu.Item
+            className={styles.DropdownMenuItem}
+            onClick={handleShare}
+          >
             Share <div className={styles.RightSlot}>⌘+N</div>
           </DropdownMenu.Item>
           <AlertComponent

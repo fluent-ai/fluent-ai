@@ -82,6 +82,7 @@ const Dashboard = () => {
             sessionUser = data[0] as User;
           } else {
             sessionUser = mockUser;
+            firestoreService.writeToDB('users', sessionUser);
           }
           dispatchToStore(sessionUser as User);
           loadFlows(sessionUser as User);
