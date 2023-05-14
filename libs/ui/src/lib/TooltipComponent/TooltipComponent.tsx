@@ -1,27 +1,32 @@
-import React from 'react';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import { flowTabActions, store, userActions } from '@tool-ai/state';
-import * as firestoreService from '@libs/firestore-service';
 import { TooltipProps } from '../../types';
 import { ButtonComponent } from '../ButtonComponent/ButtonComponent';
 const TooltipComponent = (props: TooltipProps) => {
   const addNewFlowTab = () => {
     store.dispatch(userActions.setLoadingStatus('loading'));
-    const sessionTabs = store.getState().user.userData.flows;
+    const userData = store.getState().user.userData;
+    const sessionTabs = userData.flows;
+
+    const flowTabIds = sessionTabs.map((tab) => Number(tab.id.slice(-1)));
+    let newTabId = 0;
+    for (let i = 1; i <= flowTabIds.length; i++) {
+      if (i !== flowTabIds[i - 1]) {
+        newTabId = i;
+        break;
+      }
+      if (i === flowTabIds.length) {
+        newTabId = i + 1;
+      }
+    }
 
     const newFlow = {
-      id: 'tab' + (sessionTabs.length + 1), // this will count the existing tabs and assign tab number according to exisiting count
-      title: 'Flow ' + (sessionTabs.length + 1),
+      id: userData.id + '-' + newTabId, // this will count the existing tabs and assign tab number according to exisiting count
+      title: 'Flow ' + newTabId,
       owner: true,
       stringifiedNodes: '[]',
       stringifiedEdges: '[]',
-      colaborators: [
-        {
-          id: '1',
-          name: 'John Doe',
-          initials: 'JD',
-        },
-      ],
+      colaborators: [],
     };
     // store new state in redux
     store.dispatch(userActions.updateUserFlows(newFlow));

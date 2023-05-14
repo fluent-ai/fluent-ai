@@ -12,7 +12,7 @@ import FlowTabs from '../../Navigation/FlowTabs/FlowTabs';
 import TemplateNode from '../../Nodes/TemplateNode/TemplateNode';
 //import { NodeWrapperComponent } from '@tool-ai/ui';
 import Header from '../../Navigation/Header/Header';
-import { store, flowTabActions, userActions } from '@tool-ai/state';
+import { store, flowTabActions } from '@tool-ai/state';
 import { dispatchToStore } from '@libs/auth';
 import {
   User,

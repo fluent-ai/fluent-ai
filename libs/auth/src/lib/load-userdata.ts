@@ -18,7 +18,7 @@ export function createNewUser(user: any): User {
     initials: (user.displayName || mockUser.name).slice(0, 2).toUpperCase(),
     flows: [
       {
-        id: 'tab1',
+        id: user.uid + '-1',
         title: 'Flow 1',
         stringifiedNodes: '[]',
         stringifiedEdges: '[]',
