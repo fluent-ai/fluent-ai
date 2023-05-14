@@ -12,7 +12,8 @@ import FlowTabs from '../../Navigation/FlowTabs/FlowTabs';
 import TemplateNode from '../../Nodes/TemplateNode/TemplateNode';
 //import { NodeWrapperComponent } from '@tool-ai/ui';
 import Header from '../../Navigation/Header/Header';
-import { store, flowTabActions } from '@tool-ai/state';
+import { store, flowTabActions, userActions } from '@tool-ai/state';
+import { dispatchToStore } from '@libs/auth';
 import {
   User,
   mockUser,
@@ -21,6 +22,7 @@ import {
   switchFlowTab,
 } from '@tool-ai/ui';
 import { useFlowRunner } from '@tool-ai/flow-runner';
+import * as firestoreService from '@libs/firestore-service';
 
 const nodeTypes = {
   textInput: TemplateNode,
@@ -54,33 +56,41 @@ const Dashboard = () => {
     [nodes, edges]
   );
 
+  const loadFlows = function (sessionUser: User) {
+    sessionUser.flows.forEach((flow) => {
+      const flowEntity = {
+        id: flow.id,
+        nodes: JSON.parse(flow.stringifiedNodes),
+        edges: JSON.parse(flow.stringifiedEdges),
+      };
+      store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
+    });
+
+    store.dispatch(flowTabActions.setActiveFlowTab(sessionUser.flows[0].id));
+    setNodes(JSON.parse(sessionUser.flows[0].stringifiedNodes));
+    setEdges(JSON.parse(sessionUser.flows[0].stringifiedEdges));
+  };
   // This loads the initial user and flow data from the user
   useEffect(() => {
-    const sessionUser = store.getState().user.userData;
+    let sessionUser = store.getState().user.userData;
 
     if (sessionUser.id === '') {
       // for local development only
-      // updateUser(mockUser);
-      return;
+      firestoreService
+        .getSomeFromDB('users', 'id', '==', 'testId')
+        .then((data) => {
+          sessionUser = data[0] as User;
+          dispatchToStore(sessionUser as User);
+          loadFlows(sessionUser as User);
+        });
     } else {
-      sessionUser.flows.forEach((flow) => {
-        const flowEntity = {
-          id: flow.id,
-          nodes: JSON.parse(flow.stringifiedNodes),
-          edges: JSON.parse(flow.stringifiedEdges),
-        };
-        store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
-      });
-
-      store.dispatch(flowTabActions.setActiveFlowTab(sessionUser.flows[0].id));
-      setNodes(JSON.parse(sessionUser.flows[0].stringifiedNodes));
-      setEdges(JSON.parse(sessionUser.flows[0].stringifiedEdges));
+      loadFlows(sessionUser as User);
     }
-  }, []);
+  }, [setEdges, setNodes]);
 
   const onConnect = useCallback(
     (params: any) => setEdges((eds) => addEdge(params, eds)),
-    []
+    [setEdges]
   );
 
   // save & load the nodes and edges of the tabs that we switched
@@ -131,7 +141,7 @@ const Dashboard = () => {
 
       setNodes((nds) => nds.concat(newNode));
     },
-    [reactFlowInstance]
+    [reactFlowInstance, setNodes]
   );
 
   const FlowTabsProps = {

@@ -8,8 +8,8 @@ export const mockUser: User = {
     {
       id: 'tab1',
       title: 'Flow 1',
-      stringifiedNodes: '',
-      stringifiedEdges: '',
+      stringifiedNodes: '[]',
+      stringifiedEdges: '[]',
       owner: true,
       colaborators: [],
     },

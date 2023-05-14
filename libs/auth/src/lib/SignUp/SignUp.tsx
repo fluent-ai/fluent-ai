@@ -3,14 +3,15 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Form from '@radix-ui/react-form';
 import * as firestoreService from '@libs/firestore-service';
-import { mockUser } from '@tool-ai/ui';
+
 import {
   FormFieldComponent,
   Validation,
   ButtonComponent,
   User,
 } from '@tool-ai/ui';
-import { store, userActions, UserEntity } from '@tool-ai/state';
+import { store, userActions } from '@tool-ai/state';
+import { dispatchToStore, createNewUser } from '../load-userdata';
 
 const auth = getAuth();
 
@@ -25,31 +26,8 @@ export function SignUp() {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         if (userCredential.user.email) {
-          const newUser: User = {
-            id: userCredential.user.uid,
-            email: userCredential.user.email,
-            // TODO: we need to ask for a username on signup and regex the initials from it
-            name: mockUser.name,
-            initials: mockUser.name.slice(0, 2).toUpperCase(),
-            flows: [
-              {
-                id: 'tab1',
-                title: 'Flow 1',
-                stringifiedNodes: '',
-                stringifiedEdges: '',
-                owner: true,
-                colaborators: [],
-              },
-            ],
-          };
-          // write new user to firestore & store auth UUID as user ID/ document ID
-          firestoreService.writeToDB('users', newUser);
-
-          // store user state in redux
-          store.dispatch(userActions.updateUserData(newUser as UserEntity));
-          // store.dispatch(userActions.updateUserFlows(newUser.flows[0]));
-          store.dispatch(userActions.setLoadingStatus('loaded'));
-          console.log(store.getState().user.userData);
+          const newUser = createNewUser(userCredential);
+          dispatchToStore(newUser);
           // redirect to dashboard
           navigate('/');
         }
