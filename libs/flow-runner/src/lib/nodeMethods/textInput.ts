@@ -1,16 +1,17 @@
-export interface inputProps {
-  input: string;
-  [key: string]: unknown;
-}
+import { IMethodArguments } from '../useFlowRunner';
 
-export async function textInput(
-  msg: Record<string, unknown>,
-  props: inputProps
-): Promise<Record<string, unknown>> {
+export function textInput({
+  globals,
+  inputs,
+  msg,
+}: IMethodArguments): Promise<Record<string, unknown>> {
   return new Promise((resolve, reject) => {
-    if (!props.input || typeof props.input !== 'string') {
-      reject(new Error('props.input is not a string'));
+    if (!inputs?.input || typeof inputs.input !== 'string') {
+      resolve({
+        ...msg,
+        error: 'Input must exist and be a string',
+      });
     }
-    resolve({ ...msg, payload: props.input });
+    resolve({ ...msg, payload: inputs?.input });
   });
 }

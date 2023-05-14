@@ -2,25 +2,22 @@ import { textInput } from './textInput';
 
 describe('FlowRunner nodeMethods - input', () => {
   it('should pass a string from props to msg', async () => {
-    const inputProps = {
-      input: 'Hello, world!',
+    const args = {
+      globals: {},
+      inputs: {},
+      msg: { payload: 'Oh what a nice string!' },
     };
-    const mockMsg = {};
-
-    const result = await textInput(mockMsg, inputProps);
-
-    expect(result?.['payload']).toBe('Hello, world!');
+    const result = await textInput(args);
+    expect(result?.['payload']).toBe(args.msg.payload);
   });
 
-  it('should reject when props.input is not a string', async () => {
-    const inputProps = {
-      input: 123,
+  it('should return an error on invalid input', async () => {
+    const args = {
+      globals: {},
+      inputs: {},
+      msg: {},
     };
-    const mockMsg = {};
-
-    // @ts-expect-error - testing invalid input
-    await expect(textInput(mockMsg, inputProps)).rejects.toThrow(
-      'props.input is not a string'
-    );
+    const result = await textInput(args);
+    expect(result?.['error']).toEqual('Input must exist and be a string');
   });
 });

@@ -1,18 +1,24 @@
 import { Configuration, OpenAIApi } from 'openai';
+import { IMethodArguments } from '../useFlowRunner';
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-const openai = new OpenAIApi(configuration);
-
-export async function openAi(
-  msg: Record<string, unknown>
-): Promise<Record<string, unknown>> {
-  return new Promise((resolve, reject) => {
+export function openAi({
+  globals,
+  inputs,
+  msg,
+}: IMethodArguments): Promise<Record<string, unknown>> {
+  return new Promise((resolve) => {
     if (!msg.payload || typeof msg.payload !== 'string') {
-      reject(new Error('msg.payload is not a string'));
+      resolve({
+        ...msg,
+        error: `msg.payload either doesnt exist or is not a string`,
+      });
     }
     try {
+      const configuration = new Configuration({
+        apiKey: globals?.openAiApiKey as string,
+      });
+      const openai = new OpenAIApi(configuration);
+      // console.log(`🤙 Making call to openAI with key ${globals?.openAiApiKey}`);
       openai
         .createChatCompletion({
           model: 'gpt-3.5-turbo',
@@ -20,15 +26,17 @@ export async function openAi(
           messages: [{ role: 'user', content: msg.payload }],
         })
         .then((response) => {
-          console.log('👉', response.data.choices[0].message?.content);
-
+          // console.log('🤙 openAI response', response);
           resolve({
             ...msg,
             payload: response.data.choices[0].message?.content,
           });
         });
     } catch (error) {
-      reject(error);
+      resolve({
+        ...msg,
+        error: `openAi failed with error : ${error}`,
+      });
     }
   });
 }
