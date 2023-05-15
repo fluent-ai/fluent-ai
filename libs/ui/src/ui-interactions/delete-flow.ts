@@ -6,9 +6,13 @@ export async function deleteFlow() {
   store.dispatch(userActions.removeUserFlow(activeTabId));
   store.dispatch(flowTabActions.removeActiveFlowTab());
   const updatedUser = store.getState().user.userData;
-  firestoreService.updateFirestoreDocument(
+  await firestoreService.updateFirestoreDocument(
     'users',
     updatedUser.id,
     updatedUser
   );
+  await firestoreService.deleteDocuments('flows', 'id', '==', activeTabId);
+
+  // TODO: if it's a shared document, user can just remove themselves from collaborators
+  // TODO: if it's an owned document, the other users need to be removed access from the flow document
 }

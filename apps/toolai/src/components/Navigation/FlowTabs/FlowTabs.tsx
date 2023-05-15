@@ -78,6 +78,8 @@ const FlowTabs = (props: FlowTabsProps) => {
                         return (
                           <AvatarComponent initials={collaborator.initials} />
                         );
+                      } else {
+                        return null;
                       }
                     }
                   )}
