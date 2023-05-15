@@ -11,6 +11,7 @@ import {
 } from '@tool-ai/ui';
 import { store, userActions } from '@tool-ai/state';
 import { dispatchToStore } from '../load-userdata';
+import { addFlowFromSharedLink } from '../shared-link-handler';
 
 const auth = getAuth();
 
@@ -19,27 +20,33 @@ export function SignIn() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const signIn = (e: React.FormEvent<HTMLFormElement>) => {
+  const signIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     store.dispatch(userActions.setLoadingStatus('loading'));
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // fetch user from firestore
-        firestoreService
-          .getSomeFromDB('users', 'id', '==', userCredential.user.uid)
-          .then((users) => {
-            if (users.length > 0) {
-              // store user state in redux
-              dispatchToStore(users[0] as User);
-              // redirect user to dashboard
-              navigate('/');
-            }
-          });
-      })
-      .catch((error) => {
-        console.log(error);
-        store.dispatch(userActions.setLoadingStatus('error'));
-      });
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      // fetch user from firestore
+      const users = await firestoreService.getSomeFromDB(
+        'users',
+        'id',
+        '==',
+        userCredential.user.uid
+      );
+      if (users.length > 0) {
+        // store user state in redux
+        dispatchToStore(users[0] as User);
+        await addFlowFromSharedLink(users[0]);
+        // redirect user to dashboard
+        navigate('/');
+      }
+    } catch (error) {
+      console.log(error);
+      store.dispatch(userActions.setLoadingStatus('error'));
+    }
   };
   const EmailInput = {
     label: 'Email',

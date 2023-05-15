@@ -14,12 +14,20 @@ export const FLOW_TAB_FEATURE_KEY = 'flowTab';
  * Update these interfaces according to your requirements.
  */
 
+interface FlowCollaborators {
+  id: string;
+  name: string;
+  initials: string;
+}
+
 export interface FlowTabEntity {
   id: string;
-  // nodes: flow.Node[]
-  // edges: flow.Edge[]
+  title: string;
+  ownerId: string;
   nodes: any[];
   edges: any[];
+  collaboratorIds: string[];
+  collaborators: FlowCollaborators[];
 }
 export interface TabsEntity {
   activeId: string;

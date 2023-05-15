@@ -52,13 +52,15 @@ interface FlowCollaborators {
   name: string;
   initials: string;
 }
-interface UserFlows {
+
+interface Flow {
   id: string;
   title: string;
+  ownerId: string;
   stringifiedNodes: string;
   stringifiedEdges: string;
-  owner: boolean;
-  colaborators: FlowCollaborators[];
+  collaboratorIds: string[];
+  collaborators: FlowCollaborators[];
 }
 
 interface User {
@@ -66,7 +68,7 @@ interface User {
   name: string;
   initials: string;
   email: string;
-  flows: UserFlows[];
+  flows: string[];
   profileImg?: string;
 }
 
