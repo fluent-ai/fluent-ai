@@ -16,6 +16,7 @@ import { dispatchToStore } from '@libs/auth';
 import {
   User,
   mockUser,
+  mockFlow,
   ButtonComponent,
   saveFlow,
   switchFlowTab,
@@ -42,6 +43,10 @@ const Dashboard = () => {
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
 
   const currentUser = useSelector((state: any) => state.user.userData);
+  const currentFlows = useSelector(
+    (state: any) => state.flowTab.flowTabs.flows
+  );
+
   // const flowTabs = useSelector((state: any) => state.flowTabs);
 
   const persistNewFlow = useCallback(
@@ -56,18 +61,31 @@ const Dashboard = () => {
   );
 
   const loadFlows = function (sessionUser: User) {
-    sessionUser.flows.forEach((flow) => {
-      const flowEntity = {
-        id: flow.id,
-        nodes: JSON.parse(flow.stringifiedNodes),
-        edges: JSON.parse(flow.stringifiedEdges),
-      };
-      store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
-    });
+    firestoreService
+      .getSomeFromDB(
+        'flows',
+        'collaboratorIds',
+        'array-contains',
+        sessionUser.id
+      )
+      .then((flows) => {
+        flows.forEach((flow) => {
+          const flowEntity = {
+            id: flow.id,
+            title: flow.title,
+            ownerId: flow.ownerId,
+            nodes: JSON.parse(flow.stringifiedNodes),
+            edges: JSON.parse(flow.stringifiedEdges),
+            collaboratorIds: flow.collaboratorIds,
+            collaborators: flow.collaborators,
+          };
+          store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
+        });
 
-    store.dispatch(flowTabActions.setActiveFlowTab(sessionUser.flows[0].id));
-    setNodes(JSON.parse(sessionUser.flows[0].stringifiedNodes));
-    setEdges(JSON.parse(sessionUser.flows[0].stringifiedEdges));
+        store.dispatch(flowTabActions.setActiveFlowTab(flows[0].id));
+        setNodes(JSON.parse(flows[0].stringifiedNodes));
+        setEdges(JSON.parse(flows[0].stringifiedEdges));
+      });
   };
   // This loads the initial user and flow data from the user
   useEffect(() => {
@@ -83,6 +101,7 @@ const Dashboard = () => {
           } else {
             sessionUser = mockUser;
             firestoreService.writeToDB('users', sessionUser);
+            firestoreService.writeToDB('flows', mockFlow);
           }
           dispatchToStore(sessionUser as User);
           loadFlows(sessionUser as User);
@@ -171,7 +190,7 @@ const Dashboard = () => {
   function runFlow() {
     console.log('Running');
   }
-  if (currentUser.id === '') {
+  if (currentUser.id === '' || !currentFlows) {
     return <div></div>;
   }
   return (
@@ -194,7 +213,8 @@ const Dashboard = () => {
         <ReactFlowProvider>
           <NodeSideBar />
           <FlowTabs
-            flowCharts={currentUser.flows}
+            currentUserId={currentUser.id}
+            flowCharts={currentFlows}
             reactFlowWrapper={reactFlowWrapper}
             {...FlowTabsProps}
           />

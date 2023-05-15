@@ -66,18 +66,15 @@ export function GoogleLogin() {
                   initials: users[0].initials,
                 });
 
-                firestoreService
-                  .updateFirestoreDocument('users', user.uid, {
-                    flows: arrayUnion(newFlow),
-                  })
-                  .then(() => {
-                    firestoreService.updateFirestoreDocument(
-                      'users',
-                      users[0].id,
-                      users[0]
-                    );
-                    loadAndRedirect(user);
-                  });
+                firestoreService.updateFirestoreDocument(
+                  'users',
+                  users[0].id,
+                  users[0]
+                );
+
+                // TODO: update flows collection too
+
+                loadAndRedirect(user);
               }
             });
         } else {
