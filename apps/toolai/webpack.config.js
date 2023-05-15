@@ -7,7 +7,6 @@ const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
 module.exports = composePlugins(withNx(), withReact(), (config) => {
   // Update the webpack config as needed here.
   // e.g. `config.plugins.push(new MyPlugin())`
-  config.plugins.push(new NodePolyfillPlugin())
-  config.resolve.fallback = {"fs":false};
+
   return config;
 });

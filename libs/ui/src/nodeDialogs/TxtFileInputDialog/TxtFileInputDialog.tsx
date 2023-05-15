@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { constants } from "buffer";
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
 import { FileIcon, Cross1Icon } from '@radix-ui/react-icons';
 
 import { NodeDialogProps } from "../../types";
 import { handleChange } from "../functions";
-import { Handle } from 'reactflow';
 /* eslint-disable-next-line */
 export interface TxtFileInputProps {}
 

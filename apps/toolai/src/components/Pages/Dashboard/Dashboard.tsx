@@ -19,6 +19,7 @@ import { useFlowRunner } from '@tool-ai/flow-runner';
 
 const nodeTypes = {
   txtFileInput: TemplateNode,
+  deepl: TemplateNode,
   textInput: TemplateNode,
   template: TemplateNode,
   json: TemplateNode,

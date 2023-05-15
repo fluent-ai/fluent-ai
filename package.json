@@ -2,11 +2,6 @@
   "name": "tool-ai",
   "version": "0.0.0",
   "license": "MIT",
-  "browser": {
-    "fs": false,
-    "path": false,
-    "os": false
-  },
   "scripts": {},
   "private": true,
   "dependencies": {
@@ -26,6 +21,7 @@
     "mustache": "^4.2.0",
     "node-polyfill-webpack-plugin": "^2.0.1",
     "openai": "^3.2.1",
+    "os-browserify": "^0.3.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-redux": "8.0.5",
