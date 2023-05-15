@@ -6,29 +6,40 @@ import * as Form from '@radix-ui/react-form';
 import { FormFieldComponent, Validation, ButtonComponent } from '@tool-ai/ui';
 import { store, userActions } from '@tool-ai/state';
 import { dispatchToStore, createNewUser } from '../load-userdata';
+import { addFlowFromSharedLink } from '../shared-link-handler';
 
 const auth = getAuth();
 
 export function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [displayName, setDisplayName] = useState('');
   const navigate = useNavigate();
 
-  const signUp = (e: React.FormEvent<HTMLFormElement>) => {
+  const signUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     store.dispatch(userActions.setLoadingStatus('loading'));
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        if (userCredential.user.email) {
-          const newUser = createNewUser(userCredential);
-          dispatchToStore(newUser);
-          // redirect to dashboard
-          navigate('/');
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    try {
+      const userCredentials = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      if (userCredentials.user.email) {
+        const newUser = await createNewUser({
+          ...userCredentials.user,
+          displayName: displayName,
+        });
+        dispatchToStore(newUser);
+        await addFlowFromSharedLink(newUser);
+        // redirect to dashboard
+        navigate('/');
+      }
+    } catch (error) {
+      console.log('Error when signing up: ', error);
+      store.dispatch(userActions.setLoadingStatus('error'));
+    }
   };
 
   const EmailInput = {
@@ -66,10 +77,19 @@ export function SignUp() {
     placeholder: 'Enter a password',
   };
 
+  const nameInput = {
+    label: 'Name',
+    type: 'text',
+    required: true,
+    placeholder: 'Enter a name',
+    onChange: setDisplayName,
+  };
+
   return (
     <Form.Root onSubmit={signUp}>
       <FormFieldComponent {...EmailInput} value={email} />
       <FormFieldComponent {...PasswordInput} value={password} />
+      <FormFieldComponent {...nameInput} value={displayName} />
       <Form.Submit asChild>
         <ButtonComponent
           type="submit"

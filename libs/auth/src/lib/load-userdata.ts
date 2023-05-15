@@ -10,12 +10,12 @@ export function dispatchToStore(newUser: User) {
   console.log(store.getState().user.userData);
 }
 
-export function createNewUser(user: any): User {
+export async function createNewUser(user: any): Promise<User> {
   const newUser: User = {
     id: user.uid,
-    email: user.email || mockUser.email, // TODO: ask newly signed up users for a name in their account
-    name: user.displayName || mockUser.name,
-    initials: (user.displayName || mockUser.name).slice(0, 2).toUpperCase(),
+    email: user.email,
+    name: user.displayName,
+    initials: user.displayName.slice(0, 2).toUpperCase(),
     flows: [user.uid + '-1'],
     profileImg: user.photoURL,
   };
@@ -36,8 +36,8 @@ export function createNewUser(user: any): User {
   };
 
   // update firestore
-  firestoreService.writeToDB('users', newUser);
-  firestoreService.writeToDB('flows', newFlow);
+  await firestoreService.writeToDB('users', newUser);
+  await firestoreService.writeToDB('flows', newFlow);
 
   return newUser;
 }

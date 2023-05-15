@@ -60,32 +60,29 @@ const Dashboard = () => {
     [nodes, edges]
   );
 
-  const loadFlows = function (sessionUser: User) {
-    firestoreService
-      .getSomeFromDB(
-        'flows',
-        'collaboratorIds',
-        'array-contains',
-        sessionUser.id
-      )
-      .then((flows) => {
-        flows.forEach((flow) => {
-          const flowEntity = {
-            id: flow.id,
-            title: flow.title,
-            ownerId: flow.ownerId,
-            nodes: JSON.parse(flow.stringifiedNodes),
-            edges: JSON.parse(flow.stringifiedEdges),
-            collaboratorIds: flow.collaboratorIds,
-            collaborators: flow.collaborators,
-          };
-          store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
-        });
-
-        store.dispatch(flowTabActions.setActiveFlowTab(flows[0].id));
-        setNodes(JSON.parse(flows[0].stringifiedNodes));
-        setEdges(JSON.parse(flows[0].stringifiedEdges));
-      });
+  const loadFlows = async function (sessionUser: User) {
+    const flows = await firestoreService.getSomeFromDB(
+      'flows',
+      'collaboratorIds',
+      'array-contains',
+      sessionUser.id
+    );
+    flows.forEach((flow) => {
+      const flowEntity = {
+        id: flow.id,
+        title: flow.title,
+        ownerId: flow.ownerId,
+        nodes: JSON.parse(flow.stringifiedNodes),
+        edges: JSON.parse(flow.stringifiedEdges),
+        collaboratorIds: flow.collaboratorIds,
+        collaborators: flow.collaborators,
+      };
+      store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
+    });
+    console.log('flows: ', flows);
+    store.dispatch(flowTabActions.setActiveFlowTab(flows[0].id));
+    setNodes(JSON.parse(flows[0].stringifiedNodes));
+    setEdges(JSON.parse(flows[0].stringifiedEdges));
   };
   // This loads the initial user and flow data from the user
   useEffect(() => {
