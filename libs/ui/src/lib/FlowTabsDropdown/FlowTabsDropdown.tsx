@@ -5,7 +5,8 @@ import { AlertComponent } from '../AlertComponent/AlertComponent';
 import styles from '../AlertComponent/AlertComponent.module.css';
 
 import { store } from '@tool-ai/state';
-import { FlowCollaborators, FlowTabsDropdownProps } from '../../types';
+import { FlowCollaborator, FlowTabsDropdownProps } from '../../types';
+import { removeCollaborator } from '../../ui-interactions/remove-collaborator';
 
 const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
   const handleShare = () => {
@@ -50,16 +51,26 @@ const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
           <DropdownMenu.Label className={styles.DropdownMenuLabel}>
             People
           </DropdownMenu.Label>
-          {props.users.map((user: FlowCollaborators) => {
-            return (
-              <DropdownMenu.Item
-                key={user.id}
-                className={styles.DropdownMenuItem}
-              >
-                {user.name}
-                <div className={styles.RightSlot}>remove</div>
-              </DropdownMenu.Item>
-            );
+          {props.users.map((collaborator: FlowCollaborator) => {
+            if (collaborator.id !== props.flowChartOwner) {
+              return (
+                <DropdownMenu.Item
+                  key={collaborator.id}
+                  className={styles.DropdownMenuItem}
+                >
+                  {collaborator.name}
+                  <div
+                    className={styles.RightSlot}
+                    onClick={() => removeCollaborator(collaborator.id)}
+                  >
+                    {/* we only show the option if the flow is owned by the current user */}
+                    {store.getState().user.userData.id === props.flowChartOwner
+                      ? 'remove'
+                      : ''}
+                  </div>
+                </DropdownMenu.Item>
+              );
+            } else return null;
           })}
 
           <DropdownMenu.Arrow className={styles.DropdownMenuArrow} />

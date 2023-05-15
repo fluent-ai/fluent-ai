@@ -5,7 +5,7 @@ export function addFlowTab() {
   const userData = store.getState().user.userData;
   const sessionTabs = userData.flows;
 
-  const flowTabIds = sessionTabs.map((tab) => Number(tab.id.slice(-1)));
+  const flowTabIds = sessionTabs.map((tabId) => Number(tabId.slice(-1)));
   let newTabId = 0;
   for (let i = 1; i <= flowTabIds.length; i++) {
     if (i !== flowTabIds[i - 1]) {
@@ -20,16 +20,22 @@ export function addFlowTab() {
   const newFlow = {
     id: userData.id + '-' + newTabId, // this will count the existing tabs and assign tab number according to exisiting count
     title: 'Flow ' + newTabId,
-    owner: true,
-    stringifiedNodes: '[]',
-    stringifiedEdges: '[]',
-    colaborators: [],
+    ownerId: userData.id,
+    nodes: [],
+    edges: [],
+    collaboratorIds: [userData.id],
+    collaborators: [
+      {
+        id: userData.id,
+        name: userData.name,
+        initials: userData.initials,
+      },
+    ],
   };
-  // store new state in redux
-  store.dispatch(userActions.updateUserFlows(newFlow));
-  store.dispatch(
-    flowTabActions.addNewFlowTab({ id: newFlow.id, nodes: [], edges: [] })
-  );
+
+  // store new states in redux
+  store.dispatch(userActions.updateUserFlows(newFlow.id));
+  store.dispatch(flowTabActions.addNewFlowTab(newFlow));
 
   // update firestore
   // firestoreService.updateFirestoreDocument('users', user.id, {
