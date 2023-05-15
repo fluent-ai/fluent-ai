@@ -24,11 +24,15 @@ export function GoogleLogin() {
           .then((users) => {
             if (users.length > 0) {
               // store user state in redux
+
               store.dispatch(
                 userActions.updateUserData(users[0] as UserEntity)
               );
               store.dispatch(userActions.setLoadingStatus('loaded'));
-              console.log(store.getState().user.userData);
+              console.log(
+                'google login, current user state: ',
+                store.getState().user.userData
+              );
               navigate('/');
             } else {
               if (user.displayName && user.email && user.photoURL) {
@@ -37,7 +41,15 @@ export function GoogleLogin() {
                   email: user.email,
                   name: user.displayName,
                   initials: user.displayName?.slice(0, 2).toUpperCase(),
-                  flows: [],
+                  flows: [
+                    {
+                      id: 'tab1',
+                      title: 'Flow 1',
+                      stringifiedFlowData: '',
+                      owner: true,
+                      colaborators: [],
+                    },
+                  ],
                   profileImg: user.photoURL,
                 };
 
@@ -45,6 +57,8 @@ export function GoogleLogin() {
                 store.dispatch(
                   userActions.updateUserData(newUser as UserEntity)
                 );
+
+                //store.dispatch(flowtabsActions.addFlowTab(newUser.flows[0]));
                 store.dispatch(userActions.setLoadingStatus('loaded'));
                 console.log(store.getState().user.userData);
                 navigate('/');

@@ -4,8 +4,11 @@ function updateNode(
   activeNodeId: string,
   eventValue:string,
   property: string){
+  // console.log('eventValue', eventValue)
+  console.log('activeId', activeNodeId)
   return nodes.map(node => {
     if(node.id === activeNodeId){
+      console.log(property, eventValue, property)
       return {
       ...node,
         props: { [property]: eventValue }
@@ -15,12 +18,12 @@ function updateNode(
   })
 }
 
-export function handleChange(
+export async function handleChange(
   nodes:Node<{ label: string; }, string | undefined>[],
   setNodes: any,
   activeNodeId:string,
   eventValue: string,
   property: string){
-  setNodes(updateNode(nodes, activeNodeId,eventValue, property))
-  console.log(nodes)
+  await setNodes(updateNode(nodes, activeNodeId,eventValue, property))
+  console.log(updateNode(nodes, activeNodeId,eventValue, property))
 }

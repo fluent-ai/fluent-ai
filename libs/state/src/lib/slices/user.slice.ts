@@ -12,10 +12,17 @@ export const USER_FEATURE_KEY = 'user';
 /*
  * Update these interfaces according to your requirements.
  */
+export interface FlowCollaboratorsEntity {
+  id: string;
+  name: string;
+  initials: string;
+}
 export interface FlowEntity {
   id: string;
+  title: string;
   stringifiedFlowData: string;
   owner: boolean;
+  colaborators?: FlowCollaboratorsEntity[];
 }
 export interface UserEntity {
   id: string;

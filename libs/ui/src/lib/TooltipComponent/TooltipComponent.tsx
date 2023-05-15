@@ -1,19 +1,21 @@
 import React from 'react';
 import * as Tooltip from '@radix-ui/react-tooltip';
-import { store, flowtabsActions, userActions } from '@tool-ai/state';
+import { store, userActions } from '@tool-ai/state';
 import * as firestoreService from '@libs/firestore-service';
 import { TooltipProps } from '../../types';
 import { ButtonComponent } from '../ButtonComponent/ButtonComponent';
 const TooltipComponent = (props: TooltipProps) => {
   const addNewFlowTab = () => {
-    store.dispatch(flowtabsActions.setLoadingStatus('loading'));
-    const sessionTabs = store.getState().flowtabs.tabs;
+    store.dispatch(userActions.setLoadingStatus('loading'));
+    const sessionTabs = store.getState().user.userData.flows;
 
     // store new state in redux
     store.dispatch(
-      flowtabsActions.addFlowTab({
-        value: 'tab' + (sessionTabs.length + 1), // this will count the existing tabs and assign tab number according to exisiting count
+      userActions.updateUserFlows({
+        id: 'tab' + (sessionTabs.length + 1), // this will count the existing tabs and assign tab number according to exisiting count
         title: 'Flow ' + (sessionTabs.length + 1),
+        owner: true,
+        stringifiedFlowData: '',
         colaborators: [
           {
             id: '1',
@@ -24,32 +26,33 @@ const TooltipComponent = (props: TooltipProps) => {
       })
     );
 
-    // reflect new flow in user state
-    const newFlow = {
-      id: 'Flow ' + (sessionTabs.length + 1),
-      owner: true,
-      stringifiedFlowData: '',
-    };
-    store.dispatch(userActions.updateUserFlows(newFlow));
     const user = store.getState().user.userData;
 
     // update firestore
     firestoreService.updateFirestoreDocument('users', user.id, {
       flows: [...user.flows],
     });
-    store.dispatch(flowtabsActions.setLoadingStatus('loaded'));
+    store.dispatch(userActions.setLoadingStatus('loaded'));
   };
 
   return (
     <Tooltip.Provider>
       <Tooltip.Root>
         <Tooltip.Trigger asChild>
+          {/* <button
+          type="button"
+          className="icon"
+          aria-label="iconbutton"
+          onClick={addNewFlowTab}
+          >
+          {props.buttonContent}
+          </button> */}
           <ButtonComponent
             type="button"
             ariaLabel="iconbutton"
             buttonContent={props.buttonContent}
             classes="icon"
-            clickHandler={addNewFlowTab}
+            clickHandler={props.name === "add-flow" ? addNewFlowTab : undefined}
           />
         </Tooltip.Trigger>
         <Tooltip.Portal>

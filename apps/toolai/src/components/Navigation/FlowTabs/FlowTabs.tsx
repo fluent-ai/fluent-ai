@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import * as Tabs from '@radix-ui/react-tabs';
 import {
   ReactFlow,
@@ -14,16 +14,14 @@ import {
   FlowTabsDropdown,
   AvatarComponent,
   NodeDialogComponent,
-  User,
+  UserFlows,
+  FlowCollaborators,
 } from '@tool-ai/ui';
 
-import { mock } from 'node:test';
-
 import Context from '../../context/context';
-import styles from './FlowTabs.module.css';
 
 interface FlowTabsProps {
-  flowCharts: any;
+  flowCharts: UserFlows[];
   reactFlowWrapper: any;
   nodes: Node<{ label: string }, string | undefined>[];
   edges: Edge<any>[];
@@ -38,15 +36,20 @@ interface FlowTabsProps {
 }
 
 interface FlowChart {
-  value: string;
+  id: string;
   title: string;
-  colaborators: User[];
+  colaborators: FlowCollaborators[];
+  owner: boolean;
+
+  stringifiedFlowData: string;
 }
 
 const FlowTabs = (props: FlowTabsProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [activeDialog, setActiveDialog] = useState('');
   const [activeNodeId, setActiveNodeId] = useState('');
+
+  // value
 
   return (
     <Context.Provider
@@ -57,34 +60,27 @@ const FlowTabs = (props: FlowTabsProps) => {
         setActiveNodeId,
       }}
     >
-      <ReactFlow
-        ref={props.reactFlowWrapper}
-        nodes={props.nodes}
-        edges={props.edges}
-        onConnect={props.onConnect}
-        onInit={props.onInit}
-        onDrop={props.onDrop}
-        onDragOver={props.onDragOver}
-        nodeTypes={props.nodeTypes}
-      />
       <Tabs.Root className="flex flex-col" defaultValue="tab1">
         <Tabs.List
           className="absolute my-2.5 mx-2.5 z-10 bg-white w-50 rounded-md shadow-md
           right-0 flex items-center"
           aria-label="Flow Tabs"
         >
-          {/*each tab would be dynamic in the real version*/}
-          {props.flowCharts.map((flowChart: FlowChart) => {
+          {props.flowCharts.map((flowChart: UserFlows) => {
             return (
               <Tabs.Trigger
-                className={`${styles.TabsTrigger} w-52 p-1 text-left flex justify-between items-center border-r-2 border-inherit`}
-                value={flowChart.value}
+                className={`tabs-trigger w-52 p-1 text-left flex justify-between items-center border-r-2 border-inherit`}
+                value={flowChart.id}
               >
                 {flowChart.title}
                 <div className="flex gap-x-2 items-center">
-                  {flowChart.colaborators.map((user: User) => {
-                    return <AvatarComponent initials={user.initials} />;
-                  })}
+                  {flowChart.colaborators.map(
+                    (collaborator: FlowCollaborators) => {
+                      return (
+                        <AvatarComponent initials={collaborator.initials} />
+                      );
+                    }
+                  )}
                   <div className="flex gap-x-2 items-center">
                     <FlowTabsDropdown users={flowChart.colaborators} />
                   </div>
@@ -93,16 +89,18 @@ const FlowTabs = (props: FlowTabsProps) => {
             );
           })}
 
-          <TooltipComponent text="add new flow" buttonContent={<PlusIcon />} />
+          <TooltipComponent
+          text="add new flow"
+          buttonContent={<PlusIcon />}
+          name="add-flow" />
         </Tabs.List>
         {props.flowCharts.map((flowChart: FlowChart) => {
           return (
-            <Tabs.Content
-              className={styles.TabsContent}
-              value={flowChart.value}
-            >
+            <Tabs.Content value={flowChart.id}>
+              {/*The div wrapping a flow must
+              have a set height and width*/}
               <div
-                className={styles.reactflowWrapper}
+                className="flex-grow h-screen w-screen realtive z-0"
                 ref={props.reactFlowWrapper}
               >
                 <ReactFlow

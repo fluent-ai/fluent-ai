@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Form from '@radix-ui/react-form';
 import * as firestoreService from '@libs/firestore-service';
-import { mockClient } from '@tool-ai/ui';
+import { mockUser } from '@tool-ai/ui';
 import {
   FormFieldComponent,
   Validation,
@@ -29,15 +29,24 @@ export function SignUp() {
             id: userCredential.user.uid,
             email: userCredential.user.email,
             // TODO: we need to ask for a username on signup and regex the initials from it
-            name: mockClient.name,
-            initials: mockClient.name.slice(0, 2).toUpperCase(),
-            flows: [],
+            name: mockUser.name,
+            initials: mockUser.name.slice(0, 2).toUpperCase(),
+            flows: [
+              {
+                id: 'tab1',
+                title: 'Flow 1',
+                stringifiedFlowData: '',
+                owner: true,
+                colaborators: [],
+              },
+            ],
           };
           // write new user to firestore & store auth UUID as user ID/ document ID
           firestoreService.writeToDB('users', newUser);
 
           // store user state in redux
           store.dispatch(userActions.updateUserData(newUser as UserEntity));
+          // store.dispatch(userActions.updateUserFlows(newUser.flows[0]));
           store.dispatch(userActions.setLoadingStatus('loaded'));
           console.log(store.getState().user.userData);
           // redirect to dashboard

@@ -2,14 +2,19 @@ import { AvatarComponent, User } from '@tool-ai/ui';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { Link } from 'react-router-dom';
 import { ButtonComponent } from '@tool-ai/ui';
-
+import { signOut, getAuth } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 interface UserProps {
   currentUser: User;
 }
 
 const Header = (userProps: UserProps): JSX.Element => {
+  const navigate = useNavigate();
   function handleLogout() {
-    console.log('logout');
+    const auth = getAuth();
+    console.log('logout', auth);
+    signOut(auth);
+    navigate('/login');
   }
 
   return (

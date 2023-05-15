@@ -35,6 +35,7 @@ export interface NodeWrapperComponentProps {
 interface TooltipProps {
   buttonContent?: JSX.Element | string;
   text: string;
+  name?: string;
   clickHandler?: () => void;
 }
 
@@ -46,11 +47,17 @@ interface NodeDialogProps {
   setNodes: any;
   activeNodeId: string;
 }
-
+interface FlowCollaborators {
+  id: string;
+  name: string;
+  initials: string;
+}
 interface UserFlows {
   id: string;
+  title: string;
   stringifiedFlowData: string;
   owner: boolean;
+  colaborators: FlowCollaborators[];
 }
 
 interface User {
@@ -63,7 +70,7 @@ interface User {
 }
 
 interface FlowTabsDropdownProps {
-  users: User[];
+  users: FlowCollaborators[];
 }
 
 interface AvatarProps {

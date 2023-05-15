@@ -1,17 +1,16 @@
-import React from 'react';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { ArrowDownIcon } from '@radix-ui/react-icons';
+import { ArrowDownIcon, CaretDownIcon } from '@radix-ui/react-icons';
 import './FlowTabsDropdown.module.css';
 import { AlertComponent } from '../AlertComponent/AlertComponent';
 import styles from '../AlertComponent/AlertComponent.module.css';
-import { User, FlowTabsDropdownProps } from '../../types';
+import { FlowCollaborators, FlowTabsDropdownProps } from '../../types';
 
 const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
         <button className="IconButton sidebar-icon" aria-label="FlowTab Menu">
-          <ArrowDownIcon />
+          <CaretDownIcon />
         </button>
       </DropdownMenu.Trigger>
 
@@ -37,10 +36,10 @@ const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
           <DropdownMenu.Label className={styles.DropdownMenuLabel}>
             People
           </DropdownMenu.Label>
-          {props.users.map((user: User) => {
+          {props.users.map((user: FlowCollaborators) => {
             return (
               <DropdownMenu.Item
-                key={user.email}
+                // key={user.email}
                 className={styles.DropdownMenuItem}
               >
                 {user.name}
