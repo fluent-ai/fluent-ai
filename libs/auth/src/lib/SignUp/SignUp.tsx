@@ -2,14 +2,8 @@ import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Form from '@radix-ui/react-form';
-import * as firestoreService from '@libs/firestore-service';
 
-import {
-  FormFieldComponent,
-  Validation,
-  ButtonComponent,
-  User,
-} from '@tool-ai/ui';
+import { FormFieldComponent, Validation, ButtonComponent } from '@tool-ai/ui';
 import { store, userActions } from '@tool-ai/state';
 import { dispatchToStore, createNewUser } from '../load-userdata';
 

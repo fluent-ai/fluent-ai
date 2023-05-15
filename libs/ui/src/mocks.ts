@@ -6,7 +6,7 @@ export const mockUser: User = {
   initials: 'JB',
   flows: [
     {
-      id: 'tab1',
+      id: 'testId-1',
       title: 'Flow 1',
       stringifiedNodes: '[]',
       stringifiedEdges: '[]',

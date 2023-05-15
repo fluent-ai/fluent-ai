@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
 import * as Tabs from '@radix-ui/react-tabs';
 import {
   ReactFlow,
@@ -21,7 +20,6 @@ import {
 } from '@tool-ai/ui';
 
 import { mock } from 'node:test';
-import { store, flowTabActions } from '@tool-ai/state';
 import Context from '../../context/context';
 
 interface FlowTabsProps {

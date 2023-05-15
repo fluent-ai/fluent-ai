@@ -10,9 +10,8 @@ import 'reactflow/dist/style.css';
 import NodeSideBar from '../../Navigation/NodeSideBar/NodeSideBar';
 import FlowTabs from '../../Navigation/FlowTabs/FlowTabs';
 import TemplateNode from '../../Nodes/TemplateNode/TemplateNode';
-//import { NodeWrapperComponent } from '@tool-ai/ui';
 import Header from '../../Navigation/Header/Header';
-import { store, flowTabActions, userActions } from '@tool-ai/state';
+import { store, flowTabActions } from '@tool-ai/state';
 import { dispatchToStore } from '@libs/auth';
 import {
   User,
@@ -79,7 +78,12 @@ const Dashboard = () => {
       firestoreService
         .getSomeFromDB('users', 'id', '==', 'testId')
         .then((data) => {
-          sessionUser = data[0] as User;
+          if (data.length > 0) {
+            sessionUser = data[0] as User;
+          } else {
+            sessionUser = mockUser;
+            firestoreService.writeToDB('users', sessionUser);
+          }
           dispatchToStore(sessionUser as User);
           loadFlows(sessionUser as User);
         });

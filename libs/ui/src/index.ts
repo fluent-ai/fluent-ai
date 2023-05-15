@@ -16,6 +16,8 @@ export * from './ui-interactions/save-flow';
 export * from './ui-interactions/switch-flowtab';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 export * from './ui-interactions/delete-flow';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+export * from './ui-interactions/add-flowtab';
 
 export * from './types.d';
 export * from './mocks';
