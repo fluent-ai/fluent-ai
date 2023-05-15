@@ -47,16 +47,14 @@ describe('useFlowRunner', () => {
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       expect.stringContaining('Invalid Edge')
     )
-  
     consoleErrorSpy?.mockRestore()
-    
   })
 
   it('should execute a flow', async () => {
     await act(async () => {
       await flowRunner.executeFlow()
     })
-    
+
     flowRunner.outputs.forEach((output) => {
       if (output.id === '4') {
         expect(output.nodeOutputs.payload).toContain("6 pink balloons")
@@ -67,9 +65,4 @@ describe('useFlowRunner', () => {
     })
 
     },10000)
-
-
-        
-
-
 })
