@@ -24,8 +24,7 @@ const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content
-          className="DropdownMenuContent min-w-220 bg-white rounded-6 p-5 shadow-lg animate duration-400 transform-gpu ease-out opacity-0 will-change-transform will-change-opacity
-          "
+          className={styles.DropdownMenuContent}
           sideOffset={5}
         >
           <DropdownMenu.Item
