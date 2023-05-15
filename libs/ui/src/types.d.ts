@@ -1,3 +1,5 @@
+import { ReactElement } from "react";
+
 export interface Validation {
   match:
     | 'badInput'
@@ -32,11 +34,21 @@ export interface NodeWrapperComponentProps {
   setIsDialogOpen: (arg: boolean) => void;
 }
 
-interface TooltipProps {
+export interface TooltipProps {
   buttonContent?: JSX.Element | string;
   text: string;
   name?: string;
   clickHandler?: () => void;
+  classes?: string;
+  children?: JSX.Element
+}
+
+export interface ButtonProps {
+  buttonContent?: string | JSX.Element | undefined ,
+  type: "button" | "submit" | "reset" | undefined;
+  ariaLabel: string;
+  classes?: string;
+  clickHandler?: () => void | undefined;
 }
 
 interface NodeDialogProps {

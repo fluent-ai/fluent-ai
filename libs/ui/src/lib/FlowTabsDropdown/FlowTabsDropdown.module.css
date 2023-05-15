@@ -49,10 +49,7 @@ button {
   user-select: none;
   outline: none;
 }
-.DropdownMenuSubTrigger[data-state='open'] {
-  background-color: purple;
-  color: purple;
-}
+
 .DropdownMenuItem[data-disabled],
 .DropdownMenuCheckboxItem[data-disabled],
 .DropdownMenuRadioItem[data-disabled],
@@ -103,10 +100,6 @@ button {
   justify-content: center;
   color: color;
   background-color: transparent;
-}
-.IconButton:hover {
-}
-.IconButton:focus {
 }
 
 .RightSlot {

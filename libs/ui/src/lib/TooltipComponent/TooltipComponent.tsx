@@ -1,20 +1,14 @@
 import * as Tooltip from '@radix-ui/react-tooltip';
 import { TooltipProps } from '../../types';
-import { ButtonComponent } from '../ButtonComponent/ButtonComponent';
 import { addFlowTab } from '../../ui-interactions/add-flowtab';
+import {IconButtonComponent} from '../IconButtonComponent/IconButtonComponent';
 
 const TooltipComponent = (props: TooltipProps) => {
   return (
     <Tooltip.Provider>
       <Tooltip.Root>
         <Tooltip.Trigger asChild>
-          <ButtonComponent
-            type="button"
-            ariaLabel="iconbutton"
-            buttonContent={props.buttonContent}
-            classes="icon"
-            clickHandler={props.name === 'add-flow' ? addFlowTab : undefined}
-          />
+          {props.children}
         </Tooltip.Trigger>
         <Tooltip.Portal>
           <Tooltip.Content

@@ -1,6 +1,9 @@
 import React, {useState} from 'react';
 import NodeItemSideBar from '../NodeItemSideBar/NodeItemSideBar';
 import { FileIcon, MixIcon, TextIcon, DoubleArrowRightIcon, ArrowRightIcon, ArrowLeftIcon, FrameIcon, MagnifyingGlassIcon, CameraIcon, GlobeIcon } from '@radix-ui/react-icons';
+import {ReactComponent as OpenAiLogo}  from  '../../../assets/OpenAI_Logo.svg';
+import {ReactComponent as DeeplLogo}  from  '../../../assets/Deepl_Logo.svg';
+
 
 const NodeSideBar = () => {
   const onDragStart = (event: React.DragEvent, nodeType: string) => {
@@ -18,8 +21,8 @@ const NodeSideBar = () => {
     <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'template')} title="Template" icon={<FrameIcon />} />
     <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'userFunction')} title="User Function" icon={<MixIcon />} />
     <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'preview')} title="Preview" icon={<CameraIcon />} />
-    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'openAi')} title="Open AI" icon={<GlobeIcon />} />
-    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'deepl')} title="Deepl Translate" icon={<GlobeIcon />} />
+    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'openAi')} title="Open AI" icon={<OpenAiLogo />} />
+    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'deepl')} title="Deepl Translate" icon={<DeeplLogo />} />
     </aside>
 
     {/* {open ?

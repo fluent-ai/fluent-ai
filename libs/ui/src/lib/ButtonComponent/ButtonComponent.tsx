@@ -1,12 +1,6 @@
 import { ReactNode } from "react";
+import { ButtonProps } from "../../types";
 
-export interface ButtonProps {
-  buttonContent?: string | JSX.Element | undefined ,
-  type: "button" | "submit" | "reset" | undefined;
-  ariaLabel: string;
-  classes?: string;
-  clickHandler?: () => void | undefined;
-}
 function ButtonComponent (props: ButtonProps) {
 
   const primaryButton=`transition
@@ -20,22 +14,11 @@ function ButtonComponent (props: ButtonProps) {
   h-[3vw] uppercase
   text-center`;
 
-  const iconButton=`sidebar-icon
-    h-9
-    w-9 inline-flex
-    items-center
-    justify-center
-    text-black bg-white
-    rounded-full
-    hover:opacity-80
-    focus:outline-none
-    `;
-
   return(
     <button
       type={props.type}
       aria-label={props.ariaLabel}
-      className={props.classes === 'icon' ? iconButton : primaryButton}
+      className={primaryButton}
       onClick={props.clickHandler}
     >
     {props.buttonContent}

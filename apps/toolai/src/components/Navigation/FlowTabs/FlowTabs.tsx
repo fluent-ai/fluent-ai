@@ -21,6 +21,7 @@ import {
 
 import { mock } from 'node:test';
 import Context from '../../context/context';
+import { IconButtonComponent } from '@tool-ai/ui';
 
 interface FlowTabsProps {
   flowCharts: UserFlows[];
@@ -67,10 +68,11 @@ const FlowTabs = (props: FlowTabsProps) => {
     >
       <Tabs.Root className="flex flex-col" defaultValue="tab1">
         <Tabs.List
-          className="absolute min-h-10 max-w-[70vw] overflow-x-scroll mt-2.5 mr-2.5 z-10 bg-white w-50 rounded-md shadow-md
+          className="absolute min-h-10 max-w-[50vw] overflow-x-scroll mt-2.5 mr-2.5 z-10 bg-white w-50 rounded-md shadow-md
           right-0 flex items-center"
           aria-label="Flow Tabs"
         >
+          <div className='max-w-[45vw] flex items-center overflow-x-auto'>
           {props.flowCharts.map((flowChart: UserFlows) => {
             return (
               <Tabs.Trigger
@@ -78,7 +80,7 @@ const FlowTabs = (props: FlowTabsProps) => {
                 value={flowChart.id}
                 onClick={() => props.onTabChange(flowChart.id)}
               >
-                {flowChart.title}
+                <p className='whitespace-nowrap'>{flowChart.title}</p>
                 <div className="flex gap-x-2 items-center">
                   {flowChart.colaborators.map(
                     (collaborator: FlowCollaborators) => {
@@ -87,7 +89,7 @@ const FlowTabs = (props: FlowTabsProps) => {
                       );
                     }
                   )}
-                  <div className="flex gap-x-2 items-center">
+                  <div className="flex items-center">
                     <FlowTabsDropdown
                       users={flowChart.colaborators}
                       onSave={handleSave}
@@ -97,12 +99,19 @@ const FlowTabs = (props: FlowTabsProps) => {
               </Tabs.Trigger>
             );
           })}
+          </div>
+
 
           <TooltipComponent
             text="add new flow"
-            buttonContent={<PlusIcon />}
-            name="add-flow"
-          />
+
+            name="add-flow">
+               <IconButtonComponent
+          buttonContent={<PlusIcon />}
+          type='button'
+          ariaLabel='iconbutton'
+          classes={'group-hover:bg-blue-50'} />
+            </TooltipComponent>
         </Tabs.List>
         {props.flowCharts.map((flowChart: FlowChart) => {
           return (
