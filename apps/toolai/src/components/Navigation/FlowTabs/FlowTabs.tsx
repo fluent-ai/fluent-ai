@@ -18,7 +18,7 @@ import {
   FlowCollaborators,
   saveFlow,
 } from '@tool-ai/ui';
-
+import { addFlowTab } from '@tool-ai/ui';
 import { mock } from 'node:test';
 import Context from '../../context/context';
 import { IconButtonComponent } from '@tool-ai/ui';
@@ -73,7 +73,7 @@ const FlowTabs = (props: FlowTabsProps) => {
           aria-label="Flow Tabs"
         >
           <div className='max-w-[45vw] flex items-center overflow-x-auto'>
-          {props.flowCharts.map((flowChart: UserFlows) => {
+          {props.flowCharts.length > 0 && props.flowCharts.map((flowChart: UserFlows) => {
             return (
               <Tabs.Trigger
                 className={`tabs-trigger w-52 p-2.5 text-left flex justify-between items-center border-r-2 border-inherit`}
@@ -104,16 +104,17 @@ const FlowTabs = (props: FlowTabsProps) => {
 
           <TooltipComponent
             text="add new flow"
-
             name="add-flow">
                <IconButtonComponent
-          buttonContent={<PlusIcon />}
-          type='button'
-          ariaLabel='iconbutton'
-          classes={'group-hover:bg-blue-50'} />
+                  buttonContent={<PlusIcon />}
+                  type='button'
+                  ariaLabel='iconbutton'
+                  classes={'group-hover:bg-blue-50'}
+                  clickHandler={addFlowTab}
+                   />
             </TooltipComponent>
         </Tabs.List>
-        {props.flowCharts.map((flowChart: FlowChart) => {
+        {props.flowCharts.length > 0 && props.flowCharts.map((flowChart: FlowChart) => {
           return (
             <Tabs.Content value={flowChart.id}>
               {/*The div wrapping a flow must

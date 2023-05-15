@@ -1,7 +1,5 @@
 import * as Tooltip from '@radix-ui/react-tooltip';
 import { TooltipProps } from '../../types';
-import { addFlowTab } from '../../ui-interactions/add-flowtab';
-import {IconButtonComponent} from '../IconButtonComponent/IconButtonComponent';
 
 const TooltipComponent = (props: TooltipProps) => {
   return (
