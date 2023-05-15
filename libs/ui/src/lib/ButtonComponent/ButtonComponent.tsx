@@ -6,9 +6,10 @@ function ButtonComponent (props: ButtonProps) {
   const primaryButton=`transition
   eas-in-out
   duration-150
-  bg-blue-0
-  text-white
-  hover:bg-blue-10
+  bg-primary
+  text-primary-hover
+  hover:bg-primary-hover
+  hover:text-primary
   rounded-md w-[98%]
   p-1 mt-[2vw] mb-[1vw]
   h-[3vw] uppercase
