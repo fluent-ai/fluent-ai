@@ -1,23 +1,44 @@
 import { template } from './template';
 
 describe('FlowRunner nodeMethods - Template', () => {
-  it('should render a Mustache template with the input message and props', async () => {
-    const msg = { name: 'John', age: 30 };
-    const props = {
-      template: 'My name is {{msg.name}} and I am {{msg.age}} years old',
+  it('should render a Mustache template', async () => {
+    const args = {
+      globals: { emoji: '👋' },
+      inputs: {
+        template:
+          'My name is {{msg.payload.name}} and I am {{msg.payload.age}} years old {{globals.emoji}}',
+      },
+      msg: { payload: { name: 'John', age: 30 } },
     };
-    const result = await template(msg, props);
+    const result = await template(args);
     expect(result?.['payload']).toEqual(
-      'My name is John and I am 30 years old'
+      'My name is John and I am 30 years old 👋'
     );
   });
 
   it('should reject with an error if props.template is not a string', async () => {
-    const msg = { name: 'John', age: 30 };
-    const props = { template: 123 }; // not a string
-    //@ts-expect-error - testing invalid input
-    await expect(template(msg, props)).rejects.toThrow(
-      'props.template is not a string'
+    const args = {
+      globals: { emoji: '👋' },
+      inputs: {
+        template: 123,
+      },
+      msg: { payload: { name: 'John', age: 30 } },
+    };
+    const result = await template(args);
+    expect(result?.['error']).toEqual(
+      'inputs.template either doesnt exist or is not a string'
+    );
+  });
+
+  it('should return an error if input.template doesnt exist', async () => {
+    const args = {
+      globals: { emoji: '👋' },
+      inputs: {},
+      msg: { payload: { name: 'John', age: 30 } },
+    };
+    const result = await template(args);
+    expect(result?.['error']).toEqual(
+      'inputs.template either doesnt exist or is not a string'
     );
   });
 
