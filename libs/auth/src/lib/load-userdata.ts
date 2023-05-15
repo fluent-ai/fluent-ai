@@ -1,6 +1,5 @@
 import { store, userActions, UserEntity } from '@tool-ai/state';
 import { User, Flow } from '@tool-ai/ui';
-import { mockUser } from '@tool-ai/ui';
 import * as firestoreService from '@libs/firestore-service';
 
 export function dispatchToStore(newUser: User) {

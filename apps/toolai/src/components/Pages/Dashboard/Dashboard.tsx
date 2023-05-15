@@ -91,7 +91,7 @@ const Dashboard = () => {
     if (sessionUser.id === '') {
       // for local development only
       firestoreService
-        .getSomeFromDB('users', 'id', '==', 'testId')
+        .getSomeFromDB('users', 'id', '==', 'testId_2')
         .then((data) => {
           if (data.length > 0) {
             sessionUser = data[0] as User;
