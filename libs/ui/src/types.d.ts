@@ -73,6 +73,7 @@ interface User {
 }
 
 interface FlowTabsDropdownProps {
+  flowChartOwner: string;
   users: FlowCollaborators[];
   onSave: () => void;
 }

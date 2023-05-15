@@ -1,7 +1,36 @@
 import { store, userActions, flowTabActions } from '@tool-ai/state';
+import { User } from '../types';
+import { FlowTabEntity } from '@tool-ai/state';
 import { arrayRemove } from 'firebase/firestore';
 import { FlowCollaborator } from '../types';
 import * as firestoreService from '@libs/firestore-service';
+
+export async function deleteSelectedUser(
+  collaboratorId: string,
+  activeFlowTab: FlowTabEntity,
+  user: User
+) {
+  const writableFlow: any = { ...activeFlowTab };
+  writableFlow.collaboratorIds = writableFlow.collaboratorIds.filter(
+    (id: string) => id !== collaboratorId
+  );
+  writableFlow.collaborators = writableFlow.collaborators.filter(
+    (collaborator: FlowCollaborator) => collaborator.id !== collaboratorId
+  );
+
+  writableFlow.stringifiedEdges = JSON.stringify(writableFlow.edges);
+  writableFlow.stringifiedNodes = JSON.stringify(writableFlow.nodes);
+  delete writableFlow.edges;
+  delete writableFlow.nodes;
+
+  await firestoreService.updateFirestoreDocument(
+    'flows',
+    writableFlow.id,
+    writableFlow
+  );
+  // delete for the current user only
+  await firestoreService.updateFirestoreDocument('users', collaboratorId, user);
+}
 
 export async function deleteFlow() {
   const flowTabs = store.getState().flowTab.flowTabs;
@@ -22,31 +51,8 @@ export async function deleteFlow() {
         flows: arrayRemove(activeTabId),
       });
     });
-  } else {
-    const writableFlow: any = { ...activeFlowTab };
-    writableFlow.collaboratorIds = writableFlow.collaboratorIds.filter(
-      (id: string) => id !== updatedUser.id
-    );
-    writableFlow.collaborators = writableFlow.collaborators.filter(
-      (collaborator: FlowCollaborator) => collaborator.id !== updatedUser.id
-    );
-
-    writableFlow.stringifiedEdges = JSON.stringify(writableFlow.edges);
-    writableFlow.stringifiedNodes = JSON.stringify(writableFlow.nodes);
-    delete writableFlow.edges;
-    delete writableFlow.nodes;
-
-    await firestoreService.updateFirestoreDocument(
-      'flows',
-      writableFlow.id,
-      writableFlow
-    );
-    // delete for the current user only
-    await firestoreService.updateFirestoreDocument(
-      'users',
-      updatedUser.id,
-      updatedUser
-    );
+  } else if (activeFlowTab) {
+    deleteSelectedUser(updatedUser.id, activeFlowTab, updatedUser);
   }
 
   store.dispatch(flowTabActions.removeActiveFlowTab());

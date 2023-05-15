@@ -86,6 +86,7 @@ const FlowTabs = (props: FlowTabsProps) => {
                   )}
                   <div className="flex gap-x-2 items-center">
                     <FlowTabsDropdown
+                      flowChartOwner={flowChart.ownerId}
                       users={flowChart.collaborators}
                       onSave={handleSave}
                     />
