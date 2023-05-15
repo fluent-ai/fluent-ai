@@ -15,7 +15,7 @@ import {
   AvatarComponent,
   NodeDialogComponent,
   Flow,
-  FlowCollaborators,
+  FlowCollaborator,
   saveFlow,
 } from '@tool-ai/ui';
 
@@ -48,6 +48,7 @@ const FlowTabs = (props: FlowTabsProps) => {
     saveFlow(props.nodes, props.edges);
   };
 
+  console.log(props.flowCharts);
   return (
     <Context.Provider
       value={{
@@ -73,7 +74,7 @@ const FlowTabs = (props: FlowTabsProps) => {
                 {flowChart.title}
                 <div className="flex gap-x-2 items-center">
                   {flowChart.collaborators.map(
-                    (collaborator: FlowCollaborators) => {
+                    (collaborator: FlowCollaborator) => {
                       if (collaborator.id !== props.currentUserId) {
                         return (
                           <AvatarComponent initials={collaborator.initials} />
@@ -85,6 +86,7 @@ const FlowTabs = (props: FlowTabsProps) => {
                   )}
                   <div className="flex gap-x-2 items-center">
                     <FlowTabsDropdown
+                      flowChartOwner={flowChart.ownerId}
                       users={flowChart.collaborators}
                       onSave={handleSave}
                     />

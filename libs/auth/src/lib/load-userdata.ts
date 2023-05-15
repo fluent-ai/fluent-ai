@@ -6,7 +6,6 @@ export function dispatchToStore(newUser: User) {
   // store user state in redux
   store.dispatch(userActions.updateUserData(newUser as UserEntity));
   store.dispatch(userActions.setLoadingStatus('loaded'));
-  console.log(store.getState().user.userData);
 }
 
 export async function createNewUser(user: any): Promise<User> {
