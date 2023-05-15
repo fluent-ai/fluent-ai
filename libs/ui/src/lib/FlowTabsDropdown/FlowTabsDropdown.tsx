@@ -1,11 +1,19 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { ArrowDownIcon, CaretDownIcon } from '@radix-ui/react-icons';
+import { CaretDownIcon } from '@radix-ui/react-icons';
 import './FlowTabsDropdown.module.css';
 import { AlertComponent } from '../AlertComponent/AlertComponent';
 import styles from '../AlertComponent/AlertComponent.module.css';
+
+import { store } from '@tool-ai/state';
 import { FlowCollaborators, FlowTabsDropdownProps } from '../../types';
 
 const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
+  const handleShare = () => {
+    const activeId = store.getState().flowTab.flowTabs.activeId;
+    const link = 'http://localhost:4200/login?link=' + activeId;
+    console.log("Here's your sharing link: ", link);
+  };
+
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
@@ -19,10 +27,16 @@ const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
           className={styles.DropdownMenuContent}
           sideOffset={5}
         >
-          <DropdownMenu.Item className={styles.DropdownMenuItem}>
+          <DropdownMenu.Item
+            className={styles.DropdownMenuItem}
+            onClick={props.onSave}
+          >
             Save <div className={styles.RightSlot}>⌘+S</div>
           </DropdownMenu.Item>
-          <DropdownMenu.Item className={styles.DropdownMenuItem}>
+          <DropdownMenu.Item
+            className={styles.DropdownMenuItem}
+            onClick={handleShare}
+          >
             Share <div className={styles.RightSlot}>⌘+N</div>
           </DropdownMenu.Item>
           <AlertComponent
@@ -39,7 +53,7 @@ const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
           {props.users.map((user: FlowCollaborators) => {
             return (
               <DropdownMenu.Item
-                // key={user.email}
+                key={user.id}
                 className={styles.DropdownMenuItem}
               >
                 {user.name}

@@ -3,8 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import * as Form from '@radix-ui/react-form';
 import { signInWithEmailAndPassword, getAuth } from 'firebase/auth';
 import * as firestoreService from '@libs/firestore-service';
-import { FormFieldComponent, Validation, ButtonComponent } from '@tool-ai/ui';
-import { store, userActions, UserEntity } from '@tool-ai/state';
+import {
+  FormFieldComponent,
+  Validation,
+  ButtonComponent,
+  User,
+} from '@tool-ai/ui';
+import { store, userActions } from '@tool-ai/state';
+import { dispatchToStore } from '../load-userdata';
 
 const auth = getAuth();
 
@@ -24,11 +30,7 @@ export function SignIn() {
           .then((users) => {
             if (users.length > 0) {
               // store user state in redux
-              store.dispatch(
-                userActions.updateUserData(users[0] as UserEntity)
-              );
-              store.dispatch(userActions.setLoadingStatus('loaded'));
-              console.log(store.getState().user.userData);
+              dispatchToStore(users[0] as User);
               // redirect user to dashboard
               navigate('/');
             }

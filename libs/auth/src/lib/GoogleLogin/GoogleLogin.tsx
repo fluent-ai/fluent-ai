@@ -3,7 +3,11 @@ import { signInWithPopup, GoogleAuthProvider, getAuth } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import * as firestoreService from '@libs/firestore-service';
 import { User } from '@tool-ai/ui';
+import { addFlowFromSharedLink } from '../shared-link-handler';
 import { store, userActions, UserEntity } from '@tool-ai/state';
+import { current } from '@reduxjs/toolkit';
+import { arrayUnion } from 'firebase/firestore';
+import { dispatchToStore, createNewUser } from '../load-userdata';
 
 const auth = getAuth();
 export function GoogleLogin() {
@@ -11,6 +15,25 @@ export function GoogleLogin() {
   const provider = new GoogleAuthProvider();
   const navigate = useNavigate();
   provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+
+  const loadAndRedirect = (user: any) => {
+    firestoreService
+      .getSomeFromDB('users', 'id', '==', user.uid)
+      .then((users: any) => {
+        if (users.length > 0) {
+          // store user state in redux
+          dispatchToStore(users[0] as User);
+          navigate('/');
+        } else {
+          if (user.displayName && user.email && user.photoURL) {
+            const newUser = createNewUser(user);
+            dispatchToStore(newUser);
+            navigate('/');
+          }
+        }
+      });
+  };
+
   const signInWithGoogle = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
@@ -19,52 +42,47 @@ export function GoogleLogin() {
         const token = credential?.accessToken;
         const user = result.user;
 
-        firestoreService
-          .getSomeFromDB('users', 'id', '==', user.uid)
-          .then((users) => {
-            if (users.length > 0) {
-              // store user state in redux
-
-              store.dispatch(
-                userActions.updateUserData(users[0] as UserEntity)
-              );
-              store.dispatch(userActions.setLoadingStatus('loaded'));
-              console.log(
-                'google login, current user state: ',
-                store.getState().user.userData
-              );
-              navigate('/');
-            } else {
-              if (user.displayName && user.email && user.photoURL) {
-                const newUser: User = {
-                  id: user.uid,
-                  email: user.email,
-                  name: user.displayName,
-                  initials: user.displayName?.slice(0, 2).toUpperCase(),
-                  flows: [
-                    {
-                      id: 'tab1',
-                      title: 'Flow 1',
-                      stringifiedFlowData: '',
-                      owner: true,
-                      colaborators: [],
-                    },
-                  ],
-                  profileImg: user.photoURL,
-                };
-
-                firestoreService.writeToDB('users', newUser);
-                store.dispatch(
-                  userActions.updateUserData(newUser as UserEntity)
+        // check for a sharing link
+        const sharingLinkMatch = window.location.href.match(/\?link=(.*)/);
+        if (sharingLinkMatch) {
+          const sharingLink = sharingLinkMatch[1];
+          const userIdMatch = sharingLink.match(/(.*)-\d*/) || '';
+          firestoreService
+            .getSomeFromDB('users', 'id', '==', userIdMatch[1])
+            .then((users) => {
+              if (users.length > 0) {
+                const originalUserFlow = users[0].flows.find(
+                  (flow: any) => flow.id === sharingLink
                 );
+                const newFlow = JSON.parse(JSON.stringify(originalUserFlow));
+                originalUserFlow.colaborators.push({
+                  id: user.uid,
+                  name: user.displayName,
+                  initials: user.displayName?.slice(0, 2).toUpperCase() || '',
+                });
+                newFlow.colaborators.push({
+                  id: users[0].id,
+                  name: users[0].name,
+                  initials: users[0].initials,
+                });
 
-                //store.dispatch(flowtabsActions.addFlowTab(newUser.flows[0]));
-                store.dispatch(userActions.setLoadingStatus('loaded'));
-                console.log(store.getState().user.userData);
-                navigate('/');
+                firestoreService
+                  .updateFirestoreDocument('users', user.uid, {
+                    flows: arrayUnion(newFlow),
+                  })
+                  .then(() => {
+                    firestoreService.updateFirestoreDocument(
+                      'users',
+                      users[0].id,
+                      users[0]
+                    );
+                    loadAndRedirect(user);
+                  });
               }
-            }
-          });
+            });
+        } else {
+          loadAndRedirect(user);
+        }
       })
       .catch((error) => {
         // const errorCode = error.code;

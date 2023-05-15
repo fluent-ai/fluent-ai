@@ -55,7 +55,8 @@ interface FlowCollaborators {
 interface UserFlows {
   id: string;
   title: string;
-  stringifiedFlowData: string;
+  stringifiedNodes: string;
+  stringifiedEdges: string;
   owner: boolean;
   colaborators: FlowCollaborators[];
 }
@@ -71,6 +72,7 @@ interface User {
 
 interface FlowTabsDropdownProps {
   users: FlowCollaborators[];
+  onSave: () => void;
 }
 
 interface AvatarProps {

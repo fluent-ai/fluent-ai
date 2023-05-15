@@ -16,8 +16,10 @@ import {
   NodeDialogComponent,
   UserFlows,
   FlowCollaborators,
+  saveFlow,
 } from '@tool-ai/ui';
 
+import { mock } from 'node:test';
 import Context from '../../context/context';
 
 interface FlowTabsProps {
@@ -33,6 +35,7 @@ interface FlowTabsProps {
   onDrop: any;
   onDragOver: any;
   nodeTypes: any;
+  onTabChange: (id: string) => void;
 }
 
 interface FlowChart {
@@ -40,8 +43,8 @@ interface FlowChart {
   title: string;
   colaborators: FlowCollaborators[];
   owner: boolean;
-
-  stringifiedFlowData: string;
+  stringifiedNodes: string;
+  stringifiedEdges: string;
 }
 
 const FlowTabs = (props: FlowTabsProps) => {
@@ -49,7 +52,9 @@ const FlowTabs = (props: FlowTabsProps) => {
   const [activeDialog, setActiveDialog] = useState('');
   const [activeNodeId, setActiveNodeId] = useState('');
 
-  // value
+  const handleSave = function () {
+    saveFlow(props.nodes, props.edges);
+  };
 
   return (
     <Context.Provider
@@ -71,6 +76,7 @@ const FlowTabs = (props: FlowTabsProps) => {
               <Tabs.Trigger
                 className={`tabs-trigger w-52 p-1 text-left flex justify-between items-center border-r-2 border-inherit`}
                 value={flowChart.id}
+                onClick={() => props.onTabChange(flowChart.id)}
               >
                 {flowChart.title}
                 <div className="flex gap-x-2 items-center">
@@ -82,7 +88,10 @@ const FlowTabs = (props: FlowTabsProps) => {
                     }
                   )}
                   <div className="flex gap-x-2 items-center">
-                    <FlowTabsDropdown users={flowChart.colaborators} />
+                    <FlowTabsDropdown
+                      users={flowChart.colaborators}
+                      onSave={handleSave}
+                    />
                   </div>
                 </div>
               </Tabs.Trigger>
@@ -90,9 +99,10 @@ const FlowTabs = (props: FlowTabsProps) => {
           })}
 
           <TooltipComponent
-          text="add new flow"
-          buttonContent={<PlusIcon />}
-          name="add-flow" />
+            text="add new flow"
+            buttonContent={<PlusIcon />}
+            name="add-flow"
+          />
         </Tabs.List>
         {props.flowCharts.map((flowChart: FlowChart) => {
           return (
