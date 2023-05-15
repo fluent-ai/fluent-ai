@@ -1,8 +1,8 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { CaretDownIcon } from '@radix-ui/react-icons';
-import './FlowTabsDropdown.module.css';
+import styles from './FlowTabsDropdown.module.css';
 import { AlertComponent } from '../AlertComponent/AlertComponent';
-import styles from '../AlertComponent/AlertComponent.module.css';
+import alertStyles from '../AlertComponent/AlertComponent.module.css';
 
 import { store } from '@tool-ai/state';
 import { FlowCollaborators, FlowTabsDropdownProps } from '../../types';
@@ -24,7 +24,8 @@ const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content
-          className={styles.DropdownMenuContent}
+          className="DropdownMenuContent min-w-220 bg-white rounded-6 p-5 shadow-lg animate duration-400 transform-gpu ease-out opacity-0 will-change-transform will-change-opacity
+          "
           sideOffset={5}
         >
           <DropdownMenu.Item
