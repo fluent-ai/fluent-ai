@@ -1,9 +1,8 @@
-// Note : msg is not auto forwarded by user scripts.
-// Note : The final resolve differs from the other patterns.
+import { IMethodArguments } from '../useFlowRunner';
 
 async function runUserScript(
   userScript: string,
-  context: { msg: Record<string, unknown>; props: Record<string, unknown> }
+  context: Record<string, unknown>
 ) {
   // Check for disallowed words
   const disallowedWords = [
@@ -28,32 +27,31 @@ async function runUserScript(
   userScript = userScript.replace(/\/\/.*|\/\*[\s\S]*?\*\//g, '');
 
   // Execute the sanitized code in a sandboxed context
-  const scriptFunction = new Function('msg', 'props', userScript);
+  const scriptFunction = new Function('globals', 'msg', userScript);
   let result;
   try {
-    result = await scriptFunction(context.msg, context.props);
+    result = await scriptFunction(context.globals, context.msg);
   } catch (error) {
     return { error: 'Error in user script\n' + error };
   }
   return result;
 }
 
-export interface UserFunctionProps {
-  userFunction: string;
-  [key: string]: unknown;
-}
-
-export async function userFunction(
-  msg: Record<string, unknown>,
-  props: UserFunctionProps
-): Promise<Record<string, unknown>> {
-  return new Promise((resolve, reject) => {
-    if (typeof props.userFunction === 'string') {
-      runUserScript(props.userFunction, { msg, props }).then((result) => {
+export function userFunction({
+  globals,
+  inputs,
+  msg,
+}: IMethodArguments): Promise<Record<string, unknown>> {
+  return new Promise((resolve) => {
+    if (typeof inputs?.userFunction === 'string') {
+      runUserScript(inputs?.userFunction, { globals, msg }).then((result) => {
         resolve({ ...msg, ...result });
       });
     } else {
-      reject('props.userFunction is not a string');
+      resolve({
+        ...msg,
+        error: 'inputs.userFunction either doesnt exist or is not a string',
+      });
     }
   });
 }

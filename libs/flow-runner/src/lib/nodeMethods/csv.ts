@@ -1,6 +1,6 @@
 import { IMethodArguments } from '../useFlowRunner';
 
-export function json({
+export function csv({
   globals,
   inputs,
   msg,
@@ -9,7 +9,7 @@ export function json({
     if (!msg.payload) {
       resolve({
         ...msg,
-        error: 'JSON node expects msg object to include a payload',
+        error: 'CSV node expects msg object to include a payload',
       });
     }
     //try parse the msg.payload as json
