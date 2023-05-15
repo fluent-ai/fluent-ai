@@ -111,14 +111,32 @@ const Dashboard = () => {
     nodeTypes: nodeTypes,
   };
 
-  const { flow, setFlow, executeFlow } = useFlowRunner();
+  const {
+    setFlow,
+    setInputs, 
+    setGlobals,
+    executeFlow,
+    globals,
+    outputs,
+    states,
+  } = useFlowRunner();
 
   useEffect(() => {
-    console.log('flow', flow);
-  }, [flow]);
+    console.log('🌊 flowRunner - change detected', );
+  }, [
+    globals,
+    outputs,
+    states,]);
 
   function runFlow() {
-    console.log('Running');
+    console.log('🌊 flowRunner - preparing ');
+    setFlow({nodes, edges});
+    setGlobals({ openAiApiKey: process.env.NX_OPENAI_API_KEY })
+    // setInputs({});
+    setTimeout(() => {
+      console.log('🌊 flowRunner - executing flow');
+      executeFlow();
+    }, 100);
   }
   if (currentUser.id === '') {
     return <div></div>;
