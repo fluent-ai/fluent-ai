@@ -20,7 +20,8 @@ export interface FlowCollaboratorsEntity {
 export interface FlowEntity {
   id: string;
   title: string;
-  stringifiedFlowData: string;
+  stringifiedNodes: string;
+  stringifiedEdges: string;
   owner: boolean;
   colaborators?: FlowCollaboratorsEntity[];
 }
@@ -98,6 +99,12 @@ export const userSlice = createSlice({
     updateUserFlows: (state: UserState, action: PayloadAction<FlowEntity>) => {
       const user = state.userData;
       user.flows = [...user.flows, action.payload];
+    },
+    removeUserFlow: (state: UserState, action: PayloadAction<string>) => {
+      const filteredFlows = state.userData.flows.filter(
+        (flow) => flow.id !== action.payload
+      );
+      state.userData.flows = [...filteredFlows];
     },
   },
 });

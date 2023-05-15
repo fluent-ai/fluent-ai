@@ -1,6 +1,8 @@
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import styles from './AlertComponent.module.css';
 import { AlertProps } from '../../types';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { deleteFlow } from '../../ui-interactions/delete-flow';
 
 const AlertComponent = (props: AlertProps) => (
   <AlertDialog.Root>
@@ -23,7 +25,10 @@ const AlertComponent = (props: AlertProps) => (
             </button>
           </AlertDialog.Cancel>
           <AlertDialog.Action asChild>
-            <button className={`${styles.Button} ${styles.red}`}>
+            <button
+              className={`${styles.Button} ${styles.red}`}
+              onClick={deleteFlow}
+            >
               Yes, delete flow
             </button>
           </AlertDialog.Action>

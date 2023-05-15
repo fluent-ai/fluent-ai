@@ -1,5 +1,5 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { ArrowDownIcon, CaretDownIcon } from '@radix-ui/react-icons';
+import { CaretDownIcon } from '@radix-ui/react-icons';
 import './FlowTabsDropdown.module.css';
 import { AlertComponent } from '../AlertComponent/AlertComponent';
 import styles from '../AlertComponent/AlertComponent.module.css';
@@ -19,7 +19,10 @@ const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
           className={styles.DropdownMenuContent}
           sideOffset={5}
         >
-          <DropdownMenu.Item className={styles.DropdownMenuItem}>
+          <DropdownMenu.Item
+            className={styles.DropdownMenuItem}
+            onClick={props.onSave}
+          >
             Save <div className={styles.RightSlot}>⌘+S</div>
           </DropdownMenu.Item>
           <DropdownMenu.Item className={styles.DropdownMenuItem}>
@@ -39,7 +42,7 @@ const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
           {props.users.map((user: FlowCollaborators) => {
             return (
               <DropdownMenu.Item
-                // key={user.email}
+                key={user.id}
                 className={styles.DropdownMenuItem}
               >
                 {user.name}
