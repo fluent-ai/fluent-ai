@@ -10,7 +10,7 @@ export async function addFlowFromSharedLink(user: any) {
       'flows',
       'id',
       '==',
-      sharingLinkMatch[0]
+      sharingLinkMatch[1]
     );
     if (flows.length > 0) {
       const userId = user.uid || user.id;

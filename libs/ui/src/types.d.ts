@@ -47,7 +47,7 @@ interface NodeDialogProps {
   setNodes: any;
   activeNodeId: string;
 }
-interface FlowCollaborators {
+interface FlowCollaborator {
   id: string;
   name: string;
   initials: string;
@@ -60,7 +60,7 @@ interface Flow {
   stringifiedNodes: string;
   stringifiedEdges: string;
   collaboratorIds: string[];
-  collaborators: FlowCollaborators[];
+  collaborators: FlowCollaborator[];
 }
 
 interface User {

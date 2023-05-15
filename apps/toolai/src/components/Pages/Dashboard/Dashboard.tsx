@@ -47,8 +47,6 @@ const Dashboard = () => {
     (state: any) => state.flowTab.flowTabs.flows
   );
 
-  // const flowTabs = useSelector((state: any) => state.flowTabs);
-
   const persistNewFlow = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
       e.preventDefault();
@@ -67,22 +65,24 @@ const Dashboard = () => {
       'array-contains',
       sessionUser.id
     );
-    flows.forEach((flow) => {
-      const flowEntity = {
-        id: flow.id,
-        title: flow.title,
-        ownerId: flow.ownerId,
-        nodes: JSON.parse(flow.stringifiedNodes),
-        edges: JSON.parse(flow.stringifiedEdges),
-        collaboratorIds: flow.collaboratorIds,
-        collaborators: flow.collaborators,
-      };
-      store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
-    });
-    console.log('flows: ', flows);
-    store.dispatch(flowTabActions.setActiveFlowTab(flows[0].id));
-    setNodes(JSON.parse(flows[0].stringifiedNodes));
-    setEdges(JSON.parse(flows[0].stringifiedEdges));
+    if (flows.length > 0) {
+      flows.forEach((flow) => {
+        const flowEntity = {
+          id: flow.id,
+          title: flow.title,
+          ownerId: flow.ownerId,
+          nodes: JSON.parse(flow.stringifiedNodes),
+          edges: JSON.parse(flow.stringifiedEdges),
+          collaboratorIds: flow.collaboratorIds,
+          collaborators: flow.collaborators,
+        };
+        store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
+      });
+
+      store.dispatch(flowTabActions.setActiveFlowTab(flows[0].id));
+      setNodes(JSON.parse(flows[0].stringifiedNodes));
+      setEdges(JSON.parse(flows[0].stringifiedEdges));
+    }
   };
   // This loads the initial user and flow data from the user
   useEffect(() => {
@@ -187,7 +187,7 @@ const Dashboard = () => {
   function runFlow() {
     console.log('Running');
   }
-  if (currentUser.id === '' || !currentFlows) {
+  if (currentUser.id === '') {
     return <div></div>;
   }
   return (

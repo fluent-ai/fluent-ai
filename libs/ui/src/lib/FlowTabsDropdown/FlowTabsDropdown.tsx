@@ -5,7 +5,7 @@ import { AlertComponent } from '../AlertComponent/AlertComponent';
 import styles from '../AlertComponent/AlertComponent.module.css';
 
 import { store } from '@tool-ai/state';
-import { FlowCollaborators, FlowTabsDropdownProps } from '../../types';
+import { FlowCollaborator, FlowTabsDropdownProps } from '../../types';
 
 const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
   const handleShare = () => {
@@ -50,7 +50,7 @@ const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
           <DropdownMenu.Label className={styles.DropdownMenuLabel}>
             People
           </DropdownMenu.Label>
-          {props.users.map((user: FlowCollaborators) => {
+          {props.users.map((user: FlowCollaborator) => {
             return (
               <DropdownMenu.Item
                 key={user.id}

@@ -12,7 +12,7 @@ export const mockUser: User = {
 export const mockFlow = {
   id: 'testId_2-1',
   title: 'My Flow 1',
-  ownerId: 'testId',
+  ownerId: 'testId_2',
   stringifiedNodes: '[]',
   stringifiedEdges: '[]',
   collaboratorIds: ['testId_2'],
