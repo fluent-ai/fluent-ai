@@ -34,15 +34,15 @@ const nodeTypes = {
   openAi: TemplateNode,
 };
 
-let id = 0;
-const getId = () => `dndnode_${id++}`;
+
 
 const Dashboard = () => {
   const reactFlowWrapper = useRef<any>(null);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
-
+  let id = nodes.length;
+  const getId = () => `dndnode_${id++}`;
   const currentUser = useSelector((state: any) => state.user.userData);
   // const flowTabs = useSelector((state: any) => state.flowTabs);
 
@@ -58,18 +58,21 @@ const Dashboard = () => {
   );
 
   const loadFlows = function (sessionUser: User) {
-    sessionUser.flows.forEach((flow) => {
-      const flowEntity = {
-        id: flow.id,
-        nodes: JSON.parse(flow.stringifiedNodes),
-        edges: JSON.parse(flow.stringifiedEdges),
-      };
-      store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
-    });
+    if(sessionUser) {
+      sessionUser.flows.forEach((flow) => {
+        const flowEntity = {
+          id: flow.id,
+          nodes: JSON.parse(flow.stringifiedNodes),
+          edges: JSON.parse(flow.stringifiedEdges),
+        };
+        store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
+      });
 
-    store.dispatch(flowTabActions.setActiveFlowTab(sessionUser.flows[0].id));
-    setNodes(JSON.parse(sessionUser.flows[0].stringifiedNodes));
-    setEdges(JSON.parse(sessionUser.flows[0].stringifiedEdges));
+      store.dispatch(flowTabActions.setActiveFlowTab(sessionUser.flows[0].id));
+      setNodes(JSON.parse(sessionUser.flows[0].stringifiedNodes));
+      setEdges(JSON.parse(sessionUser.flows[0].stringifiedEdges));
+    }
+
   };
   // This loads the initial user and flow data from the user
   useEffect(() => {
@@ -144,6 +147,8 @@ const Dashboard = () => {
         position,
         data: { label: `${type}` },
       };
+      console.log('nodes:', nodes)
+      console.log('nodes:', newNode);
 
       setNodes((nds) => nds.concat(newNode));
     },
