@@ -67,14 +67,14 @@ const FlowTabs = (props: FlowTabsProps) => {
     >
       <Tabs.Root className="flex flex-col" defaultValue="tab1">
         <Tabs.List
-          className="absolute my-2.5 mx-2.5 z-10 bg-white w-50 rounded-md shadow-md
+          className="absolute min-h-10 max-w-[70vw] overflow-x-scroll mt-2.5 mr-2.5 z-10 bg-white w-50 rounded-md shadow-md
           right-0 flex items-center"
           aria-label="Flow Tabs"
         >
           {props.flowCharts.map((flowChart: UserFlows) => {
             return (
               <Tabs.Trigger
-                className={`tabs-trigger w-52 p-1 text-left flex justify-between items-center border-r-2 border-inherit`}
+                className={`tabs-trigger w-52 p-2.5 text-left flex justify-between items-center border-r-2 border-inherit`}
                 value={flowChart.id}
                 onClick={() => props.onTabChange(flowChart.id)}
               >

@@ -64,17 +64,17 @@ button {
   color: rgb(111, 110, 119);
 }
 .Button.cancel:hover {
-  background-color: rgb(109, 109, 109);
+  background-color: rgb(181, 181, 181);
 }
 .Button.cancel:focus {
-  box-shadow: 0 0 0 2px black;
+  box-shadow: 0 0 0 1px black;
 }
 .Button.red {
   background-color: rgb(252, 168, 168);
   color: red;
 }
 .Button.red:hover {
-  background-color: red;
+  background-color: rgb(248, 131, 131);
 }
 .Button.red:focus {
   box-shadow: 0 0 0 2px red;
