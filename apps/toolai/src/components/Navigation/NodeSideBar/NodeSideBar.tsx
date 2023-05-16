@@ -24,6 +24,7 @@ const NodeSideBar = () => {
     <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'preview')} title="Preview" icon={<CameraIcon />} />
     <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'openAi')} title="Open AI" icon={<OpenAiLogo />} />
     <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'deepl')} title="Deepl Translate" icon={<DeeplLogo />} />
+    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'imageAi')} title="Image AI" icon={<DeeplLogo />} />
     </aside>
 
 </div>

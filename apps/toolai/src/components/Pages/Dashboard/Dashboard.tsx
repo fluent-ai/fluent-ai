@@ -33,6 +33,7 @@ const nodeTypes = {
   userFunction: TemplateNode,
   preview: TemplateNode,
   openAi: TemplateNode,
+  imageAi: TemplateNode,
 };
 
 
@@ -56,7 +57,7 @@ const Dashboard = () => {
   // --------------------------------------     Hooks & State - Flow Runner   --------------------------------------
   const {
     setFlow,
-    setInputs, 
+    setInputs,
     setGlobals,
     executeFlow,
     globals,
@@ -130,7 +131,7 @@ const Dashboard = () => {
     (params: any) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
-  
+
   // ------------------------------------------------     Tabs     --------------------------------------------
   // save & load the nodes and edges of the tabs that we switched
   const changeTabState = useCallback(
@@ -184,6 +185,8 @@ const Dashboard = () => {
             return 'OpenAI';
           case 'deepl':
             return 'DeepL';
+            case 'imageAi':
+              return 'Image AI';
           default:
             return null;
         }
