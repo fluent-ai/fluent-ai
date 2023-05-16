@@ -95,7 +95,7 @@ function TextFileInputDialog({id}:{id:string}) {
         </div>)
         }
       <textarea
-        className="border-2 border-gray-light border-solid rounded-md w-full"
+        className="border-2 border-gray-light border-solid rounded-md w-full mt-2.5"
         placeholder="input your text"
         rows={10}
         cols={100}
