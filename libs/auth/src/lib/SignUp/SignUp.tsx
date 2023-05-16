@@ -6,7 +6,10 @@ import * as Form from '@radix-ui/react-form';
 import { FormFieldComponent, Validation, ButtonComponent } from '@tool-ai/ui';
 import { store, userActions } from '@tool-ai/state';
 import { dispatchToStore, createNewUser } from '../load-userdata';
-import { addFlowFromSharedLink } from '../shared-link-handler';
+import {
+  addFlowFromSharedLink,
+  addFlowCopyFromLink,
+} from '../shared-link-handler';
 
 const auth = getAuth();
 
@@ -31,8 +34,10 @@ export function SignUp() {
           ...userCredentials.user,
           displayName: displayName,
         });
-        dispatchToStore(newUser);
+        await dispatchToStore(newUser);
         await addFlowFromSharedLink(newUser);
+        await addFlowCopyFromLink(newUser);
+
         // redirect to dashboard
         navigate('/');
       }

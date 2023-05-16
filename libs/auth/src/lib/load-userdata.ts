@@ -2,7 +2,7 @@ import { store, userActions, UserEntity } from '@tool-ai/state';
 import { User, Flow } from '@tool-ai/ui';
 import * as firestoreService from '@libs/firestore-service';
 
-export function dispatchToStore(newUser: User) {
+export async function dispatchToStore(newUser: User) {
   // store user state in redux
   store.dispatch(userActions.updateUserData(newUser as UserEntity));
   store.dispatch(userActions.setLoadingStatus('loaded'));
@@ -38,4 +38,8 @@ export async function createNewUser(user: any): Promise<User> {
   await firestoreService.writeToDB('flows', newFlow);
 
   return newUser;
+}
+
+export function setSessionToken(token: string) {
+  store.dispatch(userActions.setSessionToken(token));
 }

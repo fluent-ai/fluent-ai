@@ -11,7 +11,10 @@ import {
 } from '@tool-ai/ui';
 import { store, userActions } from '@tool-ai/state';
 import { dispatchToStore } from '../load-userdata';
-import { addFlowFromSharedLink } from '../shared-link-handler';
+import {
+  addFlowFromSharedLink,
+  addFlowCopyFromLink,
+} from '../shared-link-handler';
 
 const auth = getAuth();
 
@@ -37,9 +40,11 @@ export function SignIn() {
         userCredential.user.uid
       );
       if (users.length > 0) {
+        await dispatchToStore(users[0] as User);
+        await addFlowFromSharedLink(users[0] as User);
+        await addFlowCopyFromLink(users[0] as User);
         // store user state in redux
-        dispatchToStore(users[0] as User);
-        await addFlowFromSharedLink(users[0]);
+
         // redirect user to dashboard
         navigate('/');
       }
