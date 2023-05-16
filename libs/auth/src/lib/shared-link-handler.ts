@@ -41,6 +41,7 @@ export async function addFlowFromSharedLink(user: User) {
 
 export async function addFlowCopyFromLink(user: User) {
   const sharingLinkMatch = window.location.href.match(/\?copy=(.*)/);
+
   if (sharingLinkMatch) {
     const flows = await firestoreService.getSomeFromDB(
       'flows',
@@ -48,7 +49,6 @@ export async function addFlowCopyFromLink(user: User) {
       '==',
       sharingLinkMatch[1]
     );
-
     if (flows.length > 0) {
       // get the make a new flow that has the userId
       const flowIdNumbers = user.flows.map((flowId) =>
@@ -70,8 +70,8 @@ export async function addFlowCopyFromLink(user: User) {
         id: user.id + '-' + flowIdSuffix,
         title: 'Flow ' + flowIdSuffix,
         ownerId: user.id,
-        nodes: [],
-        edges: [],
+        stringifiedNodes: flows[0].stringifiedNodes,
+        stringifiedEdges: flows[0].stringifiedEdges,
         collaboratorIds: [user.id],
         collaborators: [
           {
@@ -81,12 +81,14 @@ export async function addFlowCopyFromLink(user: User) {
           },
         ],
       };
-
       // persist in database
-      firestoreService.writeToDB('flows', newFlow);
-      firestoreService.updateFirestoreDocument('users', user.id, {
+      await firestoreService.writeToDB('flows', newFlow);
+      await firestoreService.updateFirestoreDocument('users', user.id, {
         flows: arrayUnion(newFlow.id),
       });
+
+      // reflect changes in state
+      store.dispatch(userActions.updateUserFlows(newFlow.id));
     }
   }
 }

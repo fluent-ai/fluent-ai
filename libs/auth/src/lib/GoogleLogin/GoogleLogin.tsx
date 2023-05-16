@@ -5,7 +5,10 @@ import * as firestoreService from '@libs/firestore-service';
 import { User } from '@tool-ai/ui';
 import { store, userActions } from '@tool-ai/state';
 import { dispatchToStore, createNewUser } from '../load-userdata';
-import { addFlowFromSharedLink } from '../shared-link-handler';
+import {
+  addFlowFromSharedLink,
+  addFlowCopyFromLink,
+} from '../shared-link-handler';
 
 const auth = getAuth();
 export function GoogleLogin() {
@@ -23,14 +26,16 @@ export function GoogleLogin() {
     );
     if (users.length > 0) {
       await addFlowFromSharedLink(users[0] as User);
+      await addFlowCopyFromLink(users[0] as User);
       // store user state in redux
-      dispatchToStore(users[0] as User);
+      await dispatchToStore(users[0] as User);
       navigate('/');
     } else {
       if (user.displayName && user.email && user.photoURL) {
         const newUser = await createNewUser(user);
+        await dispatchToStore(newUser);
         await addFlowFromSharedLink(newUser);
-        dispatchToStore(newUser);
+        await addFlowCopyFromLink(newUser);
         navigate('/');
       }
     }
