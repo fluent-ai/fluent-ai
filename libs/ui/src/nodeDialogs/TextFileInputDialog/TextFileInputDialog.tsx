@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { flowRunnerActions, flowRunnerSelectors } from '@tool-ai/state';
 
 
-function TxtFileInputDialog({id}:{id:string}) {
+function TextFileInputDialog({id}:{id:string}) {
   // State
   const dispatch = useDispatch();
   const inputs = useSelector(flowRunnerSelectors.selectInput(id));
@@ -65,7 +65,7 @@ function TxtFileInputDialog({id}:{id:string}) {
 
   return (
     <InnerDialogStructure
-    title="Txt File Input"
+    title="Text File Input"
     description=" text file input description" >
       <div className="flex items-center justify-center w-full">
       <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-38 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
@@ -95,7 +95,7 @@ function TxtFileInputDialog({id}:{id:string}) {
         </div>)
         }
       <textarea
-        className="border-2 border-gray-light border-solid rounded-md w-full"
+        className="border-2 border-gray-light border-solid rounded-md w-full mt-2.5"
         placeholder="input your text"
         rows={10}
         cols={100}
@@ -116,4 +116,4 @@ function TxtFileInputDialog({id}:{id:string}) {
   );
 }
 
-export {TxtFileInputDialog};
+export {TextFileInputDialog};

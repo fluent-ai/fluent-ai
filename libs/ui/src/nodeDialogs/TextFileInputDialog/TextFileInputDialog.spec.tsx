@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import {TxtFileInputDialog} from './TxtFileInputDialog';
+import {TextFileInputDialog} from './TextFileInputDialog';
 
-describe('TxtFileInput', () => {
+describe('TextFileInput', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<TxtFileInputDialog
+    const { baseElement } = render(<TextFileInputDialog
       isOpen={true}
       onClose={()=>{console.log('onClose')}}
       activeDialog='txtFile'

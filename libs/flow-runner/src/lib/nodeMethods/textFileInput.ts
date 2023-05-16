@@ -1,6 +1,6 @@
 import { IMethodArguments } from '../useFlowRunner';
 
-export function txtFileInput({
+export function textFileInput({
   globals,
   inputs,
   msg,

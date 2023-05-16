@@ -1,4 +1,4 @@
-import { txtFileInput } from './txtFileInput';
+import { txtFileInput } from './textFileInput';
 
 describe('FlowRunner nodeMethods - input', () => {
   it('should pass a string from props to msg', async () => {

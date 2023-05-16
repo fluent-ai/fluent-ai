@@ -3,7 +3,7 @@ import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialog
 import { flowRunnerSelectors } from "@tool-ai/state";
 
 function JsonDialog({id}:{id:string}) {
-  const inputs = useSelector(flowRunnerSelectors.selectOutput(id));
+  const outputs = useSelector(flowRunnerSelectors.selectOutput(id));
 
   return (
     <InnerDialogStructure
@@ -34,7 +34,7 @@ function JsonDialog({id}:{id:string}) {
       <pre className="text-sm p-2">
         <code>
           {
-            JSON.stringify(inputs?.nodeOutputs || {},null,2).split('\n').map((item, i) => <p key={i}>{item}</p>)
+            JSON.stringify(outputs?.nodeOutputs || {},null,2).split('\n').map((item, i) => <p key={i}>{item}</p>)
           }
         </code>
       </pre>
