@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
-import { useSelector } from 'react-redux';
 import {
   ReactFlowProvider,
   addEdge,
@@ -12,8 +12,7 @@ import NodeSideBar from '../../Navigation/NodeSideBar/NodeSideBar';
 import FlowTabs from '../../Navigation/FlowTabs/FlowTabs';
 import TemplateNode from '../../Nodes/TemplateNode/TemplateNode';
 import Header from '../../Navigation/Header/Header';
-import { store, flowTabActions } from '@tool-ai/state';
-import { dispatchToStore } from '@libs/auth';
+import { store, flowRunnerActions, flowRunnerSelectors, flowTabActions } from '@tool-ai/state';
 import {
   User,
   mockUser,
@@ -23,6 +22,7 @@ import {
 } from '@tool-ai/ui';
 import { useFlowRunner } from '@tool-ai/flow-runner';
 import * as firestoreService from '@libs/firestore-service';
+import { dispatchToStore } from '@libs/auth';
 
 const nodeTypes = {
   txtFileInput: TemplateNode,
@@ -38,13 +38,47 @@ const nodeTypes = {
 
 
 const Dashboard = () => {
+  // --------------------------------------     Hooks & State - React Flow    --------------------------------------
   const reactFlowWrapper = useRef<any>(null);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
+  // Hooks & State - User
+  // --------------------------------------       Hooks & State - User       --------------------------------------
   const currentUser = useSelector((state: any) => state.user.userData);
-  // const flowTabs = useSelector((state: any) => state.flowTabs);
+  const [user, updateUser] = useState<User>({
+    id: '',
+    name: '',
+    email: '',
+    initials: '',
+    flows: [],
+  });
+  // --------------------------------------     Hooks & State - Flow Runner   --------------------------------------
+  const {
+    setFlow,
+    setInputs, 
+    setGlobals,
+    executeFlow,
+    globals,
+    outputs,
+    states,
+  } = useFlowRunner();
+  const dispatch = useDispatch();
+  const inputs = useSelector(flowRunnerSelectors.selectInputs);
+  // -----------------------------------------------     User & Auth    --------------------------------------------
+  useEffect(() => {
+    const sessionUser = store.getState().user.userData;
+    if (sessionUser.id === '') {
+      // for local development only
+      updateUser(mockUser);
+    } else {
+      updateUser(sessionUser as User);
+    }
+  }, []);
 
+
+  // ------------------------------------------------     Database     --------------------------------------------
+  // Saving & Loading Flows
   const persistNewFlow = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
       e.preventDefault();
@@ -55,8 +89,7 @@ const Dashboard = () => {
     },
     [nodes, edges]
   );
-
-  const loadFlows = function (sessionUser: User) {
+  const loadFlows = useCallback((sessionUser: User) => {
     if(sessionUser) {
       sessionUser.flows.forEach((flow) => {
         const flowEntity = {
@@ -66,17 +99,14 @@ const Dashboard = () => {
         };
         store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
       });
-
       store.dispatch(flowTabActions.setActiveFlowTab(sessionUser.flows[0].id));
       setNodes(JSON.parse(sessionUser.flows[0].stringifiedNodes));
       setEdges(JSON.parse(sessionUser.flows[0].stringifiedEdges));
     }
-
-  };
+  }, [setNodes, setEdges]);
   // This loads the initial user and flow data from the user
   useEffect(() => {
     let sessionUser = store.getState().user.userData;
-
     if (sessionUser.id === '') {
       // for local development only
       firestoreService
@@ -94,13 +124,14 @@ const Dashboard = () => {
     } else {
       loadFlows(sessionUser as User);
     }
-  }, [setEdges, setNodes]);
+  }, [setEdges, setNodes, loadFlows]);
 
   const onConnect = useCallback(
     (params: any) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
-
+  
+  // ------------------------------------------------     Tabs     --------------------------------------------
   // save & load the nodes and edges of the tabs that we switched
   const changeTabState = useCallback(
     (tabId: string) => {
@@ -113,29 +144,23 @@ const Dashboard = () => {
     [nodes, edges, setNodes, setEdges]
   );
 
-  // Trigger the effect when nodes or edges change
-  useEffect(() => {
-    // console.log('updated flowState: ', nodes, edges);
-  }, [nodes, edges]);
 
+  // ------------------------------------------------     React Flow     --------------------------------------------
+  // React Flow Events
   const onDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
   }, []);
-
   const onDrop = useCallback(
     (event: any) => {
       event.preventDefault();
-
       const reactFlowBounds =
         reactFlowWrapper?.current?.getBoundingClientRect();
       const type = event.dataTransfer.getData('application/reactflow');
-
       // check if the dropped element is valid
       if (typeof type === 'undefined' || !type) {
         return;
       }
-
       const position = reactFlowInstance.project({
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
@@ -146,14 +171,10 @@ const Dashboard = () => {
         position,
         data: { label: `${type}` },
       };
-      console.log('nodes:', nodes)
-      console.log('nodes:', newNode);
-
       setNodes((nds) => nds.concat(newNode));
     },
     [reactFlowInstance, setNodes]
   );
-
   const FlowTabsProps = {
     nodes: nodes,
     edges: edges,
@@ -168,33 +189,36 @@ const Dashboard = () => {
     onTabChange: changeTabState,
   };
 
-  const {
-    setFlow,
-    setInputs,
-    setGlobals,
-    executeFlow,
-    globals,
-    outputs,
-    states,
-  } = useFlowRunner();
-
+  // ------------------------------------------------     Flow Runner     --------------------------------------------
+  // Flow Runner - Init
   useEffect(() => {
-    console.log('🌊 flowRunner - change detected', );
+    console.log('🌊 initializing');
+    setGlobals({
+      deeplApiKey: process.env.NX_DEEPL_API_KEY,
+      openAiApiKey: process.env.NX_OPENAI_API_KEY
+     })
+  }, [setGlobals]);
+  // Flow Runner - On change
+  useEffect(() => {
+    console.log('🌊 change detected\n',{outputs,states} );
+    dispatch(flowRunnerActions.setStates(states));
+    dispatch(flowRunnerActions.setOutputs(outputs));
   }, [
-    globals,
-    outputs,
-    states,]);
-
+    outputs,states,dispatch]);
+  // Flow Runner - Runner callback
   function runFlow() {
-    console.log('🌊 flowRunner - preparing ');
+    console.log('🌊 preparing ');
     setFlow({nodes, edges});
-    setGlobals({ openAiApiKey: process.env.NX_OPENAI_API_KEY })
-    // setInputs({});
+    console.log('🌊 setting inputs',inputs);
+    setInputs(inputs);
     setTimeout(() => {
-      console.log('🌊 flowRunner - executing flow');
+      console.log('🌊 executing flow');
       executeFlow();
-    }, 100);
+    }, 500);
   }
+
+
+  // This is a hack, refactor me
   if (currentUser.id === '') {
     return <div></div>;
   }

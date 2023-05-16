@@ -63,6 +63,10 @@ export const useFlowRunner = (): {
   const [states, setStates] = useState<IFlowRunnerStates[]>([])
   const [globals, setGlobals] = useState<Record<string, unknown>>({})
 
+  useEffect(() => {
+    console.log('🌊🪝 Inputs mutated to: ', inputs)
+  }, [inputs])
+
 
   //when nodes or edges change, rebuild the links between parents and children
   useEffect(() => {
@@ -87,10 +91,11 @@ export const useFlowRunner = (): {
 
       } else {
         console.warn(
-          `🚨 FlowRunner - Invalid Edge. Source node ${edge.source} or target node ${edge.target} not found`
+          `🌊🪝🚨 Invalid Edge. Source node ${edge.source} or target node ${edge.target} not found`
         )
       }
     })
+    console.log('🌊🪝 built new nodeChildrenStore\n', newNodeChildrenStore);
     setNodeChildrenStore(newNodeChildrenStore)
   }, [flow])
 
@@ -98,6 +103,7 @@ export const useFlowRunner = (): {
    * Execute the flow.
    */
   const executeFlow = async () => {
+    console.log('🌊🪝 call to executeFlow()')
     const rootNodes = flow?.nodes.filter((node) => isRootNode(flow?.edges, node.id))
     // Start the execution by triggering executeNode on each root
     if (rootNodes) {
@@ -114,12 +120,13 @@ export const useFlowRunner = (): {
     msg: Record<string, unknown>
   ) => {
     return new Promise((resolve) => {
+      console.log('🌊🪝 In executeNode, Inputs is now :', inputs)
       // look up the node method
       let method;
       try {
         method = nodeMethods[node.type as keyof typeof nodeMethods]
       } catch (error) {
-        console.warn(`🚨 useFlowRunner - executeNode: Node type ${node.type} not found`)
+        console.warn(`🌊🪝🚨 Node type ${node.type} not found`)
       }
       if (method) {
         // set node state to running
@@ -128,6 +135,7 @@ export const useFlowRunner = (): {
           { id: node.id, state: { status: 'running' } }
         ]);
         // execute the node method 
+        console.log(`🌊🪝 executing node ${node.id}`)
         method({
           globals,
           inputs: inputs.find((input) => input.id === node.id)?.nodeInputs || {},
@@ -143,21 +151,24 @@ export const useFlowRunner = (): {
             ...prevStates.filter((state) => state.id !== node.id),
             { id: node.id, state: { status: 'done' } }
           ]);
-          //strip error off msg and call executeNode on each children
+          // strip error from msg
           delete msg.error
+          //call executeNode on each child
           const childPromises:Promise<unknown>[] = []
           nodeChildrenStore.find((nodeChildren) => nodeChildren.id === node.id)?.nodeChildren.forEach((childId) => {
             const childNode = findNode(flow?.nodes, childId)
             if (childNode) {
               childPromises.push(executeNode(childNode, msg))
             } else {
-              console.warn(`🚨 useFlowRunner - executeNode: Node ${childId} not found`)
+              console.warn(`🌊🪝🚨 Node ${childId} not found`)
             }
           })
           Promise.allSettled(childPromises).then(() => {
             resolve(null)
           })
         })
+      } else {
+        console.warn(`🌊🪝🚨 Method for node type ${node.type} not found`)
       }
     })
   }

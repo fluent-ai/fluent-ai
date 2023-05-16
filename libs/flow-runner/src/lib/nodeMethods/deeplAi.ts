@@ -1,25 +1,19 @@
-import * as deepl from 'deepl';
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import { IMethodArguments } from '../useFlowRunner';
 
 // Define the API endpoint
 const DEEPL_API_ENDPOINT = 'https://api-free.deepl.com/v2/translate';
 
-interface Message {
-  payload?: string;
-  detectedLang?: string;
-}
 
-interface Props {
-  language?: deepl.DeeplLanguages;
-  deeplAiApiKey?: string;
-  formality?: deepl.Parameters;
-}
 
-export async function deeplAi(msg: Message, props: Props): Promise<Message> {
-  // Define your parameters
-  const authKey = 'b5bdd36a-0c1b-0418-58fb-9b043d819dea:fx'; // Replace with your DeepL authentication key
-  const sourceText = msg.payload || '';
-  const targetLang = props.language ? props.language : 'en-GB'; // Replace with the ISO 639-1 code for the target language (e.g. 'ES' for Spanish)
+export async function deeplAi({
+  globals,
+  inputs,
+  msg,
+}: IMethodArguments): Promise<Record<string, unknown>> {
+  const authKey = globals?.deeplApiKey as string || '';
+  const sourceText = msg.payload as string || '';
+  const targetLang = inputs?.language as string || 'en-GB';
 
   const data = {
     auth_key: authKey,
@@ -33,11 +27,11 @@ export async function deeplAi(msg: Message, props: Props): Promise<Message> {
     headers: {
       'content-type': 'application/x-www-form-urlencoded',
     },
-    data: new URLSearchParams(data).toString(), // Convert the data object to a URL-encoded string
+    data: new URLSearchParams(data).toString(),
   };
 
   // Make the request
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     axios(config)
       .then((response: AxiosResponse) => {
         resolve({
@@ -47,23 +41,10 @@ export async function deeplAi(msg: Message, props: Props): Promise<Message> {
         });
       })
       .catch((error: AxiosError) => {
-        console.error(error); // Log any errors
+        console.error(error);
+        resolve({
+          ...msg, error:'DeepL API error : ' + error.message
+        });
       });
   });
 }
-//just for testing purposes
-// const message = {
-//   payload: 'wie geht es dir ?',
-//   formality: 'more',
-// };
-// const props = {
-//   // deeplAiApiKey: 'test',
-//   // formality: 'default',
-// };
-// console.log(
-//   '----------------------------------------------------------------------------------------------------------------'
-// );
-// const result = deeplAi(message, props);
-// setTimeout(() => {
-//   console.log(result);
-// }, 1000);

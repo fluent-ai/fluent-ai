@@ -1,11 +1,12 @@
+import { useDispatch, useSelector } from "react-redux";
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
-import { NodeDialogProps } from "../../types";
-import { handleChange } from "../functions";
+import { flowRunnerActions, flowRunnerSelectors } from "@tool-ai/state";
 /* eslint-disable-next-line */
 // export interface TemplateDialogProps {}
 
-function TemplateDialog(props: NodeDialogProps) {
-  const node = props.nodes.find(nodes => nodes.id === props.activeNodeId);
+function TemplateDialog({id}:{id:string}) {
+  const dispatch = useDispatch();
+  const inputs = useSelector(flowRunnerSelectors.selectInput(id));
 
   return (
     <InnerDialogStructure
@@ -16,13 +17,18 @@ function TemplateDialog(props: NodeDialogProps) {
         placeholder="Write your template here..."
         rows={10}
         cols={100}
-        value={node?.props ? node.props.template : ''}
-        onChange={(event) => handleChange(
-          props.nodes,
-          props.setNodes,
-          props.activeNodeId,
-          event.target.value,
-          'template')}/>
+        // value={node?.props ? node.props.template : ''}
+        value={inputs?.nodeInputs.template as string}
+        onChange={          (event) => {
+          dispatch(
+            flowRunnerActions.setInput(
+              {
+                id,
+                nodeInputs: { template:event.target.value}
+              }
+            )
+          )
+          }}/>
     </InnerDialogStructure>
   );
 }

@@ -10,3 +10,20 @@
 //     // expect(result?.['payload']).to
 //   }, 50000);
 // });
+
+//just for testing purposes
+// const message = {
+//   payload: 'wie geht es dir ?',
+//   formality: 'more',
+// };
+// const props = {
+//   // deeplAiApiKey: 'test',
+//   // formality: 'default',
+// };
+// console.log(
+//   '----------------------------------------------------------------------------------------------------------------'
+// );
+// const result = deeplAi(message, props);
+// setTimeout(() => {
+//   console.log(result);
+// }, 1000);
