@@ -56,11 +56,7 @@ const Dashboard = () => {
   });
   // --------------------------------------     Hooks & State - Flow Runner   --------------------------------------
   const {
-    setFlow,
-    setInputs,
-    setGlobals,
     executeFlow,
-    globals,
     outputs,
     states,
   } = useFlowRunner();
@@ -80,52 +76,52 @@ const Dashboard = () => {
 
   // ------------------------------------------------     Database     --------------------------------------------
   // Saving & Loading Flows
-  // const persistNewFlow = useCallback(
-  //   (e: React.KeyboardEvent<HTMLDivElement>) => {
-  //     e.preventDefault();
-  //     if ((e.ctrlKey && e.key === 's') || (e.metaKey && e.key === 's')) {
-  //       console.log('Saving to State Mngm & DB, ', e.ctrlKey, e.key, e.metaKey);
-  //       saveFlow(nodes, edges);
-  //     }
-  //   },
-  //   [nodes, edges]
-  // );
-  // const loadFlows = useCallback((sessionUser: User) => {
-  //   if(sessionUser) {
-  //     sessionUser.flows.forEach((flow) => {
-  //       const flowEntity = {
-  //         id: flow.id,
-  //         nodes: JSON.parse(flow.stringifiedNodes),
-  //         edges: JSON.parse(flow.stringifiedEdges),
-  //       };
-  //       store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
-  //     });
-  //     store.dispatch(flowTabActions.setActiveFlowTab(sessionUser.flows[0].id));
-  //     setNodes(JSON.parse(sessionUser.flows[0].stringifiedNodes));
-  //     setEdges(JSON.parse(sessionUser.flows[0].stringifiedEdges));
-  //   }
-  // }, [setNodes, setEdges]);
-  // // This loads the initial user and flow data from the user
-  // useEffect(() => {
-  //   let sessionUser = store.getState().user.userData;
-  //   if (sessionUser.id === '') {
-  //     // for local development only
-  //     firestoreService
-  //       .getSomeFromDB('users', 'id', '==', 'testId')
-  //       .then((data) => {
-  //         if (data.length > 0) {
-  //           sessionUser = data[0] as User;
-  //         } else {
-  //           sessionUser = mockUser;
-  //           firestoreService.writeToDB('users', sessionUser);
-  //         }
-  //         dispatchToStore(sessionUser as User);
-  //         loadFlows(sessionUser as User);
-  //       });
-  //   } else {
-  //     loadFlows(sessionUser as User);
-  //   }
-  // }, [setEdges, setNodes, loadFlows]);
+  const persistNewFlow = useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      if ((e.ctrlKey && e.key === 's') || (e.metaKey && e.key === 's')) {
+        console.log('Saving to State Mngm & DB, ', e.ctrlKey, e.key, e.metaKey);
+        saveFlow(nodes, edges);
+      }
+    },
+    [nodes, edges]
+  );
+  const loadFlows = useCallback((sessionUser: User) => {
+    if(sessionUser) {
+      sessionUser.flows.forEach((flow) => {
+        const flowEntity = {
+          id: flow.id,
+          nodes: JSON.parse(flow.stringifiedNodes),
+          edges: JSON.parse(flow.stringifiedEdges),
+        };
+        store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
+      });
+      store.dispatch(flowTabActions.setActiveFlowTab(sessionUser.flows[0].id));
+      setNodes(JSON.parse(sessionUser.flows[0].stringifiedNodes));
+      setEdges(JSON.parse(sessionUser.flows[0].stringifiedEdges));
+    }
+  }, [setNodes, setEdges]);
+  // This loads the initial user and flow data from the user
+  useEffect(() => {
+    let sessionUser = store.getState().user.userData;
+    if (sessionUser.id === '') {
+      // for local development only
+      firestoreService
+        .getSomeFromDB('users', 'id', '==', 'testId')
+        .then((data) => {
+          if (data.length > 0) {
+            sessionUser = data[0] as User;
+          } else {
+            sessionUser = mockUser;
+            firestoreService.writeToDB('users', sessionUser);
+          }
+          dispatchToStore(sessionUser as User);
+          loadFlows(sessionUser as User);
+        });
+    } else {
+      loadFlows(sessionUser as User);
+    }
+  }, [setEdges, setNodes, loadFlows]);
 
   const onConnect = useCallback(
     (params: any) => setEdges((eds) => addEdge(params, eds)),
@@ -217,13 +213,7 @@ const Dashboard = () => {
 
   // ------------------------------------------------     Flow Runner     --------------------------------------------
   // Flow Runner - Init
-  useEffect(() => {
-    console.log('🌊 initializing');
-    setGlobals({
-      deeplApiKey: process.env.NX_DEEPL_API_KEY,
-      openAiApiKey: process.env.NX_OPENAI_API_KEY
-     })
-  }, [setGlobals]);
+
   // Flow Runner - On change
   useEffect(() => {
     console.log('🌊 change detected\n',{outputs,states} );
@@ -233,14 +223,14 @@ const Dashboard = () => {
     outputs,states,dispatch]);
   // Flow Runner - Runner callback
   function runFlow() {
-    console.log('🌊 preparing ');
-    setFlow({nodes, edges});
-    console.log('🌊 setting inputs',inputs);
-    setInputs(inputs);
-    setTimeout(() => {
       console.log('🌊 executing flow');
-      executeFlow();
-    }, 500);
+      executeFlow(
+        {flow:{nodes, edges},
+        inputs,
+        globals:{
+          deeplApiKey: process.env.NX_DEEPL_API_KEY,
+          openAiApiKey: process.env.NX_OPENAI_API_KEY
+        }});
   }
 
 
