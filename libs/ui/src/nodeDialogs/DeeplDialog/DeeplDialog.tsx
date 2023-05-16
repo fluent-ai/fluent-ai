@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
+import { flowRunnerSelectors } from "@tool-ai/state";
+import { useSelector } from "react-redux";
 
 interface Items {
   code:string;
@@ -7,6 +9,10 @@ interface Items {
 }
 
 function DeeplDialog({id}:{id:string}) {
+  const outputs = useSelector(flowRunnerSelectors.selectOutput(id));
+  let response = outputs?.nodeOutputs?.payload as string;
+  response = '' + response
+
   const [formalityDisabled, setFormalityDisabled] = useState(true);
   const langWithFormality = ['DE', 'FR', 'IT', 'ES', 'NL', 'PL', 'PT-PT', 'PT-BR', 'RU'];
   const deeplLanguages: Items[] = [
@@ -74,6 +80,12 @@ function DeeplDialog({id}:{id:string}) {
         </select>
 
         {formalityDisabled && <small className="mt-2 text-sm text-gray-light">Formality is not available for this language</small>}
+        <div>{
+          // replace the linebreaks in the string with <br/> tags
+          response.split('\n').map((item, i) => <p key={i}>{item}</p>)
+          }
+
+      </div>
         </div>
       </InnerDialogStructure>
     </div>

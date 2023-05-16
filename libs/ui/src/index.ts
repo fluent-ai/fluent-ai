@@ -4,6 +4,7 @@ export * from './nodeDialogs/TextFileInputDialog/TextFileInputDialog';
 export * from './nodeDialogs/TemplateDialog/TemplateDialog';
 export * from './nodeDialogs/JsonDialog/JsonDialog';
 export * from './nodeDialogs/InputDialog/InputDialog';
+export * from './nodeDialogs/DalleGenerationDialog/DalleGenerationDialog';
 export * from './lib/TooltipComponent/TooltipComponent';
 export * from './lib/AlertComponent/AlertComponent';
 export * from './lib/AvatarComponent/AvatarComponent';
@@ -17,6 +18,7 @@ export * from './lib/SettingsDialog/SettingsDialog';
 export * from './lib/ShareDialog/ShareDialog';
 export * from './nodeDialogs/ImageAiDialog/ImageAiDialog';
 export * from './nodeDialogs/DownloadDialog/DownloadDialog';
+
 
 // eslint-disable-next-line @nx/enforce-module-boundaries
 export * from './ui-interactions/save-flow';

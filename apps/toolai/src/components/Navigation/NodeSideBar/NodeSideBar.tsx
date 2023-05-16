@@ -25,6 +25,7 @@ const NodeSideBar = () => {
     <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'openAi')} title="Open AI" icon={<OpenAiLogo />} />
     <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'deepl')} title="Deepl Translate" icon={<DeeplLogo />} />
     <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'imageAi')} title="Image AI" icon={<DeeplLogo />} />
+    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'dalleGeneration')} title="Dall.e Generation" icon={<OpenAiLogo />} />
     <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'download')} title="Download" icon={<ArrowDownIcon />} />
     </aside>
 

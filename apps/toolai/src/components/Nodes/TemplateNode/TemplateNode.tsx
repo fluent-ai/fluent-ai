@@ -22,7 +22,15 @@ export default memo (({id, data,type, isConnectable}: MemoProps) => {
         onConnect={(params) => console.log('handle onConnect', params)}
         isConnectable={isConnectable}
       />
-      <div onClick={()=>{setIsDialogOpen(true); setActiveDialog(type); setActiveNodeId(id)}}>{data.label}</div>
+      <div onClick={()=>{
+        setIsDialogOpen(true);
+        setActiveDialog(type);
+        setActiveNodeId(id)
+        }}
+        className='flex items-center'>
+        <div className='h-full w-[20%] bg-blue-50 p-2.5 flex justify-center'>{data.icon}</div>
+        <div className='pl-2.5'>{data.label}</div>
+        </div>
 
       <Handle
         type="source"
