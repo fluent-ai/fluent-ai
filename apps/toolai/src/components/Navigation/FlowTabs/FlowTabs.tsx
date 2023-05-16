@@ -131,9 +131,11 @@ const FlowTabs = (props: FlowTabsProps) => {
                   onConnect={props.onConnect}
                   onInit={props.onInit}
                   onDrop={props.onDrop}
+                  selectionOnDrag
                   onDragOver={props.onDragOver}
                   nodeTypes={props.nodeTypes}
                   fitView
+                  defaultViewport={{x: 0, y: 0, zoom: -5}}
                 >
                   <Background
                     variant={'dots' as BackgroundVariant}
