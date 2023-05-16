@@ -6,13 +6,13 @@ function ButtonComponent (props: ButtonProps) {
   const primaryButton=`transition
   eas-in-out
   duration-150
-  bg-primary
-  text-primary-hover
-  hover:bg-primary-hover
+  bg-gray-100
+  text-primary
+  hover:bg-gray-200
   hover:text-primary
   rounded-md w-[98%]
-  p-1 mt-[2vw] mb-[1vw]
-  h-[3vw] uppercase
+  p-2.5 mt-[2vw] mb-[1vw]
+  h-[30px] uppercase
   text-center`;
 
   return(

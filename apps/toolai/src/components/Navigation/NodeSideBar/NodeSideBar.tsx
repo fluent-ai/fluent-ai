@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import NodeItemSideBar from '../NodeItemSideBar/NodeItemSideBar';
-import { FileIcon, MixIcon, TextIcon, DoubleArrowRightIcon, ArrowRightIcon, ArrowLeftIcon, FrameIcon, MagnifyingGlassIcon, CameraIcon, GlobeIcon } from '@radix-ui/react-icons';
+import { FileIcon, MixIcon, TextIcon, DoubleArrowRightIcon, ArrowRightIcon, ArrowLeftIcon, FrameIcon, MagnifyingGlassIcon, GearIcon, CameraIcon, GlobeIcon } from '@radix-ui/react-icons';
 import {ReactComponent as OpenAiLogo}  from  '../../../assets/OpenAI_Logo.svg';
 import {ReactComponent as DeeplLogo}  from  '../../../assets/Deepl_Logo.svg';
 
@@ -14,7 +14,7 @@ const NodeSideBar = () => {
   return (
     <div className='flex absolute z-10 h-min top-20 left-2.5 group'>
     <aside className={`px-2 py-2.5 rounded-md bg-white shadow-md w-[45px] overflow-hidden transition-all duration-300 ease-in-out group-hover:w-60`}>
-    <div className='flex gap-x-3'><div className='sidebar-icon'><MagnifyingGlassIcon /></div><input className='w-100 border-2 border-inherit rounded-md' type="search" aria-label="search nodes" placeholder="Search nodes" ></input></div>
+    <div className='flex gap-x-3'><div className='sidebar-icon'><GearIcon /></div><p className='w-100' aria-label="settings" placeholder="Search nodes" >Settings</p></div>
     <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'txtFileInput')} title="Txt File Input" icon={<FileIcon />} />
     <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'textInput')} title="Text Input" icon={<TextIcon />} />
     <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'json')} title="JSON" icon={<FileIcon />} />
