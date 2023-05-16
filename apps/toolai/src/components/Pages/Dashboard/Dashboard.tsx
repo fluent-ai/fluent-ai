@@ -140,11 +140,34 @@ const Dashboard = () => {
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
       });
+      const getLabel = (label:string) => {
+        switch (label) {
+          case 'txtFileInput':
+            console.log('txtFileInput');
+            return 'Text File Input';
+          case 'textInput':
+            return 'Text Input';
+          case 'json':
+            return 'JSON';
+          case 'userFunction':
+            return 'User Function';
+          case 'template':
+            return 'Template';
+          case 'preview':
+            return 'Preview';
+          case 'openAi':
+            return 'OpenAI';
+          case 'deepl':
+            return 'DeepL';
+          default:
+            return null;
+        }
+      }
       const newNode = {
         id: uuidv4(),
         type,
         position,
-        data: { label: `${type}` },
+        data: {label: getLabel(`${type}`)},
       };
       console.log('nodes:', nodes)
       console.log('nodes:', newNode);
