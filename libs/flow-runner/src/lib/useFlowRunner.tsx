@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Node, Edge } from 'reactflow'
 import * as nodeMethods from './nodeMethods'
 
@@ -61,32 +61,13 @@ const isRootNode = (edges: Edge[] | undefined, nodeId:string): boolean => {
   return !edges?.find((edge) => edge.target === nodeId)
 }
 
-
 export const useFlowRunner = (): {
-  // setFlow: ({ nodes, edges }: { nodes: Node[]; edges: Edge[] }) => void
   executeFlow: ({flow, inputs, globals} :IExecuteFlowArguments) => Promise<void>
-  // setInputs: (inputs: IFlowRunnerInputs[]) => void
-  // setGlobals: (globals: Record<string, unknown>) => void
-  // globals: Record<string, unknown>
   outputs: IFlowRunnerOutputs[]
   states: IFlowRunnerStates[]
 } => {
-  // const [flow, setFlow] = useState<IFlow>()
-  // const [relationships, setRelationships] = useState<IRelationships[]>([])
-  // const [inputs, setInputs] = useState<IFlowRunnerInputs[]>([])
   const [outputs, setOutputs] = useState<IFlowRunnerOutputs[]>([])
   const [states, setStates] = useState<IFlowRunnerStates[]>([])
-  // const [globals, setGlobals] = useState<Record<string, unknown>>({})
-
-  // useEffect(() => {
-  //   console.log('🌊🪝 Inputs mutated to: ', inputs)
-  // }, [inputs])
-
-  // //when nodes or edges change, rebuild the links between parents and children
-  // useEffect(() => {
-  //     console.log('🌊🪝 Flow mutated to: ', flow);
-  //     setRelationships(buildRelationships(flow))
-  //   }, [flow])
 
   const buildRelationships = (flow: IFlow | undefined): IRelationships[] => {
     if (!flow) {
@@ -121,7 +102,6 @@ export const useFlowRunner = (): {
         )
       }
     })
-    console.log('🌊🪝 built new relationships\n', relationships);
     return relationships
   }
 
@@ -137,14 +117,6 @@ export const useFlowRunner = (): {
       globals,
     } : IExecuteNodeArguments ) => {
     return new Promise((resolve) => {
-      console.group('🌊🪝 call to executeNode(...)')
-      console.log({flow});
-      console.log({nodeChildrenStore: relationships});
-      console.log({inputs});
-      console.log({outputs});
-      console.log({states});
-      console.log({globals});
-      console.groupEnd()
       // look up the node method
       let method;
       try {
@@ -202,15 +174,6 @@ export const useFlowRunner = (): {
    */
   const executeFlow = async ({flow, inputs, globals} :IExecuteFlowArguments) => {
     const relationships = buildRelationships(flow)
-
-    console.group('🌊🪝 call to executeFlow()')
-    console.log({flow});
-    console.log({nodeChildrenStore: relationships});
-    console.log({inputs});
-    console.log({outputs});
-    console.log({states});
-    console.log({globals});
-    console.groupEnd()
     
     const rootNodes = flow?.nodes.filter((node) => isRootNode(flow?.edges, node.id))
     // Start the execution by triggering executeNode on each root
@@ -221,15 +184,8 @@ export const useFlowRunner = (): {
   }
 
   return {
-    // setFlow,
-    // setInputs, 
-    // setGlobals,
     executeFlow,
-    // globals,
     outputs,
     states,
   }
 }
-
-
-
