@@ -9,9 +9,10 @@ import { PreviewDialog } from '../../nodeDialogs/PreviewDialog/PreviewDialog';
 import { OpenAIDialog } from '../../nodeDialogs/OpenAIDialog/OpenAIDialog';
 import { TxtFileInputDialog } from '../../nodeDialogs/TxtFileInputDialog/TxtFileInputDialog';
 import { DeeplDialog } from '../../nodeDialogs/DeeplDialog/DeeplDialog';
-
+import { ImageAiDialog } from '../../nodeDialogs/ImageAiDialog/ImageAiDialog';
 function NodeDialogComponent(props: NodeDialogProps) {
   const shownDialog = () => {
+    console.log('activeId', props.activeDialog);
     switch (props.activeDialog) {
       case 'txtFileInput':
         return <TxtFileInputDialog id={props.activeNodeId}/>;
@@ -29,6 +30,8 @@ function NodeDialogComponent(props: NodeDialogProps) {
         return <OpenAIDialog id={props.activeNodeId} />;
       case 'deepl':
         return <DeeplDialog id={props.activeNodeId} />;
+      case 'imageAi':
+        return <ImageAiDialog id={props.activeNodeId} />;
       default:
         return null;
     }
