@@ -16,6 +16,8 @@ export * from './lib/DialogComponent/DialogComponent';
 export * from './lib/SettingsDialog/SettingsDialog';
 export * from './lib/ShareDialog/ShareDialog';
 export * from './nodeDialogs/ImageAiDialog/ImageAiDialog';
+export * from './nodeDialogs/DownloadDialog/DownloadDialog';
+
 // eslint-disable-next-line @nx/enforce-module-boundaries
 export * from './ui-interactions/save-flow';
 // eslint-disable-next-line @nx/enforce-module-boundaries

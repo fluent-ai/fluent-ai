@@ -34,6 +34,7 @@ const nodeTypes = {
   preview: TemplateNode,
   openAi: TemplateNode,
   imageAi: TemplateNode,
+  download: TemplateNode
 };
 
 
@@ -181,8 +182,10 @@ const Dashboard = () => {
             return 'OpenAI';
           case 'deepl':
             return 'DeepL';
-            case 'imageAi':
-              return 'Image AI';
+          case 'imageAi':
+            return 'Image AI';
+          case 'download':
+            return 'Download';
           default:
             return null;
         }

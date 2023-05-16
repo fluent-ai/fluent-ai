@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import NodeItemSideBar from '../NodeItemSideBar/NodeItemSideBar';
-import { FileIcon, MixIcon, TextIcon, DoubleArrowRightIcon, ArrowRightIcon, ArrowLeftIcon, FrameIcon, MagnifyingGlassIcon, GearIcon, CameraIcon, GlobeIcon } from '@radix-ui/react-icons';
+import { FileIcon, MixIcon, TextIcon, DoubleArrowRightIcon, ArrowRightIcon, ArrowLeftIcon, FrameIcon, MagnifyingGlassIcon, GearIcon, CameraIcon, GlobeIcon, ArrowDownIcon } from '@radix-ui/react-icons';
 import {ReactComponent as OpenAiLogo}  from  '../../../assets/OpenAI_Logo.svg';
 import {ReactComponent as DeeplLogo}  from  '../../../assets/Deepl_Logo.svg';
 import { SettingsDialog } from '@tool-ai/ui';
@@ -25,6 +25,7 @@ const NodeSideBar = () => {
     <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'openAi')} title="Open AI" icon={<OpenAiLogo />} />
     <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'deepl')} title="Deepl Translate" icon={<DeeplLogo />} />
     <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'imageAi')} title="Image AI" icon={<DeeplLogo />} />
+    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'download')} title="Download" icon={<ArrowDownIcon />} />
     </aside>
 
 </div>
