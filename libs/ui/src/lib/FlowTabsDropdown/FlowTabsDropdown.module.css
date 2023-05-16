@@ -8,7 +8,8 @@ button {
   background-color: white;
   border-radius: 6px;
   padding: 5px;
-  box-shadow: 0px 10px 38px -10px rgba(22, 23, 24, 0.35), 0px 10px 20px -15px rgba(22, 23, 24, 0.2);
+  box-shadow: 0px 10px 38px -10px rgba(22, 23, 24, 0.35),
+    0px 10px 20px -15px rgba(22, 23, 24, 0.2);
   animation-duration: 400ms;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform, opacity;
@@ -36,7 +37,7 @@ button {
 .DropdownMenuSubTrigger {
   font-size: 13px;
   line-height: 1;
-  color: black;
+  color: theme('colors.black');
   border-radius: 3px;
   display: flex;
   align-items: center;
@@ -48,10 +49,7 @@ button {
   user-select: none;
   outline: none;
 }
-.DropdownMenuSubTrigger[data-state='open'] {
-  background-color: purple;
-  color: purple;
-}
+
 .DropdownMenuItem[data-disabled],
 .DropdownMenuCheckboxItem[data-disabled],
 .DropdownMenuRadioItem[data-disabled],
@@ -63,8 +61,7 @@ button {
 .DropdownMenuCheckboxItem[data-highlighted],
 .DropdownMenuRadioItem[data-highlighted],
 .DropdownMenuSubTrigger[data-highlighted] {
-
-  color: purple;
+  color: theme('colors.primary');
 }
 
 .DropdownMenuLabel {
@@ -72,7 +69,7 @@ button {
   font-size: 12px;
   line-height: 25px;
   color: black;
-  font-weight: bold
+  font-weight: bold;
 }
 
 .DropdownMenuSeparator {
@@ -104,11 +101,6 @@ button {
   color: color;
   background-color: transparent;
 }
-.IconButton:hover {
-
-}
-.IconButton:focus {
-}
 
 .RightSlot {
   margin-left: auto;
@@ -116,10 +108,10 @@ button {
   color: gray;
 }
 [data-highlighted] > .RightSlot {
-  color: purple;
+  color: theme('colors.primary');
 }
 [data-disabled] .RightSlot {
-  color: gray;
+  color: theme('colors.gray-light');
 }
 
 @keyframes slideUpAndFade {

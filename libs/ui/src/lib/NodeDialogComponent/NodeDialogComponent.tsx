@@ -8,6 +8,7 @@ import { UserFunctionDialog } from '../../nodeDialogs/UserFunctionDialog/UserFun
 import { PreviewDialog } from '../../nodeDialogs/PreviewDialog/PreviewDialog';
 import { OpenAIDialog } from '../../nodeDialogs/OpenAIDialog/OpenAIDialog';
 import { TxtFileInputDialog } from '../../nodeDialogs/TxtFileInputDialog/TxtFileInputDialog';
+import { DeeplDialog } from '../../nodeDialogs/DeeplDialog/DeeplDialog';
 
 function NodeDialogComponent(props: NodeDialogProps) {
   const shownDialog = () => {
@@ -26,6 +27,8 @@ function NodeDialogComponent(props: NodeDialogProps) {
         return <PreviewDialog id={props.activeNodeId} />;
       case 'openAi':
         return <OpenAIDialog id={props.activeNodeId} />;
+      case 'deepl':
+        return <DeeplDialog id={props.activeNodeId} />;
       default:
         return null;
     }
