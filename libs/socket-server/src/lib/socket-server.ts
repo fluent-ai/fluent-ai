@@ -18,13 +18,6 @@ io.on('connection', (socket: Socket) => {
   console.log('A user connected');
 
   // Handle events from the client
-  socket.on('message', (message: string) => {
-    console.log('Received message:', message);
-
-    // Broadcast the message to all connected clients
-    io.emit('message', 'Hello Client!');
-  });
-  // Handle events from the client
   socket.on('mouse', (message: string) => {
     // Broadcast the message to all connected clients
     io.emit('mouse', message);

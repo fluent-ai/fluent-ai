@@ -8,6 +8,7 @@ import { access } from 'fs';
 /* eslint-disable-next-line */
 export interface SocketClientProps {
   userId: string;
+  userName: string;
 }
 
 export function SocketClient(props: SocketClientProps) {
@@ -23,15 +24,10 @@ export function SocketClient(props: SocketClientProps) {
     socket.on('connect', () => {
       console.log('Connected to Socket.io server');
     });
-    socket.on('message', (data: any) => {
-      console.log('Received message:', data);
-    });
 
     socket.on('mouse', (data: any) => {
-      //console.log('Received message:', JSON.parse(data));
       const extract = JSON.parse(data);
       const activeTabId = store.getState().flowTab.flowTabs.activeId;
-      console.log(extract.tabId, activeTabId);
 
       if (extract.userId !== props.userId && extract.tabId === activeTabId) {
         setMousePos({ x: extract.x, y: extract.y });
@@ -63,26 +59,10 @@ export function SocketClient(props: SocketClientProps) {
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
     };
-  }, [socket, mousePos]);
-
-  const sendMessage = () => {
-    console.log(socket);
-    if (socket) {
-      socket.emit('message', 'Hello, server!');
-    }
-  };
+  }, [socket, mousePos, props.userId]);
 
   return (
     <div>
-      <button className={styles.testButton} onClick={sendMessage}>
-        Send Message
-      </button>
-      <div>
-        The mouse is at position{' '}
-        <b>
-          ({mousePos.x}, {mousePos.y})
-        </b>
-      </div>
       <div
         style={{
           top: mousePos.y,
@@ -90,10 +70,26 @@ export function SocketClient(props: SocketClientProps) {
           position: 'absolute',
           zIndex: 1000,
           backgroundColor: 'orange',
-          width: 10,
-          height: 10,
+          width: 7,
+          height: 7,
+          borderRadius: 10,
         }}
       ></div>
+      <span
+        style={{
+          top: mousePos.y + 7,
+          left: mousePos.x + 7,
+          position: 'absolute',
+          zIndex: 1000,
+          backgroundColor: 'orange',
+          padding: 3,
+          borderRadius: 10,
+          fontSize: '0.7rem',
+          overflow: 'hidden',
+        }}
+      >
+        {props.userName}
+      </span>
     </div>
   );
 }
