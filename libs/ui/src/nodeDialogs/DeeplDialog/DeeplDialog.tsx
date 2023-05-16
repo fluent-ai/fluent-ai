@@ -1,16 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
-import { NodeDialogProps } from "../../types";
-import { handleChange } from "../functions";
 
 interface Items {
   code:string;
   name:string;
 }
-/* eslint-disable-next-line */
-export interface DeeplDialogProps {}
 
-function DeeplDialog(props: NodeDialogProps) {
+function DeeplDialog({id}:{id:string}) {
   const [formalityDisabled, setFormalityDisabled] = useState(true);
   const langWithFormality = ['DE', 'FR', 'IT', 'ES', 'NL', 'PL', 'PT-PT', 'PT-BR', 'RU'];
   const deeplLanguages: Items[] = [
@@ -60,9 +56,6 @@ function DeeplDialog(props: NodeDialogProps) {
         setFormalityDisabled(true);
       }
     }
-  // useEffect(() => {
-  //     getLanguages().then(languages => sourcedLanguages = languages);
-  //   }, []);
 
   return (
     <div>
