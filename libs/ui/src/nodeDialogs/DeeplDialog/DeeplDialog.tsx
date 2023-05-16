@@ -1,32 +1,87 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
 import { NodeDialogProps } from "../../types";
 import { handleChange } from "../functions";
-import * as deepl from 'deepl-node';
+
+interface Items {
+  code:string;
+  name:string;
+}
 /* eslint-disable-next-line */
 export interface DeeplDialogProps {}
 
 function DeeplDialog(props: NodeDialogProps) {
-  const translator = new deepl.Translator("b5bdd36a-0c1b-0418-58fb-9b043d819dea:fx");
+  const [formalityDisabled, setFormalityDisabled] = useState(true);
+  const langWithFormality = ['DE', 'FR', 'IT', 'ES', 'NL', 'PL', 'PT-PT', 'PT-BR', 'RU'];
+  const deeplLanguages: Items[] = [
+    { code: 'BG', name: 'Bulgarian' },
+    { code: 'CS', name: 'Czech' },
+    { code: 'DA', name: 'Danish' },
+    { code: 'DE', name: 'German' },
+    { code: 'EL', name: 'Greek' },
+    { code: 'EN-GB', name: 'English (UK)' },
+    { code: 'EN-US', name: 'English (US)' },
+    { code: 'EN', name: 'English' },
+    { code: 'ES', name: 'Spanish' },
+    { code: 'ET', name: 'Estonian' },
+    { code: 'FI', name: 'Finnish' },
+    { code: 'FR', name: 'French' },
+    { code: 'HU', name: 'Hungarian' },
+    { code: 'IT', name: 'Italian' },
+    { code: 'JA', name: 'Japanese' },
+    { code: 'LT', name: 'Lithuanian' },
+    { code: 'LV', name: 'Latvian' },
+    { code: 'NL', name: 'Dutch' },
+    { code: 'PL', name: 'Polish' },
+    { code: 'PT-PT', name: 'Portuguese (Portugal)' },
+    { code: 'PT-BR', name: 'Portuguese (Brazil)' },
+    { code: 'PT', name: 'Portuguese' },
+    { code: 'RO', name: 'Romanian' },
+    { code: 'RU', name: 'Russian' },
+    { code: 'SK', name: 'Slovak' },
+    { code: 'SL', name: 'Slovenian' },
+    { code: 'SV', name: 'Swedish' },
+    { code: 'ZH', name: 'Chinese' }
+  ];
 
-  async function getLanguages () {
-    return await translator.getSourceLanguages()
-  }
+  const formalities: Items[] = [
+    {code: 'default', name: 'default'},
+    {code: 'more', name: 'formal'},
+    {code: 'less', name: 'informal'},
+    {code: 'prefer_more', name: 'more formal'},
+    {code: 'prefer_less', name: 'more informal'}
 
-  let sourcedLanguages: readonly deepl.Language[]= [];
+  ]
 
-  useEffect(() => {
-      getLanguages().then(languages => sourcedLanguages = languages);
-    }, []);
+    function handleFormalityChange(e: React.ChangeEvent<HTMLSelectElement>) {
+      if(langWithFormality.includes(e.target.value)) {
+        setFormalityDisabled(false);
+      } else {
+        setFormalityDisabled(true);
+      }
+    }
+  // useEffect(() => {
+  //     getLanguages().then(languages => sourcedLanguages = languages);
+  //   }, []);
 
   return (
     <div>
       <InnerDialogStructure
         title="Deepl Translate"
         description="Deepl Translate dialog">
-        <select title="language">
-          {sourcedLanguages.length > 0 && sourcedLanguages.map((lang) => <option value={lang.code}>{lang.name}</option>)}
+        <div className="flex flex-col gap-2">
+        <label htmlFor="language-select" className="block">Select language</label>
+        <select id="language-select" title="language" onChange={handleFormalityChange} className="border-2 border-solid border-gray-light rounded-md p-2.5">
+          {deeplLanguages.length > 0 && deeplLanguages.map((lang) =>  <option value={lang.code}>{lang.name}</option>)}
         </select>
+
+        <label htmlFor="formality-select" className={`block`}>Select formality</label>
+        <select id="formality-select" title="formality" disabled={formalityDisabled} className="border-2 border-solid border-gray-light rounded-md p-2.5 disabled:text-gray-light">
+          {formalities.length > 0 && formalities.map((formality) => <option value={formality.code}>{formality.name}</option>)}
+        </select>
+
+        {formalityDisabled && <small className="mt-2 text-sm text-gray-light">Formality is not available for this language</small>}
+        </div>
       </InnerDialogStructure>
     </div>
   );
