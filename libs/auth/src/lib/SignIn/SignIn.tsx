@@ -30,7 +30,7 @@ export function SignIn() {
               store.dispatch(userActions.setLoadingStatus('loaded'));
               console.log(store.getState().user.userData);
               // redirect user to dashboard
-              navigate('/');
+              navigate('/dashboard');
             }
           });
       })
