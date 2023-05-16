@@ -3,7 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 
 /* eslint-disable-next-line */
-export interface SocketClientProps {}
+export interface SocketClientProps {
+  userId: string;
+}
 
 export function SocketClient(props: SocketClientProps) {
   const [socket, setSocket] = useState<Socket | null>(null);
@@ -24,7 +26,10 @@ export function SocketClient(props: SocketClientProps) {
 
     socket.on('mouse', (data: any) => {
       console.log('Received message:', JSON.parse(data));
-      setMousePos(JSON.parse(data));
+      const extract = JSON.parse(data);
+      if (extract.userId !== props.userId) {
+        setMousePos({ x: extract.x, y: extract.y });
+      }
     });
 
     // Clean up the socket connection on component unmount
@@ -35,11 +40,14 @@ export function SocketClient(props: SocketClientProps) {
 
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
-      // setMousePos({ x: event.clientX, y: event.clientY });
       if (socket) {
         socket.emit(
           'mouse',
-          JSON.stringify({ x: event.clientX, y: event.clientY })
+          JSON.stringify({
+            x: event.clientX,
+            y: event.clientY,
+            userId: props.userId,
+          })
         );
       }
     };
@@ -73,8 +81,6 @@ export function SocketClient(props: SocketClientProps) {
           left: mousePos.x,
           position: 'absolute',
           zIndex: 1000,
-          // top: 100,
-          // left: 50,
           backgroundColor: 'orange',
           width: 10,
           height: 10,

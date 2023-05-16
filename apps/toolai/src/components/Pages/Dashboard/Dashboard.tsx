@@ -193,7 +193,7 @@ const Dashboard = () => {
   }
   return (
     <>
-      <SocketClient />
+      <SocketClient userId={currentUser.id} />
       <Header currentUser={currentUser} />
       <div className="h-10 w-32 mt-2.5 ml-72 bg-white absolute shadow-md rounded-md z-10 text-black flex justify-between items-center">
         <ButtonComponent
