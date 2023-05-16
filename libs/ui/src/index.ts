@@ -13,6 +13,8 @@ export * from './lib/NodeDialogComponent/NodeDialogComponent';
 export * from './lib/ButtonComponent/ButtonComponent';
 export * from './lib/IconButtonComponent/IconButtonComponent';
 export * from './lib/DialogComponent/DialogComponent';
+export * from './lib/SettingsDialog/SettingsDialog';
+export * from './lib/ShareDialog/ShareDialog';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 export * from './ui-interactions/save-flow';
 // eslint-disable-next-line @nx/enforce-module-boundaries
