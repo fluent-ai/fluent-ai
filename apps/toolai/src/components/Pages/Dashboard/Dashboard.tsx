@@ -79,52 +79,52 @@ const Dashboard = () => {
 
   // ------------------------------------------------     Database     --------------------------------------------
   // Saving & Loading Flows
-  const persistNewFlow = useCallback(
-    (e: React.KeyboardEvent<HTMLDivElement>) => {
-      e.preventDefault();
-      if ((e.ctrlKey && e.key === 's') || (e.metaKey && e.key === 's')) {
-        console.log('Saving to State Mngm & DB, ', e.ctrlKey, e.key, e.metaKey);
-        saveFlow(nodes, edges);
-      }
-    },
-    [nodes, edges]
-  );
-  const loadFlows = useCallback((sessionUser: User) => {
-    if(sessionUser) {
-      sessionUser.flows.forEach((flow) => {
-        const flowEntity = {
-          id: flow.id,
-          nodes: JSON.parse(flow.stringifiedNodes),
-          edges: JSON.parse(flow.stringifiedEdges),
-        };
-        store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
-      });
-      store.dispatch(flowTabActions.setActiveFlowTab(sessionUser.flows[0].id));
-      setNodes(JSON.parse(sessionUser.flows[0].stringifiedNodes));
-      setEdges(JSON.parse(sessionUser.flows[0].stringifiedEdges));
-    }
-  }, [setNodes, setEdges]);
-  // This loads the initial user and flow data from the user
-  useEffect(() => {
-    let sessionUser = store.getState().user.userData;
-    if (sessionUser.id === '') {
-      // for local development only
-      firestoreService
-        .getSomeFromDB('users', 'id', '==', 'testId')
-        .then((data) => {
-          if (data.length > 0) {
-            sessionUser = data[0] as User;
-          } else {
-            sessionUser = mockUser;
-            firestoreService.writeToDB('users', sessionUser);
-          }
-          dispatchToStore(sessionUser as User);
-          loadFlows(sessionUser as User);
-        });
-    } else {
-      loadFlows(sessionUser as User);
-    }
-  }, [setEdges, setNodes, loadFlows]);
+  // const persistNewFlow = useCallback(
+  //   (e: React.KeyboardEvent<HTMLDivElement>) => {
+  //     e.preventDefault();
+  //     if ((e.ctrlKey && e.key === 's') || (e.metaKey && e.key === 's')) {
+  //       console.log('Saving to State Mngm & DB, ', e.ctrlKey, e.key, e.metaKey);
+  //       saveFlow(nodes, edges);
+  //     }
+  //   },
+  //   [nodes, edges]
+  // );
+  // const loadFlows = useCallback((sessionUser: User) => {
+  //   if(sessionUser) {
+  //     sessionUser.flows.forEach((flow) => {
+  //       const flowEntity = {
+  //         id: flow.id,
+  //         nodes: JSON.parse(flow.stringifiedNodes),
+  //         edges: JSON.parse(flow.stringifiedEdges),
+  //       };
+  //       store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
+  //     });
+  //     store.dispatch(flowTabActions.setActiveFlowTab(sessionUser.flows[0].id));
+  //     setNodes(JSON.parse(sessionUser.flows[0].stringifiedNodes));
+  //     setEdges(JSON.parse(sessionUser.flows[0].stringifiedEdges));
+  //   }
+  // }, [setNodes, setEdges]);
+  // // This loads the initial user and flow data from the user
+  // useEffect(() => {
+  //   let sessionUser = store.getState().user.userData;
+  //   if (sessionUser.id === '') {
+  //     // for local development only
+  //     firestoreService
+  //       .getSomeFromDB('users', 'id', '==', 'testId')
+  //       .then((data) => {
+  //         if (data.length > 0) {
+  //           sessionUser = data[0] as User;
+  //         } else {
+  //           sessionUser = mockUser;
+  //           firestoreService.writeToDB('users', sessionUser);
+  //         }
+  //         dispatchToStore(sessionUser as User);
+  //         loadFlows(sessionUser as User);
+  //       });
+  //   } else {
+  //     loadFlows(sessionUser as User);
+  //   }
+  // }, [setEdges, setNodes, loadFlows]);
 
   const onConnect = useCallback(
     (params: any) => setEdges((eds) => addEdge(params, eds)),
@@ -219,9 +219,9 @@ const Dashboard = () => {
 
 
   // This is a hack, refactor me
-  if (currentUser.id === '') {
-    return <div></div>;
-  }
+  // if (currentUser.id === '') {
+  //   return <div></div>;
+  // }
   return (
     <>
       <Header currentUser={currentUser} />
@@ -236,7 +236,7 @@ const Dashboard = () => {
       </div>
 
       <div
-        onKeyDown={persistNewFlow}
+        // onKeyDown={persistNewFlow}
         className="relative flex flex-col grow h-full md:flex-row"
       >
         <ReactFlowProvider>
