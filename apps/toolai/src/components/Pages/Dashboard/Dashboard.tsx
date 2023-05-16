@@ -23,6 +23,7 @@ import {
 } from '@tool-ai/ui';
 import { useFlowRunner } from '@tool-ai/flow-runner';
 import * as firestoreService from '@libs/firestore-service';
+import { SocketClient } from '@libs/socket-client';
 
 const nodeTypes = {
   textInput: TemplateNode,
@@ -192,6 +193,7 @@ const Dashboard = () => {
   }
   return (
     <>
+      <SocketClient />
       <Header currentUser={currentUser} />
       <div className="h-10 w-32 mt-2.5 ml-72 bg-white absolute shadow-md rounded-md z-10 text-black flex justify-between items-center">
         <ButtonComponent
