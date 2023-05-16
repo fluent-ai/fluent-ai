@@ -16,8 +16,6 @@
     "@swc/helpers": "~0.5.0",
     "axios-jwt": "^3.0.2",
     "confetti-js": "^0.0.18",
-    "deepl": "^1.0.13",
-    "deepl-node": "^1.9.0",
     "firebase": "9.21.0",
     "mustache": "^4.2.0",
     "node-polyfill-webpack-plugin": "^2.0.1",
