@@ -1,5 +1,4 @@
 import {
-  createAsyncThunk,
   createEntityAdapter,
   createSelector,
   createSlice,
@@ -9,118 +8,133 @@ import {
 
 export const FLOW_RUNNER_FEATURE_KEY = 'flowRunner';
 
-/*
- * Update these interfaces according to your requirements.
- */
 export interface FlowRunnerEntity {
   id: number;
 }
-
 export interface FlowRunnerState extends EntityState<FlowRunnerEntity> {
-  loadingStatus: 'not loaded' | 'loading' | 'loaded' | 'error';
-  error: string | null | undefined;
+  status: 'ready' | 'running' | 'error';
+  inputs: {
+    id: string;
+    nodeInputs: Record<string, unknown>;
+  }[];
+  outputs: {
+    id: string;
+    nodeOutputs: Record<string, unknown>;
+  }[];
+  states: {
+    id: string;
+    state: Record<string, unknown>;
+  }[];
 }
 
 export const flowRunnerAdapter = createEntityAdapter<FlowRunnerEntity>();
 
-/**
- * Export an effect using createAsyncThunk from
- * the Redux Toolkit: https://redux-toolkit.js.org/api/createAsyncThunk
- *
- * e.g.
- * ```
- * import React, { useEffect } from 'react';
- * import { useDispatch } from 'react-redux';
- *
- * // ...
- *
- * const dispatch = useDispatch();
- * useEffect(() => {
- *   dispatch(fetchFlowRunner())
- * }, [dispatch]);
- * ```
- */
-export const fetchFlowRunner = createAsyncThunk(
-  'flowRunner/fetchStatus',
-  async (_, thunkAPI) => {
-    /**
-     * Replace this with your custom fetch call.
-     * For example, `return myApi.getFlowRunners()`;
-     * Right now we just return an empty array.
-     */
-    return Promise.resolve([]);
-  }
-);
-
 export const initialFlowRunnerState: FlowRunnerState =
   flowRunnerAdapter.getInitialState({
-    loadingStatus: 'not loaded',
-    error: null,
+    status: 'ready',
+    inputs: [],
+    outputs: [],
+    states: [],
   });
 
 export const flowRunnerSlice = createSlice({
   name: FLOW_RUNNER_FEATURE_KEY,
   initialState: initialFlowRunnerState,
   reducers: {
-    setLoadingStatus: (
+    setStates: (
       state,
-      action: PayloadAction<'not loaded' | 'loading' | 'loaded' | 'error'>
+      action: PayloadAction<{ id: string; state: Record<string, unknown> }[]>
     ) => {
-      state.loadingStatus = action.payload;
+      state.states = action.payload;
+      //if any state is running, set the status to running, otherwise set it to ready
+      state.status = action.payload.some(
+        (state) => state.state.status === 'running'
+      )
+        ? 'running'
+        : 'ready';
+    },
+    setInputs: (
+      state,
+      action: PayloadAction<
+        { id: string; nodeInputs: Record<string, unknown> }[]
+      >
+    ) => {
+      state.inputs = action.payload;
+    },
+    setInput: (
+      state,
+      action: PayloadAction<{ id: string; nodeInputs: Record<string, unknown> }>
+    ) => {
+      // if the input exists, update it, otherwise add it
+      const input = state.inputs.find(
+        (input) => input.id === action.payload.id
+      );
+      if (input) {
+        input.nodeInputs = action.payload.nodeInputs;
+      } else {
+        state.inputs.push(action.payload);
+      }
+    },
+    setOutputs: (
+      state,
+      action: PayloadAction<
+        {
+          id: string;
+          nodeOutputs: Record<string, unknown>;
+        }[]
+      >
+    ) => {
+      state.outputs = action.payload;
     },
   },
 });
 
-/*
- * Export reducer for store configuration.
- */
 export const flowRunnerReducer = flowRunnerSlice.reducer;
-
-/*
- * Export action creators to be dispatched. For use with the `useDispatch` hook.
- *
- * e.g.
- * ```
- * import React, { useEffect } from 'react';
- * import { useDispatch } from 'react-redux';
- *
- * // ...
- *
- * const dispatch = useDispatch();
- * useEffect(() => {
- *   dispatch(flowRunnerActions.add({ id: 1 }))
- * }, [dispatch]);
- * ```
- *
- * See: https://react-redux.js.org/next/api/hooks#usedispatch
- */
 export const flowRunnerActions = flowRunnerSlice.actions;
-
-/*
- * Export selectors to query state. For use with the `useSelector` hook.
- *
- * e.g.
- * ```
- * import { useSelector } from 'react-redux';
- *
- * // ...
- *
- * const entities = useSelector(selectAllFlowRunner);
- * ```
- *
- * See: https://react-redux.js.org/next/api/hooks#useselector
- */
-const { selectAll, selectEntities } = flowRunnerAdapter.getSelectors();
-
 export const getFlowRunnerState = (rootState: any): FlowRunnerState =>
   rootState[FLOW_RUNNER_FEATURE_KEY];
 
-export const selectAllFlowRunner = createSelector(
+const selectOutput = (id: string) =>
+  createSelector(getFlowRunnerState, (state) =>
+    state.outputs.find((output) => output.id === id)
+  );
+
+const selectOutputs = createSelector(
   getFlowRunnerState,
-  selectAll
+  (state) => state.outputs
 );
 
-export const selectFlowRunnerEntities = createSelector(
+const selectInput = (id: string) =>
+  createSelector(getFlowRunnerState, (state) =>
+    state.inputs.find((input) => input.id === id)
+  );
+
+const selectInputs = createSelector(
   getFlowRunnerState,
-  selectEntities
+  (state) => state.inputs
 );
+
+const selectState = (id: string) =>
+  createSelector(getFlowRunnerState, (state) =>
+    state.states.find((state) => state.id === id)
+  );
+
+const selectStates = createSelector(
+  getFlowRunnerState,
+  (state) => state.states
+);
+
+const selectStatus = createSelector(
+  getFlowRunnerState,
+  (state) => state.status
+);
+
+export const flowRunnerSelectors = {
+  selectOutput,
+  selectOutputs,
+  selectInput,
+  selectInputs,
+  selectState,
+  selectStates,
+  selectStatus,
+};

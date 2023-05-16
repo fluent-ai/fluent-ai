@@ -6,10 +6,11 @@ import Context from '../../context/context';
 
 interface MemoProps {
   id: string,
+  type: string,
   isConnectable: boolean,
   data: any
 }
-export default memo (({id, data, isConnectable}: MemoProps) => {
+export default memo (({id, data,type, isConnectable}: MemoProps) => {
   const {setIsDialogOpen, setActiveDialog, setActiveNodeId} = useContext(Context);
 
   return (
@@ -21,7 +22,7 @@ export default memo (({id, data, isConnectable}: MemoProps) => {
         onConnect={(params) => console.log('handle onConnect', params)}
         isConnectable={isConnectable}
       />
-      <div onClick={()=>{setIsDialogOpen(true); setActiveDialog(data.label); setActiveNodeId(id)}}>{data.label}</div>
+      <div onClick={()=>{setIsDialogOpen(true); setActiveDialog(type); setActiveNodeId(id)}}>{data.label}</div>
 
       <Handle
         type="source"

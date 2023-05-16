@@ -11,6 +11,19 @@ export * from './lib/FlowTabsDropdown/FlowTabsDropdown';
 export * from './lib/FormFieldComponent/FormFieldComponent';
 export * from './lib/NodeDialogComponent/NodeDialogComponent';
 export * from './lib/ButtonComponent/ButtonComponent';
+export * from './lib/IconButtonComponent/IconButtonComponent';
+export * from './lib/DialogComponent/DialogComponent';
+export * from './lib/SettingsDialog/SettingsDialog';
+export * from './lib/ShareDialog/ShareDialog';
+export * from './nodeDialogs/ImageAiDialog/ImageAiDialog';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+export * from './ui-interactions/save-flow';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+export * from './ui-interactions/switch-flowtab';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+export * from './ui-interactions/delete-flow';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+export * from './ui-interactions/add-flowtab';
 
 export * from './types.d';
 export * from './mocks';

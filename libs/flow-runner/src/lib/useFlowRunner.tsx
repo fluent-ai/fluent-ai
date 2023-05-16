@@ -1,26 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Node, Edge } from 'reactflow'
 import * as nodeMethods from './nodeMethods'
 
-export interface Flow {
+export interface IFlow {
   nodes: Node[];
   edges: Edge[];
 }
 
-// structuredClone pollyfill for Jest
-const structuredClone = (obj: Record<string, unknown>) => {
-  return JSON.parse(JSON.stringify(obj))
-}
-
-const findNode = (nodes : Node[] | undefined, id: string): Node | undefined => {
-  return nodes?.find((node) => node.id === id)
-}
-
-const isRootNode = (edges: Edge[] | undefined, nodeId:string): boolean => {
-  return !edges?.find((edge) => edge.target === nodeId)
-}
-
-interface IFlowRunnerNodeChildren {
+interface IRelationships {
   id: string;
   nodeChildren: string[];
 }
@@ -46,30 +33,54 @@ export interface IMethodArguments {
   msg: Record<string, unknown>;
 }
 
+export interface IExecuteFlowArguments {
+  flow: IFlow;
+  inputs: IFlowRunnerInputs[];
+  globals: Record<string, unknown>;
+}
+
+interface IExecuteNodeArguments {
+  flow: IFlow;
+  relationships: IRelationships[];
+  node: Node;
+  globals: Record<string, unknown>;
+  inputs: IFlowRunnerInputs[];
+  msg: Record<string, unknown>;
+}
+
+// structuredClone pollyfill for Jest
+const structuredClone = (obj: Record<string, unknown>) => {
+  return JSON.parse(JSON.stringify(obj))
+}
+
+const findNode = (nodes : Node[] | undefined, id: string): Node | undefined => {
+  return nodes?.find((node) => node.id === id)
+}
+
+const isRootNode = (edges: Edge[] | undefined, nodeId:string): boolean => {
+  return !edges?.find((edge) => edge.target === nodeId)
+}
 
 export const useFlowRunner = (): {
-  setFlow: ({ nodes, edges }: { nodes: Node[]; edges: Edge[] }) => void
-  executeFlow: () => Promise<void>
-  setInputs: (inputs: IFlowRunnerInputs[]) => void
-  setGlobals: (globals: Record<string, unknown>) => void
-  globals: Record<string, unknown>
+  executeFlow: ({flow, inputs, globals} :IExecuteFlowArguments) => Promise<void>
   outputs: IFlowRunnerOutputs[]
   states: IFlowRunnerStates[]
 } => {
-  const [flow, setFlow] = useState<Flow>()
-  const [nodeChildrenStore, setNodeChildrenStore] = useState<IFlowRunnerNodeChildren[]>([])
-  const [inputs, setInputs] = useState<IFlowRunnerInputs[]>([])
   const [outputs, setOutputs] = useState<IFlowRunnerOutputs[]>([])
   const [states, setStates] = useState<IFlowRunnerStates[]>([])
-  const [globals, setGlobals] = useState<Record<string, unknown>>({})
 
-
-  //when nodes or edges change, rebuild the links between parents and children
-  useEffect(() => {
-    const newNodeChildrenStore:IFlowRunnerNodeChildren[] = []
+  const buildRelationships = (flow: IFlow | undefined): IRelationships[] => {
+    if (!flow) {
+      console.warn(
+        `🌊🪝🚨 Cannot build relationships, flow is falsy`
+      )
+      return []
+    }
+    
+    const relationships:IRelationships[] = []
 
     flow?.nodes.forEach((node) => {
-      newNodeChildrenStore.push({
+      relationships.push({
         id: node.id,
         nodeChildren: []
       })
@@ -81,45 +92,37 @@ export const useFlowRunner = (): {
 
       if (sourceNode && targetNode) {
         // add target id to source children
-        newNodeChildrenStore
+        relationships
           .find((child) => child.id === sourceNode.id)
           ?.nodeChildren.push(targetNode.id)
 
       } else {
         console.warn(
-          `🚨 FlowRunner - Invalid Edge. Source node ${edge.source} or target node ${edge.target} not found`
+          `🌊🪝🚨 Invalid Edge. Source node ${edge.source} or target node ${edge.target} not found`
         )
       }
     })
-    setNodeChildrenStore(newNodeChildrenStore)
-  }, [flow])
-
-  /**
-   * Execute the flow.
-   */
-  const executeFlow = async () => {
-    const rootNodes = flow?.nodes.filter((node) => isRootNode(flow?.edges, node.id))
-    // Start the execution by triggering executeNode on each root
-    if (rootNodes) {
-      const promises = rootNodes.map((rootNode) => executeNode(rootNode, {}));
-      await Promise.allSettled(promises);
-    }
+    return relationships
   }
 
   /**
    * Execute a node.
    */
-  const executeNode = (
-    node: Node,
-    msg: Record<string, unknown>
-  ) => {
+  const executeNode = ({
+      flow,
+      relationships,
+      node,
+      msg,
+      inputs,
+      globals,
+    } : IExecuteNodeArguments ) => {
     return new Promise((resolve) => {
       // look up the node method
       let method;
       try {
         method = nodeMethods[node.type as keyof typeof nodeMethods]
       } catch (error) {
-        console.warn(`🚨 useFlowRunner - executeNode: Node type ${node.type} not found`)
+        console.warn(`🌊🪝🚨 Node type ${node.type} not found`)
       }
       if (method) {
         // set node state to running
@@ -128,6 +131,7 @@ export const useFlowRunner = (): {
           { id: node.id, state: { status: 'running' } }
         ]);
         // execute the node method 
+        console.log(`🌊🪝 executing node ${node.id}`)
         method({
           globals,
           inputs: inputs.find((input) => input.id === node.id)?.nodeInputs || {},
@@ -143,35 +147,45 @@ export const useFlowRunner = (): {
             ...prevStates.filter((state) => state.id !== node.id),
             { id: node.id, state: { status: 'done' } }
           ]);
-          //strip error off msg and call executeNode on each children
+          // strip error from msg
           delete msg.error
+          //call executeNode on each child
           const childPromises:Promise<unknown>[] = []
-          nodeChildrenStore.find((nodeChildren) => nodeChildren.id === node.id)?.nodeChildren.forEach((childId) => {
+          relationships.find((nodeChildren) => nodeChildren.id === node.id)?.nodeChildren.forEach((childId) => {
             const childNode = findNode(flow?.nodes, childId)
             if (childNode) {
-              childPromises.push(executeNode(childNode, msg))
+              childPromises.push(executeNode({flow, relationships, node:childNode, globals, inputs,msg}))
             } else {
-              console.warn(`🚨 useFlowRunner - executeNode: Node ${childId} not found`)
+              console.warn(`🌊🪝🚨 Node ${childId} not found`)
             }
           })
           Promise.allSettled(childPromises).then(() => {
             resolve(null)
           })
         })
+      } else {
+        console.warn(`🌊🪝🚨 Method for node type ${node.type} not found`)
       }
     })
   }
 
+  /**
+   * Execute the flow.
+   */
+  const executeFlow = async ({flow, inputs, globals} :IExecuteFlowArguments) => {
+    const relationships = buildRelationships(flow)
+    
+    const rootNodes = flow?.nodes.filter((node) => isRootNode(flow?.edges, node.id))
+    // Start the execution by triggering executeNode on each root
+    if (rootNodes) {
+      const promises = rootNodes.map((rootNode) => executeNode({flow, relationships, node:rootNode, globals, inputs,msg:{}}));
+      await Promise.allSettled(promises);
+    }
+  }
+
   return {
-    setFlow,
-    setInputs, 
-    setGlobals,
     executeFlow,
-    globals,
     outputs,
     states,
   }
 }
-
-
-

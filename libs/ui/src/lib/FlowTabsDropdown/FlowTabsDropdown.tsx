@@ -1,13 +1,21 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { ArrowDownIcon, CaretDownIcon } from '@radix-ui/react-icons';
-import './FlowTabsDropdown.module.css';
+import { CaretDownIcon } from '@radix-ui/react-icons';
+import styles from './FlowTabsDropdown.module.css';
 import { AlertComponent } from '../AlertComponent/AlertComponent';
-import styles from '../AlertComponent/AlertComponent.module.css';
+import { store } from '@tool-ai/state';
 import { FlowCollaborators, FlowTabsDropdownProps } from '../../types';
+import {ShareDialog} from "../ShareDialog/ShareDialog";
 
 const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
+  const handleShare = () => {
+    const activeId = store.getState().flowTab.flowTabs.activeId;
+    const link = 'http://localhost:4200/login?link=' + activeId;
+    console.log("Here's your sharing link: ", link);
+  };
+
   return (
-    <DropdownMenu.Root>
+    <DropdownMenu.Root
+    >
       <DropdownMenu.Trigger asChild>
         <button className="IconButton sidebar-icon" aria-label="FlowTab Menu">
           <CaretDownIcon />
@@ -19,12 +27,13 @@ const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
           className={styles.DropdownMenuContent}
           sideOffset={5}
         >
-          <DropdownMenu.Item className={styles.DropdownMenuItem}>
+          <DropdownMenu.Item
+            className={styles.DropdownMenuItem}
+            onClick={props.onSave}
+          >
             Save <div className={styles.RightSlot}>⌘+S</div>
           </DropdownMenu.Item>
-          <DropdownMenu.Item className={styles.DropdownMenuItem}>
-            Share <div className={styles.RightSlot}>⌘+N</div>
-          </DropdownMenu.Item>
+          <ShareDialog />
           <AlertComponent
             classes={styles.DropdownMenuItem}
             buttonText="Delete"
@@ -39,7 +48,7 @@ const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
           {props.users.map((user: FlowCollaborators) => {
             return (
               <DropdownMenu.Item
-                // key={user.email}
+                key={user.id}
                 className={styles.DropdownMenuItem}
               >
                 {user.name}
