@@ -1,9 +1,6 @@
-import styles from './socket-client.module.css';
 import React, { useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { store } from '@tool-ai/state';
-import { useSelector } from 'react-redux';
-import { access } from 'fs';
 
 /* eslint-disable-next-line */
 export interface SocketClientProps {
@@ -17,6 +14,10 @@ export function SocketClient(props: SocketClientProps) {
     x: 0,
     y: 0,
   });
+  const [collabUser, setCollabUser] = useState({
+    id: '',
+    name: '',
+  });
 
   useEffect(() => {
     const socket = io('http://localhost:3000'); // Replace with your server URL
@@ -25,12 +26,13 @@ export function SocketClient(props: SocketClientProps) {
       console.log('Connected to Socket.io server');
     });
 
-    socket.on('mouse', (data: any) => {
+    socket.on('mouse', (data: string) => {
       const extract = JSON.parse(data);
       const activeTabId = store.getState().flowTab.flowTabs.activeId;
 
       if (extract.userId !== props.userId && extract.tabId === activeTabId) {
         setMousePos({ x: extract.x, y: extract.y });
+        setCollabUser({ id: extract.userId, name: extract.userName });
       }
     });
 
@@ -38,7 +40,7 @@ export function SocketClient(props: SocketClientProps) {
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [props.userId]);
 
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
@@ -49,6 +51,7 @@ export function SocketClient(props: SocketClientProps) {
           JSON.stringify({
             x: event.clientX,
             y: event.clientY,
+            userName: props.userName,
             userId: props.userId,
             tabId: activeTabId,
           })
@@ -59,7 +62,7 @@ export function SocketClient(props: SocketClientProps) {
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
     };
-  }, [socket, mousePos, props.userId]);
+  }, [socket, mousePos, props.userId, props.userName]);
 
   return (
     <div>
@@ -88,7 +91,7 @@ export function SocketClient(props: SocketClientProps) {
           overflow: 'hidden',
         }}
       >
-        {props.userName}
+        {collabUser.name}
       </span>
     </div>
   );

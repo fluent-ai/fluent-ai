@@ -1,12 +1,8 @@
-/*
- * Replace this with your own classes
- *
- * e.g.
- * .container {
- * }
-*/
-
-.testButton {
-  background-color: blue;
-  border-color: orange;
+.cursor {
+  position: 'absolute';
+  z-index: 1000;
+  background-color: 'orange';
+  width: 7;
+  height: 7;
+  border-radius: 10;
 }
