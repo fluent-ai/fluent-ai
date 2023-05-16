@@ -1,17 +1,16 @@
+import { useSelector } from "react-redux";
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
-import { NodeDialogProps } from "../../types";
+import { flowRunnerSelectors } from "@tool-ai/state";
 
-/* eslint-disable-next-line */
-//export interface PreviewDialogProps {}
 
-function PreviewDialog(props:NodeDialogProps) {
-  const node = props.nodes.find(nodes => nodes.id === props.activeNodeId);
+function PreviewDialog({id}:{id:string}) {
+  const output = useSelector(flowRunnerSelectors.selectOutput(id));
 
   return (
     <InnerDialogStructure
     title="Preview"
     description="preview description">
-      {node.msg? <div>{node.msg.payload}</div> : null}
+      {output? <div>{JSON.stringify(output)}</div> : null}
     </InnerDialogStructure>
   );
 }

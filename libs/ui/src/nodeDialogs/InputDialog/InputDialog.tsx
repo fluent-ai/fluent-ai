@@ -1,12 +1,11 @@
 /* eslint-disable-next-line */
+import { flowRunnerActions, flowRunnerSelectors } from "@tool-ai/state";
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
-import { NodeDialogProps } from "../../types";
-import { handleChange } from '../functions';
+import { useDispatch, useSelector } from 'react-redux';
 
-
-
-function InputDialog(props: NodeDialogProps) {
-  const node = props.nodes.find(nodes => nodes.id === props.activeNodeId);
+function InputDialog({id}:{id:string}) {
+  const dispatch = useDispatch();
+  const inputs = useSelector(flowRunnerSelectors.selectInput(id));
 
   return (
     <InnerDialogStructure
@@ -17,13 +16,20 @@ function InputDialog(props: NodeDialogProps) {
         placeholder="input your text"
         rows={10}
         cols={100}
-        value={node?.props ? node.props.input : ''}
-        onChange={(event) => handleChange(
-          props.nodes,
-          props.setNodes,
-          props.activeNodeId,
-          event.target.value,
-          'input')} />
+        value={inputs?.nodeInputs.input as string}
+        onChange={
+          (event) => {
+            dispatch(
+              flowRunnerActions.setInput(
+                {
+                  id,
+                  nodeInputs: { input:event.target.value}
+                }
+              )
+            )
+            }
+          }
+          />
     </InnerDialogStructure>
   );
 }

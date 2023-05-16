@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 /* eslint-disable-next-line */
 export interface InnerDialogStructureProps {
   title: string,
-  description: string,
+  description: string | ReactNode,
   children: ReactNode,
 }
 
