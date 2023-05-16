@@ -65,8 +65,6 @@ export const flowRunnerSlice = createSlice({
       state,
       action: PayloadAction<{ id: string; nodeInputs: Record<string, unknown> }>
     ) => {
-      console.log('👋 setInput Reducer', action);
-
       // if the input exists, update it, otherwise add it
       const input = state.inputs.find(
         (input) => input.id === action.payload.id
@@ -76,7 +74,6 @@ export const flowRunnerSlice = createSlice({
       } else {
         state.inputs.push(action.payload);
       }
-      console.log('👋 Proposed State', state);
     },
     setOutputs: (
       state,
