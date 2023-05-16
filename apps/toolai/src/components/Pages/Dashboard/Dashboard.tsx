@@ -12,10 +12,15 @@ import NodeSideBar from '../../Navigation/NodeSideBar/NodeSideBar';
 import FlowTabs from '../../Navigation/FlowTabs/FlowTabs';
 import TemplateNode from '../../Nodes/TemplateNode/TemplateNode';
 import Header from '../../Navigation/Header/Header';
-import { store, flowRunnerActions, flowRunnerSelectors, flowTabActions } from '@tool-ai/state';
+import {
+  store,
+  flowRunnerActions,
+  flowRunnerSelectors,
+  flowTabActions,
+} from '@tool-ai/state';
 import {
   User,
-  mockUser,
+  // mockUser,
   ButtonComponent,
   saveFlow,
   switchFlowTab,
@@ -36,8 +41,6 @@ const nodeTypes = {
   imageAi: TemplateNode,
 };
 
-
-
 const Dashboard = () => {
   // --------------------------------------     Hooks & State - React Flow    --------------------------------------
   const reactFlowWrapper = useRef<any>(null);
@@ -55,11 +58,7 @@ const Dashboard = () => {
     flows: [],
   });
   // --------------------------------------     Hooks & State - Flow Runner   --------------------------------------
-  const {
-    executeFlow,
-    outputs,
-    states,
-  } = useFlowRunner();
+  const { executeFlow, outputs, states } = useFlowRunner();
   const dispatch = useDispatch();
   const inputs = useSelector(flowRunnerSelectors.selectInputs);
   // -----------------------------------------------     User & Auth    --------------------------------------------
@@ -67,12 +66,13 @@ const Dashboard = () => {
     const sessionUser = store.getState().user.userData;
     if (sessionUser.id === '') {
       // for local development only
-      updateUser(mockUser);
+      // updateUser(mockUser);
+      // updateUser(sessionUser as User);
+      console.log('No user found, redirecting to login');
     } else {
       updateUser(sessionUser as User);
     }
   }, []);
-
 
   // ------------------------------------------------     Database     --------------------------------------------
   // Saving & Loading Flows
@@ -86,21 +86,26 @@ const Dashboard = () => {
     },
     [nodes, edges]
   );
-  const loadFlows = useCallback((sessionUser: User) => {
-    if(sessionUser) {
-      sessionUser.flows.forEach((flow) => {
-        const flowEntity = {
-          id: flow.id,
-          nodes: JSON.parse(flow.stringifiedNodes),
-          edges: JSON.parse(flow.stringifiedEdges),
-        };
-        store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
-      });
-      store.dispatch(flowTabActions.setActiveFlowTab(sessionUser.flows[0].id));
-      setNodes(JSON.parse(sessionUser.flows[0].stringifiedNodes));
-      setEdges(JSON.parse(sessionUser.flows[0].stringifiedEdges));
-    }
-  }, [setNodes, setEdges]);
+  const loadFlows = useCallback(
+    (sessionUser: User) => {
+      if (sessionUser) {
+        sessionUser.flows.forEach((flow) => {
+          const flowEntity = {
+            id: flow.id,
+            nodes: JSON.parse(flow.stringifiedNodes),
+            edges: JSON.parse(flow.stringifiedEdges),
+          };
+          store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
+        });
+        store.dispatch(
+          flowTabActions.setActiveFlowTab(sessionUser.flows[0].id)
+        );
+        setNodes(JSON.parse(sessionUser.flows[0].stringifiedNodes));
+        setEdges(JSON.parse(sessionUser.flows[0].stringifiedEdges));
+      }
+    },
+    [setNodes, setEdges]
+  );
   // This loads the initial user and flow data from the user
   useEffect(() => {
     let sessionUser = store.getState().user.userData;
@@ -112,7 +117,7 @@ const Dashboard = () => {
           if (data.length > 0) {
             sessionUser = data[0] as User;
           } else {
-            sessionUser = mockUser;
+            // sessionUser = mockUser;
             firestoreService.writeToDB('users', sessionUser);
           }
           dispatchToStore(sessionUser as User);
@@ -141,7 +146,6 @@ const Dashboard = () => {
     [nodes, edges, setNodes, setEdges]
   );
 
-
   // ------------------------------------------------     React Flow     --------------------------------------------
   // React Flow Events
   const onDragOver = useCallback((event: React.DragEvent) => {
@@ -162,7 +166,7 @@ const Dashboard = () => {
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
       });
-      const getLabel = (label:string) => {
+      const getLabel = (label: string) => {
         switch (label) {
           case 'txtFileInput':
             console.log('txtFileInput');
@@ -181,17 +185,17 @@ const Dashboard = () => {
             return 'OpenAI';
           case 'deepl':
             return 'DeepL';
-            case 'imageAi':
-              return 'Image AI';
+          case 'imageAi':
+            return 'Image AI';
           default:
             return null;
         }
-      }
+      };
       const newNode = {
         id: uuidv4(),
         type,
         position,
-        data: {label: getLabel(`${type}`)},
+        data: { label: getLabel(`${type}`) },
       };
       setNodes((nds) => nds.concat(newNode));
     },
@@ -216,23 +220,22 @@ const Dashboard = () => {
 
   // Flow Runner - On change
   useEffect(() => {
-    console.log('🌊 change detected\n',{outputs,states} );
+    console.log('🌊 change detected\n', { outputs, states });
     dispatch(flowRunnerActions.setStates(states));
     dispatch(flowRunnerActions.setOutputs(outputs));
-  }, [
-    outputs,states,dispatch]);
+  }, [outputs, states, dispatch]);
   // Flow Runner - Runner callback
   function runFlow() {
-      console.log('🌊 executing flow');
-      executeFlow(
-        {flow:{nodes, edges},
-        inputs,
-        globals:{
-          deeplApiKey: process.env.NX_DEEPL_API_KEY,
-          openAiApiKey: process.env.NX_OPENAI_API_KEY
-        }});
+    console.log('🌊 executing flow');
+    executeFlow({
+      flow: { nodes, edges },
+      inputs,
+      globals: {
+        deeplApiKey: process.env.NX_DEEPL_API_KEY,
+        openAiApiKey: process.env.NX_OPENAI_API_KEY,
+      },
+    });
   }
-
 
   // This is a hack, refactor me
   // if (currentUser.id === '') {

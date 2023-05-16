@@ -23,7 +23,7 @@ export function SignUp() {
           const newUser = createNewUser(userCredential);
           dispatchToStore(newUser);
           // redirect to dashboard
-          navigate('/');
+          navigate('/dashboard');
         }
       })
       .catch((error) => {

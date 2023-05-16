@@ -23,12 +23,12 @@ export function GoogleLogin() {
         if (users.length > 0) {
           // store user state in redux
           dispatchToStore(users[0] as User);
-          navigate('/');
+          navigate('/dashboard');
         } else {
           if (user.displayName && user.email && user.photoURL) {
             const newUser = createNewUser(user);
             dispatchToStore(newUser);
-            navigate('/');
+            navigate('/dashboard');
           }
         }
       });

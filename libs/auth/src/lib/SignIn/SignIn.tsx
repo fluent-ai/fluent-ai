@@ -24,12 +24,13 @@ export function SignIn() {
     store.dispatch(userActions.setLoadingStatus('loading'));
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // fetch user from firestore
+        console.log(`fetch user from firestore`);
         firestoreService
           .getSomeFromDB('users', 'id', '==', userCredential.user.uid)
           .then((users) => {
             if (users.length > 0) {
               // store user state in redux
+              console.log(`redirect to dashboard`);
               dispatchToStore(users[0] as User);
               // redirect user to dashboard
               navigate('/dashboard');
