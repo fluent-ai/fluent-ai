@@ -1,10 +1,10 @@
-// import { deeplAi } from './deeplAi';
+// import { deepl } from './deepl';
 
-// describe('FlowRunner nodeMethods - deeplAi', () => {
+// describe('FlowRunner nodeMethods - deepl', () => {
 //   it('should respond to a request', async () => {
-//     const props = {language: 'en-GB',deeplAiApiKey:deeplAiApiKey,{formality:'default'}}
+//     const props = {language: 'en-GB',deeplApiKey:deeplApiKey,{formality:'default'}}
 //     const msg = { payload: 'wie geht es dir?' };
-//     const result = await deeplAi(msg, props);
+//     const result = await deepl(msg, props);
 //     //expect the result to be have a type string
 //     expect(typeof result?.['payload']).toBe('string');
 //     // expect(result?.['payload']).to
@@ -17,7 +17,7 @@
 //   formality: 'more',
 // };
 // const props = {
-//   // deeplAiApiKey: 'test',
+//   // deeplApiKey: 'test',
 //   // formality: 'default',
 // };
 // console.log(
