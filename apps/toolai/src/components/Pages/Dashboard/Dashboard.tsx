@@ -1,4 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { useSelector } from 'react-redux';
 import {
   ReactFlowProvider,
@@ -41,8 +42,6 @@ const Dashboard = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
-  let id = nodes.length;
-  const getId = () => `dndnode_${id++}`;
   const currentUser = useSelector((state: any) => state.user.userData);
   // const flowTabs = useSelector((state: any) => state.flowTabs);
 
@@ -142,7 +141,7 @@ const Dashboard = () => {
         y: event.clientY - reactFlowBounds.top,
       });
       const newNode = {
-        id: getId(),
+        id: uuidv4(),
         type,
         position,
         data: { label: `${type}` },
