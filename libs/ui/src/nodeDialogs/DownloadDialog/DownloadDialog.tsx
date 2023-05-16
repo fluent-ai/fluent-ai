@@ -7,7 +7,7 @@ export interface DownloadDialogProps {}
 
 function DownloadDialog({id}:{id:string}) {
   const outputs = useSelector(flowRunnerSelectors.selectOutput(id));
-  console.log('$$$$', {outputs});
+  console.log('$$$$', outputs);
   return (
     <InnerDialogStructure
     title="Download Node"
