@@ -12,7 +12,7 @@ function DownloadDialog({id}:{id:string}) {
     <InnerDialogStructure
     title="Download Node"
     description={'download node'}>
-    <div>{JSON.stringify(outputs?.nodeOutputs || {},null,2)}</div>
+    <div>{JSON.stringify(outputs?.nodeOutputs.payload || {},null,2)}</div>
 
     </InnerDialogStructure>
   );

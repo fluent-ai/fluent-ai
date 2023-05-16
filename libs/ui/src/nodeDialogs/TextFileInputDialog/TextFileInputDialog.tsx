@@ -47,10 +47,6 @@ function TextFileInputDialog({id}:{id:string}) {
         }
         // Trigger Promises
         Promise.all(readers).then((values) => {
-            // Values will be an array that contains an item
-            // with the text of every selected file
-            // ["File1 Content", "File2 Content" ... "FileN Content"]
-            console.log(`💥`, id)
             dispatch(
               flowRunnerActions.setInput(
                 {

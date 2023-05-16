@@ -10,7 +10,7 @@ export interface DialogComponentProps {
 }
 
 function DialogComponent(props: DialogComponentProps) {
-  console.log('show dialog')
+  // console.log('show dialog')
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
