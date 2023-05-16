@@ -12,7 +12,13 @@ const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
   const handleShare = () => {
     const activeId = store.getState().flowTab.flowTabs.activeId;
     const link = 'http://localhost:4200/login?link=' + activeId;
-    console.log("Here's your sharing link: ", link);
+    console.log("Here's your collaboration link: ", link);
+  };
+
+  const handleCopy = () => {
+    const activeId = store.getState().flowTab.flowTabs.activeId;
+    const link = 'http://localhost:4200/login?copy=' + activeId;
+    console.log("Here's your link to share a copy: ", link);
   };
 
   return (
@@ -36,9 +42,17 @@ const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
           </DropdownMenu.Item>
           <DropdownMenu.Item
             className={styles.DropdownMenuItem}
+            onClick={handleCopy}
+          >
+            Share Copy
+            {/* Share a Copy <div className={styles.RightSlot}>⌘+S</div> */}
+          </DropdownMenu.Item>
+          <DropdownMenu.Item
+            className={styles.DropdownMenuItem}
             onClick={handleShare}
           >
-            Share <div className={styles.RightSlot}>⌘+N</div>
+            Collaborate
+            {/* Share <div className={styles.RightSlot}>⌘+N</div> */}
           </DropdownMenu.Item>
           <AlertComponent
             classes={styles.DropdownMenuItem}

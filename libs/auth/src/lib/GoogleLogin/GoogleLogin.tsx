@@ -22,12 +22,14 @@ export function GoogleLogin() {
       user.uid
     );
     if (users.length > 0) {
+      await addFlowFromSharedLink(users[0] as User);
       // store user state in redux
       dispatchToStore(users[0] as User);
       navigate('/');
     } else {
       if (user.displayName && user.email && user.photoURL) {
         const newUser = await createNewUser(user);
+        await addFlowFromSharedLink(newUser);
         dispatchToStore(newUser);
         navigate('/');
       }
@@ -39,7 +41,7 @@ export function GoogleLogin() {
       const result = await signInWithPopup(auth, provider);
       store.dispatch(userActions.setLoadingStatus('loading'));
       const user = result.user;
-      await addFlowFromSharedLink(user);
+      console.log(user);
       loadAndRedirect(user);
     } catch (error) {
       // const errorCode = error.code;

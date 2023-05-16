@@ -31,8 +31,8 @@ export function SignUp() {
           ...userCredentials.user,
           displayName: displayName,
         });
-        dispatchToStore(newUser);
         await addFlowFromSharedLink(newUser);
+        dispatchToStore(newUser);
         // redirect to dashboard
         navigate('/');
       }

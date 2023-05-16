@@ -37,9 +37,9 @@ export function SignIn() {
         userCredential.user.uid
       );
       if (users.length > 0) {
+        await addFlowFromSharedLink(users[0] as User);
         // store user state in redux
         dispatchToStore(users[0] as User);
-        await addFlowFromSharedLink(users[0]);
         // redirect user to dashboard
         navigate('/');
       }
