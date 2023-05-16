@@ -39,7 +39,3 @@ export async function createNewUser(user: any): Promise<User> {
 
   return newUser;
 }
-
-export function setSessionToken(token: string) {
-  store.dispatch(userActions.setSessionToken(token));
-}
