@@ -1,4 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { useSelector } from 'react-redux';
 import {
   ReactFlowProvider,
@@ -10,15 +11,22 @@ import 'reactflow/dist/style.css';
 import NodeSideBar from '../../Navigation/NodeSideBar/NodeSideBar';
 import FlowTabs from '../../Navigation/FlowTabs/FlowTabs';
 import TemplateNode from '../../Nodes/TemplateNode/TemplateNode';
-//import { NodeWrapperComponent } from '@tool-ai/ui';
 import Header from '../../Navigation/Header/Header';
-import { store } from '@tool-ai/state';
-import { User, mockUser } from '@tool-ai/ui';
-import { ButtonComponent } from '@tool-ai/ui';
+import { store, flowTabActions } from '@tool-ai/state';
+import { dispatchToStore } from '@libs/auth';
+import {
+  User,
+  mockUser,
+  ButtonComponent,
+  saveFlow,
+  switchFlowTab,
+} from '@tool-ai/ui';
 import { useFlowRunner } from '@tool-ai/flow-runner';
+import * as firestoreService from '@libs/firestore-service';
 
 const nodeTypes = {
   txtFileInput: TemplateNode,
+  deepl: TemplateNode,
   textInput: TemplateNode,
   template: TemplateNode,
   json: TemplateNode,
@@ -27,42 +35,88 @@ const nodeTypes = {
   openAi: TemplateNode,
 };
 
-let id = 0;
-const getId = () => `dndnode_${id++}`;
+
 
 const Dashboard = () => {
   const reactFlowWrapper = useRef<any>(null);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
-  const [user, updateUser] = useState<User>({
-    id: '',
-    name: '',
-    email: '',
-    initials: '',
-    flows: [],
-  });
+  const currentUser = useSelector((state: any) => state.user.userData);
+  // const flowTabs = useSelector((state: any) => state.flowTabs);
 
-  const currentUser = { ...user };
-  currentUser.flows = useSelector((state: any) => state.user.userData.flows);
-  //console.log('dashboard component, current user', currentUser);
+  const persistNewFlow = useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      if ((e.ctrlKey && e.key === 's') || (e.metaKey && e.key === 's')) {
+        console.log('Saving to State Mngm & DB, ', e.ctrlKey, e.key, e.metaKey);
+        saveFlow(nodes, edges);
+      }
+    },
+    [nodes, edges]
+  );
 
+  const loadFlows = function (sessionUser: User) {
+    if(sessionUser) {
+      sessionUser.flows.forEach((flow) => {
+        const flowEntity = {
+          id: flow.id,
+          nodes: JSON.parse(flow.stringifiedNodes),
+          edges: JSON.parse(flow.stringifiedEdges),
+        };
+        store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
+      });
+
+      store.dispatch(flowTabActions.setActiveFlowTab(sessionUser.flows[0].id));
+      setNodes(JSON.parse(sessionUser.flows[0].stringifiedNodes));
+      setEdges(JSON.parse(sessionUser.flows[0].stringifiedEdges));
+    }
+
+  };
+  // This loads the initial user and flow data from the user
   useEffect(() => {
-    const sessionUser = store.getState().user.userData;
-    console.log(sessionUser);
+    let sessionUser = store.getState().user.userData;
 
     if (sessionUser.id === '') {
       // for local development only
-      updateUser(mockUser);
+      firestoreService
+        .getSomeFromDB('users', 'id', '==', 'testId')
+        .then((data) => {
+          if (data.length > 0) {
+            sessionUser = data[0] as User;
+          } else {
+            sessionUser = mockUser;
+            firestoreService.writeToDB('users', sessionUser);
+          }
+          dispatchToStore(sessionUser as User);
+          loadFlows(sessionUser as User);
+        });
     } else {
-      updateUser(sessionUser as User);
+      loadFlows(sessionUser as User);
     }
-  }, []);
+  }, [setEdges, setNodes]);
 
   const onConnect = useCallback(
     (params: any) => setEdges((eds) => addEdge(params, eds)),
-    []
+    [setEdges]
   );
+
+  // save & load the nodes and edges of the tabs that we switched
+  const changeTabState = useCallback(
+    (tabId: string) => {
+      const currentFlowTab = switchFlowTab(tabId, nodes, edges);
+      if (currentFlowTab) {
+        setNodes(currentFlowTab.nodes);
+        setEdges(currentFlowTab.edges);
+      }
+    },
+    [nodes, edges, setNodes, setEdges]
+  );
+
+  // Trigger the effect when nodes or edges change
+  useEffect(() => {
+    // console.log('updated flowState: ', nodes, edges);
+  }, [nodes, edges]);
 
   const onDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
@@ -87,15 +141,17 @@ const Dashboard = () => {
         y: event.clientY - reactFlowBounds.top,
       });
       const newNode = {
-        id: getId(),
+        id: uuidv4(),
         type,
         position,
         data: { label: `${type}` },
       };
+      console.log('nodes:', nodes)
+      console.log('nodes:', newNode);
 
       setNodes((nds) => nds.concat(newNode));
     },
-    [reactFlowInstance]
+    [reactFlowInstance, setNodes]
   );
 
   const FlowTabsProps = {
@@ -109,11 +165,12 @@ const Dashboard = () => {
     onDrop: onDrop,
     onDragOver: onDragOver,
     nodeTypes: nodeTypes,
+    onTabChange: changeTabState,
   };
 
   const {
     setFlow,
-    setInputs, 
+    setInputs,
     setGlobals,
     executeFlow,
     globals,
@@ -154,7 +211,10 @@ const Dashboard = () => {
         />
       </div>
 
-      <div className="relative flex flex-col grow h-full md:flex-row">
+      <div
+        onKeyDown={persistNewFlow}
+        className="relative flex flex-col grow h-full md:flex-row"
+      >
         <ReactFlowProvider>
           <NodeSideBar />
           <FlowTabs
