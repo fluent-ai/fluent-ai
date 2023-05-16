@@ -24,6 +24,11 @@ io.on('connection', (socket: Socket) => {
     // Broadcast the message to all connected clients
     io.emit('message', 'Hello Client!');
   });
+  // Handle events from the client
+  socket.on('mouse', (message: string) => {
+    // Broadcast the message to all connected clients
+    io.emit('mouse', message);
+  });
 
   // Handle disconnections
   socket.on('disconnect', () => {
