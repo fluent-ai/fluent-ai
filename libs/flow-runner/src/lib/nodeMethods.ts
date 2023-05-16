@@ -1,5 +1,5 @@
 export * from './nodeMethods/textInput';
-export * from './nodeMethods/txtFileInput';
+export * from './nodeMethods/textFileInput';
 export * from './nodeMethods/template';
 export * from './nodeMethods/json';
 export * from './nodeMethods/userFunction';

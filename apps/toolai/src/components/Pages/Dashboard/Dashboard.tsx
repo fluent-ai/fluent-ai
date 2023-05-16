@@ -25,7 +25,7 @@ import * as firestoreService from '@libs/firestore-service';
 import { dispatchToStore } from '@libs/auth';
 
 const nodeTypes = {
-  txtFileInput: TemplateNode,
+  textFileInput: TemplateNode,
   deepl: TemplateNode,
   textInput: TemplateNode,
   template: TemplateNode,
@@ -164,8 +164,7 @@ const Dashboard = () => {
       });
       const getLabel = (label:string) => {
         switch (label) {
-          case 'txtFileInput':
-            console.log('txtFileInput');
+          case 'textFileInput':
             return 'Text File Input';
           case 'textInput':
             return 'Text Input';

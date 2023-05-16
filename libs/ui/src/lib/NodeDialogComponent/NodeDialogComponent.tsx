@@ -7,15 +7,15 @@ import { TemplateDialog } from '../../nodeDialogs/TemplateDialog/TemplateDialog'
 import { UserFunctionDialog } from '../../nodeDialogs/UserFunctionDialog/UserFunctionDialog';
 import { PreviewDialog } from '../../nodeDialogs/PreviewDialog/PreviewDialog';
 import { OpenAIDialog } from '../../nodeDialogs/OpenAIDialog/OpenAIDialog';
-import { TxtFileInputDialog } from '../../nodeDialogs/TxtFileInputDialog/TxtFileInputDialog';
+import { TextFileInputDialog } from '../../nodeDialogs/TextFileInputDialog/TextFileInputDialog';
 import { DeeplDialog } from '../../nodeDialogs/DeeplDialog/DeeplDialog';
 import { ImageAiDialog } from '../../nodeDialogs/ImageAiDialog/ImageAiDialog';
 function NodeDialogComponent(props: NodeDialogProps) {
   const shownDialog = () => {
     console.log('activeId', props.activeDialog);
     switch (props.activeDialog) {
-      case 'txtFileInput':
-        return <TxtFileInputDialog id={props.activeNodeId}/>;
+      case 'textFileInput':
+        return <TextFileInputDialog id={props.activeNodeId}/>;
       case 'textInput':
         return <InputDialog id={props.activeNodeId} />;
       case 'json':
