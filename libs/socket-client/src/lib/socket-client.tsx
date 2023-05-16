@@ -1,6 +1,9 @@
 import styles from './socket-client.module.css';
 import React, { useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
+import { store } from '@tool-ai/state';
+import { useSelector } from 'react-redux';
+import { access } from 'fs';
 
 /* eslint-disable-next-line */
 export interface SocketClientProps {
@@ -25,9 +28,12 @@ export function SocketClient(props: SocketClientProps) {
     });
 
     socket.on('mouse', (data: any) => {
-      console.log('Received message:', JSON.parse(data));
+      //console.log('Received message:', JSON.parse(data));
       const extract = JSON.parse(data);
-      if (extract.userId !== props.userId) {
+      const activeTabId = store.getState().flowTab.flowTabs.activeId;
+      console.log(extract.tabId, activeTabId);
+
+      if (extract.userId !== props.userId && extract.tabId === activeTabId) {
         setMousePos({ x: extract.x, y: extract.y });
       }
     });
@@ -41,12 +47,14 @@ export function SocketClient(props: SocketClientProps) {
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
       if (socket) {
+        const activeTabId = store.getState().flowTab.flowTabs.activeId;
         socket.emit(
           'mouse',
           JSON.stringify({
             x: event.clientX,
             y: event.clientY,
             userId: props.userId,
+            tabId: activeTabId,
           })
         );
       }
