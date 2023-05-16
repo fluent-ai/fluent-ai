@@ -1,20 +1,45 @@
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { flowRunnerActions, flowRunnerSelectors } from "@tool-ai/state";
 /* eslint-disable-next-line */
 export interface ImageAiDialogProps {}
 
 
 function ImageAiDialog({id}:{id:string}) {
-
+  const dispatch = useDispatch();
+  const inputs = useSelector(flowRunnerSelectors.selectInput(id));
   const [imageSelected, setImageSelected] = useState<File | null>(null);
   const [tempImageUrl, setTempImageUrl] = useState<string>('')
 
   function handleChange (e: React.ChangeEvent<HTMLInputElement>) {
     if(e.target.files){
-      setImageSelected(e.target.files[0]);
+      // setImageSelected(e.target.files[0]);
       setTempImageUrl(URL.createObjectURL(e.target.files[0]));
+      Serialize(e.target.files[0], function(dataUrl) {
+        if(e.target.files){
+        dispatch(
+            flowRunnerActions.setInput(
+              {
+                id,
+                nodeInputs: {
+                  image: dataUrl,
+                  fileName: e.target.files[0].name
+                }
+              }
+            )
+          )
+        }})
+    };
     }
 
+
+  async function Serialize(file:File, callback:(res:string | ArrayBuffer | null)=>void) {
+    const reader = new FileReader();
+    reader.onloadend = function() {
+     callback(reader.result);
+    }
+    reader.readAsDataURL(file);
   }
 
   return (
