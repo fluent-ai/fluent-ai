@@ -50,6 +50,7 @@ export interface ButtonProps {
   ariaLabel: string;
   classes?: string;
   clickHandler?: () => void | undefined;
+  style?: any
 }
 
 interface NodeDialogProps {

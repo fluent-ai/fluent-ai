@@ -4,7 +4,7 @@ import { FileIcon, MixIcon, TextIcon, DoubleArrowRightIcon, ArrowRightIcon, Arro
 import {ReactComponent as OpenAiLogo}  from  '../../../assets/OpenAI_Logo.svg';
 import {ReactComponent as DeeplLogo}  from  '../../../assets/Deepl_Logo.svg';
 import { SettingsDialog } from '@tool-ai/ui';
-import { NodeData } from '../../../nodeData';
+import { NodeData, groups } from '../../../nodeData';
 
 
 const NodeSideBar = () => {
@@ -18,7 +18,7 @@ const NodeSideBar = () => {
     <aside className={`px-2 py-2.5 max-h-[80vh] overflow-y-scroll rounded-md bg-white shadow-md w-[45px] overflow-x-hidden transition-all duration-300 ease-in-out group-hover:w-60`}>
     <SettingsDialog />
     {NodeData.map(nodeItem => {
-      return <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, nodeItem.type)} title={nodeItem.label} icon={nodeItem.icon} />
+      return <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, nodeItem.type)} title={nodeItem.label} icon={nodeItem.icon} group={nodeItem.group} />
     })}
 
     </aside>
