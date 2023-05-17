@@ -1,7 +1,6 @@
 import { useSelector } from "react-redux";
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
 import { flowRunnerSelectors } from "@tool-ai/state";
-import { download } from '../../../../flow-runner/src/lib/nodeMethods/download';
 
 /* eslint-disable-next-line */
 export interface DownloadDialogProps {}
@@ -11,7 +10,7 @@ function DownloadDialog({id}:{id:string}) {
   console.log('$$$$', outputs);
 
   function encodeFile(text:string) {
-    return 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
+    return 'data:application/octet-stream;charset=utf-8,' + encodeURIComponent(text);
   }
 
 
