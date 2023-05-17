@@ -6,9 +6,9 @@ export function addFlowTab() {
   const sessionTabs = userData.flows;
 
   const flowTabIds = sessionTabs.map((tabId) => Number(tabId.slice(-1)));
-  let newTabId = 0;
+  let newTabId = 1;
   for (let i = 1; i <= flowTabIds.length; i++) {
-    if (i !== flowTabIds[i - 1]) {
+    if (i > flowTabIds[i - 1]) {
       newTabId = i;
       break;
     }

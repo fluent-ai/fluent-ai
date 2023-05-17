@@ -19,6 +19,7 @@
     "classnames": "^2.3.2",
     "confetti-js": "^0.0.18",
     "firebase": "9.21.0",
+    "jimp": "^0.22.8",
     "mustache": "^4.2.0",
     "node-polyfill-webpack-plugin": "^2.0.1",
     "openai": "^3.2.1",

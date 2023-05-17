@@ -32,7 +32,7 @@ interface FlowTabsProps {
   onNodesChange: any;
   onEdgesChange: any;
   setNodes: any;
-  onConnect: (params:any)=>void;
+  onConnect: (params: any) => void;
   onInit: any;
   onDrop: any;
   onDragOver: any;
@@ -67,55 +67,50 @@ const FlowTabs = (props: FlowTabsProps) => {
           right-0 flex items-center"
           aria-label="Flow Tabs"
         >
-          <div className='max-w-[45vw] flex items-center overflow-x-auto'>
-          {/* {props.flowCharts.length > 0 && props.flowCharts.map((flowChart: UserFlows) => { */}
-          {props.flowCharts.map((flowChart: Flow) => {
-            return (
-              <Tabs.Trigger
-                className={`tabs-trigger w-52 p-2.5 text-left flex justify-between items-center border-r-2 border-inherit`}
-                value={flowChart.id}
-                onClick={() => props.onTabChange(flowChart.id)}
-              >
-                <p className='whitespace-nowrap'>{flowChart.title}</p>
-                <div className="flex gap-x-2 items-center">
-                  {flowChart.collaborators.map(
-                    (collaborator: FlowCollaborator) => {
-                      if (collaborator.id !== props.currentUserId) {
-                        return (
-                          <AvatarComponent initials={collaborator.initials} />
-                        );
-                      } else {
-                        return null;
+          <div className="max-w-[45vw] flex items-center overflow-x-auto">
+            {/* {props.flowCharts.length > 0 && props.flowCharts.map((flowChart: UserFlows) => { */}
+            {props.flowCharts.map((flowChart: Flow) => {
+              return (
+                <Tabs.Trigger
+                  className={`tabs-trigger w-52 p-2.5 text-left flex justify-between items-center border-r-2 border-inherit`}
+                  value={flowChart.id}
+                  onClick={() => props.onTabChange(flowChart.id)}
+                >
+                  <p className="whitespace-nowrap">{flowChart.title}</p>
+                  <div className="flex gap-x-2 items-center">
+                    {flowChart.collaborators.map(
+                      (collaborator: FlowCollaborator) => {
+                        if (collaborator.id !== props.currentUserId) {
+                          return (
+                            <AvatarComponent initials={collaborator.initials} />
+                          );
+                        } else {
+                          return null;
+                        }
                       }
-                    }
-                  )}
-                  <div className="flex items-center">
-                    <FlowTabsDropdown
-                      flowChartOwner={flowChart.ownerId}
-                      users={flowChart.collaborators}
-                      onSave={handleSave}
-                    />
+                    )}
+                    <div className="flex items-center">
+                      <FlowTabsDropdown
+                        flowChartOwner={flowChart.ownerId}
+                        users={flowChart.collaborators}
+                        onSave={handleSave}
+                      />
+                    </div>
                   </div>
-                </div>
-              </Tabs.Trigger>
-
-            );
-          })}
-          <TooltipComponent
-            text="add new flow"
-            name="add-flow">
-                <IconButtonComponent
-                  buttonContent={<PlusIcon />}
-                  type='button'
-                  ariaLabel='iconbutton'
-                  classes={'group-hover:bg-blue-50'}
-                  clickHandler={addFlowTab}
-                    />
-            </TooltipComponent>
+                </Tabs.Trigger>
+              );
+            })}
           </div>
 
-
-
+          <TooltipComponent text="add new flow" name="add-flow">
+            <IconButtonComponent
+              buttonContent={<PlusIcon />}
+              type="button"
+              ariaLabel="iconbutton"
+              classes={'group-hover:bg-blue-50'}
+              clickHandler={addFlowTab}
+            />
+          </TooltipComponent>
         </Tabs.List>
 
         {props.flowCharts.map((flowChart: Flow) => {
@@ -139,7 +134,7 @@ const FlowTabs = (props: FlowTabsProps) => {
                   onDragOver={props.onDragOver}
                   nodeTypes={props.nodeTypes}
                   fitView
-                  defaultViewport={{x: 0, y: 0, zoom: -5}}
+                  defaultViewport={{ x: 0, y: 0, zoom: -5 }}
                 >
                   <Background
                     variant={'dots' as BackgroundVariant}
