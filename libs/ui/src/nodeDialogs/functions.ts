@@ -20,7 +20,7 @@ function updateNode(
 
 export async function handleChange(
   nodes:Node<{ label: string; }, string | undefined>[],
-  setNodes: any,
+  setNodes: React.Dispatch<React.SetStateAction<Node<string | undefined>[]>> |any,
   activeNodeId:string,
   eventValue: string,
   property: string){

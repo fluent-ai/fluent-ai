@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import * as Tabs from '@radix-ui/react-tabs';
 import {
   ReactFlow,
@@ -7,7 +7,12 @@ import {
   Controls,
   Background,
   BackgroundVariant,
+  OnNodesChange,
+  OnEdgesChange,
+  OnInit,
+  Connection
 } from 'reactflow';
+
 import { PlusIcon } from '@radix-ui/react-icons';
 import {
   TooltipComponent,
@@ -26,16 +31,16 @@ import { IconButtonComponent } from '@tool-ai/ui';
 interface FlowTabsProps {
   currentUserId: string;
   flowCharts: Flow[];
-  reactFlowWrapper: any;
+  reactFlowWrapper: React.MutableRefObject<any>;
   nodes: Node<{ label: string }, string | undefined>[];
   edges: Edge[];
-  onNodesChange: any;
-  onEdgesChange: any;
-  setNodes: any;
-  onConnect: (params: any) => void;
-  onInit: any;
-  onDrop: any;
-  onDragOver: any;
+  onNodesChange: OnNodesChange;
+  onEdgesChange: OnEdgesChange;
+  setNodes: React.Dispatch<React.SetStateAction<Node<string | undefined>[]>>;
+  onConnect: (params: Connection) => void;
+  onInit: OnInit;
+  onDrop: (event: React.DragEvent) => void;
+  onDragOver: (event: React.DragEvent) => void;
   nodeTypes: any;
   onTabChange: (id: string) => void;
 }
