@@ -29,14 +29,14 @@ export function GoogleLogin() {
       await addFlowCopyFromLink(users[0] as User);
       // store user state in redux
       await dispatchToStore(users[0] as User);
-      navigate('/');
+      navigate('/dashboard');
     } else {
       if (user.displayName && user.email && user.photoURL) {
         const newUser = await createNewUser(user);
         await dispatchToStore(newUser);
         await addFlowFromSharedLink(newUser);
         await addFlowCopyFromLink(newUser);
-        navigate('/');
+        navigate('/dashboard');
       }
     }
   };

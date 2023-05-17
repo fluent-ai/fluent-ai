@@ -20,7 +20,6 @@ import {
 } from '@tool-ai/state';
 import {
   User,
-  mockUser,
   ButtonComponent,
   saveFlow,
   switchFlowTab,
@@ -29,8 +28,6 @@ import { useFlowRunner } from '@tool-ai/flow-runner';
 import * as firestoreService from '@libs/firestore-service';
 import { dispatchToStore } from '@libs/auth';
 import { NodeData } from '../../../nodeData';
-import { ReactComponent as OpenAiLogo } from '../../../assets/OpenAI_Logo.svg';
-import { ReactComponent as DeeplLogo } from '../../../assets/Deepl_Logo.svg';
 
 const nodeTypes = {
   textFileInput: TemplateNode,
@@ -52,17 +49,27 @@ const Dashboard = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
-  // Hooks & State - User
   // --------------------------------------       Hooks & State - User       --------------------------------------
   const currentUser = useSelector((state: any) => state.user.userData);
   const currentFlows = useSelector(
     (state: any) => state.flowTab.flowTabs.flows
   );
-
   // --------------------------------------     Hooks & State - Flow Runner   --------------------------------------
   const { executeFlow, outputs, states } = useFlowRunner();
   const dispatch = useDispatch();
   const inputs = useSelector(flowRunnerSelectors.selectInputs);
+  // -----------------------------------------------     User & Auth    --------------------------------------------
+  // useEffect(() => {
+  //   const sessionUser = store.getState().user.userData;
+  //   if (sessionUser.id === '') {
+  //     // for local development only
+  //     // updateUser(mockUser);
+  //     // updateUser(sessionUser as User);
+  //     console.log('No user found, redirecting to login');
+  //   } else {
+  //     updateUser(sessionUser as User);
+  //   }
+  // }, []);
 
   // ------------------------------------------------     Database     --------------------------------------------
   // Saving & Loading Flows
@@ -76,7 +83,6 @@ const Dashboard = () => {
     },
     [nodes, edges]
   );
-
   const loadFlows = useCallback(
     async (sessionUser: User) => {
       const flows = await firestoreService.getSomeFromDB(
@@ -118,7 +124,7 @@ const Dashboard = () => {
           if (data.length > 0) {
             sessionUser = data[0] as User;
           } else {
-            sessionUser = mockUser;
+            // sessionUser = mockUser;
             firestoreService.writeToDB('users', sessionUser);
           }
           dispatchToStore(sessionUser as User);
@@ -172,6 +178,7 @@ const Dashboard = () => {
         if (item) return item.label;
       };
 
+
       const newNode = {
         id: uuidv4(),
         type,
@@ -197,8 +204,6 @@ const Dashboard = () => {
   };
 
   // ------------------------------------------------     Flow Runner     --------------------------------------------
-  // Flow Runner - Init
-
   // Flow Runner - On change
   useEffect(() => {
     console.log('🌊 change detected\n', { outputs, states });
@@ -217,11 +222,6 @@ const Dashboard = () => {
       },
     });
   }
-
-  // This is a hack, refactor me
-  // if (currentUser.id === '') {
-  //   return <div></div>;
-  // }
   return (
     <>
       <Header currentUser={currentUser} />

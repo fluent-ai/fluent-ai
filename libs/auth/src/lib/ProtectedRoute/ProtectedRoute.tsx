@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+// <<<<<<< HEAD
 import { dispatchToStore } from '../load-userdata';
 import { User } from '@tool-ai/ui';
 import * as firestoreService from '@libs/firestore-service';
+// =======
+// >>>>>>> b965bd6efaf211a4f32ca61fb8bc3e5a0698e207
 
 interface IProtectedRouteProps {
   children: React.ReactNode;
@@ -21,6 +24,7 @@ export function ProtectedRoute({ children }: IProtectedRouteProps) {
           '🚀 ~ file: ProtectedRoute.tsx:20 ~ AuthCheck ~ user:',
           user
         );
+// <<<<<<< HEAD
         
         firestoreService.getSomeFromDB(
           'users',
@@ -41,6 +45,9 @@ export function ProtectedRoute({ children }: IProtectedRouteProps) {
           //TODO load flows
           })
         
+// =======
+
+// >>>>>>> b965bd6efaf211a4f32ca61fb8bc3e5a0698e207
         setLoading(false);
       } else {
         console.log('unauthorized');

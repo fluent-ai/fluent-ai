@@ -33,7 +33,7 @@ const Header = (userProps: UserProps): JSX.Element => {
           </DropdownMenu.Trigger>
           <DropdownMenu.Portal>
             <DropdownMenu.Content>
-              <DropdownMenu.Item>
+              <DropdownMenu.Item className="mt-5">
                 <button
                   aria-label="logout button"
                   type="button"
