@@ -53,6 +53,9 @@ const Dashboard = () => {
   // Hooks & State - User
   // --------------------------------------       Hooks & State - User       --------------------------------------
   const currentUser = useSelector((state: any) => state.user.userData);
+  const currentFlows = useSelector(
+    (state: any) => state.flowTab.flowTabs.flows
+  );
   const [user, updateUser] = useState<User>({
     id: '',
     name: '',
@@ -92,28 +95,55 @@ const Dashboard = () => {
     },
     [nodes, edges]
   );
-  const loadFlows = useCallback((sessionUser: User) => {
-    if(sessionUser) {
-      sessionUser.flows.forEach((flow) => {
+  // const loadFlows = useCallback((sessionUser: User) => {
+  //   if(sessionUser) {
+  //     sessionUser.flows.forEach((flow) => {
+  //       const flowEntity = {
+  //         id: flow.id,
+  //         nodes: JSON.parse(flow.stringifiedNodes),
+  //         edges: JSON.parse(flow.stringifiedEdges),
+  //       };
+  //       store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
+  //     });
+  //     store.dispatch(flowTabActions.setActiveFlowTab(sessionUser.flows[0].id));
+  //     setNodes(JSON.parse(sessionUser.flows[0].stringifiedNodes));
+  //     setEdges(JSON.parse(sessionUser.flows[0].stringifiedEdges));
+  //   }
+  // }, [setNodes, setEdges]);
+  const loadFlows = useCallback( async (sessionUser: User) => {
+    const flows = await firestoreService.getSomeFromDB(
+      'flows',
+      'collaboratorIds',
+      'array-contains',
+      sessionUser.id
+    );
+    if (flows.length > 0) {
+      flows.forEach((flow) => {
         const flowEntity = {
           id: flow.id,
+          title: flow.title,
+          ownerId: flow.ownerId,
           nodes: JSON.parse(flow.stringifiedNodes),
           edges: JSON.parse(flow.stringifiedEdges),
+          collaboratorIds: flow.collaboratorIds,
+          collaborators: flow.collaborators,
         };
         store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
       });
-      store.dispatch(flowTabActions.setActiveFlowTab(sessionUser.flows[0].id));
-      setNodes(JSON.parse(sessionUser.flows[0].stringifiedNodes));
-      setEdges(JSON.parse(sessionUser.flows[0].stringifiedEdges));
+
+      store.dispatch(flowTabActions.setActiveFlowTab(flows[0].id));
+      setNodes(JSON.parse(flows[0].stringifiedNodes));
+      setEdges(JSON.parse(flows[0].stringifiedEdges));
     }
   }, [setNodes, setEdges]);
+
   // This loads the initial user and flow data from the user
   useEffect(() => {
     let sessionUser = store.getState().user.userData;
     if (sessionUser.id === '') {
       // for local development only
       firestoreService
-        .getSomeFromDB('users', 'id', '==', 'testId')
+        .getSomeFromDB('users', 'id', '==', 'testId_2')
         .then((data) => {
           if (data.length > 0) {
             sessionUser = data[0] as User;
@@ -267,7 +297,8 @@ const Dashboard = () => {
         <ReactFlowProvider>
           <NodeSideBar />
           <FlowTabs
-            flowCharts={currentUser.flows}
+            currentUserId={currentUser.id}
+            flowCharts={currentFlows}
             reactFlowWrapper={reactFlowWrapper}
             {...FlowTabsProps}
           />

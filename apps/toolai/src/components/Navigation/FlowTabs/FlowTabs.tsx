@@ -14,8 +14,8 @@ import {
   FlowTabsDropdown,
   AvatarComponent,
   NodeDialogComponent,
-  UserFlows,
-  FlowCollaborators,
+  Flow,
+  FlowCollaborator,
   saveFlow,
 } from '@tool-ai/ui';
 import { addFlowTab } from '@tool-ai/ui';
@@ -24,7 +24,8 @@ import Context from '../../context/context';
 import { IconButtonComponent } from '@tool-ai/ui';
 
 interface FlowTabsProps {
-  flowCharts: UserFlows[];
+  currentUserId: string;
+  flowCharts: Flow[];
   reactFlowWrapper: any;
   nodes: Node<{ label: string }, string | undefined>[];
   edges: Edge<any>[];
@@ -39,15 +40,6 @@ interface FlowTabsProps {
   onTabChange: (id: string) => void;
 }
 
-interface FlowChart {
-  id: string;
-  title: string;
-  colaborators: FlowCollaborators[];
-  owner: boolean;
-  stringifiedNodes: string;
-  stringifiedEdges: string;
-}
-
 const FlowTabs = (props: FlowTabsProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [activeDialog, setActiveDialog] = useState('');
@@ -57,6 +49,7 @@ const FlowTabs = (props: FlowTabsProps) => {
     saveFlow(props.nodes, props.edges);
   };
 
+  console.log(props.flowCharts);
   return (
     <Context.Provider
       value={{
@@ -73,7 +66,8 @@ const FlowTabs = (props: FlowTabsProps) => {
           aria-label="Flow Tabs"
         >
           <div className='max-w-[45vw] flex items-center overflow-x-auto'>
-          {props.flowCharts.length > 0 && props.flowCharts.map((flowChart: UserFlows) => {
+          {/* {props.flowCharts.length > 0 && props.flowCharts.map((flowChart: UserFlows) => { */}
+          {props.flowCharts.map((flowChart: Flow) => {
             return (
               <Tabs.Trigger
                 className={`tabs-trigger w-52 p-2.5 text-left flex justify-between items-center border-r-2 border-inherit`}
@@ -82,16 +76,21 @@ const FlowTabs = (props: FlowTabsProps) => {
               >
                 <p className='whitespace-nowrap'>{flowChart.title}</p>
                 <div className="flex gap-x-2 items-center">
-                  {flowChart.colaborators.map(
-                    (collaborator: FlowCollaborators) => {
-                      return (
-                        <AvatarComponent initials={collaborator.initials} />
-                      );
+                  {flowChart.collaborators.map(
+                    (collaborator: FlowCollaborator) => {
+                      if (collaborator.id !== props.currentUserId) {
+                        return (
+                          <AvatarComponent initials={collaborator.initials} />
+                        );
+                      } else {
+                        return null;
+                      }
                     }
                   )}
                   <div className="flex items-center">
                     <FlowTabsDropdown
-                      users={flowChart.colaborators}
+                      flowChartOwner={flowChart.ownerId}
+                      users={flowChart.collaborators}
                       onSave={handleSave}
                     />
                   </div>
@@ -114,7 +113,7 @@ const FlowTabs = (props: FlowTabsProps) => {
                    />
             </TooltipComponent>
         </Tabs.List>
-        {props.flowCharts.length > 0 && props.flowCharts.map((flowChart: FlowChart) => {
+        {props.flowCharts.map((flowChart: Flow) => {
           return (
             <Tabs.Content value={flowChart.id}>
               {/*The div wrapping a flow must

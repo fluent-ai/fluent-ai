@@ -1,8 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
 import { flowRunnerActions, flowRunnerSelectors } from "@tool-ai/state";
-/* eslint-disable-next-line */
-// export interface TemplateDialogProps {}
 
 function TemplateDialog({id}:{id:string}) {
   const dispatch = useDispatch();
@@ -71,4 +69,4 @@ function TemplateDialog({id}:{id:string}) {
   );
 }
 
-export {TemplateDialog};
+export { TemplateDialog };
