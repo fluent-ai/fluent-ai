@@ -67,8 +67,11 @@ const FlowTabs = (props: FlowTabsProps) => {
 
       {props.flowCharts && (
       <Tabs.Root className="flex flex-col" defaultValue={props.flowCharts[0] ? props.flowCharts[0].id : 'tab1'}>
+        <style>
+          {`.scroll-container::-webkit-scrollbar { display: none; }`}
+        </style>
         <Tabs.List
-          className="absolute min-h-10 max-w-[50vw] overflow-x-scroll mt-2.5 mr-2.5 z-10 bg-white w-50 rounded-md shadow-md
+          className="scroll-container absolute min-h-10 max-w-[50vw] overflow-x-scroll mt-2.5 mr-2.5 z-10 bg-white w-50 rounded-md shadow-md
           right-0 flex items-center"
           aria-label="Flow Tabs"
         >
