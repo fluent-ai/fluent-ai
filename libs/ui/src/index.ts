@@ -1,3 +1,4 @@
+export * from './lib/AccordionComponent/AccordionComponent';
 export * from './lib/NodeWrapperComponent/NodeWrapperComponent';
 export * from './nodeDialogs/UserFunctionDialog/UserFunctionDialog';
 export * from './nodeDialogs/TextFileInputDialog/TextFileInputDialog';
@@ -18,7 +19,6 @@ export * from './lib/SettingsDialog/SettingsDialog';
 export * from './lib/ShareDialog/ShareDialog';
 export * from './nodeDialogs/DalleVariationDialog/DalleVariationDialog';
 export * from './nodeDialogs/DownloadDialog/DownloadDialog';
-
 
 // eslint-disable-next-line @nx/enforce-module-boundaries
 export * from './ui-interactions/save-flow';

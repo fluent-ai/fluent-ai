@@ -255,7 +255,7 @@ const Dashboard = () => {
       </div>
 
       <div
-        onKeyDown={persistNewFlow}
+        // onKeyDown={persistNewFlow}
         className="relative flex flex-col grow h-full md:flex-row"
       >
         <ReactFlowProvider>
