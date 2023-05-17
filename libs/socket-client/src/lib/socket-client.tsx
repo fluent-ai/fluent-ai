@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { store } from '@tool-ai/state';
 
@@ -14,6 +14,7 @@ export interface SocketClientProps {
 export function SocketClient(props: SocketClientProps) {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isCollaborating, setIsCollaborating] = useState(false);
+  // const [mouseDown, setMouseDown] = useState(false);
   const [mousePos, setMousePos] = useState({
     x: 0,
     y: 0,
@@ -82,6 +83,24 @@ export function SocketClient(props: SocketClientProps) {
       window.removeEventListener('mousemove', handleMouseMove);
     };
   }, [socket, props]);
+
+  // useEffect(() => {
+  //   const handleDragging = () => {
+  //     console.log(mouseDown);
+  //     if (mouseDown) {
+  //       console.log('works');
+  //     }
+  //   };
+
+  //   window.addEventListener('mousedown', () => setMouseDown(true));
+  //   window.addEventListener('mousemove', handleDragging);
+  //   window.addEventListener('mouseup', () => setMouseDown(false));
+  //   return () => {
+  //     window.removeEventListener('mouseup', () => setMouseDown(true));
+  //     window.removeEventListener('mousemove', handleDragging);
+  //     window.removeEventListener('mousedown', () => setMouseDown(false));
+  //   };
+  // }, [mouseDown]);
 
   if (isCollaborating) {
     return (
