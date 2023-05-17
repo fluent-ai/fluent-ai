@@ -1,5 +1,4 @@
 import styles from './NodeDialogComponent.module.css';
-import React from 'react';
 import { NodeDialogProps } from '../../types';
 import { InputDialog } from '../../nodeDialogs/InputDialog/InputDialog';
 import { JsonDialog } from '../../nodeDialogs/JsonDialog/JsonDialog';
@@ -12,6 +11,7 @@ import { DeeplDialog } from '../../nodeDialogs/DeeplDialog/DeeplDialog';
 import { ImageAiDialog } from '../../nodeDialogs/ImageAiDialog/ImageAiDialog';
 import { DownloadDialog } from '../../nodeDialogs/DownloadDialog/DownloadDialog';
 import { DalleGenerationDialog } from '../../nodeDialogs/DalleGenerationDialog/DalleGenerationDialog';
+
 function NodeDialogComponent(props: NodeDialogProps) {
   const shownDialog = () => {
     console.log('activeId', props.activeDialog);
