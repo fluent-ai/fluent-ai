@@ -19,11 +19,15 @@ import {
 const auth = getAuth();
 
 export function SignIn() {
+  console.log('🌳 rendering sign in component');
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
   const signIn = async (e: React.FormEvent<HTMLFormElement>) => {
+
+    console.log('🌳 in signIn callback');
     e.preventDefault();
     store.dispatch(userActions.setLoadingStatus('loading'));
     try {
@@ -32,6 +36,7 @@ export function SignIn() {
         email,
         password
       );
+      console.log('🌳 userCredential', userCredential);
       // fetch user from firestore
       const users = await firestoreService.getSomeFromDB(
         'users',
@@ -39,14 +44,15 @@ export function SignIn() {
         '==',
         userCredential.user.uid
       );
+      console.log('🌳 users', users);
       if (users.length > 0) {
         await dispatchToStore(users[0] as User);
-        await addFlowFromSharedLink(users[0] as User);
-        await addFlowCopyFromLink(users[0] as User);
+        // await addFlowFromSharedLink(users[0] as User);
+        // await addFlowCopyFromLink(users[0] as User);
         // store user state in redux
 
         // redirect user to dashboard
-        navigate('/');
+        navigate('/');  //TODO: may need to be dashboard
       }
     } catch (error) {
       console.log(error);
