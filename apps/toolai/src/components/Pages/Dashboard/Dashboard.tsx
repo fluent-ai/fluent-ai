@@ -180,7 +180,7 @@ const Dashboard = () => {
     event.dataTransfer.dropEffect = 'move';
   }, []);
   const onDrop = useCallback(
-    (event: any) => {
+    (event: React.DragEvent) => {
       event.preventDefault();
       const reactFlowBounds =
         reactFlowWrapper?.current?.getBoundingClientRect();

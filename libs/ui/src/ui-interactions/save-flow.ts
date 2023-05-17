@@ -1,8 +1,9 @@
 import { store, userActions, flowTabActions } from '@tool-ai/state';
 import * as firestoreService from '@libs/firestore-service';
 import { arrayUnion } from 'firebase/firestore';
+import {Node, Edge} from 'reactflow';
 
-export async function saveFlow(nodes: any, edges: any) {
+export async function saveFlow(nodes: Node[], edges: Edge[]) {
   store.dispatch(userActions.setLoadingStatus('loading'));
   const currentState = store.getState();
   const currentUser = currentState.user.userData;

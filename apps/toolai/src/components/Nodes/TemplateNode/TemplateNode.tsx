@@ -5,12 +5,15 @@ import * as Dialog from '@radix-ui/react-dialog';
 import Context from '../../context/context';
 import { NodeData } from '../../../nodeData';
 
+interface Data {
+  label: string;
+}
 
 interface MemoProps {
   id: string,
   type: string,
   isConnectable: boolean,
-  data: any
+  data: Data
 }
 export default memo (({id, data,type, isConnectable}: MemoProps) => {
   const {setIsDialogOpen, setActiveDialog, setActiveNodeId} = useContext(Context);

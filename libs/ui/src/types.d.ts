@@ -1,4 +1,5 @@
 import { ReactElement } from "react";
+import React from 'react';
 
 export interface Validation {
   match:
@@ -22,14 +23,14 @@ export interface FormFieldProps {
   validations?: Validation[];
   type: string;
   required?: boolean;
-  value?: any;
+  value?: string;
   onChange: any;
   placeholder?: string;
 }
 
 export interface NodeWrapperComponentProps {
   isConnectable: boolean;
-  data: any;
+  data: {label:string};
   isDialogOpen: boolean;
   setIsDialogOpen: (arg: boolean) => void;
 }
@@ -56,7 +57,7 @@ interface NodeDialogProps {
   onClose: (boolean: boolean) => void;
   activeDialog: string;
   nodes: Node<{ label: string }, string | undefined>[];
-  setNodes: any;
+  setNodes: React.Dispatch<React.SetStateAction<Node<string | undefined>[]>>;
   activeNodeId: string;
 }
 interface FlowCollaborator {
