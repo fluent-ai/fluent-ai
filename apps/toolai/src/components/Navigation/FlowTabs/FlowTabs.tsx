@@ -59,7 +59,9 @@ const FlowTabs = (props: FlowTabsProps) => {
         setActiveNodeId,
       }}
     >
-      <Tabs.Root className="flex flex-col" defaultValue="tab1">
+
+      {props.flowCharts && (
+      <Tabs.Root className="flex flex-col" defaultValue={props.flowCharts[0] ? props.flowCharts[0].id : 'tab1'}>
         <Tabs.List
           className="absolute min-h-10 max-w-[50vw] overflow-x-scroll mt-2.5 mr-2.5 z-10 bg-white w-50 rounded-md shadow-md
           right-0 flex items-center"
@@ -110,6 +112,7 @@ const FlowTabs = (props: FlowTabsProps) => {
             />
           </TooltipComponent>
         </Tabs.List>
+
         {props.flowCharts.map((flowChart: Flow) => {
           return (
             <Tabs.Content value={flowChart.id}>
@@ -155,6 +158,7 @@ const FlowTabs = (props: FlowTabsProps) => {
           activeNodeId={activeNodeId}
         />
       </Tabs.Root>
+      )}
     </Context.Provider>
   );
 };

@@ -11,6 +11,11 @@ module.exports = {
     ),
     ...createGlobPatternsForDependencies(__dirname),
   ],
+  variants: {
+    extend: {
+      outline: ['focus', 'focus-visible'],
+    },
+  },
   theme: {
     colors: {
       'primary': colors.gray[800],
