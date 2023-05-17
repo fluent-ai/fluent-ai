@@ -23,6 +23,7 @@ function ImageAiDialog({id}:{id:string}) {
               {
                 id,
                 nodeInputs: {
+                  ...inputs?.nodeInputs,
                   image: dataUrl,
                   fileName: e.target.files[0].name
                 }
@@ -64,7 +65,17 @@ function ImageAiDialog({id}:{id:string}) {
           />
           </label>
         <label className="mt-2.5">select amount of variations
-          <select aria-label="select amount of variations" defaultValue={1}>
+          <select aria-label="select amount of variations"
+            onChange={(e)=> dispatch(flowRunnerActions.setInput(
+              {
+                id,
+                nodeInputs: {
+                  ...inputs?.nodeInputs,
+                  numberVariations: e.target.value
+                }
+              }
+            ))}
+           defaultValue={1}>
             <option value={1}>1</option>
             <option value={2}>2</option>
             <option value={3}>3</option>
