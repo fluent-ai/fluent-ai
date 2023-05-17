@@ -26,10 +26,10 @@ function InnerDialogStructure(props: InnerDialogStructureProps) {
       <h3 className="text-center text-xl">{props.title}</h3>
       <div className="scroll-container h-[80%] w-full overflow-y-scroll">
         <div className="w-full my-2.5 h-[1px] bg-gray-light"></div>
-        <Accordion type="single" collapsible className="w-full">
+        <Accordion type="single" collapsible className="w-full" defaultValue='child-0'>
         {childrenArray.map((child, index) => {
           return (
-          <AccordionItem value={`child-${index}`}>
+          <AccordionItem  value={`child-${index}`}>
             <AccordionTrigger>{childrenTitles[index]}</AccordionTrigger>
             <AccordionContent>
               {child}
