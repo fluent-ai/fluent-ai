@@ -28,6 +28,7 @@ import { useFlowRunner } from '@tool-ai/flow-runner';
 import * as firestoreService from '@libs/firestore-service';
 import { dispatchToStore } from '@libs/auth';
 import { NodeData } from '../../../nodeData';
+import { Auth, getAuth } from 'firebase/auth';
 
 const nodeTypes = {
   textFileInput: TemplateNode,
@@ -54,6 +55,10 @@ const Dashboard = () => {
   const currentFlows = useSelector(
     (state: any) => state.flowTab.flowTabs.flows
   );
+  let auth: Auth | null = null;
+  useEffect(() => {
+    auth = getAuth();
+  }, []);
   // --------------------------------------     Hooks & State - Flow Runner   --------------------------------------
   const { executeFlow, outputs, states } = useFlowRunner();
   const dispatch = useDispatch();
@@ -114,31 +119,36 @@ const Dashboard = () => {
   );
 
   // This loads the initial user and flow data from the user
-  useEffect(() => {
+  async function InitialUser() {
+    console.log('auth', auth);
     let sessionUser = store.getState().user.userData;
     if (sessionUser.id === '') {
-      // for local development only
-      firestoreService
-        .getSomeFromDB('users', 'id', '==', 'testId_2')
-        .then((data) => {
-          if (data.length > 0) {
-            sessionUser = data[0] as User;
-          } else {
-            // sessionUser = mockUser;
-            firestoreService.writeToDB('users', sessionUser);
-          }
-          dispatchToStore(sessionUser as User);
-          loadFlows(sessionUser as User);
-        });
-    } else {
-      loadFlows(sessionUser as User);
+      console.log('auth', auth?.currentUser);
+      const userId = auth?.currentUser?.uid;
+      if (userId) {
+        /* eslint-disable-next-line */
+        firestoreService
+          .getSomeFromDB('users', 'id', '==', userId)
+          .then((data) => {
+            if (data.length > 0) {
+              sessionUser = data[0] as User;
+            }
+          });
+      } else {
+        console.log('No user found, redirecting to login');
+        return;
+      }
     }
+    console.log(
+      '🚀 ~ file: Dashboard.tsx:112 ~ useEffect ~ sessionUser:',
+      sessionUser.id
+    );
+    dispatchToStore(sessionUser as User);
+    loadFlows(sessionUser as User);
+  }
+  useEffect(() => {
+    InitialUser();
   }, [setEdges, setNodes, loadFlows]);
-
-  const onConnect = useCallback(
-    (params: any) => setEdges((eds) => addEdge(params, eds)),
-    [setEdges]
-  );
 
   // ------------------------------------------------     Tabs     --------------------------------------------
   // save & load the nodes and edges of the tabs that we switched
@@ -155,6 +165,11 @@ const Dashboard = () => {
 
   // ------------------------------------------------     React Flow     --------------------------------------------
   // React Flow Events
+  const onConnect = useCallback(
+    (params: any) => setEdges((eds) => addEdge(params, eds)),
+    [setEdges]
+  );
+
   const onDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
