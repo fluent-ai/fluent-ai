@@ -1,26 +1,25 @@
 import { User } from './types';
 export const mockUser: User = {
-  id: 'testId_3',
-  email: 'test@test.com',
-  name: 'Jeff Bezos',
-  initials: 'JB',
-  flows: ['testId_3-1'],
-  profileImg:
-    'https://lh3.googleusercontent.com/a/AGNmyxbYjdO34l9YBDRRFclrO7qM3cjlmxQY6F9eZ4w_Qw=s96-c',
+  id: '1aUOgbQFrvWfdNj3zES1C1l8ofC3',
+  email: 'julien@gmx.com',
+  name: 'Julien Look',
+  initials: 'JU',
+  flows: ['1aUOgbQFrvWfdNj3zES1C1l8ofC3-1'],
+  profileImg: '',
 };
 
 export const mockFlow = {
-  id: 'testId_3-1',
+  id: '1aUOgbQFrvWfdNj3zES1C1l8ofC3-1',
   title: 'My Flow 1',
-  ownerId: 'testId_3',
+  ownerId: '1aUOgbQFrvWfdNj3zES1C1l8ofC3',
   stringifiedNodes: '[]',
   stringifiedEdges: '[]',
-  collaboratorIds: ['testId_3'],
+  collaboratorIds: ['1aUOgbQFrvWfdNj3zES1C1l8ofC3'],
   collaborators: [
     {
-      id: 'testId_3',
-      name: 'Jeff Bezos',
-      initials: 'JB',
+      id: '1aUOgbQFrvWfdNj3zES1C1l8ofC3',
+      name: 'Julien Look',
+      initials: 'JU',
     },
   ],
 };

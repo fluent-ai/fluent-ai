@@ -6,6 +6,9 @@ import { store } from '@tool-ai/state';
 export interface SocketClientProps {
   userId: string;
   userName: string;
+  nodes: any[];
+  edges: any[];
+  onChangeFlow: (e: any) => void;
 }
 
 export function SocketClient(props: SocketClientProps) {
@@ -26,30 +29,40 @@ export function SocketClient(props: SocketClientProps) {
     socket.on('connect', () => {
       console.log('Connected to Socket.io server');
     });
-
-    socket.on('mouse', (data: string) => {
-      const extract = JSON.parse(data);
-      const activeTabId = store.getState().flowTab.flowTabs.activeId;
-
-      if (extract.userId !== props.userId && extract.tabId === activeTabId) {
-        setIsCollaborating(true);
-        setMousePos({ x: extract.x, y: extract.y });
-        setCollabUser({ id: extract.userId, name: extract.userName });
-      } else {
-        setIsCollaborating(false);
-      }
-    });
-
     // Clean up the socket connection on component unmount
     return () => {
+      socket.off('connect');
       socket.disconnect();
     };
-  }, [props.userId]);
+  }, []);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('mouse', (data: string) => {
+        const extract = JSON.parse(data);
+        const activeTabId = store.getState().flowTab.flowTabs.activeId;
+        if (extract.userId !== props.userId && extract.tabId === activeTabId) {
+          setIsCollaborating(true);
+          setMousePos({ x: extract.x, y: extract.y });
+          setCollabUser({ id: extract.userId, name: extract.userName });
+          props.onChangeFlow({ nodes: extract.nodes, edges: extract.edges });
+        } else {
+          setIsCollaborating(false);
+        }
+      });
+
+      // Clean up the socket connection on component unmount
+      return () => {
+        socket.off('mouse');
+      };
+    }
+  }, [props, socket]);
 
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
       if (socket) {
         const activeTabId = store.getState().flowTab.flowTabs.activeId;
+
         socket.emit(
           'mouse',
           JSON.stringify({
@@ -58,6 +71,8 @@ export function SocketClient(props: SocketClientProps) {
             userName: props.userName,
             userId: props.userId,
             tabId: activeTabId,
+            nodes: props.nodes,
+            edges: props.edges,
           })
         );
       }
@@ -66,7 +81,7 @@ export function SocketClient(props: SocketClientProps) {
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
     };
-  }, [socket, mousePos, props.userId, props.userName]);
+  }, [socket, props]);
 
   if (isCollaborating) {
     return (

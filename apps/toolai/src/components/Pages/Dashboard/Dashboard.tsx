@@ -97,7 +97,7 @@ const Dashboard = () => {
     if (sessionUser.id === '') {
       // for local development only
       firestoreService
-        .getSomeFromDB('users', 'id', '==', 'testId_3')
+        .getSomeFromDB('users', 'id', '==', '1aUOgbQFrvWfdNj3zES1C1l8ofC3')
         .then((data) => {
           if (data.length > 0) {
             sessionUser = data[0] as User;
@@ -135,6 +135,14 @@ const Dashboard = () => {
   useEffect(() => {
     // console.log('updated flowState: ', nodes, edges);
   }, [nodes, edges]);
+
+  const handleSocketChange = useCallback(
+    (flow: any) => {
+      setNodes(flow.nodes);
+      setEdges(flow.edges);
+    },
+    [setNodes, setEdges]
+  );
 
   const onDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
@@ -198,7 +206,13 @@ const Dashboard = () => {
   }
   return (
     <>
-      <SocketClient userId={currentUser.id} userName={currentUser.name} />
+      <SocketClient
+        userId={currentUser.id}
+        userName={currentUser.name}
+        nodes={[...nodes]}
+        edges={[...edges]}
+        onChangeFlow={handleSocketChange}
+      />
       <Header currentUser={currentUser} />
       <div className="h-10 w-32 mt-2.5 ml-72 bg-white absolute shadow-md rounded-md z-10 text-black flex justify-between items-center">
         <ButtonComponent
