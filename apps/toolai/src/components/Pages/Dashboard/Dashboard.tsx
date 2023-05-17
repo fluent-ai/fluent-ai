@@ -59,32 +59,35 @@ const Dashboard = () => {
     [nodes, edges]
   );
 
-  const loadFlows = async function (sessionUser: User) {
-    const flows = await firestoreService.getSomeFromDB(
-      'flows',
-      'collaboratorIds',
-      'array-contains',
-      sessionUser.id
-    );
-    if (flows.length > 0) {
-      flows.forEach((flow) => {
-        const flowEntity = {
-          id: flow.id,
-          title: flow.title,
-          ownerId: flow.ownerId,
-          nodes: JSON.parse(flow.stringifiedNodes),
-          edges: JSON.parse(flow.stringifiedEdges),
-          collaboratorIds: flow.collaboratorIds,
-          collaborators: flow.collaborators,
-        };
-        store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
-      });
+  const loadFlows = useCallback(
+    async function (sessionUser: User) {
+      const flows = await firestoreService.getSomeFromDB(
+        'flows',
+        'collaboratorIds',
+        'array-contains',
+        sessionUser.id
+      );
+      if (flows.length > 0) {
+        flows.forEach((flow) => {
+          const flowEntity = {
+            id: flow.id,
+            title: flow.title,
+            ownerId: flow.ownerId,
+            nodes: JSON.parse(flow.stringifiedNodes),
+            edges: JSON.parse(flow.stringifiedEdges),
+            collaboratorIds: flow.collaboratorIds,
+            collaborators: flow.collaborators,
+          };
+          store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
+        });
 
-      store.dispatch(flowTabActions.setActiveFlowTab(flows[0].id));
-      setNodes(JSON.parse(flows[0].stringifiedNodes));
-      setEdges(JSON.parse(flows[0].stringifiedEdges));
-    }
-  };
+        store.dispatch(flowTabActions.setActiveFlowTab(flows[0].id));
+        setNodes(JSON.parse(flows[0].stringifiedNodes));
+        setEdges(JSON.parse(flows[0].stringifiedEdges));
+      }
+    },
+    [setEdges, setNodes]
+  );
   // This loads the initial user and flow data from the user
   useEffect(() => {
     let sessionUser = store.getState().user.userData;
@@ -107,7 +110,7 @@ const Dashboard = () => {
     } else {
       loadFlows(sessionUser as User);
     }
-  }, [setEdges, setNodes]);
+  }, [loadFlows]);
 
   const onConnect = useCallback(
     (params: any) => setEdges((eds) => addEdge(params, eds)),

@@ -20,7 +20,7 @@ export function SocketClient(props: SocketClientProps) {
   });
 
   useEffect(() => {
-    const socket = io('http://localhost:3000'); // Replace with your server URL
+    const socket = io('http://localhost:3000'); // replace with server URL
     setSocket(socket);
     socket.on('connect', () => {
       console.log('Connected to Socket.io server');
