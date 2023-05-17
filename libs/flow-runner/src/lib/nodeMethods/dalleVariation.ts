@@ -6,6 +6,8 @@ export function DalleVariation({
   inputs,
   msg,
 }: IMethodArguments): Promise<Record<string, unknown>> {
+  // @ts-expect-error no custom types for one line
+  const number = (inputs.numberVariations as number) || 1;
   return new Promise((resolve) => {
     if (!msg.payload || typeof msg.payload !== 'string') {
       resolve({
@@ -24,14 +26,14 @@ export function DalleVariation({
         .createImageVariation(
           // @ts-expect-error no custom types for one line
           inputs.image,
-          1,
+          number,
           '256x256'
         )
         .then((response) => {
           console.log('🤙 openAI response', response.data);
           resolve({
             ...msg,
-            response: response.data.data[0],
+            images: response.data.data,
           });
         });
     } catch (error) {
