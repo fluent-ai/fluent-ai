@@ -1,6 +1,9 @@
-import { useSelector } from "react-redux";
+
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
-import { flowRunnerSelectors } from "@tool-ai/state";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { flowRunnerActions, flowRunnerSelectors } from "@tool-ai/state";
+
 /* eslint-disable-next-line */
 export interface DalleGenerationDialogProps {}
 
@@ -12,6 +15,8 @@ interface IOutputs {
   };
 }
 function DalleGenerationDialog({id}:{id:string}) {
+  const dispatch = useDispatch();
+  const inputs = useSelector(flowRunnerSelectors.selectInput(id));
   const outputs = useSelector(flowRunnerSelectors.selectOutput(id)) as IOutputs;
   const state = useSelector(flowRunnerSelectors.selectState(id)) as IOutputs;
   console.log(JSON.stringify(outputs, null, 2));
@@ -23,10 +28,34 @@ function DalleGenerationDialog({id}:{id:string}) {
     description="Generate an image based on in incoming message (msg.payload) using OpenAI's Dall.e"
     >
       <div>{JSON.stringify(state)}</div>
+      <label className="mt-2.5">select amount of variations
+          <select aria-label="select amount of variations"
+            onChange={(e)=> dispatch(flowRunnerActions.setInput(
+              {
+                id,
+                nodeInputs: {
+                  ...inputs?.nodeInputs,
+                  numberVariations: e.target.value
+                }
+              }
+            ))}
+           defaultValue={1}>
+            <option value={1}>1</option>
+            <option value={2}>2</option>
+            <option value={3}>3</option>
+            <option value={4}>4</option>
+            <option value={5}>5</option>
+            <option value={6}>6</option>
+            <option value={7}>7</option>
+            <option value={8}>8</option>
+            <option value={9}>9</option>
+            <option value={10}>10</option>
+          </select>
+        </label>
       <div className="flex flex-col items-center justify-center">
         {url !== '' ? <img src={url} alt="Open AI" /> : <div>Run the flow to generate an image</div>}
       </div>
-      
+
 
 
     </InnerDialogStructure>
