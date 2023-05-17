@@ -244,22 +244,14 @@ const Dashboard = () => {
   return (
     <>
       <Header currentUser={currentUser} />
-      <div className="h-10 w-32 mt-2.5 ml-72 bg-white absolute shadow-md rounded-md z-10 text-black flex justify-between items-center">
-        <ButtonComponent
-          buttonContent="RUN"
-          type="button"
-          classes="icons"
-          ariaLabel="run flow"
-          clickHandler={runFlow}
-        />
-      </div>
+
 
       <div
         // onKeyDown={persistNewFlow}
         className="relative flex flex-col grow h-full md:flex-row"
       >
         <ReactFlowProvider>
-          <NodeSideBar />
+          <NodeSideBar runFlow={runFlow}/>
           <FlowTabs
             currentUserId={currentUser.id}
             flowCharts={currentFlows}
