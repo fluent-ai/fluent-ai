@@ -6,7 +6,6 @@ import {
   addEdge,
   useNodesState,
   useEdgesState,
-
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import NodeSideBar from '../../Navigation/NodeSideBar/NodeSideBar';
@@ -20,12 +19,7 @@ import {
   flowRunnerSelectors,
   flowTabActions,
 } from '@tool-ai/state';
-import {
-  User,
-  ButtonComponent,
-  saveFlow,
-  switchFlowTab,
-} from '@tool-ai/ui';
+import { User, ButtonComponent, saveFlow, switchFlowTab } from '@tool-ai/ui';
 import { useFlowRunner } from '@tool-ai/flow-runner';
 import * as firestoreService from '@libs/firestore-service';
 import { dispatchToStore } from '@libs/auth';
@@ -93,7 +87,6 @@ const Dashboard = () => {
   );
   const loadFlows = useCallback(
     async (sessionUser: User) => {
-
       const flows = await firestoreService.getSomeFromDB(
         'flows',
         'collaboratorIds',
@@ -123,35 +116,37 @@ const Dashboard = () => {
   );
 
   // This loads the initial user and flow data from the user
-  const InitialUser=  useCallback(async (auth:Auth) => {
-    console.log('🌈 auth', auth);
-    // console.log('🌈 auth', auth?.AuthImpl?.currentUser);
-    let sessionUser = store.getState().user.userData;
-    if (sessionUser.id === '') {
-      console.log('auth?.currentUser', auth?.currentUser);
-      const userId = auth?.currentUser?.uid;
-      if (userId) {
-        /* eslint-disable-next-line */
-        firestoreService
-          .getSomeFromDB('users', 'id', '==', userId)
-          .then((data) => {
-            if (data.length > 0) {
-              sessionUser = data[0] as User;
-            }
-          });
-      } else {
-        console.log('No user found, redirecting to login');
-        return;
+  const InitialUser = useCallback(
+    async (auth: Auth) => {
+      console.log('🌈 auth', auth);
+      // console.log('🌈 auth', auth?.AuthImpl?.currentUser);
+      let sessionUser = store.getState().user.userData;
+      if (sessionUser.id === '') {
+        console.log('auth?.currentUser', auth?.currentUser);
+        const userId = auth?.currentUser?.uid;
+        if (userId) {
+          /* eslint-disable-next-line */
+          firestoreService
+            .getSomeFromDB('users', 'id', '==', userId)
+            .then((data) => {
+              if (data.length > 0) {
+                sessionUser = data[0] as User;
+              }
+            });
+        } else {
+          console.log('No user found, redirecting to login');
+          return;
+        }
       }
-    }
-    console.log(
-      '🚀 ~ file: Dashboard.tsx:112 ~ useEffect ~ sessionUser:',
-      sessionUser.id
-    );
-    dispatchToStore(sessionUser as User);
-    loadFlows(sessionUser as User);
-  }, [loadFlows]);
-
+      console.log(
+        '🚀 ~ file: Dashboard.tsx:112 ~ useEffect ~ sessionUser:',
+        sessionUser.id
+      );
+      dispatchToStore(sessionUser as User);
+      loadFlows(sessionUser as User);
+    },
+    [loadFlows]
+  );
 
   useEffect(() => {
     if (auth) {
@@ -201,7 +196,6 @@ const Dashboard = () => {
         const item = NodeData.find((nodeItem) => nodeItem.type === type);
         if (item) return item.label;
       };
-
 
       const newNode = {
         id: uuidv4(),
