@@ -3,6 +3,8 @@ import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialog
 import { FileIcon, Cross1Icon } from '@radix-ui/react-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { flowRunnerActions, flowRunnerSelectors } from '@tool-ai/state';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../../lib/AccordionComponent/AccordionComponent';
+
 
 
 function TextFileInputDialog({id}:{id:string}) {
@@ -63,7 +65,8 @@ function TextFileInputDialog({id}:{id:string}) {
     <InnerDialogStructure
     title="Text File Input"
     description=" text file input description" >
-      <div className="flex items-center justify-center w-full">
+      <div title = "Upload">
+      <div  className="flex items-center justify-center w-full">
       <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-38 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
           <div className="flex flex-col items-center justify-center pt-5 pb-6">
               <svg aria-hidden="true" className="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
@@ -89,8 +92,9 @@ function TextFileInputDialog({id}:{id:string}) {
         </div>
         <div onClick={()=>handleFileDelete(file)}><Cross1Icon /></div>
         </div>)
-        }
-      <textarea
+        }</div>
+        <textarea
+        title = "Preview" 
         className="border-2 border-gray-light border-solid rounded-md w-full mt-2.5"
         placeholder="input your text"
         rows={10}
