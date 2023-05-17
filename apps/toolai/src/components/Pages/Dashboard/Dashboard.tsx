@@ -6,11 +6,13 @@ import {
   addEdge,
   useNodesState,
   useEdgesState,
+
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import NodeSideBar from '../../Navigation/NodeSideBar/NodeSideBar';
 import FlowTabs from '../../Navigation/FlowTabs/FlowTabs';
 import TemplateNode from '../../Nodes/TemplateNode/TemplateNode';
+import CommentNode from '../../Nodes/CommentNode/CommentNode';
 import Header from '../../Navigation/Header/Header';
 import {
   store,
@@ -31,6 +33,7 @@ import { NodeData } from '../../../nodeData';
 import { Auth, getAuth } from 'firebase/auth';
 
 const nodeTypes = {
+  commentNode: CommentNode,
   textFileInput: TemplateNode,
   deepl: TemplateNode,
   textInput: TemplateNode,
@@ -90,7 +93,7 @@ const Dashboard = () => {
   );
   const loadFlows = useCallback(
     async (sessionUser: User) => {
-      
+
       const flows = await firestoreService.getSomeFromDB(
         'flows',
         'collaboratorIds',
