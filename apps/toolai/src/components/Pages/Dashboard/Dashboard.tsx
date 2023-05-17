@@ -44,6 +44,7 @@ import {
 } from '@radix-ui/react-icons';
 import { ReactComponent as OpenAiLogo } from '../../../assets/OpenAI_Logo.svg';
 import { ReactComponent as DeeplLogo } from '../../../assets/Deepl_Logo.svg';
+import { Auth, getAuth } from 'firebase/auth';
 
 const nodeTypes = {
   textFileInput: TemplateNode,
@@ -78,6 +79,10 @@ const Dashboard = () => {
     initials: '',
     flows: [],
   });
+  let auth: Auth | null = null;
+  useEffect(() => {
+    auth = getAuth();
+  }, []);
   // --------------------------------------     Hooks & State - Flow Runner   --------------------------------------
   const { executeFlow, outputs, states } = useFlowRunner();
   const dispatch = useDispatch();
@@ -153,25 +158,35 @@ const Dashboard = () => {
   );
 
   // This loads the initial user and flow data from the user
-  useEffect(() => {
+  async function InitialUser() {
+    console.log('auth', auth);
     let sessionUser = store.getState().user.userData;
     if (sessionUser.id === '') {
-      // for local development only
-      firestoreService
-        .getSomeFromDB('users', 'id', '==', 'testId_2')
-        .then((data) => {
-          if (data.length > 0) {
-            sessionUser = data[0] as User;
-          } else {
-            // sessionUser = mockUser;
-            firestoreService.writeToDB('users', sessionUser);
-          }
-          dispatchToStore(sessionUser as User);
-          loadFlows(sessionUser as User);
-        });
-    } else {
-      loadFlows(sessionUser as User);
+      console.log('auth', auth?.currentUser);
+      const userId = auth?.currentUser?.uid;
+      if (userId) {
+        /* eslint-disable-next-line */
+        firestoreService
+          .getSomeFromDB('users', 'id', '==', userId)
+          .then((data) => {
+            if (data.length > 0) {
+              sessionUser = data[0] as User;
+            }
+          });
+      } else {
+        console.log('No user found, redirecting to login');
+        return;
+      }
     }
+    console.log(
+      '🚀 ~ file: Dashboard.tsx:112 ~ useEffect ~ sessionUser:',
+      sessionUser.id
+    );
+    dispatchToStore(sessionUser as User);
+    loadFlows(sessionUser as User);
+  }
+  useEffect(() => {
+    InitialUser();
   }, [setEdges, setNodes, loadFlows]);
 
   const onConnect = useCallback(
