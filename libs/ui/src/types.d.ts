@@ -59,18 +59,20 @@ interface NodeDialogProps {
   setNodes: any;
   activeNodeId: string;
 }
-interface FlowCollaborators {
+interface FlowCollaborator {
   id: string;
   name: string;
   initials: string;
 }
-interface UserFlows {
+
+interface Flow {
   id: string;
   title: string;
+  ownerId: string;
   stringifiedNodes: string;
   stringifiedEdges: string;
-  owner: boolean;
-  colaborators: FlowCollaborators[];
+  collaboratorIds: string[];
+  collaborators: FlowCollaborator[];
 }
 
 interface User {
@@ -78,11 +80,12 @@ interface User {
   name: string;
   initials: string;
   email: string;
-  flows: UserFlows[];
+  flows: string[];
   profileImg?: string;
 }
 
 interface FlowTabsDropdownProps {
+  flowChartOwner: string;
   users: FlowCollaborators[];
   onSave: () => void;
 }

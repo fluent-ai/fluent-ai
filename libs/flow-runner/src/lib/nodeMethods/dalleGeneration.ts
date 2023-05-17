@@ -1,7 +1,7 @@
 import { Configuration, OpenAIApi } from 'openai';
 import { IMethodArguments } from '../useFlowRunner';
 
-export function imageCreationAi({
+export function dalleGeneration({
   globals,
   inputs,
   msg,
@@ -17,9 +17,13 @@ export function imageCreationAi({
       const configuration = new Configuration({
         apiKey: globals?.openAiApiKey as string,
       });
-      const openai = new OpenAIApi(configuration);
-      // console.log(`🤙 Making call to openAI with key ${globals?.openAiApiKey}`);
 
+      const openai = new OpenAIApi(configuration);
+      console.log(
+        `🤙 Making call to openAI with configuration ${JSON.stringify(
+          configuration
+        )}`
+      );
       openai
         .createImage({
           // @ts-expect-error no custom types for one line
@@ -31,7 +35,7 @@ export function imageCreationAi({
           // console.log('🤙 openAI response', response.data.data[0]);
           resolve({
             ...msg,
-            image: response.data.data[0],
+            image: response?.data?.data[0],
           });
         });
     } catch (error) {

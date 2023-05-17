@@ -28,6 +28,8 @@ export * from './ui-interactions/switch-flowtab';
 export * from './ui-interactions/delete-flow';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 export * from './ui-interactions/add-flowtab';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+export * from './ui-interactions/remove-collaborator';
 
 export * from './types.d';
 export * from './mocks';

@@ -9,8 +9,9 @@ function InputDialog({id}:{id:string}) {
 
   return (
     <InnerDialogStructure
-    title="Text Input"
-    description="text input description">
+      title="Text Input"
+      description="text input description"
+    >
       <textarea
         className="border-2 border-gray-light border-solid rounded-md w-full"
         placeholder="input your text"
@@ -34,4 +35,4 @@ function InputDialog({id}:{id:string}) {
   );
 }
 
-export {InputDialog};
+export { InputDialog };

@@ -1,9 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
-import { handleChange} from "../functions";
 import { flowRunnerActions, flowRunnerSelectors } from "@tool-ai/state";
-/* eslint-disable-next-line */
-export interface UserFunctionDialogProps {}
 
 function UserFunctionDialog({id}:{id:string}) {
   const dispatch = useDispatch();
@@ -11,8 +8,9 @@ function UserFunctionDialog({id}:{id:string}) {
 
   return (
     <InnerDialogStructure
-    title="User Function"
-    description="user function description" >
+      title="User Function"
+      description="user function description"
+    >
       <textarea
         className="border-2 border-gray-light border-solid rounded-md w-full"
         placeholder="Write your function here..."
@@ -34,4 +32,4 @@ function UserFunctionDialog({id}:{id:string}) {
   );
 }
 
-export {UserFunctionDialog};
+export { UserFunctionDialog };
