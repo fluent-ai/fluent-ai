@@ -23,7 +23,7 @@ import {
 import { useFlowRunner } from '@tool-ai/flow-runner';
 import * as firestoreService from '@libs/firestore-service';
 import { dispatchToStore } from '@libs/auth';
-import { FileIcon, MixIcon, TextIcon, DoubleArrowRightIcon, ArrowRightIcon, ArrowLeftIcon, FrameIcon, MagnifyingGlassIcon, GearIcon, CameraIcon, GlobeIcon, ArrowDownIcon } from '@radix-ui/react-icons';
+import { NodeData } from '../../../nodeData';
 import {ReactComponent as OpenAiLogo}  from  '../../../assets/OpenAI_Logo.svg';
 import {ReactComponent as DeeplLogo}  from  '../../../assets/Deepl_Logo.svg';
 
@@ -198,39 +198,16 @@ const Dashboard = () => {
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
       });
-      const getData = (label:string) => {
-        switch (label) {
-          case 'textFileInput':
-            return {label:'Text File Input', icon:<FileIcon />};
-          case 'textInput':
-            return {label:'Text Input', icon:<TextIcon/>};
-          case 'json':
-            return {label:'JSON', icon:<FileIcon />};
-          case 'userFunction':
-            return {label:'User Function', icon:<FrameIcon />};
-          case 'template':
-            return {label:'Template', icon:<MixIcon />};
-          case 'preview':
-            return {label:'Preview', icon:<CameraIcon />};
-          case 'openAi':
-            return {label:'OpenAI', icon:<OpenAiLogo />};
-          case 'deepl':
-            return {label:'DeepL', icon:<DeeplLogo />};
-          case 'imageAi':
-            return {label:'Image AI', icon:<FileIcon />};
-          case 'dalleGeneration':
-            return {label:'Dall.e Generation', icon:<OpenAiLogo />};
-          case 'download':
-            return {label:'Download', icon:<FileIcon />};
-          default:
-            return null;
-        }
+      const getData = (type:string) => {
+       const item = NodeData.find(nodeItem => nodeItem.type === type)
+      if(item) return item.label;
       }
+
       const newNode = {
         id: uuidv4(),
         type,
         position,
-        data: {...getData(`${type}`)},
+        data: {label: getData(`${type}`)},
       };
       setNodes((nds) => nds.concat(newNode));
     },
