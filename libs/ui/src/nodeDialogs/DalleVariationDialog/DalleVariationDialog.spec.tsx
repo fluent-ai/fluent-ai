@@ -1,10 +1,12 @@
 import { render } from '@testing-library/react';
 
-import ImageAiDialog from './ImageAiDialog';
+import {DalleVariationDialog} from './DalleVariationDialog';
 
 describe('ImageAiDialog', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<ImageAiDialog />);
+    const { baseElement } = render(<DalleVariationDialog
+      id='test'
+       />);
     expect(baseElement).toBeTruthy();
   });
 });

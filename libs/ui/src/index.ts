@@ -16,7 +16,7 @@ export * from './lib/IconButtonComponent/IconButtonComponent';
 export * from './lib/DialogComponent/DialogComponent';
 export * from './lib/SettingsDialog/SettingsDialog';
 export * from './lib/ShareDialog/ShareDialog';
-export * from './nodeDialogs/ImageAiDialog/ImageAiDialog';
+export * from './nodeDialogs/DalleVariationDialog/DalleVariationDialog';
 export * from './nodeDialogs/DownloadDialog/DownloadDialog';
 
 

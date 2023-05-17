@@ -6,7 +6,7 @@ import { flowRunnerActions, flowRunnerSelectors } from "@tool-ai/state";
 export interface ImageAiDialogProps {}
 
 
-function ImageAiDialog({id}:{id:string}) {
+function DalleVariationDialog({id}:{id:string}) {
   const dispatch = useDispatch();
   const inputs = useSelector(flowRunnerSelectors.selectInput(id));
   const [imageSelected, setImageSelected] = useState<File | null>(null);
@@ -97,4 +97,4 @@ function ImageAiDialog({id}:{id:string}) {
   );
 }
 
-export {ImageAiDialog};
+export {DalleVariationDialog};
