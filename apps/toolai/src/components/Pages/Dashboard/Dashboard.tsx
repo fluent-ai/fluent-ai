@@ -195,14 +195,14 @@ const Dashboard = () => {
       });
       const getData = (type: string) => {
         const item = NodeData.find((nodeItem) => nodeItem.type === type);
-        if (item) return item.label;
+        if (item) return item;
       };
 
       const newNode = {
         id: uuidv4(),
         type,
         position,
-        data: { label: getData(`${type}`) },
+        data: { ...getData(`${type}`) },
       };
       setNodes((nds) => nds.concat(newNode));
     },

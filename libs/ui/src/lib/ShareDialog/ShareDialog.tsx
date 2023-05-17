@@ -17,13 +17,13 @@ function ShareDialog(props: ShareDialogProps) {
   return (
     <DialogComponent
     trigger={
-      <div className='flex justify-between text-xs pl-[25px] H-[25px] pr-[5px]'
+      <div className='flex justify-between text-primary text-base pl-[25px] H-[25px] pr-[5px] cursor-pointer'
       >
-       {props.title}<div className={'ml-auto pl-5 text-gray-500 [data-highlighted]:text-primary [data-disabled]:text-gray-light'}>⌘+N</div>
+       {props.title}<div className={'ml-auto pl-5 text-gray-light [data-highlighted]:text-primary [data-disabled]:text-primary'}>⌘+N</div>
 
       </div>
     }
-    title="Share"
+    title={props.title}
     closeButton={
     <ButtonComponent
       type='button'

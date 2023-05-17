@@ -10,7 +10,7 @@ function IconButtonComponent(props: ButtonProps) {
     items-center
     justify-center
     text-black bg-white
-    rounded-full
+    rounded-md
     focus:outline-none
     `;
 
@@ -20,6 +20,7 @@ function IconButtonComponent(props: ButtonProps) {
       aria-label={props.ariaLabel}
       className={`${iconButton} ${props.classes}`}
       onClick={props.clickHandler}
+      style={props.style}
     >
     {props.buttonContent}
   </button>

@@ -1,4 +1,4 @@
-import {BsFiletypeTxt, BsDownload, BsTextareaT, BsBraces, BsLayoutTextWindowReverse, BsEye, BsImage, BsImages, BsFiletypeJson, BsChatRightText} from 'react-icons/bs';
+import {BsFiletypeTxt, BsDownload, BsTextareaT, BsBraces, BsLayoutTextWindowReverse, BsEye, BsImage, BsImages, BsFiletypeJson, BsTranslate, BsChatRightText} from 'react-icons/bs';
 
 import {IoImageOutline, IoImagesOutline} from 'react-icons/io5';
 import {SiOpenai} from 'react-icons/si';
@@ -17,32 +17,32 @@ export const groups = [
   {
     id: 'group-inputs',
     label: 'inputs',
-    color: "theme(colors.blue.0)"
+    color: "#78dce8"
   },
   {
     id: 'group-process',
     label: 'process',
-    color: "theme(colors.red)"
+    color: "#fc9867"
   },
   {
     id: 'group-extras',
     label: 'extras',
-    color: "theme(colors.gray)"
+    color: "#d3dce6"
   },
   {
     id: 'group-outputs',
     label: 'outputs',
-    color: "theme(colors.green)"
+    color: "#a9dc76"
   },
   {
     id: 'group-openai',
     label: 'open AI',
-    color: "theme(colors.yellow)"
+    color: "#ffd866"
   },
   {
     id: 'group-deepl',
     label: 'Deepl',
-    color: "theme(colors.purple)"
+    color: "#ab9df2"
   }
 ]
 export const NodeData: NodeItemData[] = [
@@ -77,22 +77,10 @@ export const NodeData: NodeItemData[] = [
       group: 'group-process',
       icon:<BsLayoutTextWindowReverse />},
     {
-      type: 'preview',
-      label:'Preview',
-      group: 'group-outputs',
-      icon:<BsEye />
-    },
-    {
       type: 'openAi',
       label:'OpenAI',
       group: 'group-openai',
       icon:<SiOpenai />
-    },
-    {
-      type: 'deepl',
-      label:'DeepL',
-      group: 'group-deepl',
-      icon:<DeeplLogo />
     },
     {
       type: 'dalleVariation',
@@ -105,6 +93,18 @@ export const NodeData: NodeItemData[] = [
       label:'Dall.e Generation',
       group: 'group-openai',
       icon:<IoImageOutline />
+    },
+    {
+      type: 'deepl',
+      label:'DeepL',
+      group: 'group-deepl',
+      icon:<BsTranslate />
+    },
+    {
+      type: 'preview',
+      label:'Preview',
+      group: 'group-outputs',
+      icon:<BsEye />
     },
     {
       type: 'download',
