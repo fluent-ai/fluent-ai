@@ -4,17 +4,15 @@ import { IMethodArguments } from '../useFlowRunner';
 // Define the API endpoint
 const DEEPL_API_ENDPOINT = 'https://api-free.deepl.com/v2/translate';
 
-
-
-export async function deeplAi({
+export async function deepl({
   globals,
   inputs,
   msg,
 }: IMethodArguments): Promise<Record<string, unknown>> {
-  const authKey = globals?.deeplApiKey as string || '';
-  const sourceText = msg.payload as string || '';
-  const targetLang = inputs?.language as string || 'en-GB';
-  const formality = inputs?.formality as string || 'default';
+  const authKey = (globals?.deeplApiKey as string) || '';
+  const sourceText = (msg.payload as string) || '';
+  const targetLang = (inputs?.language as string) || 'en-GB';
+  const formality = (inputs?.formality as string) || 'default';
 
   const data = {
     auth_key: authKey,
@@ -44,7 +42,8 @@ export async function deeplAi({
       .catch((error: AxiosError) => {
         console.error(error);
         resolve({
-          ...msg, error:'DeepL API error : ' + error.message
+          ...msg,
+          error: 'DeepL API error : ' + error.message,
         });
       });
   });

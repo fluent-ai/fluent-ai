@@ -1,5 +1,5 @@
 export * from './nodeMethods/csv';
-export * from './nodeMethods/deeplAi';
+export * from './nodeMethods/deepl';
 export * from './nodeMethods/download';
 export * from './nodeMethods/imageCreationAi';
 export * from './nodeMethods/imageFileInput';
