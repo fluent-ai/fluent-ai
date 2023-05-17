@@ -23,6 +23,9 @@ import {
 import { useFlowRunner } from '@tool-ai/flow-runner';
 import * as firestoreService from '@libs/firestore-service';
 import { dispatchToStore } from '@libs/auth';
+import { FileIcon, MixIcon, TextIcon, DoubleArrowRightIcon, ArrowRightIcon, ArrowLeftIcon, FrameIcon, MagnifyingGlassIcon, GearIcon, CameraIcon, GlobeIcon, ArrowDownIcon } from '@radix-ui/react-icons';
+import {ReactComponent as OpenAiLogo}  from  '../../../assets/OpenAI_Logo.svg';
+import {ReactComponent as DeeplLogo}  from  '../../../assets/Deepl_Logo.svg';
 
 const nodeTypes = {
   textFileInput: TemplateNode,
@@ -33,8 +36,10 @@ const nodeTypes = {
   userFunction: TemplateNode,
   preview: TemplateNode,
   openAi: TemplateNode,
+  dalleGeneration: TemplateNode,
   imageAi: TemplateNode,
-  download: TemplateNode
+  download: TemplateNode,
+
 };
 
 
@@ -163,28 +168,30 @@ const Dashboard = () => {
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
       });
-      const getLabel = (label:string) => {
+      const getData = (label:string) => {
         switch (label) {
           case 'textFileInput':
-            return 'Text File Input';
+            return {label:'Text File Input', icon:<FileIcon />};
           case 'textInput':
-            return 'Text Input';
+            return {label:'Text Input', icon:<TextIcon/>};
           case 'json':
-            return 'JSON';
+            return {label:'JSON', icon:<FileIcon />};
           case 'userFunction':
-            return 'User Function';
+            return {label:'User Function', icon:<FrameIcon />};
           case 'template':
-            return 'Template';
+            return {label:'Template', icon:<MixIcon />};
           case 'preview':
-            return 'Preview';
+            return {label:'Preview', icon:<CameraIcon />};
           case 'openAi':
-            return 'OpenAI';
+            return {label:'OpenAI', icon:<OpenAiLogo />};
           case 'deepl':
-            return 'DeepL';
+            return {label:'DeepL', icon:<DeeplLogo />};
           case 'imageAi':
-            return 'Image AI';
+            return {label:'Image AI', icon:<FileIcon />};
+          case 'dalleGeneration':
+            return {label:'Dall.e Generation', icon:<OpenAiLogo />};
           case 'download':
-            return 'Download';
+            return {label:'Download', icon:<FileIcon />};
           default:
             return null;
         }
@@ -193,7 +200,7 @@ const Dashboard = () => {
         id: uuidv4(),
         type,
         position,
-        data: {label: getLabel(`${type}`)},
+        data: {...getData(`${type}`)},
       };
       setNodes((nds) => nds.concat(newNode));
     },

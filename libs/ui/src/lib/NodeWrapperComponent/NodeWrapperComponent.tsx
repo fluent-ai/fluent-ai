@@ -9,7 +9,8 @@ function NodeWrapperComponent(props: NodeWrapperComponentProps) {
       <Handle
         type="target"
         position={Position.Top}
-        style={{ background: '#555' }}
+        style={{ background: '#444' }}
+
         onConnect={(params) => console.log('handle onConnect', params)}
         isConnectable={props.isConnectable}
       />

@@ -3,6 +3,7 @@ import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialog
 import { useDispatch, useSelector } from "react-redux";
 import { flowRunnerActions, flowRunnerSelectors } from "@tool-ai/state";
 
+
 interface Items {
   code:string;
   name:string;
@@ -10,36 +11,6 @@ interface Items {
 
 
 const langWithFormality = ['DE', 'FR', 'IT', 'ES', 'NL', 'PL', 'PT-PT', 'PT-BR', 'RU'];
-const deeplLanguages: Items[] = [
-  { code: 'BG', name: 'Bulgarian' },
-  { code: 'CS', name: 'Czech' },
-  { code: 'DA', name: 'Danish' },
-  { code: 'DE', name: 'German' },
-  { code: 'EL', name: 'Greek' },
-  { code: 'EN-GB', name: 'English (UK)' },
-  { code: 'EN-US', name: 'English (US)' },
-  { code: 'EN', name: 'English' },
-  { code: 'ES', name: 'Spanish' },
-  { code: 'ET', name: 'Estonian' },
-  { code: 'FI', name: 'Finnish' },
-  { code: 'FR', name: 'French' },
-  { code: 'HU', name: 'Hungarian' },
-  { code: 'IT', name: 'Italian' },
-  { code: 'JA', name: 'Japanese' },
-  { code: 'LT', name: 'Lithuanian' },
-  { code: 'LV', name: 'Latvian' },
-  { code: 'NL', name: 'Dutch' },
-  { code: 'PL', name: 'Polish' },
-  { code: 'PT-PT', name: 'Portuguese (Portugal)' },
-  { code: 'PT-BR', name: 'Portuguese (Brazil)' },
-  { code: 'PT', name: 'Portuguese' },
-  { code: 'RO', name: 'Romanian' },
-  { code: 'RU', name: 'Russian' },
-  { code: 'SK', name: 'Slovak' },
-  { code: 'SL', name: 'Slovenian' },
-  { code: 'SV', name: 'Swedish' },
-  { code: 'ZH', name: 'Chinese' }
-];
 
 const formalities: Items[] = [
   {code: 'default', name: 'default'},
@@ -49,7 +20,46 @@ const formalities: Items[] = [
   {code: 'prefer_less', name: 'more informal'}
 ]
 
+ const langWithFormality = ['DE', 'FR', 'IT', 'ES', 'NL', 'PL', 'PT-PT', 'PT-BR', 'RU'];
+  const deeplLanguages: Items[] = [
+    { code: 'BG', name: 'Bulgarian' },
+    { code: 'CS', name: 'Czech' },
+    { code: 'DA', name: 'Danish' },
+    { code: 'DE', name: 'German' },
+    { code: 'EL', name: 'Greek' },
+    { code: 'EN-GB', name: 'English (UK)' },
+    { code: 'EN-US', name: 'English (US)' },
+    { code: 'EN', name: 'English' },
+    { code: 'ES', name: 'Spanish' },
+    { code: 'ET', name: 'Estonian' },
+    { code: 'FI', name: 'Finnish' },
+    { code: 'FR', name: 'French' },
+    { code: 'HU', name: 'Hungarian' },
+    { code: 'IT', name: 'Italian' },
+    { code: 'JA', name: 'Japanese' },
+    { code: 'LT', name: 'Lithuanian' },
+    { code: 'LV', name: 'Latvian' },
+    { code: 'NL', name: 'Dutch' },
+    { code: 'PL', name: 'Polish' },
+    { code: 'PT-PT', name: 'Portuguese (Portugal)' },
+    { code: 'PT-BR', name: 'Portuguese (Brazil)' },
+    { code: 'PT', name: 'Portuguese' },
+    { code: 'RO', name: 'Romanian' },
+    { code: 'RU', name: 'Russian' },
+    { code: 'SK', name: 'Slovak' },
+    { code: 'SL', name: 'Slovenian' },
+    { code: 'SV', name: 'Swedish' },
+    { code: 'ZH', name: 'Chinese' }
+  ];
+
 function DeeplDialog({id}:{id:string}) {
+
+  const outputs = useSelector(flowRunnerSelectors.selectOutput(id));
+  let response = outputs?.nodeOutputs?.payload as string;
+  response = '' + response
+
+  const [formalityDisabled, setFormalityDisabled] = useState(true);
+
   const dispatch = useDispatch();
   const inputs = useSelector(flowRunnerSelectors.selectInput(id));
 
@@ -100,11 +110,13 @@ function DeeplDialog({id}:{id:string}) {
           {formalities.length > 0 && formalities.map((formality) => <option value={formality.code}>{formality.name}</option>)}
         </select>
 
+
         {
         !formalityAvailable && <small className="mt-2 text-sm text-gray-light">
           Formality is not available for {deeplLanguages.find((lang) => lang.code === inputs?.nodeInputs?.language)?.name}
           </small>
         }
+
         </div>
       </InnerDialogStructure>
     </div>

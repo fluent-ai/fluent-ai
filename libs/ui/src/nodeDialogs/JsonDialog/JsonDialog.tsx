@@ -9,7 +9,7 @@ function JsonDialog({id}:{id:string}) {
     <InnerDialogStructure
     title="JSON"
     description={
-    <div className="overflow-y-scroll">
+      <>
       JavaScript Object Notation is a lightweight data-interchange format.
       <br/>It is easy for humans to read and write.
       <br/>It is easy for machines to parse and generate.
@@ -28,7 +28,7 @@ function JsonDialog({id}:{id:string}) {
       <br/><b>Usage</b>
       <br/> If the JSON Node receives a string, it tries to parse it as JSON.
       <br/> If the JSON Node receives an object, it tries to stringify it as JSON.
-    </div>
+    </>
     }>
 
       <pre className="text-sm p-2">
