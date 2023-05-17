@@ -20,7 +20,6 @@ const formalities: Items[] = [
   {code: 'prefer_less', name: 'more informal'}
 ]
 
- const langWithFormality = ['DE', 'FR', 'IT', 'ES', 'NL', 'PL', 'PT-PT', 'PT-BR', 'RU'];
   const deeplLanguages: Items[] = [
     { code: 'BG', name: 'Bulgarian' },
     { code: 'CS', name: 'Czech' },

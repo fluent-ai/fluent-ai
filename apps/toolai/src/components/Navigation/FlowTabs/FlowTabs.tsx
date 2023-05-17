@@ -27,7 +27,7 @@ interface FlowTabsProps {
   flowCharts: UserFlows[];
   reactFlowWrapper: any;
   nodes: Node<{ label: string }, string | undefined>[];
-  edges: Edge<any>[];
+  edges: Edge[];
   onNodesChange: any;
   onEdgesChange: any;
   setNodes: any;
