@@ -6,12 +6,7 @@ describe('TemplateDialog', () => {
   it('should render successfully', () => {
     const { baseElement } = render(
     <TemplateDialog
-      isOpen={true}
-      onClose={()=>{console.log('onClose')}}
-      activeDialog='template'
-      nodes={[]}
-      setNodes={()=>console.log('setNodes')}
-      activeNodeId='test' />
+      id='test' />
     );
     expect(baseElement).toBeTruthy();
   });

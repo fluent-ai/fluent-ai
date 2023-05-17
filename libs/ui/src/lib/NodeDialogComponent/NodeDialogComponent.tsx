@@ -8,7 +8,7 @@ import { PreviewDialog } from '../../nodeDialogs/PreviewDialog/PreviewDialog';
 import { OpenAIDialog } from '../../nodeDialogs/OpenAIDialog/OpenAIDialog';
 import { TextFileInputDialog } from '../../nodeDialogs/TextFileInputDialog/TextFileInputDialog';
 import { DeeplDialog } from '../../nodeDialogs/DeeplDialog/DeeplDialog';
-import { ImageAiDialog } from '../../nodeDialogs/ImageAiDialog/ImageAiDialog';
+import { DalleVariationDialog } from '../../nodeDialogs/DalleVariationDialog/DalleVariationDialog';
 import { DownloadDialog } from '../../nodeDialogs/DownloadDialog/DownloadDialog';
 import { DalleGenerationDialog } from '../../nodeDialogs/DalleGenerationDialog/DalleGenerationDialog';
 
@@ -33,7 +33,7 @@ function NodeDialogComponent(props: NodeDialogProps) {
       case 'deepl':
         return <DeeplDialog id={props.activeNodeId} />;
       case 'dalleVariation':
-        return <ImageAiDialog id={props.activeNodeId} />;
+        return <DalleVariationDialog id={props.activeNodeId} />;
       case 'dalleGeneration':
         return <DalleGenerationDialog id={props.activeNodeId} />;
       case 'download':

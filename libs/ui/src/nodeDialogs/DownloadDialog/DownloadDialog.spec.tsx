@@ -4,7 +4,9 @@ import {DownloadDialog} from './DownloadDialog';
 
 describe('DownloadDialog', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<DownloadDialog />);
+    const { baseElement } = render(<DownloadDialog
+      id='test'
+       />);
     expect(baseElement).toBeTruthy();
   });
 });

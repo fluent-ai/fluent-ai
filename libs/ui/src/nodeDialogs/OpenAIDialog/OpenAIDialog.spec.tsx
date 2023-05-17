@@ -5,12 +5,7 @@ import {OpenAIDialog} from './OpenAIDialog';
 describe('OpenAIDialog', () => {
   it('should render successfully', () => {
     const { baseElement } = render(<OpenAIDialog
-      isOpen={true}
-      onClose={()=>{console.log('onClose')}}
-      activeDialog='openAi'
-      nodes={[]}
-      setNodes={()=>console.log('setNodes')}
-      activeNodeId='test'
+      id='test'
        />);
     expect(baseElement).toBeTruthy();
   });
