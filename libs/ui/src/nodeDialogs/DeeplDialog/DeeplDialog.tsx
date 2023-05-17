@@ -19,8 +19,6 @@ const formalities: Items[] = [
   {code: 'prefer_more', name: 'more formal'},
   {code: 'prefer_less', name: 'more informal'}
 ]
-
- const langWithFormality = ['DE', 'FR', 'IT', 'ES', 'NL', 'PL', 'PT-PT', 'PT-BR', 'RU'];
   const deeplLanguages: Items[] = [
     { code: 'BG', name: 'Bulgarian' },
     { code: 'CS', name: 'Czech' },
@@ -53,15 +51,13 @@ const formalities: Items[] = [
   ];
 
 function DeeplDialog({id}:{id:string}) {
-
+  const dispatch = useDispatch();
+  const inputs = useSelector(flowRunnerSelectors.selectInput(id));
   const outputs = useSelector(flowRunnerSelectors.selectOutput(id));
   let response = outputs?.nodeOutputs?.payload as string;
   response = '' + response
 
-  const [formalityDisabled, setFormalityDisabled] = useState(true);
 
-  const dispatch = useDispatch();
-  const inputs = useSelector(flowRunnerSelectors.selectInput(id));
 
   const formalityAvailable = langWithFormality.includes(inputs?.nodeInputs?.language as string);
 
@@ -116,6 +112,7 @@ function DeeplDialog({id}:{id:string}) {
           Formality is not available for {deeplLanguages.find((lang) => lang.code === inputs?.nodeInputs?.language)?.name}
           </small>
         }
+        <pre className="mt-2 p-2 border-2 border-solid border-gray-light rounded-md text-sm text-gray-light">{response}</pre>
 
         </div>
       </InnerDialogStructure>
