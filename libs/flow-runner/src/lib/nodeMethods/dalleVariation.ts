@@ -1,7 +1,7 @@
 import { Configuration, OpenAIApi } from 'openai';
 import { IMethodArguments } from '../useFlowRunner';
 
-export function imageCreationAi({
+export function DalleVariation({
   globals,
   inputs,
   msg,

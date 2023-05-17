@@ -26,6 +26,7 @@ import { dispatchToStore } from '@libs/auth';
 import { NodeData } from '../../../nodeData';
 import { Auth, getAuth } from 'firebase/auth';
 
+
 const nodeTypes = {
   commentNode: CommentNode,
   textFileInput: TemplateNode,
@@ -37,7 +38,7 @@ const nodeTypes = {
   preview: TemplateNode,
   openAi: TemplateNode,
   dalleGeneration: TemplateNode,
-  imageAi: TemplateNode,
+  dalleVariation: TemplateNode,
   download: TemplateNode,
 };
 

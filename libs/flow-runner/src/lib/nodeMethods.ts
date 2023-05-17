@@ -3,6 +3,7 @@ export * from './nodeMethods/deepl';
 export * from './nodeMethods/download';
 export * from './nodeMethods/dalleGeneration';
 export * from './nodeMethods/imageFileInput';
+export * from './nodeMethods/dalleVariation';
 export * from './nodeMethods/json';
 export * from './nodeMethods/openAi';
 export * from './nodeMethods/preview';
