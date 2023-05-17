@@ -1,14 +1,24 @@
 import { useState } from "react";
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
+import { useDispatch, useSelector } from "react-redux";
+import { flowRunnerActions, flowRunnerSelectors } from "@tool-ai/state";
+
 
 interface Items {
   code:string;
   name:string;
 }
 
-function DeeplDialog({id}:{id:string}) {
-  const [formalityDisabled, setFormalityDisabled] = useState(true);
-  const langWithFormality = ['DE', 'FR', 'IT', 'ES', 'NL', 'PL', 'PT-PT', 'PT-BR', 'RU'];
+
+const langWithFormality = ['DE', 'FR', 'IT', 'ES', 'NL', 'PL', 'PT-PT', 'PT-BR', 'RU'];
+
+const formalities: Items[] = [
+  {code: 'default', name: 'default'},
+  {code: 'more', name: 'formal'},
+  {code: 'less', name: 'informal'},
+  {code: 'prefer_more', name: 'more formal'},
+  {code: 'prefer_less', name: 'more informal'}
+]
   const deeplLanguages: Items[] = [
     { code: 'BG', name: 'Bulgarian' },
     { code: 'CS', name: 'Czech' },
@@ -40,22 +50,44 @@ function DeeplDialog({id}:{id:string}) {
     { code: 'ZH', name: 'Chinese' }
   ];
 
-  const formalities: Items[] = [
-    {code: 'default', name: 'default'},
-    {code: 'more', name: 'formal'},
-    {code: 'less', name: 'informal'},
-    {code: 'prefer_more', name: 'more formal'},
-    {code: 'prefer_less', name: 'more informal'}
+function DeeplDialog({id}:{id:string}) {
+  const dispatch = useDispatch();
+  const inputs = useSelector(flowRunnerSelectors.selectInput(id));
+  const outputs = useSelector(flowRunnerSelectors.selectOutput(id));
+  let response = outputs?.nodeOutputs?.payload as string;
+  response = '' + response
 
-  ]
 
-    function handleFormalityChange(e: React.ChangeEvent<HTMLSelectElement>) {
-      if(langWithFormality.includes(e.target.value)) {
-        setFormalityDisabled(false);
-      } else {
-        setFormalityDisabled(true);
-      }
-    }
+
+  const formalityAvailable = langWithFormality.includes(inputs?.nodeInputs?.language as string);
+
+  const onLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    console.log('🌈',e.target.value);
+    dispatch(
+      flowRunnerActions.setInput(
+        {
+          id,
+          nodeInputs: {
+            ...inputs?.nodeInputs,
+            language: e.target.value
+          }
+        })
+    )
+  }
+
+  const onFormalityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    console.log('🌈',e.target.value);
+    dispatch(
+      flowRunnerActions.setInput(
+        {
+          id,
+          nodeInputs: {
+            ...inputs?.nodeInputs,
+            formality: e.target.value
+          }
+        })
+    )
+  }
 
   return (
     <div>
@@ -63,17 +95,25 @@ function DeeplDialog({id}:{id:string}) {
         title="Deepl Translate"
         description="Deepl Translate dialog">
         <div className="flex flex-col gap-2">
+
         <label htmlFor="language-select" className="block">Select language</label>
-        <select id="language-select" title="language" onChange={handleFormalityChange} className="border-2 border-solid border-gray-light rounded-md p-2.5">
+        <select id="language-select" title="language" onChange={onLanguageChange} className="border-2 border-solid border-gray-light rounded-md p-2.5">
           {deeplLanguages.length > 0 && deeplLanguages.map((lang) =>  <option value={lang.code}>{lang.name}</option>)}
         </select>
 
         <label htmlFor="formality-select" className={`block`}>Select formality</label>
-        <select id="formality-select" title="formality" disabled={formalityDisabled} className="border-2 border-solid border-gray-light rounded-md p-2.5 disabled:text-gray-light">
+        <select id="formality-select" title="formality" onChange={onFormalityChange} disabled={!formalityAvailable} className="border-2 border-solid border-gray-light rounded-md p-2.5 disabled:text-gray-light">
           {formalities.length > 0 && formalities.map((formality) => <option value={formality.code}>{formality.name}</option>)}
         </select>
 
-        {formalityDisabled && <small className="mt-2 text-sm text-gray-light">Formality is not available for this language</small>}
+
+        {
+        !formalityAvailable && <small className="mt-2 text-sm text-gray-light">
+          Formality is not available for {deeplLanguages.find((lang) => lang.code === inputs?.nodeInputs?.language)?.name}
+          </small>
+        }
+        <pre className="mt-2 p-2 border-2 border-solid border-gray-light rounded-md text-sm text-gray-light">{response}</pre>
+
         </div>
       </InnerDialogStructure>
     </div>

@@ -12,25 +12,13 @@ export const USER_FEATURE_KEY = 'user';
 /*
  * Update these interfaces according to your requirements.
  */
-export interface FlowCollaboratorsEntity {
-  id: string;
-  name: string;
-  initials: string;
-}
-export interface FlowEntity {
-  id: string;
-  title: string;
-  stringifiedNodes: string;
-  stringifiedEdges: string;
-  owner: boolean;
-  colaborators?: FlowCollaboratorsEntity[];
-}
+
 export interface UserEntity {
   id: string;
   name: string;
   initials: string;
   email: string;
-  flows: FlowEntity[];
+  flows: string[];
   profileImg?: string;
 }
 
@@ -96,13 +84,13 @@ export const userSlice = createSlice({
     updateUserData: (state: UserState, action: PayloadAction<UserEntity>) => {
       state.userData = action.payload;
     },
-    updateUserFlows: (state: UserState, action: PayloadAction<FlowEntity>) => {
+    updateUserFlows: (state: UserState, action: PayloadAction<string>) => {
       const user = state.userData;
       user.flows = [...user.flows, action.payload];
     },
     removeUserFlow: (state: UserState, action: PayloadAction<string>) => {
       const filteredFlows = state.userData.flows.filter(
-        (flow) => flow.id !== action.payload
+        (flowId) => flowId !== action.payload
       );
       state.userData.flows = [...filteredFlows];
     },

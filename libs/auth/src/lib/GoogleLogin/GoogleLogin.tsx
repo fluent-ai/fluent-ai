@@ -3,11 +3,12 @@ import { signInWithPopup, GoogleAuthProvider, getAuth } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import * as firestoreService from '@libs/firestore-service';
 import { User } from '@tool-ai/ui';
-import { addFlowFromSharedLink } from '../shared-link-handler';
-import { store, userActions, UserEntity } from '@tool-ai/state';
-import { current } from '@reduxjs/toolkit';
-import { arrayUnion } from 'firebase/firestore';
+import { store, userActions } from '@tool-ai/state';
 import { dispatchToStore, createNewUser } from '../load-userdata';
+import {
+  addFlowFromSharedLink,
+  addFlowCopyFromLink,
+} from '../shared-link-handler';
 
 const auth = getAuth();
 export function GoogleLogin() {
@@ -16,81 +17,45 @@ export function GoogleLogin() {
   const navigate = useNavigate();
   provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 
-  const loadAndRedirect = (user: any) => {
-    firestoreService
-      .getSomeFromDB('users', 'id', '==', user.uid)
-      .then((users: any) => {
-        if (users.length > 0) {
-          // store user state in redux
-          dispatchToStore(users[0] as User);
-          navigate('/dashboard');
-        } else {
-          if (user.displayName && user.email && user.photoURL) {
-            const newUser = createNewUser(user);
-            dispatchToStore(newUser);
-            navigate('/dashboard');
-          }
-        }
-      });
+  const loadAndRedirect = async (user: any) => {
+    const users = await firestoreService.getSomeFromDB(
+      'users',
+      'id',
+      '==',
+      user.uid
+    );
+    if (users.length > 0) {
+      await addFlowFromSharedLink(users[0] as User);
+      await addFlowCopyFromLink(users[0] as User);
+      // store user state in redux
+      await dispatchToStore(users[0] as User);
+      navigate('/dashboard');
+    } else {
+      if (user.displayName && user.email && user.photoURL) {
+        const newUser = await createNewUser(user);
+        await dispatchToStore(newUser);
+        await addFlowFromSharedLink(newUser);
+        await addFlowCopyFromLink(newUser);
+        navigate('/dashboard');
+      }
+    }
   };
 
-  const signInWithGoogle = () => {
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        store.dispatch(userActions.setLoadingStatus('loading'));
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential?.accessToken;
-        const user = result.user;
-
-        // check for a sharing link
-        const sharingLinkMatch = window.location.href.match(/\?link=(.*)/);
-        if (sharingLinkMatch) {
-          const sharingLink = sharingLinkMatch[1];
-          const userIdMatch = sharingLink.match(/(.*)-\d*/) || '';
-          firestoreService
-            .getSomeFromDB('users', 'id', '==', userIdMatch[1])
-            .then((users) => {
-              if (users.length > 0) {
-                const originalUserFlow = users[0].flows.find(
-                  (flow: any) => flow.id === sharingLink
-                );
-                const newFlow = JSON.parse(JSON.stringify(originalUserFlow));
-                originalUserFlow.colaborators.push({
-                  id: user.uid,
-                  name: user.displayName,
-                  initials: user.displayName?.slice(0, 2).toUpperCase() || '',
-                });
-                newFlow.colaborators.push({
-                  id: users[0].id,
-                  name: users[0].name,
-                  initials: users[0].initials,
-                });
-
-                firestoreService
-                  .updateFirestoreDocument('users', user.uid, {
-                    flows: arrayUnion(newFlow),
-                  })
-                  .then(() => {
-                    firestoreService.updateFirestoreDocument(
-                      'users',
-                      users[0].id,
-                      users[0]
-                    );
-                    loadAndRedirect(user);
-                  });
-              }
-            });
-        } else {
-          loadAndRedirect(user);
-        }
-      })
-      .catch((error) => {
-        // const errorCode = error.code;
-        // const errorMessage = error.message;
-        // const email = error.customData.email;
-        // const credential = GoogleAuthProvider.credentialFromError(error);
-        console.log('error', error);
-      });
+  const signInWithGoogle = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      store.dispatch(userActions.setLoadingStatus('loading'));
+      const user = result.user;
+      console.log(user);
+      loadAndRedirect(user);
+    } catch (error) {
+      // const errorCode = error.code;
+      // const errorMessage = error.message;
+      // const email = error.customData.email;
+      // const credential = GoogleAuthProvider.credentialFromError(error);
+      console.log(`error occured during login: `, error);
+      store.dispatch(userActions.setLoadingStatus('error'));
+    }
   };
   return (
     <div className={styles.container}>

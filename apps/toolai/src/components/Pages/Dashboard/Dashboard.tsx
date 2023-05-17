@@ -28,9 +28,25 @@ import {
 import { useFlowRunner } from '@tool-ai/flow-runner';
 import * as firestoreService from '@libs/firestore-service';
 import { dispatchToStore } from '@libs/auth';
+import {
+  FileIcon,
+  MixIcon,
+  TextIcon,
+  DoubleArrowRightIcon,
+  ArrowRightIcon,
+  ArrowLeftIcon,
+  FrameIcon,
+  MagnifyingGlassIcon,
+  GearIcon,
+  CameraIcon,
+  GlobeIcon,
+  ArrowDownIcon,
+} from '@radix-ui/react-icons';
+import { ReactComponent as OpenAiLogo } from '../../../assets/OpenAI_Logo.svg';
+import { ReactComponent as DeeplLogo } from '../../../assets/Deepl_Logo.svg';
 
 const nodeTypes = {
-  txtFileInput: TemplateNode,
+  textFileInput: TemplateNode,
   deepl: TemplateNode,
   textInput: TemplateNode,
   template: TemplateNode,
@@ -38,7 +54,9 @@ const nodeTypes = {
   userFunction: TemplateNode,
   preview: TemplateNode,
   openAi: TemplateNode,
+  dalleGeneration: TemplateNode,
   imageAi: TemplateNode,
+  download: TemplateNode,
 };
 
 const Dashboard = () => {
@@ -50,6 +68,9 @@ const Dashboard = () => {
   // Hooks & State - User
   // --------------------------------------       Hooks & State - User       --------------------------------------
   const currentUser = useSelector((state: any) => state.user.userData);
+  const currentFlows = useSelector(
+    (state: any) => state.flowTab.flowTabs.flows
+  );
   const [user, updateUser] = useState<User>({
     id: '',
     name: '',
@@ -86,33 +107,58 @@ const Dashboard = () => {
     },
     [nodes, edges]
   );
+  // const loadFlows = useCallback((sessionUser: User) => {
+  //   if(sessionUser) {
+  //     sessionUser.flows.forEach((flow) => {
+  //       const flowEntity = {
+  //         id: flow.id,
+  //         nodes: JSON.parse(flow.stringifiedNodes),
+  //         edges: JSON.parse(flow.stringifiedEdges),
+  //       };
+  //       store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
+  //     });
+  //     store.dispatch(flowTabActions.setActiveFlowTab(sessionUser.flows[0].id));
+  //     setNodes(JSON.parse(sessionUser.flows[0].stringifiedNodes));
+  //     setEdges(JSON.parse(sessionUser.flows[0].stringifiedEdges));
+  //   }
+  // }, [setNodes, setEdges]);
   const loadFlows = useCallback(
-    (sessionUser: User) => {
-      if (sessionUser) {
-        sessionUser.flows.forEach((flow) => {
+    async (sessionUser: User) => {
+      const flows = await firestoreService.getSomeFromDB(
+        'flows',
+        'collaboratorIds',
+        'array-contains',
+        sessionUser.id
+      );
+      if (flows.length > 0) {
+        flows.forEach((flow) => {
           const flowEntity = {
             id: flow.id,
+            title: flow.title,
+            ownerId: flow.ownerId,
             nodes: JSON.parse(flow.stringifiedNodes),
             edges: JSON.parse(flow.stringifiedEdges),
+            collaboratorIds: flow.collaboratorIds,
+            collaborators: flow.collaborators,
           };
           store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
         });
-        store.dispatch(
-          flowTabActions.setActiveFlowTab(sessionUser.flows[0].id)
-        );
-        setNodes(JSON.parse(sessionUser.flows[0].stringifiedNodes));
-        setEdges(JSON.parse(sessionUser.flows[0].stringifiedEdges));
+
+        store.dispatch(flowTabActions.setActiveFlowTab(flows[0].id));
+        setNodes(JSON.parse(flows[0].stringifiedNodes));
+        setEdges(JSON.parse(flows[0].stringifiedEdges));
       }
     },
     [setNodes, setEdges]
   );
+
   // This loads the initial user and flow data from the user
   useEffect(() => {
     let sessionUser = store.getState().user.userData;
     if (sessionUser.id === '') {
       // for local development only
       firestoreService
-        .getSomeFromDB('users', 'id', '==', 'testId')
+        .getSomeFromDB('users', 'id', '==', 'testId_2')
         .then((data) => {
           if (data.length > 0) {
             sessionUser = data[0] as User;
@@ -166,27 +212,30 @@ const Dashboard = () => {
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
       });
-      const getLabel = (label: string) => {
+      const getData = (label: string) => {
         switch (label) {
-          case 'txtFileInput':
-            console.log('txtFileInput');
-            return 'Text File Input';
+          case 'textFileInput':
+            return { label: 'Text File Input', icon: <FileIcon /> };
           case 'textInput':
-            return 'Text Input';
+            return { label: 'Text Input', icon: <TextIcon /> };
           case 'json':
-            return 'JSON';
+            return { label: 'JSON', icon: <FileIcon /> };
           case 'userFunction':
-            return 'User Function';
+            return { label: 'User Function', icon: <FrameIcon /> };
           case 'template':
-            return 'Template';
+            return { label: 'Template', icon: <MixIcon /> };
           case 'preview':
-            return 'Preview';
+            return { label: 'Preview', icon: <CameraIcon /> };
           case 'openAi':
-            return 'OpenAI';
+            return { label: 'OpenAI', icon: <OpenAiLogo /> };
           case 'deepl':
-            return 'DeepL';
+            return { label: 'DeepL', icon: <DeeplLogo /> };
           case 'imageAi':
-            return 'Image AI';
+            return { label: 'Image AI', icon: <FileIcon /> };
+          case 'dalleGeneration':
+            return { label: 'Dall.e Generation', icon: <OpenAiLogo /> };
+          case 'download':
+            return { label: 'Download', icon: <FileIcon /> };
           default:
             return null;
         }
@@ -195,7 +244,7 @@ const Dashboard = () => {
         id: uuidv4(),
         type,
         position,
-        data: { label: getLabel(`${type}`) },
+        data: { ...getData(`${type}`) },
       };
       setNodes((nds) => nds.concat(newNode));
     },
@@ -261,7 +310,8 @@ const Dashboard = () => {
         <ReactFlowProvider>
           <NodeSideBar />
           <FlowTabs
-            flowCharts={currentUser.flows}
+            currentUserId={currentUser.id}
+            flowCharts={currentFlows}
             reactFlowWrapper={reactFlowWrapper}
             {...FlowTabsProps}
           />

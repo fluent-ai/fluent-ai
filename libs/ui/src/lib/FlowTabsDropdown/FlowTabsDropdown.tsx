@@ -3,14 +3,21 @@ import { CaretDownIcon } from '@radix-ui/react-icons';
 import styles from './FlowTabsDropdown.module.css';
 import { AlertComponent } from '../AlertComponent/AlertComponent';
 import { store } from '@tool-ai/state';
-import { FlowCollaborators, FlowTabsDropdownProps } from '../../types';
+import { FlowCollaborator, FlowTabsDropdownProps } from '../../types';
 import {ShareDialog} from "../ShareDialog/ShareDialog";
+import { removeCollaborator } from '../../ui-interactions/remove-collaborator';
 
 const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
   const handleShare = () => {
     const activeId = store.getState().flowTab.flowTabs.activeId;
     const link = 'http://localhost:4200/login?link=' + activeId;
-    console.log("Here's your sharing link: ", link);
+    console.log("Here's your collaboration link: ", link);
+  };
+
+  const handleCopy = () => {
+    const activeId = store.getState().flowTab.flowTabs.activeId;
+    const link = 'http://localhost:4200/login?copy=' + activeId;
+    console.log("Here's your link to share a copy: ", link);
   };
 
   return (
@@ -33,7 +40,20 @@ const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
           >
             Save <div className={styles.RightSlot}>⌘+S</div>
           </DropdownMenu.Item>
-          <ShareDialog />
+          <DropdownMenu.Item
+            className={styles.DropdownMenuItem}
+            onClick={handleCopy}
+          >
+            Share Copy
+            {/* Share a Copy <div className={styles.RightSlot}>⌘+S</div> */}
+          </DropdownMenu.Item>
+          <DropdownMenu.Item
+            className={styles.DropdownMenuItem}
+            onClick={handleShare}
+          >
+            Collaborate
+            {/* Share <div className={styles.RightSlot}>⌘+N</div> */}
+          </DropdownMenu.Item>
           <AlertComponent
             classes={styles.DropdownMenuItem}
             buttonText="Delete"
@@ -45,16 +65,26 @@ const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
           <DropdownMenu.Label className={styles.DropdownMenuLabel}>
             People
           </DropdownMenu.Label>
-          {props.users.map((user: FlowCollaborators) => {
-            return (
-              <DropdownMenu.Item
-                key={user.id}
-                className={styles.DropdownMenuItem}
-              >
-                {user.name}
-                <div className={styles.RightSlot}>remove</div>
-              </DropdownMenu.Item>
-            );
+          {props.users.map((collaborator: FlowCollaborator) => {
+            if (collaborator.id !== props.flowChartOwner) {
+              return (
+                <DropdownMenu.Item
+                  key={collaborator.id}
+                  className={styles.DropdownMenuItem}
+                >
+                  {collaborator.name}
+                  <div
+                    className={styles.RightSlot}
+                    onClick={() => removeCollaborator(collaborator.id)}
+                  >
+                    {/* we only show the option if the flow is owned by the current user */}
+                    {store.getState().user.userData.id === props.flowChartOwner
+                      ? 'remove'
+                      : ''}
+                  </div>
+                </DropdownMenu.Item>
+              );
+            } else return null;
           })}
 
           <DropdownMenu.Arrow className={styles.DropdownMenuArrow} />

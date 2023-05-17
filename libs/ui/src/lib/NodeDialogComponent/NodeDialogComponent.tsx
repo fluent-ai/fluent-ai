@@ -1,5 +1,4 @@
 import styles from './NodeDialogComponent.module.css';
-import React from 'react';
 import { NodeDialogProps } from '../../types';
 import { InputDialog } from '../../nodeDialogs/InputDialog/InputDialog';
 import { JsonDialog } from '../../nodeDialogs/JsonDialog/JsonDialog';
@@ -7,15 +6,18 @@ import { TemplateDialog } from '../../nodeDialogs/TemplateDialog/TemplateDialog'
 import { UserFunctionDialog } from '../../nodeDialogs/UserFunctionDialog/UserFunctionDialog';
 import { PreviewDialog } from '../../nodeDialogs/PreviewDialog/PreviewDialog';
 import { OpenAIDialog } from '../../nodeDialogs/OpenAIDialog/OpenAIDialog';
-import { TxtFileInputDialog } from '../../nodeDialogs/TxtFileInputDialog/TxtFileInputDialog';
+import { TextFileInputDialog } from '../../nodeDialogs/TextFileInputDialog/TextFileInputDialog';
 import { DeeplDialog } from '../../nodeDialogs/DeeplDialog/DeeplDialog';
 import { ImageAiDialog } from '../../nodeDialogs/ImageAiDialog/ImageAiDialog';
+import { DownloadDialog } from '../../nodeDialogs/DownloadDialog/DownloadDialog';
+import { DalleGenerationDialog } from '../../nodeDialogs/DalleGenerationDialog/DalleGenerationDialog';
+
 function NodeDialogComponent(props: NodeDialogProps) {
   const shownDialog = () => {
     console.log('activeId', props.activeDialog);
     switch (props.activeDialog) {
-      case 'txtFileInput':
-        return <TxtFileInputDialog id={props.activeNodeId}/>;
+      case 'textFileInput':
+        return <TextFileInputDialog id={props.activeNodeId}/>;
       case 'textInput':
         return <InputDialog id={props.activeNodeId} />;
       case 'json':
@@ -32,6 +34,10 @@ function NodeDialogComponent(props: NodeDialogProps) {
         return <DeeplDialog id={props.activeNodeId} />;
       case 'imageAi':
         return <ImageAiDialog id={props.activeNodeId} />;
+      case 'dalleGeneration':
+        return <DalleGenerationDialog id={props.activeNodeId} />;
+      case 'download':
+        return <DownloadDialog id={props.activeNodeId} />;
       default:
         return null;
     }
