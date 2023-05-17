@@ -15,7 +15,7 @@ const NodeSideBar = () => {
 
   return (
     <div className='flex absolute z-10 h-min top-20 left-2.5 group'>
-    <aside className={`px-2 py-2.5 rounded-md bg-white shadow-md w-[45px] overflow-hidden transition-all duration-300 ease-in-out group-hover:w-60`}>
+    <aside className={`px-2 py-2.5 max-h-[80vh] overflow-y-scroll rounded-md bg-white shadow-md w-[45px] overflow-x-hidden transition-all duration-300 ease-in-out group-hover:w-60`}>
     <SettingsDialog />
     {NodeData.map(nodeItem => {
       return <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, nodeItem.type)} title={nodeItem.label} icon={nodeItem.icon} />
