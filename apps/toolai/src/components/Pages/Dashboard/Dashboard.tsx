@@ -12,7 +12,12 @@ import NodeSideBar from '../../Navigation/NodeSideBar/NodeSideBar';
 import FlowTabs from '../../Navigation/FlowTabs/FlowTabs';
 import TemplateNode from '../../Nodes/TemplateNode/TemplateNode';
 import Header from '../../Navigation/Header/Header';
-import { store, flowRunnerActions, flowRunnerSelectors, flowTabActions } from '@tool-ai/state';
+import {
+  store,
+  flowRunnerActions,
+  flowRunnerSelectors,
+  flowTabActions,
+} from '@tool-ai/state';
 import {
   User,
   mockUser,
@@ -24,8 +29,8 @@ import { useFlowRunner } from '@tool-ai/flow-runner';
 import * as firestoreService from '@libs/firestore-service';
 import { dispatchToStore } from '@libs/auth';
 import { NodeData } from '../../../nodeData';
-import {ReactComponent as OpenAiLogo}  from  '../../../assets/OpenAI_Logo.svg';
-import {ReactComponent as DeeplLogo}  from  '../../../assets/Deepl_Logo.svg';
+import { ReactComponent as OpenAiLogo } from '../../../assets/OpenAI_Logo.svg';
+import { ReactComponent as DeeplLogo } from '../../../assets/Deepl_Logo.svg';
 
 const nodeTypes = {
   textFileInput: TemplateNode,
@@ -39,10 +44,7 @@ const nodeTypes = {
   dalleGeneration: TemplateNode,
   imageAi: TemplateNode,
   download: TemplateNode,
-
 };
-
-
 
 const Dashboard = () => {
   // --------------------------------------     Hooks & State - React Flow    --------------------------------------
@@ -56,32 +58,11 @@ const Dashboard = () => {
   const currentFlows = useSelector(
     (state: any) => state.flowTab.flowTabs.flows
   );
-  const [user, updateUser] = useState<User>({
-    id: '',
-    name: '',
-    email: '',
-    initials: '',
-    flows: [],
-  });
+
   // --------------------------------------     Hooks & State - Flow Runner   --------------------------------------
-  const {
-    executeFlow,
-    outputs,
-    states,
-  } = useFlowRunner();
+  const { executeFlow, outputs, states } = useFlowRunner();
   const dispatch = useDispatch();
   const inputs = useSelector(flowRunnerSelectors.selectInputs);
-  // -----------------------------------------------     User & Auth    --------------------------------------------
-  useEffect(() => {
-    const sessionUser = store.getState().user.userData;
-    if (sessionUser.id === '') {
-      // for local development only
-      updateUser(mockUser);
-    } else {
-      updateUser(sessionUser as User);
-    }
-  }, []);
-
 
   // ------------------------------------------------     Database     --------------------------------------------
   // Saving & Loading Flows
@@ -95,47 +76,36 @@ const Dashboard = () => {
     },
     [nodes, edges]
   );
-  // const loadFlows = useCallback((sessionUser: User) => {
-  //   if(sessionUser) {
-  //     sessionUser.flows.forEach((flow) => {
-  //       const flowEntity = {
-  //         id: flow.id,
-  //         nodes: JSON.parse(flow.stringifiedNodes),
-  //         edges: JSON.parse(flow.stringifiedEdges),
-  //       };
-  //       store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
-  //     });
-  //     store.dispatch(flowTabActions.setActiveFlowTab(sessionUser.flows[0].id));
-  //     setNodes(JSON.parse(sessionUser.flows[0].stringifiedNodes));
-  //     setEdges(JSON.parse(sessionUser.flows[0].stringifiedEdges));
-  //   }
-  // }, [setNodes, setEdges]);
-  const loadFlows = useCallback( async (sessionUser: User) => {
-    const flows = await firestoreService.getSomeFromDB(
-      'flows',
-      'collaboratorIds',
-      'array-contains',
-      sessionUser.id
-    );
-    if (flows.length > 0) {
-      flows.forEach((flow) => {
-        const flowEntity = {
-          id: flow.id,
-          title: flow.title,
-          ownerId: flow.ownerId,
-          nodes: JSON.parse(flow.stringifiedNodes),
-          edges: JSON.parse(flow.stringifiedEdges),
-          collaboratorIds: flow.collaboratorIds,
-          collaborators: flow.collaborators,
-        };
-        store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
-      });
 
-      store.dispatch(flowTabActions.setActiveFlowTab(flows[0].id));
-      setNodes(JSON.parse(flows[0].stringifiedNodes));
-      setEdges(JSON.parse(flows[0].stringifiedEdges));
-    }
-  }, [setNodes, setEdges]);
+  const loadFlows = useCallback(
+    async (sessionUser: User) => {
+      const flows = await firestoreService.getSomeFromDB(
+        'flows',
+        'collaboratorIds',
+        'array-contains',
+        sessionUser.id
+      );
+      if (flows.length > 0) {
+        flows.forEach((flow) => {
+          const flowEntity = {
+            id: flow.id,
+            title: flow.title,
+            ownerId: flow.ownerId,
+            nodes: JSON.parse(flow.stringifiedNodes),
+            edges: JSON.parse(flow.stringifiedEdges),
+            collaboratorIds: flow.collaboratorIds,
+            collaborators: flow.collaborators,
+          };
+          store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
+        });
+
+        store.dispatch(flowTabActions.setActiveFlowTab(flows[0].id));
+        setNodes(JSON.parse(flows[0].stringifiedNodes));
+        setEdges(JSON.parse(flows[0].stringifiedEdges));
+      }
+    },
+    [setNodes, setEdges]
+  );
 
   // This loads the initial user and flow data from the user
   useEffect(() => {
@@ -177,7 +147,6 @@ const Dashboard = () => {
     [nodes, edges, setNodes, setEdges]
   );
 
-
   // ------------------------------------------------     React Flow     --------------------------------------------
   // React Flow Events
   const onDragOver = useCallback((event: React.DragEvent) => {
@@ -198,16 +167,16 @@ const Dashboard = () => {
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
       });
-      const getData = (type:string) => {
-       const item = NodeData.find(nodeItem => nodeItem.type === type)
-      if(item) return item.label;
-      }
+      const getData = (type: string) => {
+        const item = NodeData.find((nodeItem) => nodeItem.type === type);
+        if (item) return item.label;
+      };
 
       const newNode = {
         id: uuidv4(),
         type,
         position,
-        data: {label: getData(`${type}`)},
+        data: { label: getData(`${type}`) },
       };
       setNodes((nds) => nds.concat(newNode));
     },
@@ -232,23 +201,22 @@ const Dashboard = () => {
 
   // Flow Runner - On change
   useEffect(() => {
-    console.log('🌊 change detected\n',{outputs,states} );
+    console.log('🌊 change detected\n', { outputs, states });
     dispatch(flowRunnerActions.setStates(states));
     dispatch(flowRunnerActions.setOutputs(outputs));
-  }, [
-    outputs,states,dispatch]);
+  }, [outputs, states, dispatch]);
   // Flow Runner - Runner callback
   function runFlow() {
-      console.log('🌊 executing flow');
-      executeFlow(
-        {flow:{nodes, edges},
-        inputs,
-        globals:{
-          deeplApiKey: process.env.NX_DEEPL_API_KEY,
-          openAiApiKey: process.env.NX_OPENAI_API_KEY
-        }});
+    console.log('🌊 executing flow');
+    executeFlow({
+      flow: { nodes, edges },
+      inputs,
+      globals: {
+        deeplApiKey: process.env.NX_DEEPL_API_KEY,
+        openAiApiKey: process.env.NX_OPENAI_API_KEY,
+      },
+    });
   }
-
 
   // This is a hack, refactor me
   // if (currentUser.id === '') {
@@ -268,7 +236,7 @@ const Dashboard = () => {
       </div>
 
       <div
-        // onKeyDown={persistNewFlow}
+        onKeyDown={persistNewFlow}
         className="relative flex flex-col grow h-full md:flex-row"
       >
         <ReactFlowProvider>
