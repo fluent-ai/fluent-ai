@@ -90,6 +90,7 @@ const Dashboard = () => {
   );
   const loadFlows = useCallback(
     async (sessionUser: User) => {
+      
       const flows = await firestoreService.getSomeFromDB(
         'flows',
         'collaboratorIds',
@@ -119,11 +120,12 @@ const Dashboard = () => {
   );
 
   // This loads the initial user and flow data from the user
-  async function InitialUser() {
-    console.log('auth', auth);
+  const InitialUser=  useCallback(async (auth:Auth) => {
+    console.log('🌈 auth', auth);
+    // console.log('🌈 auth', auth?.AuthImpl?.currentUser);
     let sessionUser = store.getState().user.userData;
     if (sessionUser.id === '') {
-      console.log('auth', auth?.currentUser);
+      console.log('auth?.currentUser', auth?.currentUser);
       const userId = auth?.currentUser?.uid;
       if (userId) {
         /* eslint-disable-next-line */
@@ -145,10 +147,14 @@ const Dashboard = () => {
     );
     dispatchToStore(sessionUser as User);
     loadFlows(sessionUser as User);
-  }
+  }, [loadFlows]);
+
+
   useEffect(() => {
-    InitialUser();
-  }, [setEdges, setNodes, loadFlows]);
+    if (auth) {
+      InitialUser(auth);
+    }
+  }, [auth, InitialUser]);
 
   // ------------------------------------------------     Tabs     --------------------------------------------
   // save & load the nodes and edges of the tabs that we switched
