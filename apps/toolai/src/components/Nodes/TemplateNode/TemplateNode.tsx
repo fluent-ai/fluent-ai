@@ -28,7 +28,7 @@ export default memo (({id, data,type, isConnectable}: MemoProps) => {
         setActiveNodeId(id)
         }}
         className='flex items-center'>
-        <div className='h-full w-[20%] bg-blue-50 p-2.5 flex justify-center'>{data.icon}</div>
+        <div className='h-full w-[20%] bg-blue-50 rounded-tl-[6px] rounded-bl-[6px] p-2.5 flex justify-center'>{data.icon}</div>
         <div className='pl-2.5'>{data.label}</div>
         </div>
 

@@ -5,8 +5,8 @@ export interface DalleGenerationDialogProps {}
 function DalleGenerationDialog({id}:{id:string}) {
   return (
     <InnerDialogStructure
-    title="Open Ai"
-    description="Open AI description">
+    title="Dalle Generation"
+    description="Dalle Generation description">
 
 
     </InnerDialogStructure>

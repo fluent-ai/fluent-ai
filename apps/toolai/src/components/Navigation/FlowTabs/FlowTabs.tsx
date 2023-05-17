@@ -31,7 +31,7 @@ interface FlowTabsProps {
   onNodesChange: any;
   onEdgesChange: any;
   setNodes: any;
-  onConnect: any;
+  onConnect: (params:any)=>void;
   onInit: any;
   onDrop: any;
   onDragOver: any;
