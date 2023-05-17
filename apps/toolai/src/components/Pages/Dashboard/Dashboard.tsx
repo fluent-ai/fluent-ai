@@ -6,11 +6,13 @@ import {
   addEdge,
   useNodesState,
   useEdgesState,
+
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import NodeSideBar from '../../Navigation/NodeSideBar/NodeSideBar';
 import FlowTabs from '../../Navigation/FlowTabs/FlowTabs';
 import TemplateNode from '../../Nodes/TemplateNode/TemplateNode';
+import CommentNode from '../../Nodes/CommentNode/CommentNode';
 import Header from '../../Navigation/Header/Header';
 import { store, flowRunnerActions, flowRunnerSelectors, flowTabActions } from '@tool-ai/state';
 import {
@@ -28,6 +30,7 @@ import {ReactComponent as OpenAiLogo}  from  '../../../assets/OpenAI_Logo.svg';
 import {ReactComponent as DeeplLogo}  from  '../../../assets/Deepl_Logo.svg';
 
 const nodeTypes = {
+  commentNode: CommentNode,
   textFileInput: TemplateNode,
   deepl: TemplateNode,
   textInput: TemplateNode,
@@ -85,84 +88,81 @@ const Dashboard = () => {
 
   // ------------------------------------------------     Database     --------------------------------------------
   // Saving & Loading Flows
-  const persistNewFlow = useCallback(
-    (e: React.KeyboardEvent<HTMLDivElement>) => {
-      e.preventDefault();
-      if ((e.ctrlKey && e.key === 's') || (e.metaKey && e.key === 's')) {
-        console.log('Saving to State Mngm & DB, ', e.ctrlKey, e.key, e.metaKey);
-        saveFlow(nodes, edges);
-      }
-    },
-    [nodes, edges]
-  );
-  // const loadFlows = useCallback((sessionUser: User) => {
-  //   if(sessionUser) {
-  //     sessionUser.flows.forEach((flow) => {
+  // const persistNewFlow = useCallback(
+  //   (e: React.KeyboardEvent<HTMLDivElement>) => {
+  //     e.preventDefault();
+  //     if ((e.ctrlKey && e.key === 's') || (e.metaKey && e.key === 's')) {
+  //       console.log('Saving to State Mngm & DB, ', e.ctrlKey, e.key, e.metaKey);
+  //       saveFlow(nodes, edges);
+  //     }
+  //   },
+  //   [nodes, edges]
+  // );
+  // // const loadFlows = useCallback((sessionUser: User) => {
+  // //   if(sessionUser) {
+  // //     sessionUser.flows.forEach((flow) => {
+  // //       const flowEntity = {
+  // //         id: flow.id,
+  // //         nodes: JSON.parse(flow.stringifiedNodes),
+  // //         edges: JSON.parse(flow.stringifiedEdges),
+  // //       };
+  // //       store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
+  // //     });
+  // //     store.dispatch(flowTabActions.setActiveFlowTab(sessionUser.flows[0].id));
+  // //     setNodes(JSON.parse(sessionUser.flows[0].stringifiedNodes));
+  // //     setEdges(JSON.parse(sessionUser.flows[0].stringifiedEdges));
+  // //   }
+  // // }, [setNodes, setEdges]);
+  // const loadFlows = useCallback( async (sessionUser: User) => {
+  //   const flows = await firestoreService.getSomeFromDB(
+  //     'flows',
+  //     'collaboratorIds',
+  //     'array-contains',
+  //     sessionUser.id
+  //   );
+  //   if (flows.length > 0) {
+  //     flows.forEach((flow) => {
   //       const flowEntity = {
   //         id: flow.id,
+  //         title: flow.title,
+  //         ownerId: flow.ownerId,
   //         nodes: JSON.parse(flow.stringifiedNodes),
   //         edges: JSON.parse(flow.stringifiedEdges),
+  //         collaboratorIds: flow.collaboratorIds,
+  //         collaborators: flow.collaborators,
   //       };
   //       store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
   //     });
-  //     store.dispatch(flowTabActions.setActiveFlowTab(sessionUser.flows[0].id));
-  //     setNodes(JSON.parse(sessionUser.flows[0].stringifiedNodes));
-  //     setEdges(JSON.parse(sessionUser.flows[0].stringifiedEdges));
+
+  //     store.dispatch(flowTabActions.setActiveFlowTab(flows[0].id));
+  //     setNodes(JSON.parse(flows[0].stringifiedNodes));
+  //     setEdges(JSON.parse(flows[0].stringifiedEdges));
   //   }
   // }, [setNodes, setEdges]);
-  const loadFlows = useCallback( async (sessionUser: User) => {
-    const flows = await firestoreService.getSomeFromDB(
-      'flows',
-      'collaboratorIds',
-      'array-contains',
-      sessionUser.id
-    );
-    if (flows.length > 0) {
-      flows.forEach((flow) => {
-        const flowEntity = {
-          id: flow.id,
-          title: flow.title,
-          ownerId: flow.ownerId,
-          nodes: JSON.parse(flow.stringifiedNodes),
-          edges: JSON.parse(flow.stringifiedEdges),
-          collaboratorIds: flow.collaboratorIds,
-          collaborators: flow.collaborators,
-        };
-        store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
-      });
 
-      store.dispatch(flowTabActions.setActiveFlowTab(flows[0].id));
-      setNodes(JSON.parse(flows[0].stringifiedNodes));
-      setEdges(JSON.parse(flows[0].stringifiedEdges));
-    }
-  }, [setNodes, setEdges]);
+  // // This loads the initial user and flow data from the user
+  // useEffect(() => {
+  //   let sessionUser = store.getState().user.userData;
+  //   if (sessionUser.id === '') {
+  //     // for local development only
+  //     firestoreService
+  //       .getSomeFromDB('users', 'id', '==', 'testId_2')
+  //       .then((data) => {
+  //         if (data.length > 0) {
+  //           sessionUser = data[0] as User;
+  //         } else {
+  //           sessionUser = mockUser;
+  //           firestoreService.writeToDB('users', sessionUser);
+  //         }
+  //         dispatchToStore(sessionUser as User);
+  //         loadFlows(sessionUser as User);
+  //       });
+  //   } else {
+  //     loadFlows(sessionUser as User);
+  //   }
+  // }, [setEdges, setNodes, loadFlows]);
 
-  // This loads the initial user and flow data from the user
-  useEffect(() => {
-    let sessionUser = store.getState().user.userData;
-    if (sessionUser.id === '') {
-      // for local development only
-      firestoreService
-        .getSomeFromDB('users', 'id', '==', 'testId_2')
-        .then((data) => {
-          if (data.length > 0) {
-            sessionUser = data[0] as User;
-          } else {
-            sessionUser = mockUser;
-            firestoreService.writeToDB('users', sessionUser);
-          }
-          dispatchToStore(sessionUser as User);
-          loadFlows(sessionUser as User);
-        });
-    } else {
-      loadFlows(sessionUser as User);
-    }
-  }, [setEdges, setNodes, loadFlows]);
 
-  const onConnect = useCallback(
-    (params: any) => setEdges((eds) => addEdge(params, eds)),
-    [setEdges]
-  );
 
   // ------------------------------------------------     Tabs     --------------------------------------------
   // save & load the nodes and edges of the tabs that we switched
@@ -179,6 +179,10 @@ const Dashboard = () => {
 
 
   // ------------------------------------------------     React Flow     --------------------------------------------
+  const onConnect = useCallback(
+    (params: any) => setEdges((eds) => addEdge(params, eds)),
+    [setEdges]
+  );
   // React Flow Events
   const onDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();

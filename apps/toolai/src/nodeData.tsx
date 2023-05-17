@@ -1,4 +1,4 @@
-import {BsFiletypeTxt, BsDownload, BsTextareaT, BsBraces, BsLayoutTextWindowReverse, BsEye, BsImage, BsImages, BsFiletypeJson} from 'react-icons/bs';
+import {BsFiletypeTxt, BsDownload, BsTextareaT, BsBraces, BsLayoutTextWindowReverse, BsEye, BsImage, BsImages, BsFiletypeJson, BsChatRightText} from 'react-icons/bs';
 
 import {IoImageOutline, IoImagesOutline} from 'react-icons/io5';
 import {SiOpenai} from 'react-icons/si';
@@ -25,6 +25,11 @@ export const groups = [
     color: "theme(colors.red)"
   },
   {
+    id: 'group-extras',
+    label: 'extras',
+    color: "theme(colors.gray)"
+  },
+  {
     id: 'group-outputs',
     label: 'outputs',
     color: "theme(colors.green)"
@@ -41,6 +46,11 @@ export const groups = [
   }
 ]
 export const NodeData: NodeItemData[] = [
+    {
+      type: 'commentNode',
+      label:'Add Comment',
+      group: 'group-extras',
+      icon:<BsChatRightText />},
     {
     type: 'textFileInput',
     label:'Text File Input',
