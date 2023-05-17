@@ -85,6 +85,8 @@ const Dashboard = () => {
         setNodes(JSON.parse(flows[0].stringifiedNodes));
         setEdges(JSON.parse(flows[0].stringifiedEdges));
       }
+
+      // TODO: if no flows, create one
     },
     [setEdges, setNodes]
   );
@@ -95,7 +97,7 @@ const Dashboard = () => {
     if (sessionUser.id === '') {
       // for local development only
       firestoreService
-        .getSomeFromDB('users', 'id', '==', 'testId_2')
+        .getSomeFromDB('users', 'id', '==', 'testId_3')
         .then((data) => {
           if (data.length > 0) {
             sessionUser = data[0] as User;

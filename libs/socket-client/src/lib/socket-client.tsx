@@ -10,6 +10,7 @@ export interface SocketClientProps {
 
 export function SocketClient(props: SocketClientProps) {
   const [socket, setSocket] = useState<Socket | null>(null);
+  const [isCollaborating, setIsCollaborating] = useState(false);
   const [mousePos, setMousePos] = useState({
     x: 0,
     y: 0,
@@ -31,8 +32,11 @@ export function SocketClient(props: SocketClientProps) {
       const activeTabId = store.getState().flowTab.flowTabs.activeId;
 
       if (extract.userId !== props.userId && extract.tabId === activeTabId) {
+        setIsCollaborating(true);
         setMousePos({ x: extract.x, y: extract.y });
         setCollabUser({ id: extract.userId, name: extract.userName });
+      } else {
+        setIsCollaborating(false);
       }
     });
 
@@ -64,37 +68,41 @@ export function SocketClient(props: SocketClientProps) {
     };
   }, [socket, mousePos, props.userId, props.userName]);
 
-  return (
-    <div>
-      <div
-        style={{
-          top: mousePos.y,
-          left: mousePos.x,
-          position: 'absolute',
-          zIndex: 1000,
-          backgroundColor: 'orange',
-          width: 7,
-          height: 7,
-          borderRadius: 10,
-        }}
-      ></div>
-      <span
-        style={{
-          top: mousePos.y + 7,
-          left: mousePos.x + 7,
-          position: 'absolute',
-          zIndex: 1000,
-          backgroundColor: 'orange',
-          padding: 3,
-          borderRadius: 10,
-          fontSize: '0.7rem',
-          overflow: 'hidden',
-        }}
-      >
-        {collabUser.name}
-      </span>
-    </div>
-  );
+  if (isCollaborating) {
+    return (
+      <div>
+        <div
+          style={{
+            top: mousePos.y,
+            left: mousePos.x,
+            position: 'absolute',
+            zIndex: 1000,
+            backgroundColor: 'orange',
+            width: 7,
+            height: 7,
+            borderRadius: 10,
+          }}
+        ></div>
+        <span
+          style={{
+            top: mousePos.y + 7,
+            left: mousePos.x + 7,
+            position: 'absolute',
+            zIndex: 1000,
+            backgroundColor: 'orange',
+            padding: 3,
+            borderRadius: 10,
+            fontSize: '0.7rem',
+            overflow: 'hidden',
+          }}
+        >
+          {collabUser.name}
+        </span>
+      </div>
+    );
+  } else {
+    return <div></div>;
+  }
 }
 
 export default SocketClient;
