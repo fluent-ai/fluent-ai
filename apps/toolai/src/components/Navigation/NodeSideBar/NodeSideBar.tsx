@@ -4,6 +4,7 @@ import { FileIcon, MixIcon, TextIcon, DoubleArrowRightIcon, ArrowRightIcon, Arro
 import {ReactComponent as OpenAiLogo}  from  '../../../assets/OpenAI_Logo.svg';
 import {ReactComponent as DeeplLogo}  from  '../../../assets/Deepl_Logo.svg';
 import { SettingsDialog } from '@tool-ai/ui';
+import { NodeData } from '../../../nodeData';
 
 
 const NodeSideBar = () => {
@@ -16,17 +17,10 @@ const NodeSideBar = () => {
     <div className='flex absolute z-10 h-min top-20 left-2.5 group'>
     <aside className={`px-2 py-2.5 rounded-md bg-white shadow-md w-[45px] overflow-hidden transition-all duration-300 ease-in-out group-hover:w-60`}>
     <SettingsDialog />
-    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'textFileInput')} title="Text File Input" icon={<FileIcon />} />
-    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'textInput')} title="Text Input" icon={<TextIcon />} />
-    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'json')} title="JSON" icon={<FileIcon />} />
-    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'template')} title="Template" icon={<FrameIcon />} />
-    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'userFunction')} title="User Function" icon={<MixIcon />} />
-    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'preview')} title="Preview" icon={<CameraIcon />} />
-    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'openAi')} title="Open AI" icon={<OpenAiLogo />} />
-    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'deepl')} title="Deepl Translate" icon={<DeeplLogo />} />
-    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'imageAi')} title="Image AI" icon={<DeeplLogo />} />
-    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'dalleGeneration')} title="Dall.e Generation" icon={<OpenAiLogo />} />
-    <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, 'download')} title="Download" icon={<ArrowDownIcon />} />
+    {NodeData.map(nodeItem => {
+      return <NodeItemSideBar onDragStartHandler={(event) => onDragStart(event, nodeItem.type)} title={nodeItem.label} icon={nodeItem.icon} />
+    })}
+
     </aside>
 
 </div>

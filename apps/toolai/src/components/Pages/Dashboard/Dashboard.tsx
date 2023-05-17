@@ -18,32 +18,11 @@ import {
   flowRunnerSelectors,
   flowTabActions,
 } from '@tool-ai/state';
-import {
-  User,
-  // mockUser,
-  ButtonComponent,
-  saveFlow,
-  switchFlowTab,
-} from '@tool-ai/ui';
+import { User, ButtonComponent, saveFlow, switchFlowTab } from '@tool-ai/ui';
 import { useFlowRunner } from '@tool-ai/flow-runner';
 import * as firestoreService from '@libs/firestore-service';
 import { dispatchToStore } from '@libs/auth';
-import {
-  FileIcon,
-  MixIcon,
-  TextIcon,
-  DoubleArrowRightIcon,
-  ArrowRightIcon,
-  ArrowLeftIcon,
-  FrameIcon,
-  MagnifyingGlassIcon,
-  GearIcon,
-  CameraIcon,
-  GlobeIcon,
-  ArrowDownIcon,
-} from '@radix-ui/react-icons';
-import { ReactComponent as OpenAiLogo } from '../../../assets/OpenAI_Logo.svg';
-import { ReactComponent as DeeplLogo } from '../../../assets/Deepl_Logo.svg';
+import { NodeData } from '../../../nodeData';
 import { Auth, getAuth } from 'firebase/auth';
 
 const nodeTypes = {
@@ -66,19 +45,11 @@ const Dashboard = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
-  // Hooks & State - User
   // --------------------------------------       Hooks & State - User       --------------------------------------
   const currentUser = useSelector((state: any) => state.user.userData);
   const currentFlows = useSelector(
     (state: any) => state.flowTab.flowTabs.flows
   );
-  const [user, updateUser] = useState<User>({
-    id: '',
-    name: '',
-    email: '',
-    initials: '',
-    flows: [],
-  });
   let auth: Auth | null = null;
   useEffect(() => {
     auth = getAuth();
@@ -88,17 +59,17 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const inputs = useSelector(flowRunnerSelectors.selectInputs);
   // -----------------------------------------------     User & Auth    --------------------------------------------
-  useEffect(() => {
-    const sessionUser = store.getState().user.userData;
-    if (sessionUser.id === '') {
-      // for local development only
-      // updateUser(mockUser);
-      // updateUser(sessionUser as User);
-      console.log('No user found, redirecting to login');
-    } else {
-      updateUser(sessionUser as User);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const sessionUser = store.getState().user.userData;
+  //   if (sessionUser.id === '') {
+  //     // for local development only
+  //     // updateUser(mockUser);
+  //     // updateUser(sessionUser as User);
+  //     console.log('No user found, redirecting to login');
+  //   } else {
+  //     updateUser(sessionUser as User);
+  //   }
+  // }, []);
 
   // ------------------------------------------------     Database     --------------------------------------------
   // Saving & Loading Flows
@@ -112,21 +83,6 @@ const Dashboard = () => {
     },
     [nodes, edges]
   );
-  // const loadFlows = useCallback((sessionUser: User) => {
-  //   if(sessionUser) {
-  //     sessionUser.flows.forEach((flow) => {
-  //       const flowEntity = {
-  //         id: flow.id,
-  //         nodes: JSON.parse(flow.stringifiedNodes),
-  //         edges: JSON.parse(flow.stringifiedEdges),
-  //       };
-  //       store.dispatch(flowTabActions.addNewFlowTab(flowEntity));
-  //     });
-  //     store.dispatch(flowTabActions.setActiveFlowTab(sessionUser.flows[0].id));
-  //     setNodes(JSON.parse(sessionUser.flows[0].stringifiedNodes));
-  //     setEdges(JSON.parse(sessionUser.flows[0].stringifiedEdges));
-  //   }
-  // }, [setNodes, setEdges]);
   const loadFlows = useCallback(
     async (sessionUser: User) => {
       const flows = await firestoreService.getSomeFromDB(
@@ -158,41 +114,43 @@ const Dashboard = () => {
   );
 
   // This loads the initial user and flow data from the user
-  async function InitialUser() {
-    console.log('auth', auth);
-    let sessionUser = store.getState().user.userData;
-    if (sessionUser.id === '') {
-      console.log('auth', auth?.currentUser);
-      const userId = auth?.currentUser?.uid;
-      if (userId) {
-        /* eslint-disable-next-line */
-        firestoreService
-          .getSomeFromDB('users', 'id', '==', userId)
-          .then((data) => {
-            if (data.length > 0) {
-              sessionUser = data[0] as User;
-            }
-          });
-      } else {
-        console.log('No user found, redirecting to login');
-        return;
+  const InitialUser = useCallback(
+    async (auth: Auth) => {
+      console.log('🌈 auth', auth);
+      // console.log('🌈 auth', auth?.AuthImpl?.currentUser);
+      let sessionUser = store.getState().user.userData;
+      if (sessionUser.id === '') {
+        console.log('auth?.currentUser', auth?.currentUser);
+        const userId = auth?.currentUser?.uid;
+        if (userId) {
+          /* eslint-disable-next-line */
+          firestoreService
+            .getSomeFromDB('users', 'id', '==', userId)
+            .then((data) => {
+              if (data.length > 0) {
+                sessionUser = data[0] as User;
+              }
+            });
+        } else {
+          console.log('No user found, redirecting to login');
+          return;
+        }
       }
-    }
-    console.log(
-      '🚀 ~ file: Dashboard.tsx:112 ~ useEffect ~ sessionUser:',
-      sessionUser.id
-    );
-    dispatchToStore(sessionUser as User);
-    loadFlows(sessionUser as User);
-  }
-  useEffect(() => {
-    InitialUser();
-  }, [setEdges, setNodes, loadFlows]);
-
-  const onConnect = useCallback(
-    (params: any) => setEdges((eds) => addEdge(params, eds)),
-    [setEdges]
+      console.log(
+        '🚀 ~ file: Dashboard.tsx:112 ~ useEffect ~ sessionUser:',
+        sessionUser.id
+      );
+      dispatchToStore(sessionUser as User);
+      loadFlows(sessionUser as User);
+    },
+    [loadFlows]
   );
+
+  useEffect(() => {
+    if (auth) {
+      InitialUser(auth);
+    }
+  }, [auth, InitialUser]);
 
   // ------------------------------------------------     Tabs     --------------------------------------------
   // save & load the nodes and edges of the tabs that we switched
@@ -209,6 +167,11 @@ const Dashboard = () => {
 
   // ------------------------------------------------     React Flow     --------------------------------------------
   // React Flow Events
+  const onConnect = useCallback(
+    (params: any) => setEdges((eds) => addEdge(params, eds)),
+    [setEdges]
+  );
+
   const onDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
@@ -227,39 +190,16 @@ const Dashboard = () => {
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
       });
-      const getData = (label: string) => {
-        switch (label) {
-          case 'textFileInput':
-            return { label: 'Text File Input', icon: <FileIcon /> };
-          case 'textInput':
-            return { label: 'Text Input', icon: <TextIcon /> };
-          case 'json':
-            return { label: 'JSON', icon: <FileIcon /> };
-          case 'userFunction':
-            return { label: 'User Function', icon: <FrameIcon /> };
-          case 'template':
-            return { label: 'Template', icon: <MixIcon /> };
-          case 'preview':
-            return { label: 'Preview', icon: <CameraIcon /> };
-          case 'openAi':
-            return { label: 'OpenAI', icon: <OpenAiLogo /> };
-          case 'deepl':
-            return { label: 'DeepL', icon: <DeeplLogo /> };
-          case 'imageAi':
-            return { label: 'Image AI', icon: <FileIcon /> };
-          case 'dalleGeneration':
-            return { label: 'Dall.e Generation', icon: <OpenAiLogo /> };
-          case 'download':
-            return { label: 'Download', icon: <FileIcon /> };
-          default:
-            return null;
-        }
+      const getData = (type: string) => {
+        const item = NodeData.find((nodeItem) => nodeItem.type === type);
+        if (item) return item.label;
       };
+
       const newNode = {
         id: uuidv4(),
         type,
         position,
-        data: { ...getData(`${type}`) },
+        data: { label: getData(`${type}`) },
       };
       setNodes((nds) => nds.concat(newNode));
     },
@@ -280,8 +220,6 @@ const Dashboard = () => {
   };
 
   // ------------------------------------------------     Flow Runner     --------------------------------------------
-  // Flow Runner - Init
-
   // Flow Runner - On change
   useEffect(() => {
     console.log('🌊 change detected\n', { outputs, states });
@@ -300,11 +238,6 @@ const Dashboard = () => {
       },
     });
   }
-
-  // This is a hack, refactor me
-  // if (currentUser.id === '') {
-  //   return <div></div>;
-  // }
   return (
     <>
       <Header currentUser={currentUser} />
@@ -319,7 +252,7 @@ const Dashboard = () => {
       </div>
 
       <div
-        // onKeyDown={persistNewFlow}
+        onKeyDown={persistNewFlow}
         className="relative flex flex-col grow h-full md:flex-row"
       >
         <ReactFlowProvider>
