@@ -9,6 +9,7 @@ import {
   addFlowFromSharedLink,
   addFlowCopyFromLink,
 } from '../shared-link-handler';
+import{ FcGoogle } from 'react-icons/fc';
 
 const auth = getAuth();
 export function GoogleLogin() {
@@ -58,7 +59,8 @@ export function GoogleLogin() {
     }
   };
   return (
-    <div className={styles.container}>
+    <div className='flex items-center p-2.5 my-2.5 w-full gap-2.5 border-2 border-solid border-gray-200 hover:bg-gray-100'>
+      <div className=''><FcGoogle /></div>
       <button onClick={signInWithGoogle}>Sign in with Google</button>
     </div>
   );

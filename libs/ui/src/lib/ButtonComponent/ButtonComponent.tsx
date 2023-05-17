@@ -10,8 +10,8 @@ function ButtonComponent (props: ButtonProps) {
   text-primary
   hover:bg-gray-200
   hover:text-primary
-  rounded-md w-[98%]
-  p-2.5 mt-[2vw] mb-[1vw]
+  rounded-md w-full
+  py-2.5 mt-[2vw] mb-[1vw]
   h-[30px] uppercase
   text-center`;
 
