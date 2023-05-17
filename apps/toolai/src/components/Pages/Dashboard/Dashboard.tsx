@@ -173,10 +173,6 @@ const Dashboard = () => {
   );
 
   // ------------------------------------------------     React Flow     --------------------------------------------
-  const onConnect = useCallback(
-    (params: any) => setEdges((eds) => addEdge(params, eds)),
-    [setEdges]
-  );
   // React Flow Events
   const onConnect = useCallback(
     (params: any) => setEdges((eds) => addEdge(params, eds)),
