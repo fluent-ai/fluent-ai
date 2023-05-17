@@ -95,8 +95,8 @@ export const NodeData: NodeItemData[] = [
       icon:<DeeplLogo />
     },
     {
-      type: 'imageAi',
-      label:'Image AI',
+      type: 'dalleVariation',
+      label:'Dall.e Variations',
       group: 'group-openai',
       icon:<IoImagesOutline />
     },

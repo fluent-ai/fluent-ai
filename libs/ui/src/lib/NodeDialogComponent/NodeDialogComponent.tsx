@@ -32,7 +32,7 @@ function NodeDialogComponent(props: NodeDialogProps) {
         return <OpenAIDialog id={props.activeNodeId} />;
       case 'deepl':
         return <DeeplDialog id={props.activeNodeId} />;
-      case 'imageAi':
+      case 'dalleVariation':
         return <ImageAiDialog id={props.activeNodeId} />;
       case 'dalleGeneration':
         return <DalleGenerationDialog id={props.activeNodeId} />;

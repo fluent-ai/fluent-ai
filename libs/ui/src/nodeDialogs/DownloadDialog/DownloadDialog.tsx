@@ -13,14 +13,12 @@ function DownloadDialog({id}:{id:string}) {
     return 'data:application/octet-stream;charset=utf-8,' + encodeURIComponent(text);
   }
 
-
   return (
     <InnerDialogStructure
     title="Download Node"
     description={'download node'}>
-    <div>{JSON.stringify(outputs?.nodeOutputs.payload || {},null,2)}</div>
-    <a href={encodeFile('test')}>result.txt</a>
-
+      <a href={encodeFile(outputs?.nodeOutputs.payload as string)}>result.txt</a>
+      {/* <div>{JSON.stringify(outputs?.nodeOutputs.payload || {},null,2)}</div> */}
     </InnerDialogStructure>
   );
 }
