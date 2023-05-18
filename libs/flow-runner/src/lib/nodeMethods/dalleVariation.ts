@@ -1,13 +1,15 @@
 import { Configuration, OpenAIApi } from 'openai';
 import { IMethodArguments } from '../useFlowRunner';
 
-export function DalleVariation({
+export function dalleVariation({
   globals,
   inputs,
   msg,
 }: IMethodArguments): Promise<Record<string, unknown>> {
+  console.log('🤙 dalleVariation', globals, inputs, msg);
+
   // @ts-expect-error no custom types for one line
-  const number = (inputs.numberVariations as number) || 1;
+  const number = inputs.numberVariations || 1;
   return new Promise((resolve) => {
     if (!msg.payload || typeof msg.payload !== 'string') {
       resolve({

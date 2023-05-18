@@ -6,9 +6,11 @@ export function dalleGeneration({
   inputs,
   msg,
 }: IMethodArguments): Promise<Record<string, unknown>> {
+  console.log('🤙 dalleGeneration', globals, inputs, msg);
   // @ts-expect-error no custom types for one line
+  const number = inputs.numberVariations || 1;
 
-  const number = (inputs.numberVariations as number) || 1;
+  // console.log('🤙  inputs.number', number);
   return new Promise((resolve) => {
     if (!msg.payload || typeof msg.payload !== 'string') {
       resolve({
@@ -27,15 +29,18 @@ export function dalleGeneration({
           configuration
         )}`
       );
+
+      // console.log(number);
       openai
         .createImage({
           // @ts-expect-error no custom types for one line
           prompt: msg.payload,
-          n: number,
+          // @ts-expect-error no custom types for one line
+          n: number as string,
           size: '256x256',
         })
         .then((response) => {
-          console.log('🤙 openAI response', response.data.data);
+          console.log('🤙 openAI response', response.data);
           resolve({
             ...msg,
             images: response?.data?.data,
@@ -52,13 +57,11 @@ export function dalleGeneration({
 
 // // for testing purposes
 // const message = {
+//   msg: { payload: 'a white siamese cat' },
 //   globals: {
-//     openAiApiKey: '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',
+//     openAiApiKey: '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',
 //   },
-//   msg: { payload: 'a white siamese cat	' },
-//   inputs: {
-//     numberVariations: 2,
-//   },
+//   inputs: { numberVariations: 3 },
 // };
 
 // console.log(dalleGeneration(message));

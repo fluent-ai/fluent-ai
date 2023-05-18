@@ -26,7 +26,6 @@ import { dispatchToStore } from '@libs/auth';
 import { NodeData } from '../../../nodeData';
 import { Auth, getAuth } from 'firebase/auth';
 
-
 const nodeTypes = {
   commentNode: CommentNode,
   textFileInput: TemplateNode,
@@ -255,7 +254,7 @@ const Dashboard = () => {
       </div>
 
       <div
-        onKeyDown={persistNewFlow}
+        // onKeyDown={persistNewFlow}
         className="relative flex flex-col grow h-full md:flex-row"
       >
         <ReactFlowProvider>
