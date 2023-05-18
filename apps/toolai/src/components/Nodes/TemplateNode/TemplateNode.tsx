@@ -1,4 +1,4 @@
-import React, { memo, useContext } from 'react';
+import React, { memo, useContext, useEffect } from 'react';
 import { Handle, Position } from 'reactflow';
 import '../CustomNodesStyles.css';
 import * as Dialog from '@radix-ui/react-dialog';
@@ -22,6 +22,11 @@ export default memo (({id, data,type, isConnectable}: MemoProps) => {
   const {setIsDialogOpen, setActiveDialog, setActiveNodeId} = useContext(Context);
   const status = useSelector(flowRunnerSelectors.selectState(id))?.state?.status as string || 'ready';
   // {JSON.stringify(state?.status || 'ready')}
+  useEffect(() => {
+    console.log('status', status);
+  }, [status]);
+  
+  
   function getIcon () {
     return NodeData.find(nodeItem => nodeItem.label == data.label);
   }
@@ -30,13 +35,13 @@ export default memo (({id, data,type, isConnectable}: MemoProps) => {
   }
 
   function getStatusColor() {
-    let color = '585858';
+    let color = '#585858';
     switch (status) {
       case 'ready':
         color = '#ffffff';
         break;
       case 'running':
-        color = '#ff9c7a';
+        color = '#7aadff';
         break;
       case 'done':
         color = '#c6ffac';
@@ -77,6 +82,8 @@ export default memo (({id, data,type, isConnectable}: MemoProps) => {
             width: '7px',
             height: '7px',
             borderRadius: '50%',
+            animation: `${status === 'running' ? 'pulse' : ''} 0.5s infinite ease-in-out alternate`,
+            
             
           }}
           ></div>

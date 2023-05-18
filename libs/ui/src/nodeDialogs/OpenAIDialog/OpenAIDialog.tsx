@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 function OpenAIDialog({id}:{id:string}){
   const inputs = useSelector(flowRunnerSelectors.selectOutput(id));
   let response = inputs?.nodeOutputs?.payload as string;
-  response = '' + response
+  if(!response) response = 'Run the flow to generate a response'
 
   return (
     <InnerDialogStructure

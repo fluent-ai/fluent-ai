@@ -54,7 +54,7 @@ const FlowTabs = (props: FlowTabsProps) => {
     saveFlow(props.nodes, props.edges);
   };
 
-  console.log(props.flowCharts);
+  // console.log(props.flowCharts);
   return (
     <Context.Provider
       value={{

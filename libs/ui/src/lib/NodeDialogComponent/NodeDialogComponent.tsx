@@ -14,7 +14,7 @@ import { DalleGenerationDialog } from '../../nodeDialogs/DalleGenerationDialog/D
 
 function NodeDialogComponent(props: NodeDialogProps) {
   const shownDialog = () => {
-    console.log('activeId', props.activeDialog);
+    // console.log('activeId', props.activeDialog);
     switch (props.activeDialog) {
       case 'textFileInput':
         return <TextFileInputDialog id={props.activeNodeId}/>;
