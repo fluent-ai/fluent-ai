@@ -17,9 +17,9 @@ function ShareDialog(props: ShareDialogProps) {
   return (
     <DialogComponent
     trigger={
-      <div className='flex justify-between text-primary text-base pl-[25px] H-[25px] pr-[5px] cursor-pointer'
+      <div className='flex justify-between text-primary text-[13px] text-base pl-[25px] H-[25px] pr-[5px] cursor-default group'
       >
-       {props.title}<div className={'ml-auto pl-5 text-gray-light [data-highlighted]:text-primary [data-disabled]:text-primary'}>⌘+N</div>
+       {props.title}<div className={'ml-auto pl-5 text-[#808080] [data-highlighted]:text-primary [data-disabled]:text-primary group-hover:text-primary'}>⌘+N</div>
 
       </div>
     }
