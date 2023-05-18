@@ -12,6 +12,6 @@ export function textFileInput({
         error: 'Input must exist and be a string',
       });
     }
-    resolve({ ...msg, payload: inputs?.input });
+    resolve({ ...msg, payload: inputs?.input, files: inputs?.files });
   });
 }

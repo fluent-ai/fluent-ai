@@ -41,25 +41,42 @@ function TextFileInputDialog({id}:{id:string}) {
 
   useEffect(() => {
     const readers = [];
+    const fileNames = [];
     // Abort if there were no files selected
     if(files == null || !files.length) return;
         // Store promises in array
         for(let i = 0;i < files.length;i++){
             readers.push(readFileAsText(files[i]));
+            fileNames.push(files[i].name);
         }
+        // const fileData = []
+
         // Trigger Promises
         Promise.all(readers).then((values) => {
             dispatch(
               flowRunnerActions.setInput(
                 {
                   id,
-                  nodeInputs: { input:
-                    values.join('')}
+                  nodeInputs: {
+                    ...inputs?.nodeInputs,
+                    input: values.join(''),
+                    files: files.map((file, index) => {
+                      return {
+                        name: file.name,
+                        size: file.size,
+                        type: file.type,
+                        contents: values[index],
+                      };
+                    })
+                  }
                 }
               )
             )
         });
   }, [dispatch, files, id]);
+
+  //generate a file list from inputs.nodeInputs.files
+  // inputs?.nodeInputs.files?.map((file) => file.name)
 
   return (
     <InnerDialogStructure
