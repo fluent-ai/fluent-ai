@@ -19,9 +19,10 @@ const NodeItemSideBar = (props: NodeItemSideBarProps): JSX.Element => {
 
   return(
   <div
-    className={`py-2.5 h-10 flex rounded-md justify-start items-center group/item hover:bg-gray-50 gap-x-2 ${props.classes}`}
+    className={`nodeItemSideBar py-2.5 h-10 flex rounded-md justify-start items-center group/item hover:bg-gray-50 gap-x-2 ${props.classes}`}
     onDragStart={props.onDragStartHandler}
     draggable >
+      <div className='w-[30px] h-[30px]'>
       <TooltipComponent buttonContent={props.icon} text={props.title} >
         <IconButtonComponent
           buttonContent={props.icon}
@@ -30,6 +31,7 @@ const NodeItemSideBar = (props: NodeItemSideBarProps): JSX.Element => {
           classes={'group-hover/item:bg-gray-50'}
           style={{backgroundColor: getColor()?.color}} />
       </TooltipComponent>
+      </div>
       <div className='py-2 whitespace-nowrap w-full overflow-hidden pl-2 rounded-md'>{props.title}</div>
   </div>
 )

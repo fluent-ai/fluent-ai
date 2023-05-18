@@ -12,7 +12,7 @@ function SettingsDialog(props: SettingsDialogProps) {
     <DialogComponent
     trigger={
     <div className='flex gap-x-3'>
-      <div className='sidebar-icon'><GearIcon />
+      <div className='sidebar-icon w-[30px] h-[30px]'><GearIcon />
       </div><p className='w-100' aria-label="settings" placeholder="Search nodes" >Settings</p></div>}
     title="Nodes settings"
     closeButton={<Form.Submit asChild>
