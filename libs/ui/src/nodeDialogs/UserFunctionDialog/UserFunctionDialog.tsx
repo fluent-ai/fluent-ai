@@ -1,11 +1,10 @@
-import { InnerDialogStructure } from '../../lib/InnerDialogStructure/InnerDialogStructure';
-import { NodeDialogProps } from '../../types';
-import { handleChange } from '../functions';
-/* eslint-disable-next-line */
-export interface UserFunctionDialogProps {}
+import { useDispatch, useSelector } from "react-redux";
+import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
+import { flowRunnerActions, flowRunnerSelectors } from "@tool-ai/state";
 
-function UserFunctionDialog(props: NodeDialogProps) {
-  const node = props.nodes.find((nodes) => nodes.id === props.activeNodeId);
+function UserFunctionDialog({id}:{id:string}) {
+  const dispatch = useDispatch();
+  const inputs = useSelector(flowRunnerSelectors.selectInput(id));
 
   return (
     <InnerDialogStructure
@@ -17,18 +16,18 @@ function UserFunctionDialog(props: NodeDialogProps) {
         placeholder="Write your function here..."
         rows={10}
         cols={100}
-        value={node?.props ? node.props.userFunction : ''}
-        onKeyDown={(e) => e.stopPropagation()}
-        onChange={(event) =>
-          handleChange(
-            props.nodes,
-            props.setNodes,
-            props.activeNodeId,
-            event.target.value,
-            'userFunction'
+        // value={node?.props ? node.props.userFunction : ''}
+        value={inputs?.nodeInputs.userFunction as string}
+        onChange={          (event) => {
+          dispatch(
+            flowRunnerActions.setInput(
+              {
+                id,
+                nodeInputs: { userFunction:event.target.value}
+              }
+            )
           )
-        }
-      />
+          }} />
     </InnerDialogStructure>
   );
 }

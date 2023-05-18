@@ -6,12 +6,7 @@ describe('UserFunctionDialog', () => {
   it('should render successfully', () => {
     const { baseElement } = render(
     <UserFunctionDialog
-      isOpen={true}
-      onClose={()=>{console.log('onClose')}}
-      activeDialog='userFunction'
-      nodes={[]}
-      setNodes={()=>console.log('setNodes')}
-      activeNodeId='test' />
+    id='test'  />
       );
     expect(baseElement).toBeTruthy();
   });

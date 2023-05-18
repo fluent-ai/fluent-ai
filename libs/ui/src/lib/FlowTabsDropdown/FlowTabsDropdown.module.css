@@ -37,7 +37,7 @@ button {
 .DropdownMenuSubTrigger {
   font-size: 13px;
   line-height: 1;
-  color: black;
+  color: theme('colors.black');
   border-radius: 3px;
   display: flex;
   align-items: center;
@@ -49,10 +49,7 @@ button {
   user-select: none;
   outline: none;
 }
-.DropdownMenuSubTrigger[data-state='open'] {
-  background-color: purple;
-  color: purple;
-}
+
 .DropdownMenuItem[data-disabled],
 .DropdownMenuCheckboxItem[data-disabled],
 .DropdownMenuRadioItem[data-disabled],
@@ -64,7 +61,7 @@ button {
 .DropdownMenuCheckboxItem[data-highlighted],
 .DropdownMenuRadioItem[data-highlighted],
 .DropdownMenuSubTrigger[data-highlighted] {
-  color: purple;
+  color: theme('colors.primary');
 }
 
 .DropdownMenuLabel {
@@ -104,10 +101,6 @@ button {
   color: color;
   background-color: transparent;
 }
-.IconButton:hover {
-}
-.IconButton:focus {
-}
 
 .RightSlot {
   margin-left: auto;
@@ -115,10 +108,10 @@ button {
   color: gray;
 }
 [data-highlighted] > .RightSlot {
-  color: purple;
+  color: theme('colors.primary');
 }
 [data-disabled] .RightSlot {
-  color: gray;
+  color: theme('colors.gray-light');
 }
 
 @keyframes slideUpAndFade {

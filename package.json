@@ -7,6 +7,7 @@
   },
   "private": true,
   "dependencies": {
+    "@radix-ui/react-accordion": "^1.1.1",
     "@radix-ui/react-alert-dialog": "^1.0.3",
     "@radix-ui/react-avatar": "^1.0.2",
     "@radix-ui/react-dropdown-menu": "^2.0.4",
@@ -16,23 +17,30 @@
     "@radix-ui/react-tooltip": "^1.0.5",
     "@reduxjs/toolkit": "1.9.3",
     "@swc/helpers": "~0.5.0",
-    "@testing-library/react-hooks": "^8.0.1",
+    "axios-jwt": "^3.0.2",
+    "classnames": "^2.3.2",
     "confetti-js": "^0.0.18",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "firebase": "9.21.0",
     "http": "^0.0.1-security",
+    "jimp": "^0.22.8",
     "mustache": "^4.2.0",
+    "node-polyfill-webpack-plugin": "^2.0.1",
     "openai": "^3.2.1",
+    "os-browserify": "^0.3.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-icons": "^4.8.0",
     "react-redux": "8.0.5",
     "react-router-dom": "^6.11.1",
     "reactflow": "^11.7.0",
     "socket.io": "^4.6.1",
     "socket.io-client": "^4.6.1",
+    "stream-http": "^3.2.0",
     "tailwind": "^4.0.0",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.14.5",
@@ -57,6 +65,7 @@
     "@types/react-dom": "18.0.11",
     "@types/react-router-dom": "5.3.3",
     "@types/socket.io-client": "^3.0.0",
+    "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5.58.0",
     "@typescript-eslint/parser": "^5.58.0",
     "@vitejs/plugin-react": "^3.0.0",
@@ -92,6 +101,7 @@
     "vite-plugin-dts": "~1.7.1",
     "vite-plugin-eslint": "^1.8.1",
     "vite-tsconfig-paths": "^4.0.2",
-    "vitest": "^0.31.0"
+    "vitest": "^0.31.0",
+    "webpack-cli": "^5.1.1"
   }
 }

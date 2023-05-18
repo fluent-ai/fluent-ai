@@ -5,9 +5,12 @@ import './CustomNodesStyles.css';
 import * as Dialog from '@radix-ui/react-dialog';
 import Context from '../../context/context';
 
+interface Data {
+  label:string
+}
 interface MemoProps {
   isConnectable: boolean;
-  data: any
+  data: Data
 }
 export default memo (({data, isConnectable}: MemoProps) => {
   const {setIsDialogOpen} = useContext(Context);

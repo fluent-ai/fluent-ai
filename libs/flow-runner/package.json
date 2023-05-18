@@ -8,5 +8,9 @@
       "import": "./index.mjs",
       "require": "./index.js"
     }
+  },
+  "dependencies": {
+    "node-ts": "^6.0.0",
+    "ts-node": "^10.9.1"
   }
 }

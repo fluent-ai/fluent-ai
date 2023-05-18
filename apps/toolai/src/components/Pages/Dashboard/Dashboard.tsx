@@ -1,5 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
 import {
   ReactFlowProvider,
   addEdge,
@@ -10,44 +11,71 @@ import 'reactflow/dist/style.css';
 import NodeSideBar from '../../Navigation/NodeSideBar/NodeSideBar';
 import FlowTabs from '../../Navigation/FlowTabs/FlowTabs';
 import TemplateNode from '../../Nodes/TemplateNode/TemplateNode';
+import CommentNode from '../../Nodes/CommentNode/CommentNode';
 import Header from '../../Navigation/Header/Header';
-import { store, flowTabActions } from '@tool-ai/state';
-import { dispatchToStore } from '@libs/auth';
 import {
-  User,
-  mockUser,
-  mockFlow,
-  ButtonComponent,
-  saveFlow,
-  switchFlowTab,
-} from '@tool-ai/ui';
+  store,
+  flowRunnerActions,
+  flowRunnerSelectors,
+  flowTabActions,
+} from '@tool-ai/state';
+import { User, ButtonComponent, saveFlow, switchFlowTab } from '@tool-ai/ui';
 import { useFlowRunner } from '@tool-ai/flow-runner';
 import * as firestoreService from '@libs/firestore-service';
 import { SocketClient } from '@libs/socket-client';
+import { dispatchToStore } from '@libs/auth';
+import { NodeData } from '../../../nodeData';
+import { Auth, getAuth } from 'firebase/auth';
 
 const nodeTypes = {
+  commentNode: CommentNode,
+  textFileInput: TemplateNode,
+  deepl: TemplateNode,
   textInput: TemplateNode,
   template: TemplateNode,
   json: TemplateNode,
   userFunction: TemplateNode,
   preview: TemplateNode,
   openAi: TemplateNode,
+  dalleGeneration: TemplateNode,
+  dalleVariation: TemplateNode,
+  download: TemplateNode,
 };
 
-let id = 0;
-const getId = () => `dndnode_${id++}`;
-
 const Dashboard = () => {
+  // --------------------------------------     Hooks & State - React Flow    --------------------------------------
   const reactFlowWrapper = useRef<any>(null);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
-
+  // --------------------------------------       Hooks & State - User       --------------------------------------
   const currentUser = useSelector((state: any) => state.user.userData);
   const currentFlows = useSelector(
     (state: any) => state.flowTab.flowTabs.flows
   );
+  let auth: Auth | null = null;
+  useEffect(() => {
+    auth = getAuth();
+  }, []);
+  // --------------------------------------     Hooks & State - Flow Runner   --------------------------------------
+  const { executeFlow, outputs, states } = useFlowRunner();
+  const dispatch = useDispatch();
+  const inputs = useSelector(flowRunnerSelectors.selectInputs);
+  // -----------------------------------------------     User & Auth    --------------------------------------------
+  // useEffect(() => {
+  //   const sessionUser = store.getState().user.userData;
+  //   if (sessionUser.id === '') {
+  //     // for local development only
+  //     // updateUser(mockUser);
+  //     // updateUser(sessionUser as User);
+  //     console.log('No user found, redirecting to login');
+  //   } else {
+  //     updateUser(sessionUser as User);
+  //   }
+  // }, []);
 
+  // ------------------------------------------------     Database     --------------------------------------------
+  // Saving & Loading Flows
   const persistNewFlow = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
       e.preventDefault();
@@ -58,9 +86,8 @@ const Dashboard = () => {
     },
     [nodes, edges]
   );
-
   const loadFlows = useCallback(
-    async function (sessionUser: User) {
+    async (sessionUser: User) => {
       const flows = await firestoreService.getSomeFromDB(
         'flows',
         'collaboratorIds',
@@ -114,11 +141,54 @@ const Dashboard = () => {
     }
   }, [loadFlows]);
 
-  const onConnect = useCallback(
-    (params: any) => setEdges((eds) => addEdge(params, eds)),
-    [setEdges]
+        store.dispatch(flowTabActions.setActiveFlowTab(flows[0].id));
+        setNodes(JSON.parse(flows[0].stringifiedNodes));
+        setEdges(JSON.parse(flows[0].stringifiedEdges));
+      }
+    },
+    [setNodes, setEdges]
   );
 
+  // This loads the initial user and flow data from the user
+  const InitialUser = useCallback(
+    async (auth: Auth) => {
+      console.log('🌈 auth', auth);
+      // console.log('🌈 auth', auth?.AuthImpl?.currentUser);
+      let sessionUser = store.getState().user.userData;
+      if (sessionUser.id === '') {
+        console.log('auth?.currentUser', auth?.currentUser);
+        const userId = auth?.currentUser?.uid;
+        if (userId) {
+          /* eslint-disable-next-line */
+          firestoreService
+            .getSomeFromDB('users', 'id', '==', userId)
+            .then((data) => {
+              if (data.length > 0) {
+                sessionUser = data[0] as User;
+              }
+            });
+        } else {
+          console.log('No user found, redirecting to login');
+          return;
+        }
+      }
+      console.log(
+        '🚀 ~ file: Dashboard.tsx:112 ~ useEffect ~ sessionUser:',
+        sessionUser.id
+      );
+      dispatchToStore(sessionUser as User);
+      loadFlows(sessionUser as User);
+    },
+    [loadFlows]
+  );
+
+  useEffect(() => {
+    if (auth) {
+      InitialUser(auth);
+    }
+  }, [auth, InitialUser]);
+
+  // ------------------------------------------------     Tabs     --------------------------------------------
   // save & load the nodes and edges of the tabs that we switched
   const changeTabState = useCallback(
     (tabId: string) => {
@@ -131,10 +201,12 @@ const Dashboard = () => {
     [nodes, edges, setNodes, setEdges]
   );
 
-  // Trigger the effect when nodes or edges change
-  useEffect(() => {
-    // console.log('updated flowState: ', nodes, edges);
-  }, [nodes, edges]);
+  // ------------------------------------------------     React Flow     --------------------------------------------
+  // React Flow Events
+  const onConnect = useCallback(
+    (params: any) => setEdges((eds) => addEdge(params, eds)),
+    [setEdges]
+  );
 
   const handleSocketChange = useCallback(
     (flow: any) => {
@@ -148,36 +220,35 @@ const Dashboard = () => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
   }, []);
-
   const onDrop = useCallback(
-    (event: any) => {
+    (event: React.DragEvent) => {
       event.preventDefault();
-
       const reactFlowBounds =
         reactFlowWrapper?.current?.getBoundingClientRect();
       const type = event.dataTransfer.getData('application/reactflow');
-
       // check if the dropped element is valid
       if (typeof type === 'undefined' || !type) {
         return;
       }
-
       const position = reactFlowInstance.project({
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
       });
-      const newNode = {
-        id: getId(),
-        type,
-        position,
-        data: { label: `${type}` },
+      const getData = (type: string) => {
+        const item = NodeData.find((nodeItem) => nodeItem.type === type);
+        if (item) return item;
       };
 
+      const newNode = {
+        id: uuidv4(),
+        type,
+        position,
+        data: { ...getData(`${type}`) },
+      };
       setNodes((nds) => nds.concat(newNode));
     },
     [reactFlowInstance, setNodes]
   );
-
   const FlowTabsProps = {
     nodes: nodes,
     edges: edges,
@@ -192,17 +263,24 @@ const Dashboard = () => {
     onTabChange: changeTabState,
   };
 
-  const { flow, setFlow, executeFlow } = useFlowRunner();
-
-  // useEffect(() => {
-  //   console.log('flow', flow);
-  // }, [flow]);
-
+  // ------------------------------------------------     Flow Runner     --------------------------------------------
+  // Flow Runner - On change
+  useEffect(() => {
+    console.log('🌊 change detected\n', { outputs, states });
+    dispatch(flowRunnerActions.setStates(states));
+    dispatch(flowRunnerActions.setOutputs(outputs));
+  }, [outputs, states, dispatch]);
+  // Flow Runner - Runner callback
   function runFlow() {
-    console.log('Running');
-  }
-  if (currentUser.id === '') {
-    return <div></div>;
+    console.log('🌊 executing flow');
+    executeFlow({
+      flow: { nodes, edges },
+      inputs,
+      globals: {
+        deeplApiKey: process.env.NX_DEEPL_API_KEY,
+        openAiApiKey: process.env.NX_OPENAI_API_KEY,
+      },
+    });
   }
   return (
     <>
@@ -214,22 +292,14 @@ const Dashboard = () => {
         onChangeFlow={handleSocketChange}
       />
       <Header currentUser={currentUser} />
-      <div className="h-10 w-32 mt-2.5 ml-72 bg-white absolute shadow-md rounded-md z-10 text-black flex justify-between items-center">
-        <ButtonComponent
-          buttonContent="RUN"
-          type="button"
-          classes="icons"
-          ariaLabel="run flow"
-          clickHandler={runFlow}
-        />
-      </div>
+
 
       <div
-        onKeyDown={persistNewFlow}
+        // onKeyDown={persistNewFlow}
         className="relative flex flex-col grow h-full md:flex-row"
       >
         <ReactFlowProvider>
-          <NodeSideBar />
+          <NodeSideBar runFlow={runFlow}/>
           <FlowTabs
             currentUserId={currentUser.id}
             flowCharts={currentFlows}

@@ -1,3 +1,6 @@
+import { ReactElement } from "react";
+import React from 'react';
+
 export interface Validation {
   match:
     | 'badInput'
@@ -20,23 +23,34 @@ export interface FormFieldProps {
   validations?: Validation[];
   type: string;
   required?: boolean;
-  value?: any;
+  value?: string;
   onChange: any;
   placeholder?: string;
 }
 
 export interface NodeWrapperComponentProps {
   isConnectable: boolean;
-  data: any;
+  data: {label:string};
   isDialogOpen: boolean;
   setIsDialogOpen: (arg: boolean) => void;
 }
 
-interface TooltipProps {
+export interface TooltipProps {
   buttonContent?: JSX.Element | string;
   text: string;
   name?: string;
   clickHandler?: () => void;
+  classes?: string;
+  children?: JSX.Element
+}
+
+export interface ButtonProps {
+  buttonContent?: string | JSX.Element | undefined ,
+  type: "button" | "submit" | "reset" | undefined;
+  ariaLabel: string;
+  classes?: string;
+  clickHandler?: () => void | undefined;
+  style?: any
 }
 
 interface NodeDialogProps {
@@ -44,7 +58,7 @@ interface NodeDialogProps {
   onClose: (boolean: boolean) => void;
   activeDialog: string;
   nodes: Node<{ label: string }, string | undefined>[];
-  setNodes: any;
+  setNodes: React.Dispatch<React.SetStateAction<Node<string | undefined>[]>>;
   activeNodeId: string;
 }
 interface FlowCollaborator {

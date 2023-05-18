@@ -5,15 +5,22 @@ import { Route, Routes } from 'react-router-dom';
 import Dashboard from '../components/Pages/Dashboard/Dashboard';
 import Login from '../components/Pages/Login/Login';
 import Register from '../components/Pages/Register/Register';
-
+import { ProtectedRoute } from '@libs/auth';
 
 const App = () => {
-
   return (
     <Routes>
-      <Route path="/" element={<Dashboard />}></Route>
+      <Route path="/" element={<Login />}></Route>
       <Route path="/login" element={<Login />}></Route>
       <Route path="/register" element={<Register />}></Route>
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      ></Route>
     </Routes>
   );
 };

@@ -5,12 +5,7 @@ import {PreviewDialog} from './PreviewDialog';
 describe('PreviewDialog', () => {
   it('should render successfully', () => {
     const { baseElement } = render(<PreviewDialog
-      isOpen={true}
-      onClose={()=>{console.log('onClose')}}
-      activeDialog='preview'
-      nodes={[]}
-      setNodes={()=>console.log('setNodes')}
-      activeNodeId='test' />);
+      id='test' />);
     expect(baseElement).toBeTruthy();
   });
 });

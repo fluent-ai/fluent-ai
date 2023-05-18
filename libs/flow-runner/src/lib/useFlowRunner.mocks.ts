@@ -1,11 +1,7 @@
-export const nodes = [
+export const inputs = [
   {
     id: '1',
-    type: 'input',
-    data: {
-      label: 'Text input',
-    },
-    props: {
+    nodeInputs: {
       input: `{
           "name" : "Mr Wiggles",
           "color" : "pink",
@@ -13,6 +9,35 @@ export const nodes = [
           "balloons" : true
         }
         `,
+    },
+  },
+  {
+    id: '3',
+    nodeInputs: {
+      userFunction: 'msg.payload.number = msg.payload.number * 2; return msg',
+    },
+  },
+  {
+    id: '4',
+    nodeInputs: {
+      template: `Hello {{msg.payload.name}}!
+        Here! have {{msg.payload.number}} {{msg.payload.color}} balloons.`,
+    },
+  },
+  {
+    id: '5',
+    nodeInputs: {
+      input: `Please respond with exactly 'Hello'`,
+    },
+  },
+];
+
+export const nodes = [
+  {
+    id: '1',
+    type: 'textInput',
+    data: {
+      label: 'Text input',
     },
     position: { x: 0, y: 50 },
   },
@@ -26,50 +51,28 @@ export const nodes = [
   },
   {
     id: '3',
-    type: 'template',
-    data: {
-      label: 'Template',
-    },
-    props: {
-      template: `Hello {{msg.payload.name}}!
-        Here! have {{msg.payload.number}} {{msg.payload.color}} balloons.`,
-    },
-    position: { x: 300, y: 50 },
-  },
-  {
-    id: '4',
-    type: 'preview',
-    data: { label: 'Preview' },
-    position: { x: 300, y: 50 },
-  },
-  {
-    id: '5',
-    type: 'output',
-    data: { label: 'Output' },
-    position: { x: 650, y: 25 },
-  },
-  {
-    id: '6',
     type: 'userFunction',
     data: {
       label: 'Function',
     },
-    props: {
-      userFunction: 'msg.payload.number = msg.payload.number * 2; return msg',
-    },
     position: { x: 650, y: 25 },
   },
   {
-    id: '7',
-    type: 'input',
+    id: '4',
+    type: 'template',
+    data: {
+      label: 'Template',
+    },
+    position: { x: 300, y: 50 },
+  },
+  {
+    id: '5',
+    type: 'textInput',
     data: { label: 'Input' },
-    props: {
-      input: `Please do a thing`,
-    },
     position: { x: 650, y: 25 },
   },
   {
-    id: '8',
+    id: '6',
     type: 'openAi',
     data: {
       label: 'OpenAI Chat Completion',
@@ -95,23 +98,8 @@ export const edges = [
     target: '4',
   },
   {
-    id: 'e3-5',
-    source: '3',
-    target: '5',
-  },
-  {
-    id: 'e4-5',
-    source: '4',
-    target: '5',
-  },
-  {
-    id: 'e2-6',
-    source: '2',
+    id: 'e5-6',
+    source: '5',
     target: '6',
-  },
-  {
-    id: 'e7-8',
-    source: '7',
-    target: '8',
   },
 ];
