@@ -26,7 +26,6 @@ import { dispatchToStore } from '@libs/auth';
 import { NodeData } from '../../../nodeData';
 import { Auth, getAuth } from 'firebase/auth';
 
-
 const nodeTypes = {
   commentNode: CommentNode,
   textFileInput: TemplateNode,

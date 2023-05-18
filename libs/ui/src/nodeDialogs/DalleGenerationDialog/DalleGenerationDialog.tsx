@@ -19,16 +19,15 @@ function DalleGenerationDialog({id}:{id:string}) {
   const inputs = useSelector(flowRunnerSelectors.selectInput(id));
   const outputs = useSelector(flowRunnerSelectors.selectOutput(id)) as IOutputs;
   const state = useSelector(flowRunnerSelectors.selectState(id)) as IOutputs;
-  console.log(JSON.stringify(outputs, null, 2));
-  const url = outputs?.nodeOutputs?.image?.url || ''
+  // const url = outputs?.nodeOutputs?.image?.url || ''
 
   return (
     <InnerDialogStructure
     title="Open AI Dall.e Generation"
     description="Generate an image based on in incoming message (msg.payload) using OpenAI's Dall.e"
     >
-      <div>{JSON.stringify(state)}</div>
-      <label className="mt-2.5">select amount of variations
+      <div title="Settings" >
+      <label title="Output Images"  className="mt-2.5">select amount of variations
           <select aria-label="select amount of variations"
             onChange={(e)=> dispatch(flowRunnerActions.setInput(
               {
@@ -52,8 +51,15 @@ function DalleGenerationDialog({id}:{id:string}) {
             <option value={10}>10</option>
           </select>
         </label>
-      <div className="flex flex-col items-center justify-center">
-        {url !== '' ? <img src={url} alt="Open AI" /> : <div>Run the flow to generate an image</div>}
+        </div>
+      <div title="Output Images" className="flex flex-col items-center justify-center">
+        {/* {url !== '' ? <img src={url} alt="Open AI" /> : <div>Run the flow to generate an image</div>} */}
+        { 
+        // @ts-ignore
+        outputs?.nodeOutputs?.images?.map((image, index) => {
+          return <img key={index} src={image.url} alt="Open AI" />
+        })
+        }
       </div>
 
 
