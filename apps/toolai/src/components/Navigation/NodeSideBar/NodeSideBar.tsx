@@ -1,9 +1,13 @@
 import React, {useState} from 'react';
 import NodeItemSideBar from '../NodeItemSideBar/NodeItemSideBar';
+// <<<<<<< HEAD
 import { PlayIcon, LapTimerIcon, MixIcon, TextIcon, DoubleArrowRightIcon, ArrowRightIcon, ArrowLeftIcon, FrameIcon, MagnifyingGlassIcon, GearIcon, CameraIcon, GlobeIcon, ArrowDownIcon } from '@radix-ui/react-icons';
 import {ReactComponent as OpenAiLogo}  from  '../../../assets/OpenAI_Logo.svg';
 import {ReactComponent as DeeplLogo}  from  '../../../assets/Deepl_Logo.svg';
 import { ButtonComponent, SettingsDialog } from '@tool-ai/ui';
+// =======
+// import { SettingsDialog } from '@tool-ai/ui';
+// >>>>>>> cdfe2e311866fedb31b473c935915b1b4ffe9654
 import { NodeData, groups } from '../../../nodeData';
 import { flowRunnerSelectors } from '@tool-ai/state';
 import { useSelector } from 'react-redux';
@@ -24,6 +28,7 @@ const NodeSideBar = ({runFlow}:{runFlow:()=>void}) => {
       {`.scroll-container::-webkit-scrollbar { display: none; }`}
     </style>
     <aside className={`scroll-container px-2 py-2.5 max-h-[80vh] overflow-y-scroll rounded-md bg-white shadow-md w-[45px] overflow-x-hidden transition-all duration-300 ease-in-out group-hover:w-60`}>
+
     <SettingsDialog />
       <div className='flex gap-x-3' onClick={runFlow}>
         <div className='sidebar-icon'>
