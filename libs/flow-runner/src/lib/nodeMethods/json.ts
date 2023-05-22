@@ -1,10 +1,17 @@
-export interface JsonMsg {
-  payload: string | Record<string, unknown>;
-  [key: string]: unknown;
-}
+import { IMethodArguments } from '../useFlowRunner';
 
-export async function json(msg: JsonMsg): Promise<Record<string, unknown>> {
+export function json({
+  globals,
+  inputs,
+  msg,
+}: IMethodArguments): Promise<Record<string, unknown>> {
   return new Promise((resolve) => {
+    if (!msg.payload) {
+      resolve({
+        ...msg,
+        error: 'JSON node expects msg object to include a payload',
+      });
+    }
     //try parse the msg.payload as json
     try {
       resolve({ ...msg, payload: JSON.parse(msg.payload as string) });

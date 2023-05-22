@@ -1,6 +1,4 @@
 import styles from './NodeDialogComponent.module.css';
-import React, { useState } from 'react';
-import * as Dialog from '@radix-ui/react-dialog';
 import { NodeDialogProps } from '../../types';
 import { InputDialog } from '../../nodeDialogs/InputDialog/InputDialog';
 import { JsonDialog } from '../../nodeDialogs/JsonDialog/JsonDialog';
@@ -8,21 +6,38 @@ import { TemplateDialog } from '../../nodeDialogs/TemplateDialog/TemplateDialog'
 import { UserFunctionDialog } from '../../nodeDialogs/UserFunctionDialog/UserFunctionDialog';
 import { PreviewDialog } from '../../nodeDialogs/PreviewDialog/PreviewDialog';
 import { OpenAIDialog } from '../../nodeDialogs/OpenAIDialog/OpenAIDialog';
+import { TextFileInputDialog } from '../../nodeDialogs/TextFileInputDialog/TextFileInputDialog';
+import { DeeplDialog } from '../../nodeDialogs/DeeplDialog/DeeplDialog';
+import { DalleVariationDialog } from '../../nodeDialogs/DalleVariationDialog/DalleVariationDialog';
+import { DownloadDialog } from '../../nodeDialogs/DownloadDialog/DownloadDialog';
+import { DalleGenerationDialog } from '../../nodeDialogs/DalleGenerationDialog/DalleGenerationDialog';
+
 function NodeDialogComponent(props: NodeDialogProps) {
   const shownDialog = () => {
+    // console.log('activeId', props.activeDialog);
     switch (props.activeDialog) {
+      case 'textFileInput':
+        return <TextFileInputDialog id={props.activeNodeId}/>;
       case 'textInput':
-        return <InputDialog {...props} />;
+        return <InputDialog id={props.activeNodeId} />;
       case 'json':
-        return <JsonDialog {...props} />;
+        return <JsonDialog id={props.activeNodeId}/>;
       case 'userFunction':
-        return <UserFunctionDialog {...props} />;
+        return <UserFunctionDialog id={props.activeNodeId}  />;
       case 'template':
-        return <TemplateDialog {...props} />;
+        return <TemplateDialog id={props.activeNodeId}  />;
       case 'preview':
-        return <PreviewDialog {...props} />;
+        return <PreviewDialog id={props.activeNodeId} />;
       case 'openAi':
-        return <OpenAIDialog {...props} />;
+        return <OpenAIDialog id={props.activeNodeId} />;
+      case 'deepl':
+        return <DeeplDialog id={props.activeNodeId} />;
+      case 'dalleVariation':
+        return <DalleVariationDialog id={props.activeNodeId} />;
+      case 'dalleGeneration':
+        return <DalleGenerationDialog id={props.activeNodeId} />;
+      case 'download':
+        return <DownloadDialog id={props.activeNodeId} />;
       default:
         return null;
     }
@@ -36,7 +51,7 @@ function NodeDialogComponent(props: NodeDialogProps) {
           <button
            className='absolute right-2 top-2'
            onClick={() => props.onClose(false)}>
-            X
+            🅧
            </button>
           <div>
             {shownDialog()}
@@ -48,19 +63,3 @@ function NodeDialogComponent(props: NodeDialogProps) {
 }
 
 export { NodeDialogComponent };
-
-{
-  /* <Dialog.Root >
-    <Dialog.Trigger>{props.label}</Dialog.Trigger>
-    <Dialog.Portal>
-      <Dialog.Overlay className="DialogOverlay"  />
-      <Dialog.Content className="DialogContent">
-        <Dialog.Title className="DialogTitle">Hello</Dialog.Title>
-        <Dialog.Description />
-        {/* <Dialog.Close /> */
-}
-{
-  /* </Dialog.Content>
-    </Dialog.Portal>
-    </Dialog.Root> */
-}

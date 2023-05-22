@@ -8,6 +8,7 @@ import {
 } from '@reduxjs/toolkit';
 import * as flow from 'reactflow';
 
+
 export const FLOW_TAB_FEATURE_KEY = 'flowTab';
 
 /*
@@ -24,8 +25,8 @@ export interface FlowTabEntity {
   id: string;
   title: string;
   ownerId: string;
-  nodes: any[];
-  edges: any[];
+  nodes: flow.Node[];
+  edges: flow.Edge[];
   collaboratorIds: string[];
   collaborators: FlowCollaborators[];
 }

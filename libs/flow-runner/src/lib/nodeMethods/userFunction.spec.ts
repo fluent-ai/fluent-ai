@@ -1,35 +1,68 @@
 import { userFunction } from './userFunction';
 
-describe('FlowRunner nodeMethods - userFunction', () => {
+describe('FlowRunner nodeMethods - userFunction - usage errors', () => {
   it('should execute a valid user script and merge the result into the input message', async () => {
-    const msg = { name: 'John', age: 30 };
-    const props = {
-      userFunction: 'return { surname: "Doe", age: msg.age * 2 };',
+    const args = {
+      globals: { emoji: '👋' },
+      inputs: {
+        userFunction: `
+          msg.payload.surname = "Doe";
+          msg.payload.age = msg.payload.age * 2;
+          msg.payload.emoji = globals.emoji;
+          return msg;
+          `,
+      },
+      msg: { payload: { name: 'John', age: 30 } },
     };
-    const result = await userFunction(msg, props);
-    expect(result).toEqual({ name: 'John', surname: 'Doe', age: 60 });
+    const result = await userFunction(args);
+    expect(result).toEqual({
+      payload: {
+        name: 'John',
+        surname: 'Doe',
+        age: 60,
+        emoji: args.globals.emoji,
+      },
+    });
   });
 
-  it('should reject with an error if props.userFunction is not a string', async () => {
-    const msg = { name: 'John', age: 30 };
-    const props = { userFunction: 123 }; // not a string
-    //@ts-expect-error - testing invalid input
-    await expect(userFunction(msg, props)).rejects.toBe(
-      'props.userFunction is not a string'
+  it('should resolve with an error if props.userFunction is not a string', async () => {
+    const args = {
+      globals: {},
+      inputs: {},
+      msg: {},
+    };
+    const result = await userFunction(args);
+    expect(result?.['error']).toEqual(
+      'inputs.userFunction either doesnt exist or is not a string'
     );
   });
 
-  it('should reject with an error if the user script includes a disallowed word', async () => {
-    const msg = { name: 'John', age: 30 };
-    const props = { userFunction: "import 'evil-package'" }; // disallowed word
-    const response = await userFunction(msg, props);
-    expect(response).toHaveProperty('error');
+  it('should resolve with an error if the user script includes a disallowed word', async () => {
+    const args = {
+      globals: {},
+      inputs: {
+        userFunction: `
+          import 'evil library
+          return msg;
+          `,
+      },
+      msg: { payload: { name: 'John', age: 30 } },
+    };
+    const result = await userFunction(args);
+    expect(result).toHaveProperty('error');
   });
 
-  it('should reject with an error if the user script throws an error', async () => {
-    const msg = { name: 'John', age: 30 };
-    const props = { userFunction: 'throw new Error("Oops");' }; // throws an error
-    const response = await userFunction(msg, props);
-    expect(response).toHaveProperty('error');
+  it('should resolve with an error if the user script throws an error', async () => {
+    const args = {
+      globals: { emoji: '👋' },
+      inputs: {
+        userFunction: `
+          throw new Error("Oops");
+          `,
+      },
+      msg: { payload: { name: 'John', age: 30 } },
+    };
+    const result = await userFunction(args);
+    expect(result).toHaveProperty('error');
   });
 });

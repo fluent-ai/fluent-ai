@@ -9,6 +9,7 @@ import {
   addFlowFromSharedLink,
   addFlowCopyFromLink,
 } from '../shared-link-handler';
+import{ FcGoogle } from 'react-icons/fc';
 
 const auth = getAuth();
 export function GoogleLogin() {
@@ -29,14 +30,14 @@ export function GoogleLogin() {
       await addFlowCopyFromLink(users[0] as User);
       // store user state in redux
       await dispatchToStore(users[0] as User);
-      navigate('/');
+      navigate('/dashboard');
     } else {
       if (user.displayName && user.email && user.photoURL) {
         const newUser = await createNewUser(user);
         await dispatchToStore(newUser);
         await addFlowFromSharedLink(newUser);
         await addFlowCopyFromLink(newUser);
-        navigate('/');
+        navigate('/dashboard');
       }
     }
   };
@@ -58,7 +59,8 @@ export function GoogleLogin() {
     }
   };
   return (
-    <div className={styles.container}>
+    <div className='flex items-center p-2.5 my-2.5 w-full gap-2.5 border-2 border-solid border-gray-200 hover:bg-gray-100'>
+      <div className=''><FcGoogle /></div>
       <button onClick={signInWithGoogle}>Sign in with Google</button>
     </div>
   );

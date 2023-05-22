@@ -2,37 +2,24 @@ import { openAi } from './openAi';
 
 describe('FlowRunner nodeMethods - openAi', () => {
   it('should respond to a request', async () => {
-    const msg = { payload: 'Please say hello' };
-    const result = await openAi(msg);
-    //expect the result to be have a type string
+    const args = {
+      globals: { openAiApiKey: process.env.NX_OPENAI_API_KEY },
+      inputs: {},
+      msg: { payload: 'Please say hello' },
+    };
+    const result = await openAi(args);
     expect(typeof result?.['payload']).toBe('string');
-    // expect(result?.['payload']).to
-  }, 60000);
+  }, 10000);
 
-  //   it('should reject with an error if props.template is not a string', async () => {
-  //     const msg = { name: 'John', age: 30 };
-  //     const props = { template: 123 }; // not a string
-  //     //@ts-expect-error - testing invalid input
-  //     await expect(template(msg, props)).rejects.toThrow(
-  //       'props.template is not a string'
-  //     );
-  //   });
-
-  // Mustache.render doesn't throw an error if a variable is missing
-  // it('should reject with an error if Mustache render throws an error', async () => {
-  //   const msg = {};
-  //   const props = {
-  //     template: 'My name is {{msg.name}} and I am {{msg.age}} years old',
-  //   }; // missing variable
-  //   await expect(template(msg, props)).rejects.toThrow();
-  // });
-  // Use a helper like so
-  // var template = "{{#exists foo}}{{foo}}{{/exists}}";
-  // Mustache.registerHelper('exists', function(variable, options) {
-  //   if (typeof variable !== 'undefined') {
-  //     return options.fn(this);
-  //   } else {
-  //     throw new Error('Variable not defined: ' + options.name);
-  //   }
-  // });
+  it('should return an error if msg.payload is not a string', async () => {
+    const args = {
+      globals: { openAiApiKey: process.env.NX_OPENAI_API_KEY },
+      inputs: {},
+      msg: {},
+    };
+    const result = await openAi(args);
+    expect(result?.['error']).toEqual(
+      'msg.payload either doesnt exist or is not a string'
+    );
+  });
 });

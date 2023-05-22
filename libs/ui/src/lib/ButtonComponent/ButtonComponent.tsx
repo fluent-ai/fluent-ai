@@ -1,41 +1,25 @@
 import { ReactNode } from "react";
+import { ButtonProps } from "../../types";
 
-export interface ButtonProps {
-  buttonContent?: string | JSX.Element | undefined ,
-  type: "button" | "submit" | "reset" | undefined;
-  ariaLabel: string;
-  classes?: string;
-  clickHandler?: () => void | undefined;
-}
 function ButtonComponent (props: ButtonProps) {
 
   const primaryButton=`transition
   eas-in-out
   duration-150
-  bg-blue-0
-  text-white
-  hover:bg-blue-10
-  rounded-md w-[98%]
-  p-1 mt-[2vw] mb-[1vw]
-  h-[3vw] uppercase
+  bg-gray-100
+  text-primary
+  hover:bg-gray-200
+  hover:text-primary
+  rounded-md w-full
+  py-2.5 mt-[2vw] mb-[1vw]
+  h-[30px] uppercase
   text-center`;
-
-  const iconButton=`sidebar-icon
-    h-9
-    w-9 inline-flex
-    items-center
-    justify-center
-    text-black bg-white
-    rounded-full
-    hover:opacity-80
-    focus:outline-none
-    `;
 
   return(
     <button
       type={props.type}
       aria-label={props.ariaLabel}
-      className={props.classes === 'icon' ? iconButton : primaryButton}
+      className={primaryButton}
       onClick={props.clickHandler}
     >
     {props.buttonContent}

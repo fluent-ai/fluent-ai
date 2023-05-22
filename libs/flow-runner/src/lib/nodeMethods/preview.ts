@@ -1,6 +1,10 @@
-export async function preview(
-  msg: Record<string, unknown>
-): Promise<Record<string, unknown>> {
+import { IMethodArguments } from '../useFlowRunner';
+
+export function preview({
+  globals,
+  inputs,
+  msg,
+}: IMethodArguments): Promise<Record<string, unknown>> {
   return new Promise((resolve) => {
     resolve(msg);
   });

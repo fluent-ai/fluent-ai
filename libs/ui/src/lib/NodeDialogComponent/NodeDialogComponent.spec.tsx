@@ -6,7 +6,11 @@ describe('NodeDialogComponent', () => {
   it('should render successfully', () => {
     const { baseElement } = render(<NodeDialogComponent
       isOpen={true}
-      onClose={()=>{console.log(false)}} />);
+      onClose={()=>{console.log('onClose')}}
+      activeDialog='nodedialog'
+      nodes={[]}
+      setNodes={()=>console.log('setNodes')}
+      activeNodeId='test' />);
     expect(baseElement).toBeTruthy();
   });
 });

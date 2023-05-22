@@ -1,28 +1,33 @@
+import { useState, useEffect } from 'react';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { CaretDownIcon } from '@radix-ui/react-icons';
-import './FlowTabsDropdown.module.css';
+import styles from './FlowTabsDropdown.module.css';
 import { AlertComponent } from '../AlertComponent/AlertComponent';
-import styles from '../AlertComponent/AlertComponent.module.css';
-
 import { store } from '@tool-ai/state';
 import { FlowCollaborator, FlowTabsDropdownProps } from '../../types';
+import {ShareDialog} from "../ShareDialog/ShareDialog";
 import { removeCollaborator } from '../../ui-interactions/remove-collaborator';
 
 const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
-  const handleShare = () => {
+  const [shareLink, setShareLink] = useState('');
+  const [copyLink, setCopyLink] = useState('');
+
+  const getLinks = () =>{
     const activeId = store.getState().flowTab.flowTabs.activeId;
-    const link = 'http://localhost:4200/login?link=' + activeId;
-    console.log("Here's your collaboration link: ", link);
+    const shareLink = 'http://localhost:4200/login?link=' + activeId;
+    const copyLink = 'http://localhost:4200/login?copy=' + activeId;
+    // console.log("Here's your collaboration link: ", link);
+    setShareLink(shareLink)
+    setCopyLink(copyLink)
   };
 
-  const handleCopy = () => {
-    const activeId = store.getState().flowTab.flowTabs.activeId;
-    const link = 'http://localhost:4200/login?copy=' + activeId;
-    console.log("Here's your link to share a copy: ", link);
-  };
+  useEffect(() => {
+    getLinks();
+  }, [])
 
   return (
-    <DropdownMenu.Root>
+    <DropdownMenu.Root
+    >
       <DropdownMenu.Trigger asChild>
         <button className="IconButton sidebar-icon" aria-label="FlowTab Menu">
           <CaretDownIcon />
@@ -40,20 +45,15 @@ const FlowTabsDropdown = (props: FlowTabsDropdownProps) => {
           >
             Save <div className={styles.RightSlot}>⌘+S</div>
           </DropdownMenu.Item>
-          <DropdownMenu.Item
-            className={styles.DropdownMenuItem}
-            onClick={handleCopy}
-          >
-            Share Copy
-            {/* Share a Copy <div className={styles.RightSlot}>⌘+S</div> */}
-          </DropdownMenu.Item>
-          <DropdownMenu.Item
-            className={styles.DropdownMenuItem}
-            onClick={handleShare}
-          >
-            Collaborate
-            {/* Share <div className={styles.RightSlot}>⌘+N</div> */}
-          </DropdownMenu.Item>
+          <ShareDialog
+          title='Share'
+          value={copyLink}
+          />
+
+          <ShareDialog
+           title='Collaborate'
+           value={shareLink} />
+
           <AlertComponent
             classes={styles.DropdownMenuItem}
             buttonText="Delete"

@@ -21,6 +21,8 @@
       "@libs/custom-types": ["libs/custom-types/src/index.ts"],
       "@libs/firestore-service": ["libs/firestore/src/index.ts"],
       "@libs/mock-data": ["libs/mock-data/src/index.ts"],
+      "@libs/socket-client": ["libs/socket-client/src/index.ts"],
+      "@libs/socket-server": ["libs/socket-server/src/index.ts"],
       "@tool-ai/flow-runner": ["libs/flow-runner/src/index.ts"],
       "@tool-ai/state": ["libs/state/src/index.ts"],
       "@tool-ai/ui": ["libs/ui/src/index.ts"]
