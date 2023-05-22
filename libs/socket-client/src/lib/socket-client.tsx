@@ -25,7 +25,11 @@ export function SocketClient(props: SocketClientProps) {
   });
 
   useEffect(() => {
-    const socket = io('http://localhost:3000'); // replace with server URL
+    const socket = io('https://93c6-213-86-144-42.ngrok-free.app', {
+      extraHeaders: {
+        'ngrok-skip-browser-warning': 'true',
+      },
+    }); // replace with server URL
     setSocket(socket);
     socket.on('connect', () => {
       console.log('Connected to Socket.io server');
