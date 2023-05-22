@@ -6,6 +6,8 @@ A highly customizable AI-powered automation tool using flowchart methodology
 
 <img src="tool-ai.gif" width="1000">
 
+[Full Demo on YouTube](https://youtu.be/1iVAP0cKqBk)
+
 ## Installation
 
 ### NX Monorepo
