@@ -19,7 +19,14 @@ import {
   flowRunnerSelectors,
   flowTabActions,
 } from '@tool-ai/state';
-import { User, ButtonComponent, saveFlow, switchFlowTab } from '@tool-ai/ui';
+import {
+  User,
+  ButtonComponent,
+  saveFlow,
+  switchFlowTab,
+  mockUser,
+  mockFlow,
+} from '@tool-ai/ui';
 import { useFlowRunner } from '@tool-ai/flow-runner';
 import * as firestoreService from '@libs/firestore-service';
 import { SocketClient } from '@libs/socket-client';
@@ -117,37 +124,37 @@ const Dashboard = () => {
     },
     [setEdges, setNodes]
   );
-  // This loads the initial user and flow data from the user
-  useEffect(() => {
-    let sessionUser = store.getState().user.userData;
+  // // This loads the initial user and flow data from the user
+  // useEffect(() => {
+  //   let sessionUser = store.getState().user.userData;
 
-    if (sessionUser.id === '') {
-      // for local development only
-      firestoreService
-        .getSomeFromDB('users', 'id', '==', '1aUOgbQFrvWfdNj3zES1C1l8ofC3')
-        .then((data) => {
-          if (data.length > 0) {
-            sessionUser = data[0] as User;
-          } else {
-            sessionUser = mockUser;
-            firestoreService.writeToDB('users', sessionUser);
-            firestoreService.writeToDB('flows', mockFlow);
-          }
-          dispatchToStore(sessionUser as User);
-          loadFlows(sessionUser as User);
-        });
-    } else {
-      loadFlows(sessionUser as User);
-    }
-  }, [loadFlows]);
+  //   if (sessionUser.id === '') {
+  //     // for local development only
+  //     firestoreService
+  //       .getSomeFromDB('users', 'id', '==', '1aUOgbQFrvWfdNj3zES1C1l8ofC3')
+  //       .then((data) => {
+  //         if (data.length > 0) {
+  //           sessionUser = data[0] as User;
+  //         } else {
+  //           sessionUser = mockUser;
+  //           firestoreService.writeToDB('users', sessionUser);
+  //           firestoreService.writeToDB('flows', mockFlow);
+  //         }
+  //         dispatchToStore(sessionUser as User);
+  //         loadFlows(sessionUser as User);
+  //       });
+  //   } else {
+  //     loadFlows(sessionUser as User);
+  //   }
+  // }, [loadFlows]);
 
-        store.dispatch(flowTabActions.setActiveFlowTab(flows[0].id));
-        setNodes(JSON.parse(flows[0].stringifiedNodes));
-        setEdges(JSON.parse(flows[0].stringifiedEdges));
-      }
-    },
-    [setNodes, setEdges]
-  );
+  //       store.dispatch(flowTabActions.setActiveFlowTab(flows[0].id));
+  //       setNodes(JSON.parse(flows[0].stringifiedNodes));
+  //       setEdges(JSON.parse(flows[0].stringifiedEdges));
+  //     }
+  //   },
+  //   [setNodes, setEdges]
+  // );
 
   // This loads the initial user and flow data from the user
   const InitialUser = useCallback(
@@ -293,13 +300,12 @@ const Dashboard = () => {
       />
       <Header currentUser={currentUser} />
 
-
       <div
         // onKeyDown={persistNewFlow}
         className="relative flex flex-col grow h-full md:flex-row"
       >
         <ReactFlowProvider>
-          <NodeSideBar runFlow={runFlow}/>
+          <NodeSideBar runFlow={runFlow} />
           <FlowTabs
             currentUserId={currentUser.id}
             flowCharts={currentFlows}
