@@ -6,7 +6,8 @@ import { GoogleLogin } from '@libs/auth';
 export function Login() {
   return (
     <div className="mx-auto w-96 h-screen flex flex-col items-center justify-center">
-      <h1 className="text-left">Welcome</h1>
+      <img src="/assets/logo-text.png" alt="logo" style={{width:'300px'}}/>
+      {/* <h1 className="text-left">Welcome</h1> */}
       <SignIn />
       <GoogleLogin />
       <Link to="/register">New here? Create an Account</Link>
