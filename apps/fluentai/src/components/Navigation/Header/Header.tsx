@@ -1,14 +1,21 @@
 import { AvatarComponent, IUser } from '@tool-ai/ui';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import {
+  supabaseActions,
+  supabaseSelectors,
+} from '@tool-ai/state';
 interface UserProps {
   currentUser: IUser;
 }
 
 const Header = (userProps: UserProps): JSX.Element => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   function handleLogout() {
     console.log('logout');
-    navigate('/login');
+    dispatch(supabaseActions.logout());
+    navigate('/');
   }
 
   return (
