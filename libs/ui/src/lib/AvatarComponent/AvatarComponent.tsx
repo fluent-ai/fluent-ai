@@ -1,8 +1,8 @@
 import * as Avatar from '@radix-ui/react-avatar';
 import styles from './AvatarComponent.module.css';
-import { AvatarProps } from '../../types';
+import { IAvatarProps } from '../../types';
 
-const AvatarComponent = (props: AvatarProps) => (
+const AvatarComponent = (props: IAvatarProps) => (
   <Avatar.Root className={styles.AvatarRoot}>
     <Avatar.Image className={styles.AvatarImage} src={props.url} />
     <Avatar.Fallback className={styles.AvatarFallback}>

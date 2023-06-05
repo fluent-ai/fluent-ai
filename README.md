@@ -1,10 +1,10 @@
-# ToolAi
+# fluentAI
 
 A highly customizable AI-powered automation tool using flowchart methodology
 
 ## Demo of the App
 
-<img src="tool-ai.gif" width="1000">
+Run `nx serve fluentai` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
 
 [Full Demo on YouTube](https://youtu.be/1iVAP0cKqBk)
 

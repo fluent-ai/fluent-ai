@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
-import { ButtonProps } from "../../types";
+import { IButtonProps } from "../../types";
 
-function ButtonComponent (props: ButtonProps) {
+function ButtonComponent (props: IButtonProps) {
 
   const primaryButton=`transition
   eas-in-out
