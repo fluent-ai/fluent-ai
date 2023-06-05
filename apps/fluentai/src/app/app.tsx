@@ -30,7 +30,11 @@ const App = () => {
   }, [])
 
   if (!session) {
-    return (<Auth supabaseClient={supabase} appearance={{ theme: ThemeSupa }} />)
+    return (
+    <div className="mx-auto w-96 h-screen flex flex-col items-center justify-center">
+      <img src="/assets/logo-text.png" alt="logo" style={{width:'300px'}}/>
+      <Auth supabaseClient={supabase} appearance={{ theme: ThemeSupa }} />
+    </div>)
   }
   else {
     return (
