@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
   supabaseActions,
-  supabaseSelectors,
 } from '@tool-ai/state';
 interface UserProps {
   currentUser: IUser;

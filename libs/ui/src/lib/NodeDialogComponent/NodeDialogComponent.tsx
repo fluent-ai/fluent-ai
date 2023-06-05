@@ -1,5 +1,4 @@
 import styles from './NodeDialogComponent.module.css';
-import { INodeDialogProps } from '../../types';
 import { InputDialog } from '../../nodeDialogs/InputDialog/InputDialog';
 import { JsonDialog } from '../../nodeDialogs/JsonDialog/JsonDialog';
 import { TemplateDialog } from '../../nodeDialogs/TemplateDialog/TemplateDialog';
@@ -11,46 +10,53 @@ import { DeeplDialog } from '../../nodeDialogs/DeeplDialog/DeeplDialog';
 import { DalleVariationDialog } from '../../nodeDialogs/DalleVariationDialog/DalleVariationDialog';
 import { DownloadDialog } from '../../nodeDialogs/DownloadDialog/DownloadDialog';
 import { DalleGenerationDialog } from '../../nodeDialogs/DalleGenerationDialog/DalleGenerationDialog';
+import { useDispatch, useSelector } from 'react-redux';
+import { flowActions, flowSelectors } from '@tool-ai/state';
 
-function NodeDialogComponent(props: INodeDialogProps) {
+function NodeDialogComponent() {
+  const dispatch = useDispatch();
+  const isOpen = useSelector(flowSelectors.isDialogOpen) 
+  const activeDialog = useSelector(flowSelectors.activeDialog)
+  const activeNodeId = useSelector(flowSelectors.activeNodeId)
+
+
   const shownDialog = () => {
-    // console.log('activeId', props.activeDialog);
-    switch (props.activeDialog) {
+    switch (activeDialog) {
       case 'textFileInput':
-        return <TextFileInputDialog id={props.activeNodeId}/>;
+        return <TextFileInputDialog id={activeNodeId}/>;
       case 'textInput':
-        return <InputDialog id={props.activeNodeId} />;
+        return <InputDialog id={activeNodeId} />;
       case 'json':
-        return <JsonDialog id={props.activeNodeId}/>;
+        return <JsonDialog id={activeNodeId}/>;
       case 'userFunction':
-        return <UserFunctionDialog id={props.activeNodeId}  />;
+        return <UserFunctionDialog id={activeNodeId}  />;
       case 'template':
-        return <TemplateDialog id={props.activeNodeId}  />;
+        return <TemplateDialog id={activeNodeId}  />;
       case 'preview':
-        return <PreviewDialog id={props.activeNodeId} />;
+        return <PreviewDialog id={activeNodeId} />;
       case 'openAi':
-        return <OpenAIDialog id={props.activeNodeId} />;
+        return <OpenAIDialog id={activeNodeId} />;
       case 'deepl':
-        return <DeeplDialog id={props.activeNodeId} />;
+        return <DeeplDialog id={activeNodeId} />;
       case 'dalleVariation':
-        return <DalleVariationDialog id={props.activeNodeId} />;
+        return <DalleVariationDialog id={activeNodeId} />;
       case 'dalleGeneration':
-        return <DalleGenerationDialog id={props.activeNodeId} />;
+        return <DalleGenerationDialog id={activeNodeId} />;
       case 'download':
-        return <DownloadDialog id={props.activeNodeId} />;
+        return <DownloadDialog id={activeNodeId} />;
       default:
         return null;
     }
   }
   return (
     <div>
-      {props.isOpen && (
+      {isOpen && (
         <div
           className={`${styles.DialogContent} border-2 border-inherit rounded-md`}
         >
           <button
            className='absolute right-2 top-2'
-           onClick={() => props.onClose(false)}>
+           onClick={() => dispatch(flowActions.setIsDialogOpen)}>
             🅧
            </button>
           <div>
