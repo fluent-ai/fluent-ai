@@ -8,7 +8,6 @@ import {
 } from '@reduxjs/toolkit';
 import * as flow from 'reactflow';
 
-
 export const FLOW_TAB_FEATURE_KEY = 'flowTab';
 
 /*
@@ -104,7 +103,7 @@ export const flowTabSlice = createSlice({
     ) => {
       const currentIds = state.flowTabs.flows.map((f) => f.id);
       if (!currentIds.includes(action.payload.id)) {
-        state.flowTabs.activeId = action.payload.id;
+        //state.flowTabs.activeId = action.payload.id;
         state.flowTabs.flows = [...state.flowTabs.flows, action.payload];
       }
     },
