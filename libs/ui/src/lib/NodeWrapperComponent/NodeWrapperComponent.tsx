@@ -1,9 +1,9 @@
 /* eslint-disable-next-line */
 import React, { memo, useContext } from 'react';
 import { Handle, Position } from 'reactflow';
-import { NodeWrapperComponentProps } from '../../types';
+import { INodeWrapperComponentProps } from '../../types';
 
-function NodeWrapperComponent(props: NodeWrapperComponentProps) {
+function NodeWrapperComponent(props: INodeWrapperComponentProps) {
   return (
       <>
       <Handle

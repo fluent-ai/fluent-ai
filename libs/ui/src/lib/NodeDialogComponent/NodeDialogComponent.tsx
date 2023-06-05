@@ -1,5 +1,5 @@
 import styles from './NodeDialogComponent.module.css';
-import { NodeDialogProps } from '../../types';
+import { INodeDialogProps } from '../../types';
 import { InputDialog } from '../../nodeDialogs/InputDialog/InputDialog';
 import { JsonDialog } from '../../nodeDialogs/JsonDialog/JsonDialog';
 import { TemplateDialog } from '../../nodeDialogs/TemplateDialog/TemplateDialog';
@@ -12,7 +12,7 @@ import { DalleVariationDialog } from '../../nodeDialogs/DalleVariationDialog/Dal
 import { DownloadDialog } from '../../nodeDialogs/DownloadDialog/DownloadDialog';
 import { DalleGenerationDialog } from '../../nodeDialogs/DalleGenerationDialog/DalleGenerationDialog';
 
-function NodeDialogComponent(props: NodeDialogProps) {
+function NodeDialogComponent(props: INodeDialogProps) {
   const shownDialog = () => {
     // console.log('activeId', props.activeDialog);
     switch (props.activeDialog) {

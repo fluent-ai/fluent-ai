@@ -1,14 +1,14 @@
 /* eslint-disable-next-line */
 import * as Form from '@radix-ui/react-form';
 import { SetStateAction, Dispatch } from 'react';
-import { FormFieldProps, Validation } from '../../types';
+import { IFormFieldProps, IValidation } from '../../types';
 
-function FormFieldComponent(props: FormFieldProps) {
+function FormFieldComponent(props: IFormFieldProps) {
   return (
     <Form.Field className="relative grid mb-[10px]" name="password">
       <div className="flex items-baseline justify-between">
         <Form.Label className="">{props.label}</Form.Label>
-        {props.validations?.map((validation: Validation) => (
+        {props.validations?.map((validation: IValidation) => (
           <Form.Message className="" match={validation.match}>
             {validation.message}
           </Form.Message>

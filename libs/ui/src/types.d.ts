@@ -1,7 +1,7 @@
-import { ReactElement } from "react";
+import { ReactElement } from 'react';
 import React from 'react';
 
-export interface Validation {
+export interface IValidation {
   match:
     | 'badInput'
     | 'patternMismatch'
@@ -18,7 +18,7 @@ export interface Validation {
   message: string;
 }
 
-export interface FormFieldProps {
+export interface IFormFieldProps {
   label: string;
   validations?: Validation[];
   type: string;
@@ -28,32 +28,32 @@ export interface FormFieldProps {
   placeholder?: string;
 }
 
-export interface NodeWrapperComponentProps {
+export interface INodeWrapperComponentProps {
   isConnectable: boolean;
-  data: {label:string};
+  data: { label: string };
   isDialogOpen: boolean;
   setIsDialogOpen: (arg: boolean) => void;
 }
 
-export interface TooltipProps {
+export interface ITooltipProps {
   buttonContent?: JSX.Element | string;
   text: string;
   name?: string;
   clickHandler?: () => void;
   classes?: string;
-  children?: JSX.Element
+  children?: JSX.Element;
 }
 
-export interface ButtonProps {
-  buttonContent?: string | JSX.Element | undefined ,
-  type: "button" | "submit" | "reset" | undefined;
+export interface IButtonProps {
+  buttonContent?: string | JSX.Element | undefined;
+  type: 'button' | 'submit' | 'reset' | undefined;
   ariaLabel: string;
   classes?: string;
   clickHandler?: () => void | undefined;
-  style?: any
+  style?: any;
 }
 
-interface NodeDialogProps {
+interface INodeDialogProps {
   isOpen: boolean;
   onClose: (boolean: boolean) => void;
   activeDialog: string;
@@ -61,13 +61,8 @@ interface NodeDialogProps {
   setNodes: React.Dispatch<React.SetStateAction<Node<string | undefined>[]>>;
   activeNodeId: string;
 }
-interface FlowCollaborator {
-  id: string;
-  name: string;
-  initials: string;
-}
 
-interface Flow {
+interface IFlow {
   id: string;
   title: string;
   ownerId: string;
@@ -77,7 +72,7 @@ interface Flow {
   collaborators: FlowCollaborator[];
 }
 
-interface User {
+interface IUser {
   id: string;
   name: string;
   initials: string;
@@ -86,20 +81,14 @@ interface User {
   profileImg?: string;
 }
 
-interface FlowTabsDropdownProps {
-  flowChartOwner: string;
-  users: FlowCollaborators[];
-  onSave: () => void;
-}
-
-interface AvatarProps {
+interface IAvatarProps {
   initials: string;
   name?: string;
   url?: string;
   alt?: string;
 }
 
-interface AlertProps {
+interface IAlertProps {
   buttonText: string;
   title?: string;
   description?: string;

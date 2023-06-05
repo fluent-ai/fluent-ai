@@ -1,8 +1,8 @@
-import { ButtonProps } from "../../types";
+import { IButtonProps } from "../../types";
 /* eslint-disable-next-line */
 export interface IconButtonComponentProps {}
 
-function IconButtonComponent(props: ButtonProps) {
+function IconButtonComponent(props: IButtonProps) {
 
   const iconButton=`sidebar-icon
     h-9

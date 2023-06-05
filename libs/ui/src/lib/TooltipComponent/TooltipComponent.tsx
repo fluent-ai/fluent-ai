@@ -1,7 +1,7 @@
 import * as Tooltip from '@radix-ui/react-tooltip';
-import { TooltipProps } from '../../types';
+import { ITooltipProps } from '../../types';
 
-const TooltipComponent = (props: TooltipProps) => {
+const TooltipComponent = (props: ITooltipProps) => {
   return (
     <Tooltip.Provider>
       <Tooltip.Root>
