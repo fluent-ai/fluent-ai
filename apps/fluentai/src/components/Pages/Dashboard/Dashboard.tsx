@@ -145,7 +145,7 @@ const Dashboard = () => {
   }
   return (
     <>
-      <Header currentUser={currentUser} />
+      <Header/>
       <div
         className="relative flex flex-col grow h-full md:flex-row"
       >
@@ -161,6 +161,7 @@ const Dashboard = () => {
                   edges={edges}
                   onNodesChange={onNodesChange}
                   onEdgesChange={onEdgesChange}
+                  onNodesDelete={() => dispatch(flowActions.setIsDialogOpen(false))}
                   onConnect={onConnect}
                   onDrop={onDrop}
                   selectionOnDrag

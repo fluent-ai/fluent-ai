@@ -20,8 +20,12 @@ const App = () => {
   const session = useSelector(supabaseSelectors.getSession)
 
   useEffect(() => {
+    console.log('session', session)
+  }
+  , [session])
+
+  useEffect(() => {
     if (supabase) {
-      
     supabase.getSession().then(({ data: { session } }) => {
       dispatch(supabaseActions.setSession(session));
     })
@@ -40,7 +44,6 @@ const App = () => {
   if (!session) {
     return (
     <div className="mx-auto w-96 h-screen flex flex-col items-center justify-center">
-
       <img src="/assets/logo-text.png" alt="logo" style={{width:'300px'}}/>
       {supabase&&<Auth supabaseClient={supabase.getClient()} appearance={{ theme: ThemeSupa }} />}
     </div>)

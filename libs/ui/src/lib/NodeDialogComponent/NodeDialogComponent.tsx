@@ -56,7 +56,7 @@ function NodeDialogComponent() {
         >
           <button
            className='absolute right-2 top-2'
-           onClick={() => dispatch(flowActions.setIsDialogOpen)}>
+           onClick={() => dispatch(flowActions.setIsDialogOpen(false))}>
             🅧
            </button>
           <div>

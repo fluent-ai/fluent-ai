@@ -1,21 +1,21 @@
-import { AvatarComponent, IUser } from '@tool-ai/ui';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import {
-  supabaseActions,
+  supabaseActions, supabaseSelectors,
 } from '@tool-ai/state';
-interface UserProps {
-  currentUser: IUser;
-}
-
-const Header = (userProps: UserProps): JSX.Element => {
+const Header = (): JSX.Element => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   function handleLogout() {
     console.log('logout');
     dispatch(supabaseActions.logout());
-    navigate('/');
+    setTimeout(() => {
+      window.location.reload()
+    }, 500);
   }
+
+  const user = useSelector(supabaseSelectors.getUser)
+
+
+  
 
   return (
     <div
@@ -27,18 +27,15 @@ const Header = (userProps: UserProps): JSX.Element => {
       <div className="flex flex-start  items-center gap-2">
         <img src="/assets/logo.png" alt="logo" className="h-10 w-10" />
         <div className="sidebar-icon">
-          <AvatarComponent
-            initials={userProps.currentUser.initials}
-            url={userProps.currentUser.profileImg}
-          />
+          <div>{user?.email}</div>
+          <button
+              aria-label="logout button"
+              type="button"
+              onClick={handleLogout}
+            >
+              Log out
+            </button>
         </div>
-        <button
-            aria-label="logout button"
-            type="button"
-            onClick={handleLogout}
-          >
-            Log out
-          </button>
       </div>
 
     </aside>

@@ -1,11 +1,14 @@
+import { v4 as uuidv4 } from 'uuid';
 import { DialogComponent } from '../DialogComponent/DialogComponent';
 import * as  Form  from '@radix-ui/react-form';
 import { ButtonComponent } from '../ButtonComponent/ButtonComponent';
-import { TrashIcon, BackpackIcon } from '@radix-ui/react-icons';
+import { BackpackIcon } from '@radix-ui/react-icons';
 import { supabase }  from '@tool-ai/supabase';
 import { useDispatch, useSelector } from 'react-redux';
 import { flowActions, flowSelectors, supabaseSelectors } from '@tool-ai/state';
 import { useEffect, useState, } from 'react';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../AccordionComponent/AccordionComponent';
+import FlowListItem from './FlowListItem';
 /* eslint-disable-next-line */
 export interface LoadDialogProps {}
 
@@ -13,6 +16,7 @@ function LoadDialog(props: LoadDialogProps) {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [flows, setFlows] = useState<any[]>([]);
+  const [examples, setExamples] = useState<any[]>([]);
   const userId = useSelector(supabaseSelectors.getUserId);
   const currentFlow = useSelector(flowSelectors.getFlow);
 
@@ -20,7 +24,8 @@ function LoadDialog(props: LoadDialogProps) {
   useEffect(() => {
     if (open) {
       supabase.updateFlows().then(() => {
-        setFlows(supabase.getFlows())
+        setFlows(supabase.getFlows('flows'))
+        setExamples(supabase.getFlows('examples'))
       })
     }
   }, [open]);
@@ -59,48 +64,87 @@ function LoadDialog(props: LoadDialogProps) {
     title="Flows"
     >
       <div>
-        <button
-          className='h-5'
-          type="button"
-          onClick={newFlow}
-        >New Flow</button>
-        <ul>
-        {flows.map((flow) => {
-          return (
-            <li key={flow.id} className='flex gap-x-3'>
-              <div
-                onClick={() => {
-                  const flowData = supabase.getFlow(flow.id);
+      <Accordion type="single" collapsible className="w-full" defaultValue='my-flows'>
+          <AccordionItem  value="my-flows">
+            <AccordionTrigger>My Flows</AccordionTrigger>
+            <AccordionContent>
+              <ul className='[&>*:nth-child(odd)]:bg-grey-50'>
+              {flows.map((flow, index) => {
+                return (
+                  <FlowListItem
+                    key={flow.id}
+                    index={index}
+                    flow={flow}
+                    loadFlow={() => {
+                      const flowData = supabase.getFlow(flow.id);
+                      if (!flowData) {
+                      return;
+                      }
+                      dispatch(flowActions.setFlow(flowData));
+                    }}
+                    deleteFlow={() => {
+                      supabase.deleteFlow(flow.id)
+                      .then(() => {
+                      setFlows(supabase.getFlows())
+                      })
+                  }}
+                  />
                   
-                  if (!flowData) {
-                    return;
-                  }
-                  dispatch(flowActions.setFlow(flowData));
-                }}
-              >
-                {flow.displayName}
-              </div>
-              <button
-                className='h-5'
-                type="button"
-                title='Delete Flow'
-                onClick={() => {
-                  supabase.deleteFlow(flow.id)
-                  .then(() => {
-                    setFlows(supabase.getFlows())
-                  })
-                }}
-              ><TrashIcon/></button>
-            </li>
-          );
-        })}
-        </ul>
-        <ButtonComponent
-          type="button"
-          ariaLabel="Save current flow"
-          buttonContent="Save"
-          clickHandler={saveFlow}
-        />
+                );
+              })}
+                <li>
+                  <button
+                      className='h-5'
+                      type="button"
+                      onClick={saveFlow}
+                    >
+                    Save
+                    </button>
+                </li>
+              <li>
+                <button
+                    className='h-5'
+                    type="button"
+                    onClick={newFlow}
+                  >
+                    New Blank Flow
+                  </button>
+              </li>
+              </ul>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem  value="example-flows">
+            <AccordionTrigger>Example Flows</AccordionTrigger>
+            <AccordionContent>
+              <ul className='[&>*:nth-child(odd)]:bg-grey-50'>
+                {examples.map((flow, index) => {
+                  return (
+                    <FlowListItem
+                      key={flow.id}
+                      index={index}
+                      flow={flow}
+                      loadFlow={() => {
+                        const flowData = supabase.getFlow(flow.id);
+                        if (!flowData) {
+                        return;
+                        }
+                        flowData.id = uuidv4()
+                        dispatch(flowActions.setFlow(flowData));
+                      }}
+                      deleteFlow={() => {
+                        supabase.deleteFlow(flow.id)
+                        .then(() => {
+                        setFlows(supabase.getFlows())
+                        })
+                    }}
+                    />
+                  );
+                })}
+              </ul>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      
     </div>
   </DialogComponent>
   );

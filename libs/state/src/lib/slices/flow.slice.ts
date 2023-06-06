@@ -62,6 +62,9 @@ export const flowSlice = createSlice({
     setId: (state, action: PayloadAction<string>) => {
       state.id = action.payload;
     },
+    setDisplayName: (state, action: PayloadAction<string>) => {
+      state.displayName = action.payload;
+    },
     setNodes: (state, action: PayloadAction<Node[]>) => {
       state.nodes = action.payload;
     },

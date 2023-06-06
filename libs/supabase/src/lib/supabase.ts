@@ -9,6 +9,7 @@ import { deflate, inflate } from 'pako';
 import { Node, Edge } from 'reactflow';
 
 interface FlowReference {
+  source?: string;
   id: string;
   displayName: string;
 }
@@ -35,6 +36,12 @@ class Supabase {
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJyZ3Rtb3ZrY3pvdG1pYWNhaWJqIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODU5NjgxMzYsImV4cCI6MjAwMTU0NDEzNn0.wiV3JVN1q2-PWxBZLi1cKQ6gYRE9gyE_aQcLQXzR6mw'
     );
     this.flowsDeflated = [];
+  }
+  public loadClient(): void {
+    this.client = createClient(
+      'https://rrgtmovkczotmiacaibj.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJyZ3Rtb3ZrY3pvdG1pYWNhaWJqIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODU5NjgxMzYsImV4cCI6MjAwMTU0NDEzNn0.wiV3JVN1q2-PWxBZLi1cKQ6gYRE9gyE_aQcLQXzR6mw'
+    );
   }
 
   public getClient(): SupabaseClient {
@@ -74,8 +81,8 @@ class Supabase {
     this.client.auth.signOut();
   }
 
-  private inflateFlow(id: string): FlowInflated {
-    const flowDeflated = this.flowsDeflated.find((flow) => flow.id === id);
+  private inflateFlow(db: FlowDeflated[], id: string): FlowInflated {
+    const flowDeflated = db.find((flow) => flow.id === id);
     if (!flowDeflated) {
       throw new Error('Flow not found');
     }
@@ -93,32 +100,40 @@ class Supabase {
   }
 
   public async updateFlows(): Promise<void> {
-    const { data, error } = await this.client.from('flows').select('*');
-
-    if (error) {
-      console.error('Error fetching flows:', error);
-      this.flowsDeflated = [];
-    } else {
-      const flows = data?.map((flow) => flow as FlowDeflated);
-      flows.forEach((flow) => {
-        //@ts-expect-error supabase prefers _ over camelCase
-        flow.displayName = flow.display_name;
-        //@ts-expect-error supabase prefers _ over camelCase
-        delete flow.display_name;
-      });
-      this.flowsDeflated = flows;
-    }
+    const promises = ['flows', 'examples'].map(async (source) => {
+      const { data, error } = await this.client.from(source).select('*');
+      if (error) {
+        console.error(`Error fetching ${source}:`, error);
+        return [];
+      } else {
+        const flows = data?.map((flow) => flow as FlowDeflated);
+        flows.forEach((flow) => {
+          flow.source = source;
+          //@ts-expect-error supabase prefers _ over camelCase
+          flow.displayName = flow.display_name;
+          //@ts-expect-error supabase prefers _ over camelCase
+          delete flow.display_name;
+        });
+        return flows;
+      }
+    });
+    const results = await Promise.all(promises);
+    const flattenedResults = ([] as FlowDeflated[]).concat(...results);
+    this.flowsDeflated = flattenedResults;
+    console.log('Flows updated!', this.flowsDeflated);
   }
 
   public getFlow(id: string): FlowInflated | null {
-    return this.inflateFlow(id);
+    return this.inflateFlow(this.flowsDeflated, id);
   }
 
-  public getFlows(): FlowReference[] {
-    return this.flowsDeflated.map((flow) => ({
-      id: flow.id,
-      displayName: flow.displayName,
-    }));
+  public getFlows(source = 'flows'): FlowReference[] {
+    return this.flowsDeflated
+      .filter((flow) => flow.source === source)
+      .map((flow) => ({
+        id: flow.id,
+        displayName: flow.displayName,
+      }));
   }
 
   public async saveFlow({
