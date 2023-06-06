@@ -7,6 +7,7 @@ import {
   EntityState,
   PayloadAction,
 } from '@reduxjs/toolkit';
+import { log } from 'console';
 
 export const SUPABASE_FEATURE_KEY = 'supabase';
 
@@ -29,14 +30,13 @@ export const supabaseSlice = createSlice({
   initialState: initialSupabaseState,
   reducers: {
     setSession: (state, action: PayloadAction<Session | null>) => {
+      console.log('reducer setSession', action.payload);
       if (action.payload) {
-        console.log('⚗️ action.payload', action.payload);
-
         state.session = action.payload;
       }
     },
     logout: (state) => {
-      supabase.auth.signOut();
+      supabase.signOut();
     },
   },
 });
@@ -47,7 +47,11 @@ export const getSupabaseState = (rootState: any): SupabaseState =>
   rootState[SUPABASE_FEATURE_KEY];
 
 const getSession = createSelector(getSupabaseState, (state) => state.session);
+const getUserId = createSelector(getSession, (session) => session?.user?.id);
+const getUser = createSelector(getSession, (session) => session?.user);
 
 export const supabaseSelectors = {
   getSession,
+  getUserId,
+  getUser,
 };

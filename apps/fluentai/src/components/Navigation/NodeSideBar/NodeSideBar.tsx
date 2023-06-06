@@ -1,28 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import NodeItemSideBar from '../NodeItemSideBar/NodeItemSideBar';
 // <<<<<<< HEAD
 import {
   PlayIcon,
   LapTimerIcon,
-  MixIcon,
-  TextIcon,
-  DoubleArrowRightIcon,
-  ArrowRightIcon,
-  ArrowLeftIcon,
-  FrameIcon,
-  MagnifyingGlassIcon,
-  GearIcon,
-  CameraIcon,
-  GlobeIcon,
-  ArrowDownIcon,
 } from '@radix-ui/react-icons';
-import { ReactComponent as OpenAiLogo } from '../../../assets/OpenAI_Logo.svg';
-import { ReactComponent as DeeplLogo } from '../../../assets/Deepl_Logo.svg';
-import { ButtonComponent, SettingsDialog } from '@tool-ai/ui';
-// =======
-// import { SettingsDialog } from '@tool-ai/ui';
-// >>>>>>> cdfe2e311866fedb31b473c935915b1b4ffe9654
-import { NodeData, groups } from '../../../nodeData';
+import { SettingsDialog, LoadDialog } from '@tool-ai/ui';
+
+import { NodeData } from '../../../nodeData';
 import { flowRunnerSelectors } from '@tool-ai/state';
 import { useSelector } from 'react-redux';
 
@@ -41,6 +26,7 @@ const NodeSideBar = ({ runFlow }: { runFlow: () => void }) => {
         className={`scroll-container px-2 py-2.5 max-h-[80vh] overflow-y-scroll rounded-md bg-white shadow-md w-[50px] overflow-x-hidden transition-all duration-300 ease-in-out group-hover:w-60`}
       >
         <SettingsDialog />
+        <LoadDialog />
         <div className="flex gap-x-3" onClick={runFlow}>
           <div className="sidebar-icon">
             {state !== 'running' ? <PlayIcon /> : <LapTimerIcon />}
@@ -52,6 +38,7 @@ const NodeSideBar = ({ runFlow }: { runFlow: () => void }) => {
         {NodeData.map((nodeItem) => {
           return (
             <NodeItemSideBar
+              key={nodeItem.type}
               onDragStartHandler={(event) => onDragStart(event, nodeItem.type)}
               title={nodeItem.label}
               icon={nodeItem.icon}

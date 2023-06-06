@@ -6,7 +6,8 @@ function IconButtonComponent(props: IButtonProps) {
 
   const iconButton=`sidebar-icon
     h-9
-    w-9 inline-flex
+    w-9
+    inline-flex
     items-center
     justify-center
     text-black bg-white

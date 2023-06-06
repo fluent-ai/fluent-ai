@@ -4,8 +4,8 @@ import '../CustomNodesStyles.css';
 import * as Dialog from '@radix-ui/react-dialog';
 import Context from '../../context/context';
 import { NodeData, groups} from '../../../nodeData';
-import { useSelector } from 'react-redux';
-import { flowRunnerSelectors } from '@tool-ai/state';
+import { useDispatch, useSelector } from 'react-redux';
+import { flowActions, flowRunnerSelectors } from '@tool-ai/state';
 
 interface Data {
   group: string;
@@ -19,7 +19,7 @@ interface MemoProps {
   data: Data
 }
 export default memo (({id, data,type, isConnectable}: MemoProps) => {
-  const {setIsDialogOpen, setActiveDialog, setActiveNodeId} = useContext(Context);
+  const dispatch = useDispatch();
   const status = useSelector(flowRunnerSelectors.selectState(id))?.state?.status as string || 'ready';
   // {JSON.stringify(state?.status || 'ready')}
   useEffect(() => {
@@ -60,9 +60,9 @@ export default memo (({id, data,type, isConnectable}: MemoProps) => {
         isConnectable={isConnectable}
       />
       <div onClick={()=>{
-        setIsDialogOpen(true);
-        setActiveDialog(type);
-        setActiveNodeId(id)
+        dispatch(flowActions.setIsDialogOpen(true))
+        dispatch(flowActions.setActiveDialog(type))
+        dispatch(flowActions.setActiveNodeId(id))
         }}
         className='flex items-center relative'>
           
