@@ -28,6 +28,7 @@ export interface FlowEntity {
 
 export interface Flow {
   id: string;
+  displayName: string;
   nodes: Node[];
   edges: Edge[];
   inputs: {
@@ -36,13 +37,6 @@ export interface Flow {
   }[];
 }
 export interface FlowState extends Flow {
-  id: string;
-  nodes: Node[];
-  edges: Edge[];
-  inputs: {
-    id: string;
-    nodeInputs: Record<string, unknown>;
-  }[];
   isDialogOpen: boolean;
   activeDialog: string;
   activeNodeId: string;
@@ -52,6 +46,7 @@ export const flowAdapter = createEntityAdapter<FlowEntity>();
 
 export const initialFlowState: FlowState = flowAdapter.getInitialState({
   id: uuidv4(),
+  displayName: 'My Flow',
   nodes: [],
   edges: [],
   inputs: [],
@@ -74,7 +69,6 @@ export const flowSlice = createSlice({
       state.edges = action.payload;
     },
     addNode: (state, action: PayloadAction<Node>) => {
-      console.log('addNode', action.payload);
       state.nodes = [...state.nodes, action.payload];
     },
     addEdge: (state, action: PayloadAction<Edge>) => {
@@ -88,6 +82,13 @@ export const flowSlice = createSlice({
       state.nodes = action.payload.nodes;
       state.edges = action.payload.edges;
       state.inputs = action.payload.inputs;
+    },
+    newFlow: (state) => {
+      state.id = uuidv4();
+      state.displayName = 'My Flow';
+      state.nodes = [];
+      state.edges = [];
+      state.inputs = [];
     },
     applyNodeChanges: (state, action: PayloadAction<NodeChange[]>) => {
       state.nodes = applyNodeChanges(action.payload, state.nodes);
@@ -118,6 +119,7 @@ const getNodes = createSelector(getFlowState, (state) => state.nodes);
 const getInputs = createSelector(getFlowState, (state) => state.inputs);
 const getFlow = createSelector(getFlowState, (state) => ({
   id: state.id,
+  displayName: state.displayName,
   nodes: state.nodes,
   edges: state.edges,
   inputs: state.inputs,

@@ -1,8 +1,8 @@
 import { DialogComponent } from '../DialogComponent/DialogComponent';
 import * as  Form  from '@radix-ui/react-form';
 import { ButtonComponent } from '../ButtonComponent/ButtonComponent';
-import { BackpackIcon } from '@radix-ui/react-icons';
-import * as supabase from '@tool-ai/supabase';
+import { TrashIcon, BackpackIcon } from '@radix-ui/react-icons';
+import { supabase }  from '@tool-ai/supabase';
 import { useDispatch, useSelector } from 'react-redux';
 import { flowActions, flowSelectors, supabaseSelectors } from '@tool-ai/state';
 import { useEffect, useState, } from 'react';
@@ -19,23 +19,30 @@ function LoadDialog(props: LoadDialogProps) {
   // const 
   useEffect(() => {
     if (open) {
-      supabase.getFlows().then((result) => {
-        try {
-          setFlows(result);
-        } catch (error) {
-          console.log(error);
-        }
-      });
+      supabase.updateFlows().then(() => {
+        setFlows(supabase.getFlows())
+      })
     }
   }, [open]);
+
+  const newFlow = () => {
+    dispatch(flowActions.newFlow());
+  }
 
   const saveFlow = () => {
     if (!userId) {
       return;
     }
-    supabase.saveFlow(currentFlow.id, userId, JSON.stringify(currentFlow));
+    supabase.saveFlow({
+      id: currentFlow.id,
+      userId,
+      displayName: currentFlow.displayName,
+      flow: currentFlow
+      })
+      .then(() => {
+        setFlows(supabase.getFlows())
+      })
   }
-
 
 
   return (
@@ -50,36 +57,40 @@ function LoadDialog(props: LoadDialogProps) {
       </div>
     }
     title="Flows"
-
     >
       <div>
+        <button
+          className='h-5'
+          type="button"
+          onClick={newFlow}
+        >New Flow</button>
         <ul>
         {flows.map((flow) => {
           return (
             <li key={flow.id} className='flex gap-x-3'>
               <div
                 onClick={() => {
-                    console.log("load flow");
-                    try {
-                      const flowData = JSON.parse(flow.flow);
-                      console.log(flowData);
-                      
-                      dispatch(flowActions.setFlow(flowData));
-                    } catch (error) {
-                      console.log(error);
-                    }
+                  const flowData = supabase.getFlow(flow.id);
+                  
+                  if (!flowData) {
+                    return;
+                  }
+                  dispatch(flowActions.setFlow(flowData));
                 }}
               >
-                {flow.id}
+                {flow.displayName}
               </div>
-              <ButtonComponent
+              <button
+                className='h-5'
                 type="button"
-                ariaLabel="Delete flow"
-                buttonContent="Delete"
-                clickHandler={() => {
-                  // supabase.deleteFlow(flow.id);
+                title='Delete Flow'
+                onClick={() => {
+                  supabase.deleteFlow(flow.id)
+                  .then(() => {
+                    setFlows(supabase.getFlows())
+                  })
                 }}
-              />
+              ><TrashIcon/></button>
             </li>
           );
         })}

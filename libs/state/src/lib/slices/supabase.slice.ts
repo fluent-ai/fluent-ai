@@ -34,7 +34,7 @@ export const supabaseSlice = createSlice({
       }
     },
     logout: (state) => {
-      supabase.auth.signOut();
+      supabase.signOut();
     },
   },
 });
