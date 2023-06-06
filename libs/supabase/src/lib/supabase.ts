@@ -5,21 +5,23 @@ export const supabase = createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJyZ3Rtb3ZrY3pvdG1pYWNhaWJqIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODU5NjgxMzYsImV4cCI6MjAwMTU0NDEzNn0.wiV3JVN1q2-PWxBZLi1cKQ6gYRE9gyE_aQcLQXzR6mw'
 );
 
-export const getFlows = async (userId: string) => {
-  const { data, error } = await supabase.from('flowcharts').select('*');
+export const getFlows = async () => {
+  const { data, error } = await supabase.from('flows').select('*');
 
   if (error) {
     console.error('Error fetching flows :', error);
+    return [];
   } else {
     console.log('Flows retrieved successfully:', data);
+    return data;
     // Use the retrieved data to render flow charts for the current user
   }
 };
 
-const saveFlow = async (userId: string, flow: string) => {
+export const saveFlow = async (id: string, userId: string, flow: string) => {
   const { data, error } = await supabase
-    .from('flowcharts')
-    .insert([{ user_id: userId, flow }]);
+    .from('flows')
+    .upsert({ id, user_id: userId, flow }, { onConflict: 'id' });
 
   if (error) {
     console.error('Error saving flow :', error);

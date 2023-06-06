@@ -38,6 +38,7 @@ const NodeSideBar = ({ runFlow }: { runFlow: () => void }) => {
         {NodeData.map((nodeItem) => {
           return (
             <NodeItemSideBar
+              key={nodeItem.type}
               onDragStartHandler={(event) => onDragStart(event, nodeItem.type)}
               title={nodeItem.label}
               icon={nodeItem.icon}

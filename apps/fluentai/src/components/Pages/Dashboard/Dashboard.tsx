@@ -128,7 +128,6 @@ const Dashboard = () => {
   // ------------------------------------------------     Flow Runner     --------------------------------------------
   // Flow Runner - On change
   useEffect(() => {
-    console.log('🌊 change detected\n', { outputs, states });
     dispatch(flowRunnerActions.setStates(states));
     dispatch(flowRunnerActions.setOutputs(outputs));
   }, [outputs, states, dispatch]);

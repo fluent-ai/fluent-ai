@@ -6,13 +6,14 @@ export interface DialogComponentProps {
   title: string;
   description?: string
   children: JSX.Element;
-  closeButton: JSX.Element;
+  closeButton?: JSX.Element;
+  onOpenChange?: (open: boolean) => void;
 }
 
 function DialogComponent(props: DialogComponentProps) {
   // console.log('show dialog')
   return (
-    <Dialog.Root>
+    <Dialog.Root onOpenChange={props.onOpenChange}>
       <Dialog.Trigger asChild>
         {props.trigger}
       </Dialog.Trigger>

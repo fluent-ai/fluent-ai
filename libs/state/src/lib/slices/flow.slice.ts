@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import {
   Connection,
   Edge,
@@ -24,7 +25,18 @@ export const FLOW_FEATURE_KEY = 'flow';
 export interface FlowEntity {
   id: number;
 }
-export interface FlowState extends EntityState<FlowEntity> {
+
+export interface Flow {
+  id: string;
+  nodes: Node[];
+  edges: Edge[];
+  inputs: {
+    id: string;
+    nodeInputs: Record<string, unknown>;
+  }[];
+}
+export interface FlowState extends Flow {
+  id: string;
   nodes: Node[];
   edges: Edge[];
   inputs: {
@@ -39,6 +51,7 @@ export interface FlowState extends EntityState<FlowEntity> {
 export const flowAdapter = createEntityAdapter<FlowEntity>();
 
 export const initialFlowState: FlowState = flowAdapter.getInitialState({
+  id: uuidv4(),
   nodes: [],
   edges: [],
   inputs: [],
@@ -51,6 +64,9 @@ export const flowSlice = createSlice({
   name: FLOW_FEATURE_KEY,
   initialState: initialFlowState,
   reducers: {
+    setId: (state, action: PayloadAction<string>) => {
+      state.id = action.payload;
+    },
     setNodes: (state, action: PayloadAction<Node[]>) => {
       state.nodes = action.payload;
     },
@@ -66,6 +82,12 @@ export const flowSlice = createSlice({
     },
     setInputs: (state, action: PayloadAction<FlowState['inputs']>) => {
       state.inputs = action.payload;
+    },
+    setFlow: (state, action: PayloadAction<Flow>) => {
+      state.id = action.payload.id;
+      state.nodes = action.payload.nodes;
+      state.edges = action.payload.edges;
+      state.inputs = action.payload.inputs;
     },
     applyNodeChanges: (state, action: PayloadAction<NodeChange[]>) => {
       state.nodes = applyNodeChanges(action.payload, state.nodes);
@@ -90,9 +112,16 @@ export const flowActions = flowSlice.actions;
 export const getFlowState = (rootState: any): FlowState =>
   rootState[FLOW_FEATURE_KEY];
 
+const getId = createSelector(getFlowState, (state) => state.id);
 const getEdges = createSelector(getFlowState, (state) => state.edges);
 const getNodes = createSelector(getFlowState, (state) => state.nodes);
 const getInputs = createSelector(getFlowState, (state) => state.inputs);
+const getFlow = createSelector(getFlowState, (state) => ({
+  id: state.id,
+  nodes: state.nodes,
+  edges: state.edges,
+  inputs: state.inputs,
+}));
 const isDialogOpen = createSelector(
   getFlowState,
   (state) => state?.isDialogOpen
@@ -107,9 +136,11 @@ const activeNodeId = createSelector(
 );
 
 export const flowSelectors = {
+  getId,
   getEdges,
   getNodes,
   getInputs,
+  getFlow,
   isDialogOpen,
   activeDialog,
   activeNodeId,

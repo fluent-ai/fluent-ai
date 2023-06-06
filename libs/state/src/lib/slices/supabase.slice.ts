@@ -30,8 +30,6 @@ export const supabaseSlice = createSlice({
   reducers: {
     setSession: (state, action: PayloadAction<Session | null>) => {
       if (action.payload) {
-        console.log('⚗️ action.payload', action.payload);
-
         state.session = action.payload;
       }
     },
@@ -47,7 +45,9 @@ export const getSupabaseState = (rootState: any): SupabaseState =>
   rootState[SUPABASE_FEATURE_KEY];
 
 const getSession = createSelector(getSupabaseState, (state) => state.session);
+const getUserId = createSelector(getSession, (session) => session?.user?.id);
 
 export const supabaseSelectors = {
   getSession,
+  getUserId,
 };
