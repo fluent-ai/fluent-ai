@@ -7,7 +7,6 @@ export interface DownloadDialogProps {}
 
 function DownloadDialog({id}:{id:string}) {
   const outputs = useSelector(flowRunnerSelectors.selectOutput(id));
-  console.log('$$$$', outputs);
 
   function encodeFile(text:string) {
     return 'data:application/octet-stream;charset=utf-8,' + encodeURIComponent(text);

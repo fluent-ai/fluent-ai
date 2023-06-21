@@ -1,14 +1,13 @@
 import { InnerDialogStructure } from '../../lib/InnerDialogStructure/InnerDialogStructure';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { flowRunnerActions, flowRunnerSelectors } from '@tool-ai/state';
+import { flowActions, flowSelectors } from '@tool-ai/state';
 /* eslint-disable-next-line */
 export interface ImageAiDialogProps {}
 
 function DalleVariationDialog({id}:{id:string}) {
   const dispatch = useDispatch();
-  const inputs = useSelector(flowRunnerSelectors.selectInput(id));
-  const outputs = useSelector(flowRunnerSelectors.selectOutput(id));
+  const inputs = useSelector(flowSelectors.getInputsById(id));
   const [tempImageUrl, setTempImageUrl] = useState<string>('');
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -18,10 +17,10 @@ function DalleVariationDialog({id}:{id:string}) {
       Serialize(e.target.files[0], function (dataUrl) {
         if (e.target.files) {
           dispatch(
-            flowRunnerActions.setInput({
+            flowActions.setInput({
               id,
               nodeInputs: {
-                ...inputs?.nodeInputs,
+                ...inputs,
                 image: dataUrl,
                 fileName: e.target.files[0].name,
               },
@@ -87,10 +86,10 @@ function DalleVariationDialog({id}:{id:string}) {
             aria-label="select amount of variations"
             onChange={(e) =>
               dispatch(
-                flowRunnerActions.setInput({
+                flowActions.setInput({
                   id,
                   nodeInputs: {
-                    ...inputs?.nodeInputs,
+                    ...inputs,
                     numberVariations: e.target.value,
                   },
                 })

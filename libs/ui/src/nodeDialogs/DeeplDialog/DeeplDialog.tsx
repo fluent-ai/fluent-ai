@@ -1,7 +1,6 @@
-import { useState } from "react";
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
 import { useDispatch, useSelector } from "react-redux";
-import { flowRunnerActions, flowRunnerSelectors } from "@tool-ai/state";
+import { flowActions, flowSelectors , flowRunnerSelectors } from "@tool-ai/state";
 
 
 interface Items {
@@ -52,23 +51,23 @@ const formalities: Items[] = [
 
 function DeeplDialog({id}:{id:string}) {
   const dispatch = useDispatch();
-  const inputs = useSelector(flowRunnerSelectors.selectInput(id));
+  const inputs = useSelector(flowSelectors.getInputsById(id));
   const outputs = useSelector(flowRunnerSelectors.selectOutput(id));
   let response = outputs?.nodeOutputs?.payload as string;
   response = '' + response
 
 
 
-  const formalityAvailable = langWithFormality.includes(inputs?.nodeInputs?.language as string);
+  const formalityAvailable = langWithFormality.includes(inputs?.language as string);
 
   const onLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     console.log('🌈',e.target.value);
     dispatch(
-      flowRunnerActions.setInput(
+      flowActions.setInput(
         {
           id,
           nodeInputs: {
-            ...inputs?.nodeInputs,
+            ...inputs,
             language: e.target.value
           }
         })
@@ -78,11 +77,11 @@ function DeeplDialog({id}:{id:string}) {
   const onFormalityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     console.log('🌈',e.target.value);
     dispatch(
-      flowRunnerActions.setInput(
+      flowActions.setInput(
         {
           id,
           nodeInputs: {
-            ...inputs?.nodeInputs,
+            ...inputs,
             formality: e.target.value
           }
         })
@@ -109,7 +108,7 @@ function DeeplDialog({id}:{id:string}) {
 
         {
         !formalityAvailable && <small className="mt-2 text-sm text-gray-light">
-          Formality is not available for {deeplLanguages.find((lang) => lang.code === inputs?.nodeInputs?.language)?.name}
+          Formality is not available for {deeplLanguages.find((lang) => lang.code === inputs?.language)?.name}
           </small>
         }
         <pre className="mt-2 p-2 border-2 border-solid border-gray-light rounded-md text-sm text-gray-light">{response}</pre>
