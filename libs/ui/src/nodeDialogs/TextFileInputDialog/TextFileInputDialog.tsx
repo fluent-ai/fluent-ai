@@ -2,15 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
 import { FileIcon, Cross1Icon } from '@radix-ui/react-icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { flowRunnerActions, flowRunnerSelectors } from '@tool-ai/state';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../../lib/AccordionComponent/AccordionComponent';
+import { flowActions, flowSelectors } from "@tool-ai/state";
 
 
 
 function TextFileInputDialog({id}:{id:string}) {
   // State
   const dispatch = useDispatch();
-  const inputs = useSelector(flowRunnerSelectors.selectInput(id));
+  const inputs = useSelector(flowSelectors.getInputsById(id));
   const [files, setFiles] = useState<Blob[]>([]);
 
   // File handling 
@@ -54,11 +53,11 @@ function TextFileInputDialog({id}:{id:string}) {
         // Trigger Promises
         Promise.all(readers).then((values) => {
             dispatch(
-              flowRunnerActions.setInput(
+              flowActions.setInput(
                 {
                   id,
                   nodeInputs: {
-                    ...inputs?.nodeInputs,
+                    ...inputs,
                     input: values.join(''),
                     files: files.map((file, index) => {
                       return {
@@ -73,7 +72,7 @@ function TextFileInputDialog({id}:{id:string}) {
               )
             )
         });
-  }, [dispatch, files, id]);
+  }, [dispatch, files, id, inputs]);
 
   //generate a file list from inputs.nodeInputs.files
   // inputs?.nodeInputs.files?.map((file) => file.name)
@@ -116,11 +115,11 @@ function TextFileInputDialog({id}:{id:string}) {
         placeholder="input your text"
         rows={10}
         cols={100}
-        value={inputs?.nodeInputs.input as string}
+        value={inputs?.input as string}
         onChange={
           (event) => {
             dispatch(
-              flowRunnerActions.setInput(
+              flowActions.setInput(
                 {
                   id,
                   nodeInputs: { input:event.target.value}

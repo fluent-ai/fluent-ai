@@ -173,6 +173,8 @@ export const useFlowRunner = (): {
    * Execute the flow.
    */
   const executeFlow = async ({flow, inputs, globals} :IExecuteFlowArguments) => {
+    console.log(`🌊🪝 executing flow with inputs:`, {inputs});
+    
     const relationships = buildRelationships(flow)
     
     const rootNodes = flow?.nodes.filter((node) => isRootNode(flow?.edges, node.id))

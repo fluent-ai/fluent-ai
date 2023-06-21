@@ -44,19 +44,15 @@ const nodeTypes = {
 
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const currentUser = {
-    id: "a-dcasfvsvsvs",
-    name: "John Doe",
-    initials: "JD",
-    email: "j.doe@example.com",
-    flows: [],
-    profileImg: "",
-  }
   // --------------------------------------     Hooks & State - React Flow    --------------------------------------
   const reactFlowWrapper = useRef<any>(null);
   const nodes = useSelector(flowSelectors.getNodes);
   const edges = useSelector(flowSelectors.getEdges);
   const inputs = useSelector(flowSelectors.getInputs);
+  useEffect(() => {
+    console.log('Dashboard', {inputs});
+  }
+  , [inputs])
 
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
   // --------------------------------------     Hooks & State - Flow Runner   --------------------------------------
@@ -137,10 +133,7 @@ const Dashboard = () => {
     executeFlow({
       flow: { nodes, edges },
       inputs,
-      globals: {
-        deeplApiKey: process.env.NX_DEEPL_API_KEY,
-        openAiApiKey: process.env.NX_OPENAI_API_KEY,
-      },
+      globals: {},
     });
   }
   return (
