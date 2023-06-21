@@ -1,8 +1,7 @@
 
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { flowRunnerActions, flowRunnerSelectors } from "@tool-ai/state";
+import { flowActions, flowSelectors, flowRunnerSelectors } from "@tool-ai/state";
 
 /* eslint-disable-next-line */
 export interface DalleGenerationDialogProps {}
@@ -16,9 +15,8 @@ interface IOutputs {
 }
 function DalleGenerationDialog({id}:{id:string}) {
   const dispatch = useDispatch();
-  const inputs = useSelector(flowRunnerSelectors.selectInput(id));
+  const inputs = useSelector(flowSelectors.getInputsById(id));
   const outputs = useSelector(flowRunnerSelectors.selectOutput(id)) as IOutputs;
-  const state = useSelector(flowRunnerSelectors.selectState(id)) as IOutputs;
   // const url = outputs?.nodeOutputs?.image?.url || ''
 
   return (
@@ -29,11 +27,11 @@ function DalleGenerationDialog({id}:{id:string}) {
       <div title="Settings" >
       <label title="Output Images"  className="mt-2.5">select amount of variations
           <select aria-label="select amount of variations"
-            onChange={(e)=> dispatch(flowRunnerActions.setInput(
+            onChange={(e)=> dispatch(flowActions.setInput(
               {
                 id,
                 nodeInputs: {
-                  ...inputs?.nodeInputs,
+                  ...inputs,
                   numberVariations: e.target.value
                 }
               }
@@ -53,7 +51,6 @@ function DalleGenerationDialog({id}:{id:string}) {
         </label>
         </div>
       <div title="Output Images" className="flex flex-col items-center justify-center">
-        {/* {url !== '' ? <img src={url} alt="Open AI" /> : <div>Run the flow to generate an image</div>} */}
         { 
         // @ts-ignore
         outputs?.nodeOutputs?.images?.map((image, index) => {

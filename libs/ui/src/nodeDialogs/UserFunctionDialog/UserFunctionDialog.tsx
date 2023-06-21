@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
-import { flowRunnerActions, flowRunnerSelectors } from "@tool-ai/state";
+import { flowActions, flowSelectors } from "@tool-ai/state";
 
 function UserFunctionDialog({id}:{id:string}) {
   const dispatch = useDispatch();
-  const inputs = useSelector(flowRunnerSelectors.selectInput(id));
+  const inputs = useSelector(flowSelectors.getInputsById(id));
 
   return (
     <InnerDialogStructure
@@ -17,10 +17,10 @@ function UserFunctionDialog({id}:{id:string}) {
         rows={10}
         cols={100}
         // value={node?.props ? node.props.userFunction : ''}
-        value={inputs?.nodeInputs.userFunction as string}
+        value={inputs?.userFunction as string}
         onChange={          (event) => {
           dispatch(
-            flowRunnerActions.setInput(
+            flowActions.setInput(
               {
                 id,
                 nodeInputs: { userFunction:event.target.value}

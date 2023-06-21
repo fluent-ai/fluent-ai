@@ -80,6 +80,19 @@ export const flowSlice = createSlice({
     setInputs: (state, action: PayloadAction<FlowState['inputs']>) => {
       state.inputs = action.payload;
     },
+    setInput: (
+      state,
+      action: PayloadAction<{ id: string; nodeInputs: Record<string, unknown> }>
+    ) => {
+      const existingInput = state.inputs.find(
+        (input) => input.id === action.payload.id
+      );
+      if (existingInput) {
+        existingInput.nodeInputs = action.payload.nodeInputs;
+      } else {
+        state.inputs = [...state.inputs, action.payload];
+      }
+    },
     setFlow: (state, action: PayloadAction<Flow>) => {
       state.id = action.payload.id;
       state.nodes = action.payload.nodes;
@@ -120,6 +133,12 @@ const getId = createSelector(getFlowState, (state) => state.id);
 const getEdges = createSelector(getFlowState, (state) => state.edges);
 const getNodes = createSelector(getFlowState, (state) => state.nodes);
 const getInputs = createSelector(getFlowState, (state) => state.inputs);
+const getInputsById = (id: string) => {
+  return createSelector(getInputs, (inputs) => {
+    const input = inputs.find((input) => input.id === id);
+    return input?.nodeInputs;
+  });
+};
 const getFlow = createSelector(getFlowState, (state) => ({
   id: state.id,
   displayName: state.displayName,
@@ -144,6 +163,7 @@ export const flowSelectors = {
   getId,
   getEdges,
   getNodes,
+  getInputsById,
   getInputs,
   getFlow,
   isDialogOpen,
