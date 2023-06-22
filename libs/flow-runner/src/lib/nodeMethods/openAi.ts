@@ -7,17 +7,23 @@ export function openAi({
   msg,
 }: IMethodArguments): Promise<Record<string, unknown>> {
   async function query(args = {}) {
-    const { data, error } = await supabase
-      .getClient()
-      .functions.invoke('open-ai', { body: JSON.stringify(args) });
+    const { data } = await supabase.getClient().functions.invoke('open-ai', {
+      body: JSON.stringify({ name: 'fluentAI', params: args }),
+    });
+    console.log('💰', { data });
 
-    if (data.error) {
-      throw new Error(data.error);
-    }
+    // const { data, error } = await supabase
+    //   .getClient()
+    //   .functions.invoke('set-credit', { body: JSON.stringify(args) });
 
-    console.log('🤙 openAI data', data);
+    // if (data?.error) {
+    //   throw new Error(data?.error);
+    // }
 
-    return data.response;
+    // console.log('🤙 openAI data', data);
+
+    // return data.content;
+    return data.content;
   }
 
   return new Promise((resolve) => {
@@ -30,7 +36,7 @@ export function openAi({
     try {
       console.log('🤙 openAI msg', msg);
 
-      query({ params: { messages: [{ role: 'user', content: msg.payload }] } })
+      query({ messages: [{ role: 'user', content: msg.payload }] })
         .then((response) => {
           console.log('🤙 openAI response', response);
           resolve({
