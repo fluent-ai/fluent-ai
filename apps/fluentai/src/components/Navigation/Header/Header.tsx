@@ -2,6 +2,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   supabaseActions, supabaseSelectors,
 } from '@tool-ai/state';
+import { supabase } from '@tool-ai/supabase';
+import { useEffect, useState } from 'react';
 const Header = (): JSX.Element => {
   const dispatch = useDispatch();
   function handleLogout() {
@@ -13,6 +15,43 @@ const Header = (): JSX.Element => {
   }
 
   const user = useSelector(supabaseSelectors.getUser)
+
+  const [credit, setCredit] = useState(0);
+  useEffect(() => {
+    if (user) {
+      const fetchCredit = async () => {
+        const { data, error } = await supabase.getClient()
+          .from('accounts')
+          .select('credit')
+          .eq('user_id', user.id)
+          .single();
+        if (error) {
+          console.log(error);
+          return;
+        }
+        setCredit(data?.credit);
+      };
+      fetchCredit();
+    }
+  }
+  , [user])
+  supabase.getClient()
+    .channel('schema-db-changes')
+    .on(
+      'postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'accounts'
+      },
+      (payload) => {
+        console.log('💰 change to account detected',payload)
+        const newPayload = payload?.new as { credit: number };
+        setCredit(newPayload?.credit);
+
+      }
+    )
+    .subscribe()
 
 
   
@@ -27,7 +66,9 @@ const Header = (): JSX.Element => {
       <div className="flex flex-start  items-center gap-2">
         <img src="/assets/logo.png" alt="logo" className="h-10 w-10" />
         <div className="sidebar-icon">
+          <div className="flex"></div>
           <div>{user?.email}</div>
+          <div>{credit.toFixed(3)} €</div>
           <button
               aria-label="logout button"
               type="button"
