@@ -15,7 +15,7 @@
         "baseHref": "/",
         "main": "apps/fluentai/src/main.tsx",
         "tsConfig": "apps/fluentai/tsconfig.app.json",
-        "assets": ["apps/fluentai/src/favicon.ico", "apps/fluentai/src/assets"],
+        "assets": ["apps/fluentai/src/assets/favicon/favicon.ico", "apps/fluentai/src/assets"],
         "styles": ["apps/fluentai/src/styles.css"],
         "scripts": [],
         "postcssConfig": "apps/fluentai/postcss.config.js",
