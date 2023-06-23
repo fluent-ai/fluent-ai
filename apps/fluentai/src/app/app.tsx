@@ -45,7 +45,22 @@ const App = () => {
     return (
     <div className="mx-auto w-96 h-screen flex flex-col items-center justify-center">
       <img src="/assets/logo-text.png" alt="logo" style={{width:'300px'}}/>
-      {supabase&&<Auth supabaseClient={supabase.getClient()} appearance={{ theme: ThemeSupa }} />}
+      {supabase&&<Auth
+        supabaseClient={supabase.getClient()}    appearance={{
+          theme: ThemeSupa,
+          variables: {
+            default: {
+              colors: {
+                brand: 'hsla(91, 60%, 66%, 1.0)',
+                brandAccent: 'hsla(91, 76%, 66%, 1.0)',
+              },
+            },
+          },
+        }}
+        providers={['github']}
+
+        
+        />}
     </div>)
   }
   else {
