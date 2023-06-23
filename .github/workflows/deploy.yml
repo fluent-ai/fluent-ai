@@ -32,7 +32,7 @@ jobs:
         mkdir -p ~/.ssh
         echo "$DEPLOY_KEY" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        rsync -avz -e "ssh -o StrictHostKeyChecking=no" ./dist/apps/fluentai/ therone@194.13.83.192:/home/theron/fluentAI/build/public
+        rsync -avz -e "ssh -o StrictHostKeyChecking=no" ./dist/apps/fluentai/ theron@194.13.83.192:/home/theron/fluentAI/build/public
 
     - name: Run build script on server
-      run: ssh -o StrictHostKeyChecking=no therone@194.13.83.192 'bash /home/theron/fluentAI/build.sh'
+      run: ssh -o StrictHostKeyChecking=no theron@194.13.83.192 'bash /home/theron/fluentAI/build.sh'
