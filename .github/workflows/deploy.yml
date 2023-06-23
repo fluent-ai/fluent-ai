@@ -16,6 +16,9 @@ jobs:
     - name: Install NX
       run: npm install -g nx
 
+    - name: Install dependencies
+      run: npm ci
+
     - name: Build NX project
       run: nx build fluentai
 
