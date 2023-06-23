@@ -1,0 +1,31 @@
+.react-flow__node {
+  border-radius: 6px;
+  width: 150px;
+  font-size: 12px;
+  color: theme("colors.gray-dark");
+  text-align: center;
+  border-width: 1px;
+  border-style: solid;
+  border-color: theme("colors.gray[200]");
+  background-color: white;
+}
+
+.react-flow__handle{
+  background-color: theme("colors.primary") !important;
+}
+.react-flow__handle-top {
+  /* background-color: theme("colors.gray[400]"); */
+  border-radius: 100% 100% 0 0;
+  top: -5px;
+}
+
+.react-flow__handle-bottom {
+  /* background-color: theme("colors.gray-dark"); */
+  border-radius: 0 0 100% 100%;
+  bottom: -5px;
+}
+
+.react-flow__node:focus {
+  box-shadow: 0 0 0 0.5px #1a192b;
+}
+

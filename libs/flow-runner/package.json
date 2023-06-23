@@ -1,0 +1,16 @@
+{
+  "name": "@tool-ai/flow-runner",
+  "version": "0.0.1",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
+  },
+  "dependencies": {
+    "node-ts": "^6.0.0",
+    "ts-node": "^10.9.1"
+  }
+}
