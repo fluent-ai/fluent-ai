@@ -147,8 +147,13 @@ export const useFlowRunner = (): {
             ...prevStates.filter((state) => state.id !== node.id),
             { id: node.id, state: { status: 'done' } }
           ]);
-          // strip error from msg
-          delete msg.error
+          //if there was an error, stop this branch of the flow
+          if (msg.error) {
+            console.warn(`🌊🪝🚨 Error executing node ${node.id}. Stopping Branch`)
+            console.warn(msg.error)
+            resolve(null)
+            return
+          }
           //call executeNode on each child
           const childPromises:Promise<unknown>[] = []
           relationships.find((nodeChildren) => nodeChildren.id === node.id)?.nodeChildren.forEach((childId) => {
