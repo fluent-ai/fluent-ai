@@ -4,7 +4,6 @@ async function runUserScript(
   userScript: string,
   context: Record<string, unknown>
 ) {
-  // Check for disallowed words
   const disallowedWords = [
     'import',
     'require',
@@ -20,19 +19,46 @@ async function runUserScript(
     }
   }
 
-  // Prepend Use strict mode
   userScript = '"use strict";\n' + userScript;
 
-  // Remove comments
-  userScript = userScript.replace(/\/\/.*|\/\*[\s\S]*?\*\//g, '');
-
-  // Execute the sanitized code in a sandboxed context
-  const scriptFunction = new Function('globals', 'msg', userScript);
-  let result;
+  let scriptFunction;
   try {
-    result = await scriptFunction(context.globals, context.msg);
+    scriptFunction = new Function(
+      'globals',
+      'msg',
+      `return (async function(){ ${userScript} })();`
+    );
   } catch (error) {
-    return { error: 'Error in user script\n' + error };
+    console.log('🚨 Error parsing user script', error);
+    return { error: 'Error parsing user script\n' + error };
+  }
+
+  let result;
+
+  try {
+    // Save original handler
+    const originalHandler = window.onunhandledrejection;
+
+    // Override it
+    window.onunhandledrejection = function (event) {
+      // Prevent the default handler from running
+      event.preventDefault();
+      // Now, we can handle it:
+      console.log('🚨 Unhandled promise rejection', event.reason);
+      result = { error: 'Error running user script\n' + event.reason };
+    };
+
+    result = await Promise.resolve(
+      scriptFunction(context.globals, context.msg)
+    ).catch((error) => {
+      throw error;
+    });
+
+    // Restore the original handler
+    window.onunhandledrejection = originalHandler;
+  } catch (error) {
+    console.log('🚨 Error running user script', error);
+    return { error: 'Error running user script\n' + error };
   }
   return result;
 }
