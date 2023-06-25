@@ -13,6 +13,7 @@ import { DalleGenerationDialog } from '../../nodeDialogs/DalleGenerationDialog/D
 import { useDispatch, useSelector } from 'react-redux';
 import { flowActions, flowSelectors } from '@tool-ai/state';
 import { useEffect, useState } from 'react';
+import { ConditionDialog } from '../../nodeDialogs/ConditionDialog/ConditionDialog';
 
 function NodeDialogComponent() {
   const dispatch = useDispatch();
@@ -38,6 +39,8 @@ function NodeDialogComponent() {
         return <UserFunctionDialog id={activeNodeId}  />;
       case 'template':
         return <TemplateDialog id={activeNodeId}  />;
+      case 'condition':
+        return <ConditionDialog id={activeNodeId}  />;
       case 'preview':
         return <PreviewDialog id={activeNodeId} />;
       case 'openAi':

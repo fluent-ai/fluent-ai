@@ -1,6 +1,5 @@
 import React from 'react';
 import NodeItemSideBar from '../NodeItemSideBar/NodeItemSideBar';
-// <<<<<<< HEAD
 import {
   PlayIcon,
   LapTimerIcon,
