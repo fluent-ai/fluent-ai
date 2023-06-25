@@ -27,6 +27,7 @@ export function openAi({
         ...msg,
         error: `msg.payload either doesnt exist or is neither a string nor object`,
       });
+      return;
     }
     try {
       console.log('🤙 openAI msg', msg);
@@ -38,7 +39,6 @@ export function openAi({
         console.log('🤙 openAI msg.payload is object');
         params = msg.payload as Record<string, unknown>;
       }
-
       query(params)
         .then((response) => {
           //if input.mode is 'conversation', append the last message message property

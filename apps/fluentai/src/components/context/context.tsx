@@ -1,3 +1,4 @@
+//TODO: #116 check if this file is still referenced, if not, remove it
 import { createContext } from 'react';
 
 interface MyContextType {

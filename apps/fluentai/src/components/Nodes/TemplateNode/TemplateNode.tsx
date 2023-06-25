@@ -1,11 +1,9 @@
-import React, { memo, useContext, useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import { Handle, Position } from 'reactflow';
 import '../CustomNodesStyles.css';
-import * as Dialog from '@radix-ui/react-dialog';
-import Context from '../../context/context';
 import { NodeData, groups} from '../../../nodeData';
-import { useDispatch, useSelector } from 'react-redux';
-import { flowActions, flowRunnerSelectors } from '@tool-ai/state';
+import {  useSelector } from 'react-redux';
+import { flowRunnerSelectors } from '@tool-ai/state';
 
 interface Data {
   group: string;
@@ -28,10 +26,10 @@ export default memo (({id, data,type, isConnectable}: MemoProps) => {
   
   
   function getIcon () {
-    return NodeData.find(nodeItem => nodeItem.label == data.label);
+    return NodeData.find(nodeItem => nodeItem.label === data.label);
   }
   function getColor () {
-    return groups.find(nodeGroup => nodeGroup.id == data.group);
+    return groups.find(nodeGroup => nodeGroup.id === data.group);
   }
 
   function getStatusColor() {

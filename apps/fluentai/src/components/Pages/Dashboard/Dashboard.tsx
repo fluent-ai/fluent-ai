@@ -32,6 +32,7 @@ const nodeTypes = {
   deepl: TemplateNode,
   textInput: TemplateNode,
   template: TemplateNode,
+  condition: TemplateNode,
   json: TemplateNode,
   userFunction: TemplateNode,
   preview: TemplateNode,

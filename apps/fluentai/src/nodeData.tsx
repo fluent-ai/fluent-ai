@@ -1,10 +1,8 @@
 import {BsFiletypeTxt, BsDownload, BsTextareaT, BsBraces, BsLayoutTextWindowReverse, BsEye, BsImage, BsImages, BsFiletypeJson, BsTranslate, BsChatRightText} from 'react-icons/bs';
-
+import {PiPlugs} from 'react-icons/pi';
+import {GiChoice} from 'react-icons/gi';
 import {IoImageOutline, IoImagesOutline} from 'react-icons/io5';
 import {SiOpenai} from 'react-icons/si';
-
-import {ReactComponent as DeeplLogo}  from  './assets/Deepl_Logo.svg';
-import {VscJson} from 'react-icons/vsc';
 
 interface NodeItemData {
   type: string
@@ -76,6 +74,11 @@ export const NodeData: NodeItemData[] = [
       label:'Template',
       group: 'group-process',
       icon:<BsLayoutTextWindowReverse />},
+    {
+      type: 'condition',
+      label:'Condition',
+      group: 'group-process',
+      icon:<GiChoice />},
     {
       type: 'openAi',
       label:'OpenAI',

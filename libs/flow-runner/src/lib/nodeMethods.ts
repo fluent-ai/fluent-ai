@@ -11,3 +11,4 @@ export * from './nodeMethods/template';
 export * from './nodeMethods/textFileInput';
 export * from './nodeMethods/textInput';
 export * from './nodeMethods/userFunction';
+export * from './nodeMethods/condition';

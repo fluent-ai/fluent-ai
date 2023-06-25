@@ -1,0 +1,102 @@
+/* reset */
+button {
+  all: unset;
+}
+
+.SelectTrigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  padding: 0 15px;
+  font-size: 13px;
+  line-height: 1;
+  height: 35px;
+  gap: 5px;
+  background-color: white;
+  color: black;
+  margin: 5px;
+  outline: 1px solid black;
+}
+.SelectTrigger:hover {
+  background-color: hsla(20, 96%, 69%, 1.0);
+}
+/* .SelectTrigger:focus {
+  box-shadow: 0 0 0 2px black;
+} */
+
+.SelectTrigger[data-placeholder] {
+  color: hsla(20, 96%, 69%, 1.0);
+}
+
+.SelectIcon {
+  color: hsla(20, 96%, 69%, 1.0);
+}
+
+.SelectContent {
+  overflow: hidden;
+  background-color: white;
+  border-radius: 6px;
+/* https://smoothshadows.com/#djEsMSw1LDAuMDgsMjQsMTAsMTAsIzAzMDcxMiwjZjNmNGY2LCNmZmZmZmYsMg%3D%3D */
+box-shadow: 0px 0px 1px rgba(3, 7, 18, 0.02),
+  2px 2px 4px rgba(3, 7, 18, 0.03),
+  4px 4px 9px rgba(3, 7, 18, 0.05),
+  6px 6px 15px rgba(3, 7, 18, 0.06),
+  10px 10px 24px rgba(3, 7, 18, 0.08);
+
+}
+
+.SelectViewport {
+  padding: 25px;
+}
+
+.SelectItem {
+  font-size: 13px;
+  line-height: 1;
+  color: hsla(20, 96%, 69%, 1.0);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  height: 25px;
+  padding: 0 35px 0 25px;
+  position: relative;
+  user-select: none;
+}
+.SelectItem[data-disabled] {
+  color: var(--mauve8);
+  pointer-events: none;
+}
+.SelectItem[data-highlighted] {
+  outline: none;
+  background-color: hsla(20, 96%, 69%, 1.0);
+  color: hsla(20, 96%, 87%, 1.0);
+}
+
+.SelectLabel {
+  padding: 0 25px;
+}
+
+.SelectSeparator {
+  height: 1px;
+  background-color: hsla(20, 96%, 69%, 1.0);
+  margin: 5px;
+}
+
+.SelectItemIndicator {
+  position: absolute;
+  left: 0;
+  width: 25px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.SelectScrollButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 25px;
+  background-color: white;
+  color: hsla(20, 96%, 69%, 1.0);
+  cursor: default;
+}
