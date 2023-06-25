@@ -1,13 +1,5 @@
 import { IMethodArguments } from '../useFlowRunner';
 
-interface IConditionInputs extends IMethodArguments {
-  inputs: {
-    location: string;
-    query: string;
-    operator: 'is' | 'is-not' | 'contains' | 'does-not-contain';
-  };
-}
-
 // Helper function to get a deeply nested property from an object.
 // If property does not exist, it will return undefined.
 // Example: getNestedProperty(msg, ['payload', 'name']) would get msg.payload.name
@@ -60,12 +52,14 @@ export function condition({
           // ...msg,
           error: `location must exist and be a string`,
         });
+        return;
       }
       if (!inputs?.query && typeof inputs?.query !== 'string') {
         resolve({
           // ...msg,
           error: `query must exist and be a string`,
         });
+        return;
       }
       if (
         !inputs?.operator ||
@@ -77,6 +71,7 @@ export function condition({
           // ...msg,
           error: `operator must exist and be one of the following :  'is' | 'is-not' | 'contains' | 'does-not-contain'`,
         });
+        return;
       }
 
       console.log('🚦 condition inputs', { inputs });
@@ -92,6 +87,7 @@ export function condition({
           // ...msg,
           error: `Failed to get nested property, ${error}`,
         });
+        return;
       }
 
       // Store the query for easier access
@@ -131,6 +127,7 @@ export function condition({
             // ...msg,
             error: `Invalid operator`,
           });
+          return;
       }
 
       // If the condition is met, resolve the promise with the original message
@@ -142,12 +139,14 @@ export function condition({
           // ...msg,
           error: `Condition not met`,
         });
+        return;
       }
     } catch (error) {
       resolve({
         // ...msg,
         error: `condition failed with error : ${error}`,
       });
+      return;
     }
   });
 }
