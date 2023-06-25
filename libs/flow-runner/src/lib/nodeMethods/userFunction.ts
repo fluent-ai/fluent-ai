@@ -70,7 +70,6 @@ export function userFunction({
 }: IMethodArguments): Promise<Record<string, unknown>> {
   return new Promise((resolve) => {
     if (typeof inputs?.userFunction === 'string') {
-      console.log('🌳', inputs?.userFunction);
       runUserScript(inputs?.userFunction, { globals, msg }).then((result) => {
         resolve({ ...msg, ...result });
       });
