@@ -139,6 +139,13 @@ const getInputsById = (id: string) => {
     return input?.nodeInputs;
   });
 };
+const getNodeTypeById = (id: string) => {
+  return createSelector(getNodes, (nodes) => {
+    const node = nodes.find((node) => node.id === id);
+    return node?.type;
+  });
+};
+
 const getFlow = createSelector(getFlowState, (state) => ({
   id: state.id,
   displayName: state.displayName,
@@ -164,6 +171,7 @@ export const flowSelectors = {
   getEdges,
   getNodes,
   getInputsById,
+  getNodeTypeById,
   getInputs,
   getFlow,
   isDialogOpen,

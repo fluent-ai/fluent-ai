@@ -11,11 +11,17 @@ input {
   right: 10px;
   height: 100%;
   width: 90vw;
-  max-width: 450px;
+  max-width: 500px;
   max-height: 85vh;
   padding: 25px;
-  /* animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1); */
+  transition: max-width 0.3s ease;
 }
+
+.expanded {
+  max-width: 1000px;
+
+}
+
 .DialogContent:focus {
   outline: none;
 }
