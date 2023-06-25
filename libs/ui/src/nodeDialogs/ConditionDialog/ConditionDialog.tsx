@@ -8,6 +8,15 @@ function ConditionDialog({id}:{id:string}){
   const dispatch = useDispatch();
   const inputs = useSelector(flowSelectors.getInputsById(id));
 
+  if (inputs?.location === undefined) {
+    dispatch(flowActions.setInput({id, nodeInputs:{...inputs,location:'msg.payload'}}))
+  }
+  if (inputs?.operator === undefined) {
+    dispatch(flowActions.setInput({id, nodeInputs:{...inputs,operator:'is'}}))
+  }
+  if (inputs?.query === undefined) {
+    dispatch(flowActions.setInput({id, nodeInputs:{...inputs,query:''}}))
+  }
 
   const location = inputs?.location as string || 'msg.payload';
   const operator = inputs?.operator as string || 'is';
@@ -51,7 +60,7 @@ function ConditionDialog({id}:{id:string}){
               flowActions.setInput(
                 {
                   id,
-                  nodeInputs: { location:event.target.value}
+                  nodeInputs: {...inputs,  location:event.target.value}
                 }
               )
             )
@@ -68,7 +77,7 @@ function ConditionDialog({id}:{id:string}){
               flowActions.setInput(
                 {
                   id,
-                  nodeInputs: { operator:value}
+                  nodeInputs: {...inputs, operator:value}
                 }
               )
             )
@@ -86,7 +95,7 @@ function ConditionDialog({id}:{id:string}){
               flowActions.setInput(
                 {
                   id,
-                  nodeInputs: { query:event.target.value}
+                  nodeInputs: {...inputs,  query:event.target.value}
                 }
               )
             )
