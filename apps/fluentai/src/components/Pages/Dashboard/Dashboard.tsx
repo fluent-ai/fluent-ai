@@ -8,6 +8,7 @@ import ReactFlow, {
   Controls,
   NodeChange,
   EdgeChange,
+  NodeSelectionChange,
 } from 'reactflow';
 
 import 'reactflow/dist/style.css';
@@ -20,7 +21,6 @@ import {
   flowRunnerActions,
   flowActions,
   flowSelectors,
-  supabaseSelectors,
 } from '@tool-ai/state';
 import { useFlowRunner } from '@tool-ai/flow-runner';
 import { NodeData } from '../../../nodeData';
@@ -64,6 +64,11 @@ const Dashboard = () => {
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => {
       dispatch(flowActions.applyNodeChanges(changes));
+      const primary = changes.find((change) => change.type === 'select' && change.selected) as NodeSelectionChange;
+      if(primary) {
+        dispatch(flowActions.setIsDialogOpen(true))
+        dispatch(flowActions.setActiveNodeId(primary.id))
+      }
     }
     ,
     [dispatch]

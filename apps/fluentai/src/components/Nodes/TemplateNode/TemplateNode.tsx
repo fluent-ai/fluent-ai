@@ -19,12 +19,12 @@ interface MemoProps {
   data: Data
 }
 export default memo (({id, data,type, isConnectable}: MemoProps) => {
-  const dispatch = useDispatch();
   const status = useSelector(flowRunnerSelectors.selectState(id))?.state?.status as string || 'ready';
-  // {JSON.stringify(state?.status || 'ready')}
   useEffect(() => {
     console.log('status', status);
   }, [status]);
+
+
   
   
   function getIcon () {
@@ -59,19 +59,13 @@ export default memo (({id, data,type, isConnectable}: MemoProps) => {
         onConnect={(params) => console.log('handle onConnect', params)}
         isConnectable={isConnectable}
       />
-      <div onClick={()=>{
-        dispatch(flowActions.setIsDialogOpen(true))
-        dispatch(flowActions.setActiveDialog(type))
-        dispatch(flowActions.setActiveNodeId(id))
-        }}
+      <div
         className='flex items-center relative'>
-          
         <div
           className={`node h-full w-[20%] rounded-tl-[6px] rounded-bl-[6px] p-2.5 flex justify-center`}
           style={{backgroundColor: getColor()?.color}}>{getIcon()?.icon}
         </div>
         <div className='pl-2.5'>{data.label}</div>
-        {/* <div className='pl-2.5'>{status}</div> */}
         <div
           className={`bottom-0 right-0 w-10 h-10 rounded-full ${getStatusColor()}`}
           style={{
@@ -83,13 +77,9 @@ export default memo (({id, data,type, isConnectable}: MemoProps) => {
             height: '7px',
             borderRadius: '50%',
             animation: `${status === 'running' ? 'pulse' : ''} 0.5s infinite ease-in-out alternate`,
-            
-            
           }}
           ></div>
-      
         </div>
-
       <Handle
         type="source"
         position={Position.Bottom}

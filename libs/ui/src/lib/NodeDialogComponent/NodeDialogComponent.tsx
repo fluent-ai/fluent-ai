@@ -12,16 +12,22 @@ import { DownloadDialog } from '../../nodeDialogs/DownloadDialog/DownloadDialog'
 import { DalleGenerationDialog } from '../../nodeDialogs/DalleGenerationDialog/DalleGenerationDialog';
 import { useDispatch, useSelector } from 'react-redux';
 import { flowActions, flowSelectors } from '@tool-ai/state';
+import { useEffect, useState } from 'react';
 
 function NodeDialogComponent() {
   const dispatch = useDispatch();
   const isOpen = useSelector(flowSelectors.isDialogOpen) 
-  const activeDialog = useSelector(flowSelectors.activeDialog)
   const activeNodeId = useSelector(flowSelectors.activeNodeId)
+  const [isExpanded, setIsExpanded] = useState(false); 
+
+  const nodeType = useSelector(flowSelectors.getNodeTypeById(activeNodeId));
+  useEffect(() => {
+    setIsExpanded(false);
+  }, [nodeType]); 
 
 
   const shownDialog = () => {
-    switch (activeDialog) {
+    switch (nodeType) {
       case 'textFileInput':
         return <TextFileInputDialog id={activeNodeId}/>;
       case 'textInput':
@@ -52,13 +58,20 @@ function NodeDialogComponent() {
     <div>
       {isOpen && (
         <div
-          className={`${styles.DialogContent} border-2 border-inherit rounded-md`}
+          className={`${styles.DialogContent} ${isExpanded && styles.expanded} border-2 border-inherit rounded-md`}
         >
-          <button
-           className='absolute right-2 top-2'
-           onClick={() => dispatch(flowActions.setIsDialogOpen(false))}>
-            🅧
-           </button>
+          <div className="flex flex-space-between">
+            <button
+            className='absolute right-2 top-2'
+            onClick={() => dispatch(flowActions.setIsDialogOpen(false))}>
+              🅧
+            </button>
+            <button
+            className='absolute left-2 top-2'
+            onClick={() => setIsExpanded(!isExpanded)}>
+              {isExpanded ? '▶ Contract' : '◀ Expand'}
+            </button>
+           </div>
           <div>
             {shownDialog()}
           </div>
