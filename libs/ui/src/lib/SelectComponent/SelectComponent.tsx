@@ -36,7 +36,7 @@ const Select = ({value, onChange, options, placeholder} : SelectProps) => (
           <SelectPrimitive.Group>
             <SelectPrimitive.Label className={styles.SelectLabel}>{placeholder}</SelectPrimitive.Label>
             {options.map((option) => (
-                <SelectItem value={option.value} label={option.label}/>
+                <SelectItem key={option.value} value={option.value} label={option.label}/>
             ))}
           </SelectPrimitive.Group>
         </SelectPrimitive.Viewport>
