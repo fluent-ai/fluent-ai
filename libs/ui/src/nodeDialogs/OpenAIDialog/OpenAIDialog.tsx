@@ -9,6 +9,7 @@ function OpenAIDialog({id}:{id:string}){
   const outputs = useSelector(flowRunnerSelectors.selectOutput(id));
   const mode = inputs?.mode as string || 'simple';
   let response = outputs?.nodeOutputs?.payload as string;
+  const error = outputs?.nodeOutputs?.error as string;
   if(!response) response = 'Run the flow to generate a response'
   
   const modes = [
@@ -33,6 +34,7 @@ function OpenAIDialog({id}:{id:string}){
     <InnerDialogStructure
     title="Open Ai"
     description="Open AI description">
+      {error && <div title="ERROR" className="error">{error}</div>}
       <div title="Options">
         <b>Input</b>
         <p>The openAI node expects a payload on the msg object (as most nodes). <code>msg.payload</code> can be either a string or an object.</p>
@@ -62,7 +64,7 @@ function OpenAIDialog({id}:{id:string}){
       <div title="Output">{
       // replace the linebreaks in the string with <br/> tags
       // response.split('\n').map((item, i) => <p key={i}>{item}</p>)
-      JSON.stringify(response, null, 2)
+      JSON.stringify(response, null, 2).split('\n').map((item, i) => <p key={i}>{item}</p>)
       }
       
       </div>
