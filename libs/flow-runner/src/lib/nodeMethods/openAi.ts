@@ -1,6 +1,10 @@
 import { supabase } from '@tool-ai/supabase';
 import { IMethodArguments } from '../useFlowRunner';
 
+interface IConversation {
+  messages: Record<string, unknown>[];
+}
+
 export function openAi({
   globals,
   inputs,
@@ -11,7 +15,7 @@ export function openAi({
       body: JSON.stringify({ params }),
     });
     console.log('💰', { data });
-    return data?.content;
+    return data;
   }
 
   return new Promise((resolve) => {
@@ -37,10 +41,28 @@ export function openAi({
 
       query(params)
         .then((response) => {
-          resolve({
-            ...msg,
-            payload: response,
-          });
+          //if input.mode is 'conversation', append the last message message property
+          if (inputs?.mode === 'conversation') {
+            console.log('🤙 openAI is in conversation mode 🎙️');
+            let conversation: IConversation = { messages: [] };
+            if (msg.payload && typeof msg.payload === 'object') {
+              conversation = msg.payload as IConversation;
+            }
+            conversation.messages.push(response.raw.choices[0].message);
+
+            resolve({
+              ...msg,
+              finish_reason: response.raw.choices[0].finish_reason,
+              usage: response.raw.usage,
+              payload: conversation,
+            });
+          } else {
+            console.log('🤙 openAI is in simple mode 🤪');
+            resolve({
+              ...msg,
+              payload: response.content,
+            });
+          }
         })
         .catch((error) => {
           console.log('🤙 openAI error', error);

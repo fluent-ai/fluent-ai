@@ -11,20 +11,36 @@ function OpenAIDialog({id}:{id:string}){
   let response = outputs?.nodeOutputs?.payload as string;
   if(!response) response = 'Run the flow to generate a response'
   
-  const modes = [{value:'simple', label:'Simple'}, {value:'conversation', label:'Conversation'}]
+  const modes = [
+    {
+      value:'simple',
+      label:'Simple',
+      description:
+      <p>Returns the response as a string in <code>msg.payload</code></p>
+    },
+    {
+      value:'conversation',
+      label:'Conversation',
+      description:<div>
+      <p>The node expects msg.payload to follow openAI's
+      <a href='https://platform.openai.com/docs/api-reference/chat' style={{textDecoration:'underline'}}> chat completion spec 🔗</a>.
+      New messages are appended to the messages property, allowing you to chain nodes to form a conversation</p>
+      </div>
+    }
+  ]
 
   return (
     <InnerDialogStructure
     title="Open Ai"
     description="Open AI description">
       <div title="Options">
-        <b>Mode</b>
-        <p>In <b>simple mode</b>, the node uses msg.payload as the prompt, and returns the respond as msg.payload</p>
-        <p>In <b>conversation mode</b>, the node expects msg.payload to follow openAI's
-        <a href='https://platform.openai.com/docs/api-reference/chat' style={{textDecoration:'underline'}}> chat completion spec</a></p>
+        <b>Input</b>
+        <p>The openAI node expects a payload on the msg object (as most nodes). <code>msg.payload</code> can be either a string or an object.</p>
+        <br/>
           <RadioGroup
+          title="Mode"
           options={modes}
-          defaultValue={mode}
+          value={mode}
           onChange={
             (value) => {
               console.log('change', value);

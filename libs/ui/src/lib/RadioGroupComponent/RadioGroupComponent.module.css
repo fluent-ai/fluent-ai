@@ -10,11 +10,16 @@ button {
 }
 
 .size-small {
-  --factor: 0.875;
+  --factor: 0.75;
 }
 
 .size-large {
-  --factor: 1.125;
+  --factor: 1.25;
+}
+
+.RadioGroupTitle {
+  /* font-size: 16px */
+  font-weight: bold;
 }
 
 .RadioGroupItem {
@@ -49,7 +54,5 @@ button {
 
 .Label {
   color: black;
-  font-size: calc(15px * var(--factor));
-  line-height: 1;
   padding-left: calc(5px * var(--factor));;
 }
