@@ -1,0 +1,55 @@
+/* reset */
+button {
+  all: unset;
+}
+
+.RadioGroupRoot {
+  display: flex;
+  flex-direction: column;
+  --factor: 1;
+}
+
+.size-small {
+  --factor: 0.875;
+}
+
+.size-large {
+  --factor: 1.125;
+}
+
+.RadioGroupItem {
+  background-color: white;
+  width: calc(20px * var(--factor));
+  height: calc(20px * var(--factor));
+  border-radius: 100%;
+  outline: 2px solid black;
+  margin: calc(5px * var(--factor));
+}
+.RadioGroupItem:hover {
+  background-color: hsla(45, 100%, 70%, 1.0);
+}
+
+
+.RadioGroupIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.RadioGroupIndicator::after {
+  content: '';
+  display: block;
+  width: calc(11px * var(--factor));
+  height: calc(11px * var(--factor));
+  border-radius: 50%;
+  background-color: black;
+}
+
+.Label {
+  color: black;
+  font-size: calc(15px * var(--factor));
+  line-height: 1;
+  padding-left: calc(5px * var(--factor));;
+}
