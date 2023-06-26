@@ -60,6 +60,14 @@ function ConditionDialog({id}:{id:string}){
     {
       value:'does-not-contain',
       label:'does not contain'
+    },
+    {
+      value:'starts-with',
+      label:'starts with'
+    },
+    {
+      value:'ends-with',
+      label:'ends with'
     }
   ]
 
@@ -76,7 +84,7 @@ function ConditionDialog({id}:{id:string}){
       <div title="Condition">
       <p>Allow the execution chain to pass on to the next node when </p>
       <input
-        style={{width:'25%'}}
+        style={{width:'20%'}}
         className={styles.TextInput}
         type="text"
         value={location}
@@ -113,7 +121,7 @@ function ConditionDialog({id}:{id:string}){
           />
       <input
         className={styles.TextInput}
-        style={{width:'25%'}}
+        style={{width:'20%'}}
         type="text"
         value={query}
         placeholder="query"
