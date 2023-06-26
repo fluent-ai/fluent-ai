@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, useState} from 'react';
 import { Handle, Position } from 'reactflow';
 import '../CustomNodesStyles.css';
 import { NodeData, groups} from '../../../nodeData';
@@ -49,6 +49,16 @@ export default memo (({id, data,type, isConnectable}: MemoProps) => {
   const dispatch = useDispatch();
   const inputs = useSelector(flowSelectors.getInputsById(id));
   const output = useSelector(flowRunnerSelectors.selectOutput(id));
+  let location = ''
+  switch (type) {
+    case 'textInput':
+      location = 'input';
+      break;
+    case 'preview':
+      location = 'title';
+  }
+
+
 
   const editable = inputs?.editable as boolean || false;
   let title = inputs?.title as string ?? data.label;
@@ -59,7 +69,11 @@ export default memo (({id, data,type, isConnectable}: MemoProps) => {
     } catch (error) {
       console.error(error);
     }
+  } else if (inputs?.titleMode === 'text-input') {
+    title = inputs?.input as string;
   }
+
+
 
 
 
@@ -131,7 +145,7 @@ export default memo (({id, data,type, isConnectable}: MemoProps) => {
                 flowActions.setInput(
                   {
                     id,
-                    nodeInputs: {...inputs,  title:event.target.value}
+                    nodeInputs: {...inputs,  [location]:event.target.value}
                   }
                 )
               )
