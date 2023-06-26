@@ -2,8 +2,37 @@ import React, { memo, useEffect } from 'react';
 import { Handle, Position } from 'reactflow';
 import '../CustomNodesStyles.css';
 import { NodeData, groups} from '../../../nodeData';
-import {  useSelector } from 'react-redux';
-import { flowRunnerSelectors } from '@tool-ai/state';
+import {  useDispatch, useSelector } from 'react-redux';
+import { flowActions, flowRunnerSelectors, flowSelectors } from '@tool-ai/state';
+
+
+function getNestedProperty(
+  obj: Record<string, unknown>,
+  propertyPath: string[]
+): unknown {
+  try {
+    return propertyPath.reduce(
+      (
+        currentObject: Record<string, unknown> | unknown,
+        currentProperty: string
+      ) => {
+        if (
+          typeof currentObject === 'object' &&
+          currentObject !== null &&
+          currentProperty in currentObject
+        ) {
+          return (currentObject as Record<string, unknown>)[currentProperty];
+        } else {
+          throw new Error(`Property ${propertyPath.join('.')} doesn't exist`);
+        }
+      },
+      obj as Record<string, unknown>
+    );
+  } catch (error) {
+    console.error(error);
+    return undefined;
+  }
+}
 
 interface Data {
   group: string;
@@ -18,11 +47,22 @@ interface MemoProps {
 }
 export default memo (({id, data,type, isConnectable}: MemoProps) => {
   const status = useSelector(flowRunnerSelectors.selectState(id))?.state?.status as string || 'ready';
-  useEffect(() => {
-    console.log('status', status);
-  }, [status]);
+  // useEffect(() => {
+  //   console.log('status', status);
+  // }, [status]);
 
 
+  const dispatch = useDispatch();
+  const inputs = useSelector(flowSelectors.getInputsById(id));
+  const output = useSelector(flowRunnerSelectors.selectOutput(id));
+
+  const editable = inputs?.editable as boolean || false;
+  let title = inputs?.title as string ?? data.label;
+
+  if (inputs?.titleMode === 'from-msg' && output?.msg) {
+    title = getNestedProperty(output, (inputs?.titlePath as string)?.split('.') ?? []) as string;
+  }
+  
   
   
   function getIcon () {
@@ -58,12 +98,31 @@ export default memo (({id, data,type, isConnectable}: MemoProps) => {
         isConnectable={isConnectable}
       />
       <div
-        className='flex items-center relative'>
+        className='flex relative'>
         <div
           className={`node h-full w-[20%] rounded-tl-[6px] rounded-bl-[6px] p-2.5 flex justify-center`}
           style={{backgroundColor: getColor()?.color}}>{getIcon()?.icon}
         </div>
-        <div className='pl-2.5'>{data.label}</div>
+        <input
+          type="text"
+          aria-label={title}
+          disabled={!editable}
+          className='pl-2.5'
+          value={title}
+          onChange={
+            (event) => {
+              dispatch(
+                flowActions.setInput(
+                  {
+                    id,
+                    nodeInputs: {...inputs,  title:event.target.value}
+                  }
+                )
+              )
+              }
+            }
+          />
+        
         <div
           className={`bottom-0 right-0 w-10 h-10 rounded-full ${getStatusColor()}`}
           style={{
