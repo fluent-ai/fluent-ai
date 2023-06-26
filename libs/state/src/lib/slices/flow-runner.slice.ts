@@ -24,6 +24,8 @@ export interface FlowRunnerState extends EntityState<FlowRunnerEntity> {
   states: {
     id: string;
     state: Record<string, unknown>;
+    inputMsg?: Record<string, unknown>;
+    error?: string;
   }[];
 }
 

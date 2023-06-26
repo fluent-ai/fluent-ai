@@ -24,6 +24,7 @@ interface FlowInflated extends FlowReference {
     id: string;
     nodeInputs: Record<string, unknown>;
   }[];
+  globals: Record<string, unknown>;
 }
 
 class Supabase {
@@ -96,6 +97,7 @@ class Supabase {
       nodes: flowInflated.nodes,
       edges: flowInflated.edges,
       inputs: flowInflated.inputs,
+      globals: flowInflated.globals,
     };
   }
 

@@ -35,6 +35,7 @@ export interface Flow {
     id: string;
     nodeInputs: Record<string, unknown>;
   }[];
+  globals: Record<string, unknown>;
 }
 export interface FlowState extends Flow {
   isDialogOpen: boolean;
@@ -50,6 +51,8 @@ export const initialFlowState: FlowState = flowAdapter.getInitialState({
   nodes: [],
   edges: [],
   inputs: [],
+  globals: {},
+
   isDialogOpen: false,
   activeDialog: '',
   activeNodeId: '',
@@ -70,6 +73,9 @@ export const flowSlice = createSlice({
     },
     setEdges: (state, action: PayloadAction<Edge[]>) => {
       state.edges = action.payload;
+    },
+    setGlobals: (state, action: PayloadAction<FlowState['globals']>) => {
+      state.globals = action.payload;
     },
     addNode: (state, action: PayloadAction<Node>) => {
       state.nodes = [...state.nodes, action.payload];
@@ -133,6 +139,7 @@ const getId = createSelector(getFlowState, (state) => state.id);
 const getEdges = createSelector(getFlowState, (state) => state.edges);
 const getNodes = createSelector(getFlowState, (state) => state.nodes);
 const getInputs = createSelector(getFlowState, (state) => state.inputs);
+const getGlobals = createSelector(getFlowState, (state) => state.globals);
 const getInputsById = (id: string) => {
   return createSelector(getInputs, (inputs) => {
     const input = inputs.find((input) => input.id === id);
@@ -152,6 +159,7 @@ const getFlow = createSelector(getFlowState, (state) => ({
   nodes: state.nodes,
   edges: state.edges,
   inputs: state.inputs,
+  globals: state.globals,
 }));
 const isDialogOpen = createSelector(
   getFlowState,
@@ -170,6 +178,7 @@ export const flowSelectors = {
   getId,
   getEdges,
   getNodes,
+  getGlobals,
   getInputsById,
   getNodeTypeById,
   getInputs,
