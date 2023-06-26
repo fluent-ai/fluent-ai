@@ -15,7 +15,6 @@ import 'reactflow/dist/style.css';
 
 import NodeSideBar from '../../Navigation/NodeSideBar/NodeSideBar';
 import TemplateNode from '../../Nodes/TemplateNode/TemplateNode';
-import CommentNode from '../../Nodes/CommentNode/CommentNode';
 import Header from '../../Navigation/Header/Header';
 import {
   flowRunnerActions,
@@ -27,7 +26,6 @@ import { NodeData } from '../../../nodeData';
 import { NodeDialogComponent } from '@tool-ai/ui';
 
 const nodeTypes = {
-  commentNode: CommentNode,
   textFileInput: TemplateNode,
   deepl: TemplateNode,
   textInput: TemplateNode,
