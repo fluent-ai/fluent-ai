@@ -61,7 +61,9 @@ function PreviewDialog({id}:{id:string}) {
       <div title="Preview">
         {
           output? <pre><code>{
-            JSON.stringify(output,null,2)
+            JSON.stringify(
+              inputs?.dialogMode === 'full' ?
+              output : output?.msg?.payload,null,2)
             .split('\n').map((item, i) => <p key={i}>{item}</p>)
             }</code></pre> : "Nothing to preview"
         }
