@@ -38,6 +38,7 @@ const nodeTypes = {
   dalleGeneration: TemplateNode,
   dalleVariation: TemplateNode,
   download: TemplateNode,
+  localhost: TemplateNode,
 };
 
 
