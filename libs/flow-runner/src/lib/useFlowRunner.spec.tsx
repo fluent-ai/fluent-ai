@@ -57,10 +57,10 @@ describe('useFlowRunner', () => {
 
     flowRunner.outputs.forEach((output) => {
       if (output.id === '4') {
-        expect(output.nodeOutputs.payload).toContain("6 pink balloons")
+        expect(output.msg.payload).toContain("6 pink balloons")
       }
       if (output.id === '6') {
-        expect(output.nodeOutputs.payload).toContain("Hello")
+        expect(output.msg.payload).toContain("Hello")
       }
     })
 

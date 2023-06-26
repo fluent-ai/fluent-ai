@@ -19,7 +19,7 @@ export interface FlowRunnerState extends EntityState<FlowRunnerEntity> {
   }[];
   outputs: {
     id: string;
-    nodeOutputs: Record<string, unknown>;
+    msg: Record<string, unknown>;
   }[];
   states: {
     id: string;
@@ -83,7 +83,7 @@ export const flowRunnerSlice = createSlice({
       action: PayloadAction<
         {
           id: string;
-          nodeOutputs: Record<string, unknown>;
+          msg: Record<string, unknown>;
         }[]
       >
     ) => {

@@ -20,5 +20,7 @@ export * from './nodeDialogs/DalleVariationDialog/DalleVariationDialog';
 export * from './nodeDialogs/DownloadDialog/DownloadDialog';
 export * from './lib/RadioGroupComponent/RadioGroupComponent';
 export * from './nodeDialogs/ConditionDialog/ConditionDialog';
+export * from './lib/SwitchComponent/SwitchComponent';
+export * from './lib/getNestedProperty';
 
 export * from './types.d';

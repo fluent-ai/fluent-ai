@@ -53,7 +53,7 @@ function DeeplDialog({id}:{id:string}) {
   const dispatch = useDispatch();
   const inputs = useSelector(flowSelectors.getInputsById(id));
   const outputs = useSelector(flowRunnerSelectors.selectOutput(id));
-  let response = outputs?.nodeOutputs?.payload as string;
+  let response = outputs?.msg?.payload as string;
   response = '' + response
 
 

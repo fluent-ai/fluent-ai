@@ -32,7 +32,7 @@ function JsonDialog({id}:{id:string}) {
       <pre className="text-sm p-2">
         <code>
           {
-            JSON.stringify(outputs?.nodeOutputs || {},null,2).split('\n').map((item, i) => <p key={i}>{item}</p>)
+            JSON.stringify(outputs?.msg || {},null,2).split('\n').map((item, i) => <p key={i}>{item}</p>)
           }
         </code>
       </pre>
