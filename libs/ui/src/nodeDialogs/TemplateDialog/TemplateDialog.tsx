@@ -2,7 +2,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
 import { flowActions, flowSelectors, flowRunnerSelectors } from "@tool-ai/state";
 import Mustache from 'mustache';
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import styles from '../Dialog.module.css';
 
 function TemplateDialog({id}:{id:string}) {
   const dispatch = useDispatch();
@@ -11,10 +12,8 @@ function TemplateDialog({id}:{id:string}) {
   const outputs = useSelector(flowRunnerSelectors.selectOutput(id));
   const globals = useSelector(flowSelectors.getGlobals);
 
-  useEffect(() => {
-    console.log({state})
-  }, [state])
 
+  const titleString = inputs?.title as string || 'Template';
 
   const [preview, setPreview] = useState('');
 
@@ -97,6 +96,30 @@ function TemplateDialog({id}:{id:string}) {
               }
             </code>
           </pre>
+        </div>
+        <div title="Options"> 
+        <div>
+          <p><b>Title</b></p>
+          <input
+          className={styles.TextInput}
+          type="text"
+          value={titleString}
+          placeholder="Template"
+          onChange={
+            (event) => {
+              dispatch(
+                flowActions.setInput(
+                  {
+                    id,
+                    nodeInputs: {...inputs,  title:event.target.value}
+                  }
+                )
+              )
+              }
+            }
+          />
+        </div>
+          
         </div>
     </InnerDialogStructure>
   );
