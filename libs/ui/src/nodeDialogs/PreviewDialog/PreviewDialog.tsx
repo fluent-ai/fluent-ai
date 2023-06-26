@@ -11,8 +11,28 @@ function PreviewDialog({id}:{id:string}) {
   const dispatch = useDispatch();
   const inputs = useSelector(flowSelectors.getInputsById(id));
   const output = useSelector(flowRunnerSelectors.selectOutput(id));
-  const [editingDisabled, setEditingDisabled] = useState(false);
 
+  const titlePath = inputs?.titlePath as string || 'msg.payload';
+  const titleString = inputs?.title as string || 'Preview';
+  const titleMode = inputs?.titleMode as string || 'custom';
+
+  const [editingDisabled, setEditingDisabled] = useState(titleMode === 'from-msg');
+
+  const titleModes = [
+    {
+      value:'custom',
+      label:'Custom',
+      description:
+      <p>Displays a user settable string, by default "Preview"</p>
+    },
+    {
+      value:'from-msg',
+      label:'From msg object',
+      description:<div>
+      <p>Displays a property from the <code>msg</code> object</p>
+      </div>
+    }
+  ]
 
   const dialogMode = inputs?.dialogMode as string || 'simple';
   const dialogModes = [
@@ -30,26 +50,7 @@ function PreviewDialog({id}:{id:string}) {
       </div>
     }
   ]
-  const titleMode = inputs?.titleMode as string || 'custom';
-  const titleModes = [
-    {
-      value:'custom',
-      label:'Custom',
-      description:
-      <p>Displays a user settable string, by default "Preview"</p>
-    },
-    {
-      value:'from-msg',
-      label:'From msg object',
-      description:<div>
-      <p>Displays a property from the <code>msg</code> object</p>
-      </div>
-    }
-  ]
 
-
-  const titlePath = inputs?.titlePath as string || 'msg.payload';
-  const titleString = inputs?.title as string || 'Preview';
 
   const customStyles = {'--highlight': 'hsla(91, 60%, 66%, 1.0)'}
 

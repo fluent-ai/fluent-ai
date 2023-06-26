@@ -1,17 +1,10 @@
 import { DialogComponent } from '../DialogComponent/DialogComponent';
 import { GearIcon } from '@radix-ui/react-icons';
 import Checkbox from '../CheckboxComponent/CheckboxComponent';
-import { supabase } from '@tool-ai/supabase';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { supabaseSelectors } from '@tool-ai/state';
 /* eslint-disable-next-line */
 export interface SettingsDialogProps {}
 
 function SettingsDialog(props: SettingsDialogProps) {
-  const user = useSelector(supabaseSelectors.getUser)
-
-
 
   return (
     <DialogComponent
