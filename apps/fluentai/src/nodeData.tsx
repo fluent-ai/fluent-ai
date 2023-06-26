@@ -45,11 +45,6 @@ export const groups = [
 ]
 export const NodeData: NodeItemData[] = [
     {
-      type: 'commentNode',
-      label:'Add Comment',
-      group: 'group-extras',
-      icon:<BsChatRightText />},
-    {
     type: 'textFileInput',
     label:'Text File Input',
     group: 'group-inputs',

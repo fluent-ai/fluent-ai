@@ -8,8 +8,8 @@ function OpenAIDialog({id}:{id:string}){
   const inputs = useSelector(flowSelectors.getInputsById(id));
   const outputs = useSelector(flowRunnerSelectors.selectOutput(id));
   const mode = inputs?.mode as string || 'simple';
-  let response = outputs?.nodeOutputs?.payload as string;
-  const error = outputs?.nodeOutputs?.error as string;
+  let response = outputs?.msg?.payload as string;
+  const error = outputs?.msg?.error as string;
   if(!response) response = 'Run the flow to generate a response'
   
   const modes = [

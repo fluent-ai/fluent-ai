@@ -3,10 +3,12 @@ button {
   all: unset;
 }
 
+
 .RadioGroupRoot {
   display: flex;
   flex-direction: column;
   --factor: 1;
+  --highlight: white: 
 }
 
 .size-small {
@@ -31,7 +33,7 @@ button {
   margin: calc(5px * var(--factor));
 }
 .RadioGroupItem:hover {
-  background-color: hsla(45, 100%, 70%, 1.0);
+  background-color: var(--highlight);
 }
 
 

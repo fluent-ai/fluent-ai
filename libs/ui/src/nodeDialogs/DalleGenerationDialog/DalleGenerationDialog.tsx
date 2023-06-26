@@ -7,7 +7,7 @@ import { flowActions, flowSelectors, flowRunnerSelectors } from "@tool-ai/state"
 export interface DalleGenerationDialogProps {}
 
 interface IOutputs {
-  nodeOutputs?: {
+  msg?: {
     image?: {
       url: string
     }
@@ -17,7 +17,7 @@ function DalleGenerationDialog({id}:{id:string}) {
   const dispatch = useDispatch();
   const inputs = useSelector(flowSelectors.getInputsById(id));
   const outputs = useSelector(flowRunnerSelectors.selectOutput(id)) as IOutputs;
-  // const url = outputs?.nodeOutputs?.image?.url || ''
+  // const url = outputs?.msg?.image?.url || ''
 
   return (
     <InnerDialogStructure
@@ -53,7 +53,7 @@ function DalleGenerationDialog({id}:{id:string}) {
       <div title="Output Images" className="flex flex-col items-center justify-center">
         { 
         // @ts-ignore
-        outputs?.nodeOutputs?.images?.map((image, index) => {
+        outputs?.msg?.images?.map((image, index) => {
           return <img key={index} src={image.url} alt="Open AI" />
         })
         }

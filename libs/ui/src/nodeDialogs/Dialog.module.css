@@ -1,0 +1,16 @@
+.TextInput {
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    padding: 0 15px;
+    font-size: 13px;
+    line-height: 1;
+    height: 35px;
+    gap: 5px;
+    background-color: white;
+    color: black;
+    margin: 5px;
+    outline: 1px solid black;
+}
