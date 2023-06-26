@@ -1,0 +1,42 @@
+/* reset */
+button {
+  all: unset;
+}
+
+.CheckboxRoot {
+  --factor: 1;
+  --highlight: black; 
+  background-color: white;
+  width: calc(25px * var(--factor));
+  height: calc(25px * var(--factor));
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* margin: 5px; */
+  outline: 1px solid black;
+}
+
+.size-small {
+  --factor: 0.75;
+}
+  
+.size-large {
+  --factor: 1.25;
+}
+
+.CheckboxRoot:hover {
+  outline: 2px solid var(--highlight);
+}
+
+
+.CheckboxIndicator {
+  color: black;
+}
+
+.Label {
+  color: black;
+  padding-left: 15px;
+  font-size: calc(15px * var(--factor));
+  line-height: 1;
+}
