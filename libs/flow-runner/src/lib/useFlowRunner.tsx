@@ -25,6 +25,8 @@ export interface IFlowRunnerInputs {
 export interface IFlowRunnerStates {
   id: string;
   state: Record<string, unknown>;
+  inputMsg?: Record<string, unknown>;
+  error?: string
 }
 
 export interface IMethodArguments {
@@ -112,7 +114,7 @@ export const useFlowRunner = (): {
       flow,
       relationships,
       node,
-      msg,
+      msg: inputMsg,
       inputs,
       globals,
     } : IExecuteNodeArguments ) => {
@@ -135,7 +137,7 @@ export const useFlowRunner = (): {
         method({
           globals,
           inputs: inputs.find((input) => input.id === node.id)?.nodeInputs || {},
-          msg,
+          msg: inputMsg,
         }).then((msg) => {
           // save the output    
           setOutputs((prevOutputs) => [
@@ -145,7 +147,13 @@ export const useFlowRunner = (): {
           // save the state. If error exists on msg, set state to error, otherwise set it to done
           setStates((prevStates) => [
             ...prevStates.filter((state) => state.id !== node.id),
-            { id: node.id, state: { status: 'done' } }
+            { 
+              id: node.id,
+              state: { status: 'done' },
+              inputMsg: structuredClone(inputMsg),
+              error: msg.error ? msg.error as string: undefined
+
+            }
           ]);
           //if there was an error, stop this branch of the flow
           if (msg.error) {

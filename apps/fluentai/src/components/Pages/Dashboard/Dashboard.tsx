@@ -49,10 +49,7 @@ const Dashboard = () => {
   const nodes = useSelector(flowSelectors.getNodes);
   const edges = useSelector(flowSelectors.getEdges);
   const inputs = useSelector(flowSelectors.getInputs);
-  useEffect(() => {
-    console.log('Dashboard', {inputs});
-  }
-  , [inputs])
+
 
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
   // --------------------------------------     Hooks & State - Flow Runner   --------------------------------------

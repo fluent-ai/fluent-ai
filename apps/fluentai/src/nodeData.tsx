@@ -1,5 +1,4 @@
-import {BsFiletypeTxt, BsDownload, BsTextareaT, BsBraces, BsLayoutTextWindowReverse, BsEye, BsImage, BsImages, BsFiletypeJson, BsTranslate, BsChatRightText} from 'react-icons/bs';
-import {PiPlugs} from 'react-icons/pi';
+import {BsFiletypeTxt, BsDownload, BsTextareaT, BsBraces, BsLayoutTextWindowReverse, BsEye, BsFiletypeJson, BsTranslate} from 'react-icons/bs';
 import {GiChoice} from 'react-icons/gi';
 import {IoImageOutline, IoImagesOutline} from 'react-icons/io5';
 import {SiOpenai} from 'react-icons/si';
