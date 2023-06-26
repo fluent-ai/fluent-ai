@@ -50,9 +50,14 @@ export function condition({
       }
       if (
         !inputs?.operator ||
-        !['is', 'is-not', 'contains', 'does-not-contain'].includes(
-          inputs?.operator as string
-        )
+        ![
+          'is',
+          'is-not',
+          'contains',
+          'does-not-contain',
+          'starts-with',
+          'ends-with',
+        ].includes(inputs?.operator as string)
       ) {
         resolve({
           error: `operator must exist and be one of the following :  'is' | 'is-not' | 'contains' | 'does-not-contain'`,
@@ -92,6 +97,19 @@ export function condition({
             targetValue &&
             !targetValue.toString().includes(query as string)
           ) {
+            conditionMet = true;
+          }
+          break;
+        case 'starts-with':
+          if (
+            targetValue &&
+            targetValue.toString().startsWith(query as string)
+          ) {
+            conditionMet = true;
+          }
+          break;
+        case 'ends-with':
+          if (targetValue && targetValue.toString().endsWith(query as string)) {
             conditionMet = true;
           }
           break;
