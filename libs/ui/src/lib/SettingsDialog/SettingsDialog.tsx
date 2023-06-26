@@ -1,12 +1,17 @@
 import { DialogComponent } from '../DialogComponent/DialogComponent';
-import {FormFieldComponent} from '../FormFieldComponent/FormFieldComponent';
-import * as  Form  from '@radix-ui/react-form';
-import { ButtonComponent } from '../ButtonComponent/ButtonComponent';
 import { GearIcon } from '@radix-ui/react-icons';
+import Checkbox from '../CheckboxComponent/CheckboxComponent';
+import { supabase } from '@tool-ai/supabase';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { supabaseSelectors } from '@tool-ai/state';
 /* eslint-disable-next-line */
 export interface SettingsDialogProps {}
 
 function SettingsDialog(props: SettingsDialogProps) {
+  const user = useSelector(supabaseSelectors.getUser)
+
+
 
   return (
     <DialogComponent
@@ -14,26 +19,28 @@ function SettingsDialog(props: SettingsDialogProps) {
     <div className='flex gap-x-3'>
       <div className='sidebar-icon w-[30px] h-[30px]'><GearIcon />
       </div><p className='w-100' aria-label="settings" placeholder="Search nodes" >Settings</p></div>}
-    title="Nodes settings"
-    closeButton={<Form.Submit asChild>
-      <ButtonComponent
-        type="submit"
-        ariaLabel="Save node settings"
-        buttonContent="Save"
-      />
-    </Form.Submit>}
+    title="Settings"
+    // closeButton={<Form.Submit asChild>
+    //   <ButtonComponent
+    //     type="submit"
+    //     ariaLabel="Save node settings"
+    //     buttonContent="Save"
+    //   />
+    // </Form.Submit>}
     >
-    <Form.Root onSubmit={()=>{console.log('save')}} className="w-full">
-    <FormFieldComponent
-      label="Open Ai Key"
-      type="text"
-      onChange={(e:React.ChangeEvent)=>{console.log(e)}} />
-    <FormFieldComponent
-      label="Deepl Ai Key"
-      type="text"
-      onChange={(e:React.ChangeEvent)=>{console.log(e)}} />
+      <div>
+      <p>Node Types</p>
+      <Checkbox
+        label="openAI"
+        checked={true}
+        onCheckedChange={(value) => {
+          // supabase.saveSettings({...settings, showOpenAI: value});
+        } }
+        />
+        </div>
+    
 
-  </Form.Root></DialogComponent>
+  </DialogComponent>
   );
 }
 
