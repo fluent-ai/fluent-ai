@@ -2,6 +2,7 @@ import { flowActions, flowRunnerSelectors, flowSelectors } from "@tool-ai/state"
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
 import RadioGroup from "../../lib/RadioGroupComponent/RadioGroupComponent";
 import { useDispatch, useSelector } from "react-redux";
+import styles from '../Dialog.module.css';
 
 function OpenAIDialog({id}:{id:string}){
   const dispatch = useDispatch();
@@ -11,6 +12,9 @@ function OpenAIDialog({id}:{id:string}){
   let response = outputs?.msg?.payload as string;
   const error = outputs?.msg?.error as string;
   if(!response) response = 'Run the flow to generate a response'
+
+
+  const titleString = inputs?.title as string || 'OpenAI';
   
   const modes = [
     {
@@ -32,8 +36,8 @@ function OpenAIDialog({id}:{id:string}){
 
   return (
     <InnerDialogStructure
-    title="Open Ai"
-    description="Open AI description">
+    title="OpenAI"
+    description="OpenAI description">
       {error && <div title="ERROR" className="error">{error}</div>}
       <div title="Options">
         <b>Input</b>
@@ -58,6 +62,27 @@ function OpenAIDialog({id}:{id:string}){
             }
           size="small"
           />
+                  <div>
+          <p><b>Title</b></p>
+          <input
+          className={styles.TextInput}
+          type="text"
+          value={titleString}
+          placeholder="OpenAI"
+          onChange={
+            (event) => {
+              dispatch(
+                flowActions.setInput(
+                  {
+                    id,
+                    nodeInputs: {...inputs,  title:event.target.value}
+                  }
+                )
+              )
+              }
+            }
+          />
+        </div>
         </div>
 
       
