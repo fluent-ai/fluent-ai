@@ -4,12 +4,14 @@ import { flowActions, flowRunnerSelectors, flowSelectors } from "@tool-ai/state"
 import RadioGroup from "../../lib/RadioGroupComponent/RadioGroupComponent";
 import styles from '../Dialog.module.css';
 import Switch from "../../lib/SwitchComponent/SwitchComponent";
+import { useState } from "react";
 
 
 function PreviewDialog({id}:{id:string}) {
   const dispatch = useDispatch();
   const inputs = useSelector(flowSelectors.getInputsById(id));
   const output = useSelector(flowRunnerSelectors.selectOutput(id));
+  const [editingDisabled, setEditingDisabled] = useState(false);
 
 
   const dialogMode = inputs?.dialogMode as string || 'simple';
@@ -66,6 +68,7 @@ function PreviewDialog({id}:{id:string}) {
       </div>
       <div title="Options"> 
         <Switch
+          disabled={editingDisabled}
           size="small"
           label="Editable on node / in place"
           checked={inputs?.editable as boolean || false}
@@ -91,11 +94,12 @@ function PreviewDialog({id}:{id:string}) {
           customStyles={customStyles}
           onChange={
             (value) => {
+              setEditingDisabled(value === 'from-msg');
               dispatch(
                 flowActions.setInput(
                   {
                     id,
-                    nodeInputs: {...inputs,  titleMode:value}
+                    nodeInputs: {...inputs,  titleMode:value, editable:false}
                   }
                 )
               )

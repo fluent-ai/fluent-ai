@@ -18,6 +18,11 @@ button {
   background-color: var(--highlight);
 }
 
+.SwitchRoot .disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 
 .size-small {
   --factor: 0.75;
