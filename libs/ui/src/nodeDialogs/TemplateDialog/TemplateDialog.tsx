@@ -8,10 +8,10 @@ function TemplateDialog({id}:{id:string}) {
   const outputs = useSelector(flowRunnerSelectors.selectOutput(id));
 
   let displayOutput = ''
-  if (typeof outputs?.nodeOutputs?.payload === 'string') {
-    displayOutput = outputs?.nodeOutputs?.payload
-  } else if (typeof outputs?.nodeOutputs?.payload === 'object') {
-    displayOutput = JSON.stringify(outputs?.nodeOutputs?.payload)
+  if (typeof outputs?.msg?.payload === 'string') {
+    displayOutput = outputs?.msg?.payload
+  } else if (typeof outputs?.msg?.payload === 'object') {
+    displayOutput = JSON.stringify(outputs?.msg?.payload)
   }
 
   return (

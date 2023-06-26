@@ -14,7 +14,7 @@ interface IRelationships {
 
 export interface IFlowRunnerOutputs {
   id: string;
-  nodeOutputs:  Record<string, unknown>;
+  msg:  Record<string, unknown>;
 }
 
 export interface IFlowRunnerInputs {
@@ -140,7 +140,7 @@ export const useFlowRunner = (): {
           // save the output    
           setOutputs((prevOutputs) => [
             ...prevOutputs.filter((output) => output.id !== node.id),
-            { id: node.id, nodeOutputs: structuredClone(msg) }
+            { id: node.id, msg: structuredClone(msg) }
           ]);
           // save the state. If error exists on msg, set state to error, otherwise set it to done
           setStates((prevStates) => [

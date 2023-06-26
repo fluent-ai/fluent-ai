@@ -2,7 +2,7 @@ import { flowActions, flowSelectors } from "@tool-ai/state";
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "../../lib/SelectComponent/SelectComponent";
-import styles from './ConditionDialog.module.css';
+import styles from '../Dialog.module.css';
 
 function ConditionDialog({id}:{id:string}){
   const dispatch = useDispatch();
@@ -47,10 +47,10 @@ function ConditionDialog({id}:{id:string}){
     title="Condition"
     description="Condition test">
       
-      <div className={styles.ConditionContainer}>
+      <div>
       <p>Allow the execution chain to pass on to the next node when </p>
       <input
-        className={styles.ConditionInput}
+        className={styles.TextInput}
         type="text"
         value={location}
         placeholder="location"
@@ -85,7 +85,7 @@ function ConditionDialog({id}:{id:string}){
           }
           />
       <input
-        className={styles.ConditionInput}
+        className={styles.TextInput}
         type="text"
         value={query}
         placeholder="query"

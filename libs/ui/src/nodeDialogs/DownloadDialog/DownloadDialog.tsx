@@ -16,8 +16,8 @@ function DownloadDialog({id}:{id:string}) {
     <InnerDialogStructure
     title="Download Node"
     description={'download node'}>
-      <a href={encodeFile(JSON.stringify(outputs?.nodeOutputs.payload) as string)}>result.txt</a>
-      {/* <div>{JSON.stringify(outputs?.nodeOutputs.payload || {},null,2)}</div> */}
+      <a href={encodeFile(JSON.stringify(outputs?.msg.payload) as string)}>result.txt</a>
+      {/* <div>{JSON.stringify(outputs?.msg.payload || {},null,2)}</div> */}
     </InnerDialogStructure>
   );
 }
