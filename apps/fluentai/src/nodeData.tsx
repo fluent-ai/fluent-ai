@@ -2,6 +2,7 @@ import {BsFiletypeTxt, BsDownload, BsTextareaT, BsBraces, BsLayoutTextWindowReve
 import {GiChoice} from 'react-icons/gi';
 import {IoImageOutline, IoImagesOutline} from 'react-icons/io5';
 import {SiOpenai} from 'react-icons/si';
+import {PiPlugs} from 'react-icons/pi'
 
 interface NodeItemData {
   type: string
@@ -73,6 +74,11 @@ export const NodeData: NodeItemData[] = [
       label:'Condition',
       group: 'group-process',
       icon:<GiChoice />},
+    {
+      type: 'localhost',
+      label:'Localhost',
+      group: 'group-process',
+      icon:<PiPlugs />},
     {
       type: 'openAi',
       label:'OpenAI',

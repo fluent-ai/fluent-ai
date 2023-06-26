@@ -12,3 +12,4 @@ export * from './nodeMethods/textFileInput';
 export * from './nodeMethods/textInput';
 export * from './nodeMethods/userFunction';
 export * from './nodeMethods/condition';
+export * from './nodeMethods/localhost';

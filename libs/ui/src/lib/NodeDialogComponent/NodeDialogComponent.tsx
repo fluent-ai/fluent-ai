@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { flowActions, flowSelectors } from '@tool-ai/state';
 import { useEffect, useState } from 'react';
 import { ConditionDialog } from '../../nodeDialogs/ConditionDialog/ConditionDialog';
+import { LocalhostDialog } from '../../nodeDialogs/LocalhostDialog/LocalhostDialog';
 
 function NodeDialogComponent() {
   const dispatch = useDispatch();
@@ -41,6 +42,8 @@ function NodeDialogComponent() {
         return <TemplateDialog id={activeNodeId}  />;
       case 'condition':
         return <ConditionDialog id={activeNodeId}  />;
+      case 'localhost':
+        return <LocalhostDialog id={activeNodeId}  />;
       case 'preview':
         return <PreviewDialog id={activeNodeId} />;
       case 'openAi':
