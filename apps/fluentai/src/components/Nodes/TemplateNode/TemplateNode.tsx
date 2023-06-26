@@ -1,10 +1,9 @@
-import React, { memo, useEffect } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { Handle, Position } from 'reactflow';
 import '../CustomNodesStyles.css';
 import { NodeData, groups} from '../../../nodeData';
 import {  useDispatch, useSelector } from 'react-redux';
 import { flowActions, flowRunnerSelectors, flowSelectors } from '@tool-ai/state';
-
 
 function getNestedProperty(
   obj: Record<string, unknown>,
@@ -30,7 +29,7 @@ function getNestedProperty(
     );
   } catch (error) {
     console.error(error);
-    return undefined;
+    throw error;
   }
 }
 
@@ -47,11 +46,6 @@ interface MemoProps {
 }
 export default memo (({id, data,type, isConnectable}: MemoProps) => {
   const status = useSelector(flowRunnerSelectors.selectState(id))?.state?.status as string || 'ready';
-  // useEffect(() => {
-  //   console.log('status', status);
-  // }, [status]);
-
-
   const dispatch = useDispatch();
   const inputs = useSelector(flowSelectors.getInputsById(id));
   const output = useSelector(flowRunnerSelectors.selectOutput(id));
@@ -60,10 +54,16 @@ export default memo (({id, data,type, isConnectable}: MemoProps) => {
   let title = inputs?.title as string ?? data.label;
 
   if (inputs?.titleMode === 'from-msg' && output?.msg) {
-    title = getNestedProperty(output, (inputs?.titlePath as string)?.split('.') ?? []) as string;
+    try {
+      title = getNestedProperty(output, (inputs?.titlePath as string)?.split('.') ?? []) as string;
+    } catch (error) {
+      console.error(error);
+    }
   }
-  
-  
+
+
+
+  const heightFactor = 40 + (Math.ceil(Math.max(title.length, 20*3 ) / 20) - 3) * 12
   
   function getIcon () {
     return NodeData.find(nodeItem => nodeItem.label === data.label);
@@ -88,8 +88,9 @@ export default memo (({id, data,type, isConnectable}: MemoProps) => {
     return color;
   }
 
+
   return (
-    <>
+    <div style={{height:`${heightFactor}px`}}>
       <Handle
         type="target"
         position={Position.Top}
@@ -100,14 +101,29 @@ export default memo (({id, data,type, isConnectable}: MemoProps) => {
       <div
         className='flex relative'>
         <div
-          className={`node h-full w-[20%] rounded-tl-[6px] rounded-bl-[6px] p-2.5 flex justify-center`}
-          style={{backgroundColor: getColor()?.color}}>{getIcon()?.icon}
+          className={`node rounded-tl-[6px] rounded-bl-[6px] p-2.5 flex justify-center items-center`}
+          style={{height:`${heightFactor}px`, backgroundColor: getColor()?.color}}>{getIcon()?.icon}
         </div>
-        <input
-          type="text"
+        <textarea
+          id={`textarea-${id}`}
           aria-label={title}
           disabled={!editable}
-          className='pl-2.5'
+          className={`pl-2.5`}
+          spellCheck={false}
+          style={{
+            overflow: 'hidden',
+            paddingTop: title.length > 17 ? '5px' : '10px',
+            fontSize: title.length > 17 ? '0.5rem' : '0.8rem',
+            width: '100%',
+            wordWrap: 'break-word',         
+            resize: 'none',
+            height:`${heightFactor}px`,
+            display: 'flex',
+            flexGrow: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'all 0.2s ease-in-out',
+          }}
           value={title}
           onChange={
             (event) => {
@@ -144,6 +160,6 @@ export default memo (({id, data,type, isConnectable}: MemoProps) => {
         style={{top: 'auto', background: '#555' }}
         isConnectable={isConnectable}
       />
-    </>
+    </div>
   );
   });

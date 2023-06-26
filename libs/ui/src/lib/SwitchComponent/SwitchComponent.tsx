@@ -10,16 +10,18 @@ interface SwitchProps {
     onCheckedChange: (checked: boolean) => void;
     customStyles?: CSSProperties & { '--highlight': string };
     size?: 'small' | 'medium' | 'large';
+    disabled?: boolean;
 }
 
-const Switch = ({label, checked, onCheckedChange, customStyles, size}:SwitchProps) => {
+const Switch = ({label, checked, onCheckedChange, customStyles, size, disabled}:SwitchProps) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [id, setId] = useState<string>(`switch-${uuid()}`);
   
   return (
   <form>
-    <div style={{ display: 'flex', alignItems: 'center' }}>
+    <div style={{ display: 'flex', alignItems: 'center', opacity: disabled ? '0.5' : '1' }}>
       <SwitchPrimitive.Root
+        disabled={disabled}
         className={style.SwitchRoot}
         checked={checked}
         onCheckedChange={onCheckedChange}
