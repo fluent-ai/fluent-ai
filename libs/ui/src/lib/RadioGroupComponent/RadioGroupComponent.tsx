@@ -1,5 +1,6 @@
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 import styles from './RadioGroupComponent.module.css';
+import { CSSProperties } from 'react';
 
 interface option {
     value: string;
@@ -15,15 +16,20 @@ interface RadioGroupProps {
     onChange: (value: string) => void;
     areaLabel?: string;
     size?: 'small' | 'medium' | 'large';
+    customStyles?: CSSProperties & { '--highlight': string };
+
 }
 
-const RadioGroup = ({value, defaultValue, options, onChange, areaLabel, size='medium', title}:RadioGroupProps) => {
+const RadioGroup = ({value, defaultValue, options, onChange, areaLabel, size='medium', title, customStyles}:RadioGroupProps) => {
     if(!defaultValue) defaultValue = options[0].value;
     
     return (
         <form>
             {title && <div className={styles.RadioGroupTitle}>{title}</div>}
             <RadioGroupPrimitive.Root
+            style={customStyles}
+            
+  
                 className={`${styles.RadioGroupRoot} ${styles[`size-${size}`]}`}
                 {...(value && {value})}
                 {...(!value && defaultValue && {defaultValue})}
