@@ -3,10 +3,32 @@ import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialog
 import { useDispatch, useSelector } from "react-redux";
 import Select from "../../lib/SelectComponent/SelectComponent";
 import styles from '../Dialog.module.css';
+import Switch from "../../lib/SwitchComponent/SwitchComponent";
+import RadioGroup from "../../lib/RadioGroupComponent/RadioGroupComponent";
 
 function ConditionDialog({id}:{id:string}){
   const dispatch = useDispatch();
   const inputs = useSelector(flowSelectors.getInputsById(id));
+
+
+  const titleString = inputs?.title as string || 'Text Input';
+  const titleMode = inputs?.titleMode as string || 'custom';
+
+  const titleModes = [
+    {
+      value:'custom',
+      label:'Custom',
+      description:
+      <p>Displays a user settable string, by default "Preview"</p>
+    },
+    {
+      value:'condition',
+      label:'Direct',
+      description:<div>
+      <p>Edit the text to be sent directly from the flow</p>
+      </div>
+    }
+  ]
 
   if (inputs?.location === undefined) {
     dispatch(flowActions.setInput({id, nodeInputs:{...inputs,location:'msg.payload'}}))
@@ -42,14 +64,19 @@ function ConditionDialog({id}:{id:string}){
   ]
 
 
+
+  const customStyles = {'--highlight': 'hsla(91, 60%, 66%, 1.0)'}
+
+
   return (
     <InnerDialogStructure
     title="Condition"
     description="Condition test">
       
-      <div>
+      <div title="Condition">
       <p>Allow the execution chain to pass on to the next node when </p>
       <input
+        style={{width:'25%'}}
         className={styles.TextInput}
         type="text"
         value={location}
@@ -86,6 +113,7 @@ function ConditionDialog({id}:{id:string}){
           />
       <input
         className={styles.TextInput}
+        style={{width:'25%'}}
         type="text"
         value={query}
         placeholder="query"
@@ -103,6 +131,51 @@ function ConditionDialog({id}:{id:string}){
           }
         />
       </div>
+      <div title="Options"> 
+        <RadioGroup
+          options={titleModes}
+          value={titleMode}
+          customStyles={customStyles}
+          onChange={
+            (value) => {
+              dispatch(
+                flowActions.setInput(
+                  {
+                    id,
+                    nodeInputs: {...inputs,  titleMode:value, editable:false}
+                  }
+                )
+              )
+              }
+            }
+          size="small"
+          />
+          <br/>
+          { titleMode === 'custom' &&
+            <div>
+              <p><b>String to display</b></p>
+              <input
+              className={styles.TextInput}
+              type="text"
+              value={titleString}
+              placeholder="Text Input"
+              onChange={
+                (event) => {
+                  dispatch(
+                    flowActions.setInput(
+                      {
+                        id,
+                        nodeInputs: {...inputs,  title:event.target.value}
+                      }
+                    )
+                  )
+                  }
+                }
+              />
+            </div>
+          }
+        </div>
+      
     </InnerDialogStructure>
   );
 }

@@ -46,9 +46,11 @@ interface MemoProps {
 }
 export default memo (({id, data,type, isConnectable}: MemoProps) => {
   const status = useSelector(flowRunnerSelectors.selectState(id))?.state?.status as string || 'ready';
+  const lastMsg = useSelector(flowRunnerSelectors.selectState(id))?.state?.lastMsg as Record<string, unknown> || {};
   const dispatch = useDispatch();
   const inputs = useSelector(flowSelectors.getInputsById(id));
   const output = useSelector(flowRunnerSelectors.selectOutput(id));
+
   let location = ''
   switch (type) {
     case 'textInput':
@@ -59,9 +61,8 @@ export default memo (({id, data,type, isConnectable}: MemoProps) => {
   }
 
 
-
   const editable = inputs?.editable as boolean || false;
-  let title = inputs?.title as string ?? data.label;
+  let title = inputs?.title as string ?? data.label;  
 
   if (inputs?.titleMode === 'from-msg' && output?.msg) {
     try {
@@ -71,7 +72,11 @@ export default memo (({id, data,type, isConnectable}: MemoProps) => {
     }
   } else if (inputs?.titleMode === 'text-input') {
     title = inputs?.input as string;
+  } else if (inputs?.titleMode === 'condition') {
+    title = `${inputs?.location}\n${inputs?.operator}\n${inputs?.query}`;
   }
+
+
 
 
 
