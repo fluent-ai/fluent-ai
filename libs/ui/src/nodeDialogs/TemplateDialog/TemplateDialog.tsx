@@ -1,11 +1,40 @@
 import { useDispatch, useSelector } from "react-redux";
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
 import { flowActions, flowSelectors, flowRunnerSelectors } from "@tool-ai/state";
+import Mustache from 'mustache';
+import { useEffect, useState } from "react";
 
 function TemplateDialog({id}:{id:string}) {
   const dispatch = useDispatch();
   const inputs = useSelector(flowSelectors.getInputsById(id));
+  const state = useSelector(flowRunnerSelectors.selectState(id));
   const outputs = useSelector(flowRunnerSelectors.selectOutput(id));
+  const globals = useSelector(flowSelectors.getGlobals);
+
+  useEffect(() => {
+    console.log({state})
+  }, [state])
+
+
+  const [preview, setPreview] = useState('');
+
+  const onChange:React.ChangeEventHandler<HTMLTextAreaElement> = (event) => {
+    setPreview(Mustache.render(event.target.value, {
+      globals,
+      inputs,
+      msg:state?.inputMsg,
+    }))
+    dispatch(
+      flowActions.setInput(
+        {
+          id,
+          nodeInputs: { template:event.target.value}
+        }
+      )
+    )
+  
+  }
+
 
   let displayOutput = ''
   if (typeof outputs?.msg?.payload === 'string') {
@@ -16,9 +45,8 @@ function TemplateDialog({id}:{id:string}) {
 
   return (
     <InnerDialogStructure
-    title="Template"
-    description={
-    <div>
+    title="Template">
+      <div title="Info">
       Use  <b>double braces</b>, ie. {' {{ }} '} to insert data into your template.
       <br/> The template node uses the data from the previous node 
       <br/>Place the variable name inside the braces and it will be replaced with the value.
@@ -40,31 +68,36 @@ function TemplateDialog({id}:{id:string}) {
       </pre>
 
       </div>
-    }>
-      <textarea
-        className="border-2 border-gray-light border-solid rounded-md w-full"
-        placeholder="Write your template here..."
-        rows={10}
-        cols={100}
-        // value={node?.props ? node.props.template : ''}
-        value={inputs?.template as string}
-        onChange={          (event) => {
-          dispatch(
-            flowActions.setInput(
+      <div title="Template">
+        <textarea
+          className="border-2 border-gray-light border-solid rounded-md w-full"
+          placeholder="Write your template here..."
+          rows={6}
+          cols={100}
+          // value={node?.props ? node.props.template : ''}
+          value={inputs?.template as string}
+          onChange={onChange}/>
+            <div>
+              <p><b>Preview</b></p>
+              <p>Note : The preview runs on the last data the node received and may differ from the output at runtime</p>
+              <pre className="text-sm p-2">
+                <code>
+                  {
+                    preview
+                  }
+                </code>
+              </pre>
+            </div>
+        </div>
+        <div title="Output">
+          <pre className="text-sm p-2">
+            <code>
               {
-                id,
-                nodeInputs: { template:event.target.value}
+                displayOutput
               }
-            )
-          )
-          }}/>
-                <pre className="text-sm p-2">
-        <code>
-          {
-            displayOutput
-          }
-        </code>
-      </pre>
+            </code>
+          </pre>
+        </div>
     </InnerDialogStructure>
   );
 }
