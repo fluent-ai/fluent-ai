@@ -11,8 +11,6 @@ function LocalhostDialog({nodeId}:{nodeId:string}){
   const dispatch = useDispatch();
   const inputs = useSelector(flowSelectors.getInputsById(nodeId));
 
-  const titleString = inputs?.title as string || 'Localhost';
-
   if (inputs?.callMode === undefined) { 
     dispatch(
       flowActions.setInput(
