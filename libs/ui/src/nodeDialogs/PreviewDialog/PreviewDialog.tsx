@@ -2,15 +2,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
 import { flowActions, flowRunnerSelectors, flowSelectors } from "@tool-ai/state";
 import RadioGroup from "../../lib/RadioGroupComponent/RadioGroupComponent";
-import styles from '../Dialog.module.css';
+import styles from '../../styles.module.css';
 import Switch from "../../lib/SwitchComponent/SwitchComponent";
 import { useState } from "react";
 
 
-function PreviewDialog({id}:{id:string}) {
+function PreviewDialog({nodeId}:{nodeId:string}) {
   const dispatch = useDispatch();
-  const inputs = useSelector(flowSelectors.getInputsById(id));
-  const output = useSelector(flowRunnerSelectors.selectOutput(id));
+  const inputs = useSelector(flowSelectors.getInputsById(nodeId));
+  const output = useSelector(flowRunnerSelectors.selectOutput(nodeId));
 
   const titlePath = inputs?.titlePath as string || 'msg.payload';
   const titleString = inputs?.title as string || 'Preview';
@@ -81,7 +81,7 @@ function PreviewDialog({id}:{id:string}) {
               dispatch(
                 flowActions.setInput(
                   {
-                    id,
+                    id:nodeId,
                     nodeInputs: {...inputs,  editable:value}
                   }
                 )
@@ -101,7 +101,7 @@ function PreviewDialog({id}:{id:string}) {
               dispatch(
                 flowActions.setInput(
                   {
-                    id,
+                    id:nodeId,
                     nodeInputs: {...inputs,  titleMode:value, editable:false}
                   }
                 )
@@ -124,7 +124,7 @@ function PreviewDialog({id}:{id:string}) {
                   dispatch(
                     flowActions.setInput(
                       {
-                        id,
+                        id:nodeId,
                         nodeInputs: {...inputs,  title:event.target.value}
                       }
                     )
@@ -147,7 +147,7 @@ function PreviewDialog({id}:{id:string}) {
                   dispatch(
                     flowActions.setInput(
                       {
-                        id,
+                        id:nodeId,
                         nodeInputs: {...inputs,  titlePath:event.target.value}
                       }
                     )
@@ -168,7 +168,7 @@ function PreviewDialog({id}:{id:string}) {
               dispatch(
                 flowActions.setInput(
                   {
-                    id,
+                    id:nodeId,
                     nodeInputs: {...inputs,  dialogMode:value}
                   }
                 )

@@ -1,14 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
 import {
-  Connection,
   Edge,
   EdgeChange,
   Node,
   NodeChange,
   addEdge,
-  OnNodesChange,
-  OnEdgesChange,
-  OnConnect,
   applyNodeChanges,
   applyEdgeChanges,
 } from 'reactflow';
@@ -16,7 +12,6 @@ import {
   createEntityAdapter,
   createSelector,
   createSlice,
-  EntityState,
   PayloadAction,
 } from '@reduxjs/toolkit';
 

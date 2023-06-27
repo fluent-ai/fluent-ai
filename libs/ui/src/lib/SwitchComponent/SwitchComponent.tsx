@@ -6,11 +6,11 @@ import { CheckIcon } from '@radix-ui/react-icons';
 
 interface SwitchProps {
     label: string;
+    disabled?: boolean;
     checked: boolean;
     onCheckedChange: (checked: boolean) => void;
     customStyles?: CSSProperties & { '--highlight': string };
     size?: 'small' | 'medium' | 'large';
-    disabled?: boolean;
 }
 
 const Switch = ({label, checked, onCheckedChange, customStyles, size, disabled}:SwitchProps) => {

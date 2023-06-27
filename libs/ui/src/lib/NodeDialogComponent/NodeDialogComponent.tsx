@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { flowActions, flowSelectors } from '@tool-ai/state';
 import { useEffect, useState } from 'react';
 import { ConditionDialog } from '../../nodeDialogs/ConditionDialog/ConditionDialog';
+import { LocalhostDialog } from '../../nodeDialogs/LocalhostDialog/LocalhostDialog';
 
 function NodeDialogComponent() {
   const dispatch = useDispatch();
@@ -30,29 +31,31 @@ function NodeDialogComponent() {
   const shownDialog = () => {
     switch (nodeType) {
       case 'textFileInput':
-        return <TextFileInputDialog id={activeNodeId}/>;
+        return <TextFileInputDialog nodeId={activeNodeId}/>;
       case 'textInput':
-        return <InputDialog id={activeNodeId} />;
+        return <InputDialog nodeId={activeNodeId} />;
       case 'json':
-        return <JsonDialog id={activeNodeId}/>;
+        return <JsonDialog nodeId={activeNodeId}/>;
       case 'userFunction':
-        return <UserFunctionDialog id={activeNodeId}  />;
+        return <UserFunctionDialog nodeId={activeNodeId}  />;
       case 'template':
-        return <TemplateDialog id={activeNodeId}  />;
+        return <TemplateDialog nodeId={activeNodeId}  />;
       case 'condition':
-        return <ConditionDialog id={activeNodeId}  />;
+        return <ConditionDialog nodeId={activeNodeId}  />;
+      case 'localhost':
+        return <LocalhostDialog nodeId={activeNodeId}  />;
       case 'preview':
-        return <PreviewDialog id={activeNodeId} />;
+        return <PreviewDialog nodeId={activeNodeId} />;
       case 'openAi':
-        return <OpenAIDialog id={activeNodeId} />;
+        return <OpenAIDialog nodeId={activeNodeId} />;
       case 'deepl':
-        return <DeeplDialog id={activeNodeId} />;
+        return <DeeplDialog nodeId={activeNodeId} />;
       case 'dalleVariation':
-        return <DalleVariationDialog id={activeNodeId} />;
+        return <DalleVariationDialog nodeId={activeNodeId} />;
       case 'dalleGeneration':
-        return <DalleGenerationDialog id={activeNodeId} />;
+        return <DalleGenerationDialog nodeId={activeNodeId} />;
       case 'download':
-        return <DownloadDialog id={activeNodeId} />;
+        return <DownloadDialog nodeId={activeNodeId} />;
       default:
         return null;
     }

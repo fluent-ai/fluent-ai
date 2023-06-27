@@ -1,12 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
 import { flowActions, flowRunnerSelectors, flowSelectors } from "@tool-ai/state";
-import styles from '../Dialog.module.css';
+import styles from '../../styles.module.css'
 
-function JsonDialog({id}:{id:string}) {
+function JsonDialog({nodeId}:{nodeId:string}) {
   const dispatch = useDispatch();
-  const inputs = useSelector(flowSelectors.getInputsById(id));
-  const outputs = useSelector(flowRunnerSelectors.selectOutput(id));
+  const inputs = useSelector(flowSelectors.getInputsById(nodeId));
+  const outputs = useSelector(flowRunnerSelectors.selectOutput(nodeId));
 
   const titleString = inputs?.title as string || 'JSON';
 
@@ -49,7 +49,7 @@ function JsonDialog({id}:{id:string}) {
               dispatch(
                 flowActions.setInput(
                   {
-                    id,
+                    id:nodeId,
                     nodeInputs: {...inputs,  title:event.target.value}
                   }
                 )

@@ -5,8 +5,8 @@ import { flowRunnerSelectors } from "@tool-ai/state";
 /* eslint-disable-next-line */
 export interface DownloadDialogProps {}
 
-function DownloadDialog({id}:{id:string}) {
-  const outputs = useSelector(flowRunnerSelectors.selectOutput(id));
+function DownloadDialog({nodeId}:{nodeId:string}) {
+  const outputs = useSelector(flowRunnerSelectors.selectOutput(nodeId));
 
   function encodeFile(text:string) {
     return 'data:application/octet-stream;charset=utf-8,' + encodeURIComponent(text);

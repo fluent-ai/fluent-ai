@@ -29,7 +29,7 @@ function InnerDialogStructure(props: InnerDialogStructureProps) {
         <Accordion type="single" collapsible className="w-full" defaultValue='child-0'>
         {childrenArray.map((child, index) => {
           return (
-          <AccordionItem  value={`child-${index}`}>
+          <AccordionItem key={`child-${index}`} value={`child-${index}`}>
             <AccordionTrigger>{childrenTitles[index]}</AccordionTrigger>
             <AccordionContent>
               {child}

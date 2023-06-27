@@ -2,12 +2,12 @@ import { flowActions, flowRunnerSelectors, flowSelectors } from "@tool-ai/state"
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
 import RadioGroup from "../../lib/RadioGroupComponent/RadioGroupComponent";
 import { useDispatch, useSelector } from "react-redux";
-import styles from '../Dialog.module.css';
+import styles from '../../styles.module.css'
 
-function OpenAIDialog({id}:{id:string}){
+function OpenAIDialog({nodeId}:{nodeId:string}){
   const dispatch = useDispatch();
-  const inputs = useSelector(flowSelectors.getInputsById(id));
-  const outputs = useSelector(flowRunnerSelectors.selectOutput(id));
+  const inputs = useSelector(flowSelectors.getInputsById(nodeId));
+  const outputs = useSelector(flowRunnerSelectors.selectOutput(nodeId));
   const mode = inputs?.mode as string || 'simple';
   let response = outputs?.msg?.payload as string;
   const error = outputs?.msg?.error as string;
@@ -53,7 +53,7 @@ function OpenAIDialog({id}:{id:string}){
               dispatch(
                 flowActions.setInput(
                   {
-                    id,
+                    id:nodeId,
                     nodeInputs: { mode:value}
                   }
                 )
@@ -74,7 +74,7 @@ function OpenAIDialog({id}:{id:string}){
               dispatch(
                 flowActions.setInput(
                   {
-                    id,
+                    id:nodeId,
                     nodeInputs: {...inputs,  title:event.target.value}
                   }
                 )

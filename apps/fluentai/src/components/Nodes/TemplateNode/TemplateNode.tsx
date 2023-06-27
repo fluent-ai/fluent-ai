@@ -22,7 +22,8 @@ function getNestedProperty(
         ) {
           return (currentObject as Record<string, unknown>)[currentProperty];
         } else {
-          throw new Error(`Property ${propertyPath.join('.')} doesn't exist`);
+          console.warn(`🚨 Property ${propertyPath.join('.')} doesn't exist`)
+          return 'undefined';
         }
       },
       obj as Record<string, unknown>
@@ -64,6 +65,10 @@ export default memo (({id, data,type, isConnectable}: MemoProps) => {
   const editable = inputs?.editable as boolean || false;
   let title = inputs?.title as string ?? data.label;  
 
+  if (inputs?.title === '') {
+    title = data.label
+  }
+
   if (inputs?.titleMode === 'from-msg' && output?.msg) {
     try {
       title = getNestedProperty(output, (inputs?.titlePath as string)?.split('.') ?? []) as string;
@@ -71,16 +76,10 @@ export default memo (({id, data,type, isConnectable}: MemoProps) => {
       console.error(error);
     }
   } else if (inputs?.titleMode === 'text-input') {
-    title = inputs?.input as string;
+    title = inputs?.input as string ?? '';
   } else if (inputs?.titleMode === 'condition') {
     title = `${inputs?.location}\n${inputs?.operator}\n${inputs?.query}`;
   }
-
-
-
-
-
-
 
   const heightFactor = 40 + (Math.ceil(Math.max(title.length, 20*3 ) / 20) - 3) * 12
   

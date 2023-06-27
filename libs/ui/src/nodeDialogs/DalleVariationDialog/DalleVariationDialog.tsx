@@ -5,9 +5,9 @@ import { flowActions, flowSelectors } from '@tool-ai/state';
 /* eslint-disable-next-line */
 export interface ImageAiDialogProps {}
 
-function DalleVariationDialog({id}:{id:string}) {
+function DalleVariationDialog({nodeId}:{nodeId:string}) {
   const dispatch = useDispatch();
-  const inputs = useSelector(flowSelectors.getInputsById(id));
+  const inputs = useSelector(flowSelectors.getInputsById(nodeId));
   const [tempImageUrl, setTempImageUrl] = useState<string>('');
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -18,7 +18,7 @@ function DalleVariationDialog({id}:{id:string}) {
         if (e.target.files) {
           dispatch(
             flowActions.setInput({
-              id,
+              id:nodeId,
               nodeInputs: {
                 ...inputs,
                 image: dataUrl,
@@ -87,7 +87,7 @@ function DalleVariationDialog({id}:{id:string}) {
             onChange={(e) =>
               dispatch(
                 flowActions.setInput({
-                  id,
+                  id:nodeId,
                   nodeInputs: {
                     ...inputs,
                     numberVariations: e.target.value,
