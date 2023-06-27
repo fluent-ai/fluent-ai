@@ -37,18 +37,27 @@ wss.on('connection', (ws) => {
         console.log(`🚀 Calling ${command}`);
         exec(command, (error, stdout, stderr) => {
           if (error) {
-            console.warn(
-              `🚨 Error executing bash/reference function: ${error}`,
-              error
-            );
+            console.warn(`🚨 Error executing bash function: ${error}`, error);
             return;
           }
           ws.send(stdout ? stdout : stderr);
         });
         break;
       }
-      case 'call-reference':
-        console.log('💀 Calling by reference not yet implemented');
+      case 'call-reference': {
+        // console.log('💀 Calling by reference not yet implemented');
+        try {
+          const func = require(`./functions/${msg?.inputs?.functionName}.js`);
+          const result = func();
+          ws.send(JSON.stringify(result));
+        } catch (error) {
+          console.warn(
+            `🚨 Error executing reference function: ${error}`,
+            error
+          );
+        }
+        break;
+      }
       case 'call-javascript': {
         try {
           const func =
