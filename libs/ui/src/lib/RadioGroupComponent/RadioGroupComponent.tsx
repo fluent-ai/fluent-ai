@@ -22,7 +22,7 @@ interface RadioGroupProps {
 }
 
 const RadioGroup = ({value, defaultValue, options, onChange, areaLabel, size='medium', title, customStyles}:RadioGroupProps) => {
-    const id = useRef(uuidv4());
+    const idRef = useRef(uuidv4());
     if(!defaultValue) defaultValue = options[0].value;
     
     return (
@@ -39,12 +39,12 @@ const RadioGroup = ({value, defaultValue, options, onChange, areaLabel, size='me
                 onValueChange={onChange}
             >
             {options.map((option, index) => (
-                <div key={`${id}-${option.value}`}>
+                <div key={`${idRef.current}-${option.value}`}>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <RadioGroupPrimitive.Item className={styles.RadioGroupItem} value={option.value} id={`${id}-${option.value}`}>
+                        <RadioGroupPrimitive.Item className={styles.RadioGroupItem} value={option.value} id={`${idRef.current}-${option.value}`}>
                         <RadioGroupPrimitive.Indicator className={styles.RadioGroupIndicator} />
                         </RadioGroupPrimitive.Item>
-                        <label className={styles.Label} htmlFor={`${id}-${option.value}`}>
+                        <label className={styles.Label} htmlFor={`${idRef.current}-${option.value}`}>
                         {option.label}
                         </label>
                     </div>
