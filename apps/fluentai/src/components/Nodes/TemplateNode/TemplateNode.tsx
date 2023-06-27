@@ -71,17 +71,14 @@ export default memo (({id, data,type, isConnectable}: MemoProps) => {
       console.error(error);
     }
   } else if (inputs?.titleMode === 'text-input') {
-    title = inputs?.input as string;
+    title = inputs?.input as string ?? '';
   } else if (inputs?.titleMode === 'condition') {
     title = `${inputs?.location}\n${inputs?.operator}\n${inputs?.query}`;
   }
 
-
-
-
-
-
-
+  if (title === undefined) {
+    title = 'explosion!';
+  }
   const heightFactor = 40 + (Math.ceil(Math.max(title.length, 20*3 ) / 20) - 3) * 12
   
   function getIcon () {

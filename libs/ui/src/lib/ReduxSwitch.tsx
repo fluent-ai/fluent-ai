@@ -4,8 +4,8 @@ import { CSSProperties } from "react";
 import Switch from "./SwitchComponent/SwitchComponent";
 
 const ReduxSwitch = (
-  {id, inputs, stateKey, size, checked,customStyles, label,disabled}:  {
-    id:string,
+  {nodeId, inputs, stateKey, size, checked,customStyles, label,disabled}:  {
+    nodeId:string,
     inputs:Record<string, unknown> | undefined,
     stateKey:string
     label: string;
@@ -29,7 +29,7 @@ const ReduxSwitch = (
             dispatch(
                 flowActions.setInput(
                 {
-                    id,
+                    id:nodeId,
                     nodeInputs: {...inputs,  [stateKey]:value}
                 }
                 )
