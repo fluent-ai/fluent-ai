@@ -90,6 +90,8 @@ export const flowSlice = createSlice({
       state,
       action: PayloadAction<{ id: string; nodeInputs: Record<string, unknown> }>
     ) => {
+      console.log('🧰 setInput', action.payload);
+
       const existingInput = state.inputs.find(
         (input) => input.id === action.payload.id
       );

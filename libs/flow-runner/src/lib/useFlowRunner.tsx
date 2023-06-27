@@ -29,11 +29,12 @@ export interface IFlowRunnerStates {
   error?: string
 }
 
-export interface IMethodArguments {
+export interface IMethodArguments<TInputs = Record<string, unknown>> {
   globals?: Record<string, unknown>;
-  inputs?: Record<string, unknown>;
+  inputs?: TInputs;
   msg: Record<string, unknown>;
 }
+
 
 export interface IExecuteFlowArguments {
   flow: IFlow;

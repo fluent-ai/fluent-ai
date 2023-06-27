@@ -66,7 +66,7 @@ function LocalhostDialog({nodeId}:{nodeId:string}){
         <ReduxTextInput
           nodeId={nodeId}
           inputs={inputs ?? {}}
-          placeholder="Template"
+          placeholder="Localhost"
           stateKey="title"
         />
       </div>
