@@ -13,10 +13,10 @@ interface IOutputs {
     }
   };
 }
-function DalleGenerationDialog({id}:{id:string}) {
+function DalleGenerationDialog({nodeId}:{nodeId:string}) {
   const dispatch = useDispatch();
-  const inputs = useSelector(flowSelectors.getInputsById(id));
-  const outputs = useSelector(flowRunnerSelectors.selectOutput(id)) as IOutputs;
+  const inputs = useSelector(flowSelectors.getInputsById(nodeId));
+  const outputs = useSelector(flowRunnerSelectors.selectOutput(nodeId)) as IOutputs;
   // const url = outputs?.msg?.image?.url || ''
 
   return (
@@ -29,7 +29,7 @@ function DalleGenerationDialog({id}:{id:string}) {
           <select aria-label="select amount of variations"
             onChange={(e)=> dispatch(flowActions.setInput(
               {
-                id,
+                id:nodeId,
                 nodeInputs: {
                   ...inputs,
                   numberVariations: e.target.value

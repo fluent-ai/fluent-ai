@@ -3,10 +3,10 @@ import ReduxRadioGroup from '../../../lib/ReduxRadioGroup';
 import ReduxTextInput from '../../../lib/ReduxTextInput';
 
 const CallReference = (
-  {id, inputs, customStyles}
+  {nodeId, inputs, customStyles}
   :
   {
-    id:string,
+    nodeId:string,
     inputs:Record<string, unknown> | undefined,
     customStyles?: CSSProperties & { '--highlight': string }
   }) => {
@@ -25,7 +25,7 @@ const CallReference = (
   return (
     <div title="call-reference">
       <ReduxRadioGroup
-        id={id}
+        nodeId={nodeId}
         inputs={inputs}
         title="Where does the function name come from?"
         options={referenceFunctionModes}
@@ -36,7 +36,7 @@ const CallReference = (
       
       { inputs?.referenceFunctionMode === referenceFunctionModes[0].value && 
         <ReduxTextInput
-          id={id}
+          nodeId={nodeId}
           inputs={inputs}
           placeholder="tree"
           stateKey="functionName"
@@ -44,7 +44,7 @@ const CallReference = (
       }
       { inputs?.referenceFunctionMode !== referenceFunctionModes[0].value &&
         <ReduxTextInput
-          id={id}
+          nodeId={nodeId}
           inputs={inputs}
           placeholder="msg.payload.function"
           stateKey="functionPath"
@@ -52,7 +52,7 @@ const CallReference = (
       }
 
       <ReduxRadioGroup
-        id={id}
+        nodeId={nodeId}
         inputs={inputs}
         title="Where do the arguments come from?"
         options={referenceArgumentsModes}
@@ -63,7 +63,7 @@ const CallReference = (
 
       { inputs?.argumentsMode === referenceArgumentsModes[0].value && 
         <ReduxTextInput
-          id={id}
+          nodeId={nodeId}
           inputs={inputs}
           placeholder="-P '*[^.]*'"
           stateKey="argumentsPath"
@@ -71,7 +71,7 @@ const CallReference = (
       }
       { inputs?.argumentsMode !== referenceArgumentsModes[0].value &&
         <ReduxTextInput
-          id={id}
+          nodeId={nodeId}
           inputs={inputs}
           placeholder="msg.payload.arguments"
           stateKey="argumentsPath"

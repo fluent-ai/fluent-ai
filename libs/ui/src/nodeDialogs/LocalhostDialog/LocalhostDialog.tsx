@@ -7,9 +7,9 @@ import CallJavascript from './CallModes/CallJavascript';
 import ReduxTextInput from "../../lib/ReduxTextInput";
 import ReduxRadioGroup from "../../lib/ReduxRadioGroup";
 
-function LocalhostDialog({id}:{id:string}){
+function LocalhostDialog({nodeId}:{nodeId:string}){
   const dispatch = useDispatch();
-  const inputs = useSelector(flowSelectors.getInputsById(id));
+  const inputs = useSelector(flowSelectors.getInputsById(nodeId));
 
   const titleString = inputs?.title as string || 'Localhost';
 
@@ -17,7 +17,7 @@ function LocalhostDialog({id}:{id:string}){
     dispatch(
       flowActions.setInput(
         {
-          id,
+          id:nodeId,
           nodeInputs: {...inputs,  callMode:'call-reference'}
         }
       )
@@ -48,7 +48,7 @@ function LocalhostDialog({id}:{id:string}){
     >
       <div title="Settings">
         <ReduxRadioGroup 
-          id={id} 
+          nodeId={nodeId} 
           inputs={inputs ?? {}}
           title="Choose a call mode" 
           stateKey={'callMode'} 
@@ -56,15 +56,15 @@ function LocalhostDialog({id}:{id:string}){
           defaultValue="call-reference"
           customStyles={customStyles}
         />
-        { inputs?.callMode === 'call-reference' && <CallReference id={id} inputs={inputs} /> }
-        { inputs?.callMode === 'call-bash' && <CallBash id={id} inputs={inputs} /> }
-        { inputs?.callMode === 'call-javascript' && <CallJavascript id={id} inputs={inputs} /> }
+        { inputs?.callMode === 'call-reference' && <CallReference nodeId={nodeId} inputs={inputs} /> }
+        { inputs?.callMode === 'call-bash' && <CallBash nodeId={nodeId} inputs={inputs} /> }
+        { inputs?.callMode === 'call-javascript' && <CallJavascript nodeId={nodeId} inputs={inputs} /> }
       </div>
 
       <div title="Options"> 
         <p><b>Title</b></p>
         <ReduxTextInput
-          id={id}
+          nodeId={nodeId}
           inputs={inputs ?? {}}
           placeholder="Template"
           stateKey="title"

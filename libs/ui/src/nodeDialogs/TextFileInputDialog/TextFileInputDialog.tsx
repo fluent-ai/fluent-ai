@@ -6,10 +6,10 @@ import { flowActions, flowSelectors } from "@tool-ai/state";
 
 
 
-function TextFileInputDialog({id}:{id:string}) {
+function TextFileInputDialog({nodeId}:{nodeId:string}) {
   // State
   const dispatch = useDispatch();
-  const inputs = useSelector(flowSelectors.getInputsById(id));
+  const inputs = useSelector(flowSelectors.getInputsById(nodeId));
   const [files, setFiles] = useState<Blob[]>([]);
 
   // File handling 
@@ -55,7 +55,7 @@ function TextFileInputDialog({id}:{id:string}) {
             dispatch(
               flowActions.setInput(
                 {
-                  id,
+                  id:nodeId,
                   nodeInputs: {
                     ...inputs,
                     input: values.join(''),
@@ -72,7 +72,7 @@ function TextFileInputDialog({id}:{id:string}) {
               )
             )
         });
-  }, [dispatch, files, id, inputs]);
+  }, [dispatch, files, nodeId, inputs]);
 
   //generate a file list from inputs.nodeInputs.files
   // inputs?.nodeInputs.files?.map((file) => file.name)
@@ -121,7 +121,7 @@ function TextFileInputDialog({id}:{id:string}) {
             dispatch(
               flowActions.setInput(
                 {
-                  id,
+                  id:nodeId,
                   nodeInputs: { input:event.target.value}
                 }
               )

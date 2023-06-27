@@ -5,17 +5,17 @@ import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialog
 import { useDispatch, useSelector } from 'react-redux';
 import styles from '../../styles.module.css'
 import Switch from "../../lib/SwitchComponent/SwitchComponent";
-import RadioGroup from "../../lib/RadioGroupComponent/RadioGroupComponent";
+import ReduxRadioGroup from "../../lib/ReduxRadioGroup";
+import ReduxTextInput from "../../lib/ReduxTextInput";
+import ReduxSwitch from "../../lib/ReduxSwitch";
 
-function InputDialog({id}:{id:string}) {
+function InputDialog({nodeId}:{nodeId:string}) {
   const dispatch = useDispatch();
-  const inputs = useSelector(flowSelectors.getInputsById(id));
+  const inputs = useSelector(flowSelectors.getInputsById(nodeId));
   
   const titleString = inputs?.title as string || 'Text Input';
 
   const titleMode = inputs?.titleMode as string || 'custom';
-
-
   const titleModes = [
     {
       value:'custom',
@@ -28,6 +28,24 @@ function InputDialog({id}:{id:string}) {
       label:'Direct',
       description:<div>
       <p>Edit the text to be sent directly from the flow</p>
+      </div>
+    }
+  ]
+
+
+  const pathMode = inputs?.pathMode as string || 'simple';
+  const pathModes = [
+    {
+      value:'simple',
+      label:'Simple',
+      description:
+      <p>Saves the text input to msg.payload</p>
+    },
+    {
+      value:'custom',
+      label:'Custom',
+      description:<div>
+      <p>Saves the text input to a path of your choice</p>
       </div>
     }
   ]
@@ -51,7 +69,7 @@ function InputDialog({id}:{id:string}) {
             dispatch(
               flowActions.setInput(
                 {
-                  id,
+                  id:nodeId,
                   nodeInputs: {...inputs, input:event.target.value}
                 }
               )
@@ -60,65 +78,53 @@ function InputDialog({id}:{id:string}) {
           }
           />
         <div title="Options"> 
-        <Switch
-          size="small"
+        <ReduxSwitch
+          nodeId={nodeId}
+          inputs={inputs}
+          stateKey="editable"
           label="Editable on node / in place"
           checked={inputs?.editable as boolean || false}
           customStyles={customStyles}
-          onCheckedChange={
-            (value) => {
-              dispatch(
-                flowActions.setInput(
-                  {
-                    id,
-                    nodeInputs: {...inputs,  editable:value}
-                  }
-                )
-              )
-              }
-            }
-          />
-        <br/>
-        <RadioGroup
-          title="Flow view title behavior "
-          options={titleModes}
-          value={titleMode}
-          customStyles={customStyles}
-          onChange={
-            (value) => {
-              dispatch(
-                flowActions.setInput(
-                  {
-                    id,
-                    nodeInputs: {...inputs,  titleMode:value, editable:false}
-                  }
-                )
-              )
-              }
-            }
           size="small"
           />
-          <br/>
+        <ReduxRadioGroup
+          nodeId={nodeId} 
+          inputs={inputs}
+          title="Flow view title behavior"
+          options={titleModes}
+          customStyles={customStyles}
+          stateKey="titleMode"
+          size="small"
+          />
           { titleMode === 'custom' &&
             <div>
               <p><b>String to display</b></p>
-              <input
-              className={styles.TextInput}
-              type="text"
-              value={titleString}
+              <ReduxTextInput
+              nodeId={nodeId} 
+              inputs={inputs}
               placeholder="Text Input"
-              onChange={
-                (event) => {
-                  dispatch(
-                    flowActions.setInput(
-                      {
-                        id,
-                        nodeInputs: {...inputs,  title:event.target.value}
-                      }
-                    )
-                  )
-                  }
-                }
+              stateKey="title"
+              />
+            </div>
+          }
+
+        <ReduxRadioGroup
+          nodeId={nodeId} 
+          inputs={inputs}
+          title="Where should the input be saved?"
+          options={pathModes}
+          customStyles={customStyles}
+          stateKey="pathMode"
+          size="small"
+          />
+          { pathMode === 'custom' &&
+            <div>
+              <p><b>Path to save the text input</b></p>
+              <ReduxTextInput
+              nodeId={nodeId} 
+              inputs={inputs}
+              placeholder="msg.payload"
+              stateKey="path"
               />
             </div>
           }

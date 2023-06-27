@@ -5,9 +5,9 @@ import Select from "../../lib/SelectComponent/SelectComponent";
 import styles from '../../styles.module.css'
 import RadioGroup from "../../lib/RadioGroupComponent/RadioGroupComponent";
 
-function ConditionDialog({id}:{id:string}){
+function ConditionDialog({nodeId}:{nodeId:string}){
   const dispatch = useDispatch();
-  const inputs = useSelector(flowSelectors.getInputsById(id));
+  const inputs = useSelector(flowSelectors.getInputsById(nodeId));
 
 
   const titleString = inputs?.title as string || 'Text Input';
@@ -30,13 +30,13 @@ function ConditionDialog({id}:{id:string}){
   ]
 
   if (inputs?.location === undefined) {
-    dispatch(flowActions.setInput({id, nodeInputs:{...inputs,location:'msg.payload'}}))
+    dispatch(flowActions.setInput({id:nodeId, nodeInputs:{...inputs,location:'msg.payload'}}))
   }
   if (inputs?.operator === undefined) {
-    dispatch(flowActions.setInput({id, nodeInputs:{...inputs,operator:'is'}}))
+    dispatch(flowActions.setInput({id:nodeId, nodeInputs:{...inputs,operator:'is'}}))
   }
   if (inputs?.query === undefined) {
-    dispatch(flowActions.setInput({id, nodeInputs:{...inputs,query:''}}))
+    dispatch(flowActions.setInput({id:nodeId, nodeInputs:{...inputs,query:''}}))
   }
 
   const location = inputs?.location as string || 'msg.payload';
@@ -93,7 +93,7 @@ function ConditionDialog({id}:{id:string}){
             dispatch(
               flowActions.setInput(
                 {
-                  id,
+                  id:nodeId,
                   nodeInputs: {...inputs,  location:event.target.value}
                 }
               )
@@ -110,7 +110,7 @@ function ConditionDialog({id}:{id:string}){
             dispatch(
               flowActions.setInput(
                 {
-                  id,
+                  id:nodeId,
                   nodeInputs: {...inputs, operator:value}
                 }
               )
@@ -129,7 +129,7 @@ function ConditionDialog({id}:{id:string}){
             dispatch(
               flowActions.setInput(
                 {
-                  id,
+                  id:nodeId,
                   nodeInputs: {...inputs,  query:event.target.value}
                 }
               )
@@ -148,7 +148,7 @@ function ConditionDialog({id}:{id:string}){
               dispatch(
                 flowActions.setInput(
                   {
-                    id,
+                    id:nodeId,
                     nodeInputs: {...inputs,  titleMode:value, editable:false}
                   }
                 )
@@ -171,7 +171,7 @@ function ConditionDialog({id}:{id:string}){
                   dispatch(
                     flowActions.setInput(
                       {
-                        id,
+                        id:nodeId,
                         nodeInputs: {...inputs,  title:event.target.value}
                       }
                     )

@@ -49,10 +49,10 @@ const formalities: Items[] = [
     { code: 'ZH', name: 'Chinese' }
   ];
 
-function DeeplDialog({id}:{id:string}) {
+function DeeplDialog({nodeId}:{nodeId:string}) {
   const dispatch = useDispatch();
-  const inputs = useSelector(flowSelectors.getInputsById(id));
-  const outputs = useSelector(flowRunnerSelectors.selectOutput(id));
+  const inputs = useSelector(flowSelectors.getInputsById(nodeId));
+  const outputs = useSelector(flowRunnerSelectors.selectOutput(nodeId));
   let response = outputs?.msg?.payload as string;
   response = '' + response
 
@@ -65,7 +65,7 @@ function DeeplDialog({id}:{id:string}) {
     dispatch(
       flowActions.setInput(
         {
-          id,
+          id:nodeId,
           nodeInputs: {
             ...inputs,
             language: e.target.value
@@ -79,7 +79,7 @@ function DeeplDialog({id}:{id:string}) {
     dispatch(
       flowActions.setInput(
         {
-          id,
+          id:nodeId,
           nodeInputs: {
             ...inputs,
             formality: e.target.value
