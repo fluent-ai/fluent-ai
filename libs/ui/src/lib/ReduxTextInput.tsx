@@ -3,8 +3,8 @@ import { flowActions } from "@tool-ai/state";
 import styles from '../styles.module.css';
 
 const ReduxTextInput = (
-  {id, inputs, placeholder, stateKey}:  {
-    id:string,
+  {nodeId, inputs, placeholder, stateKey}:  {
+    nodeId:string,
     inputs:Record<string, unknown> | undefined,
     placeholder:string,
     stateKey:string
@@ -19,7 +19,7 @@ const ReduxTextInput = (
         className={styles.TextInput}
         type="text"
         value={inputs?.[stateKey] as string ?? placeholder}
-        onChange={(event) => dispatch(flowActions.setInput({ id, nodeInputs: {...inputs, [stateKey]: event.target.value} }))}
+        onChange={(event) => dispatch(flowActions.setInput({ id:nodeId, nodeInputs: {...inputs, [stateKey]: event.target.value} }))}
       />
     </div>
   );
