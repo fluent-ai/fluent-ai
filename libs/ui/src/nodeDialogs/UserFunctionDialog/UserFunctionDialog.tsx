@@ -3,14 +3,14 @@ import Editor from '@monaco-editor/react';
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
 import { flowActions, flowSelectors } from "@tool-ai/state";
 
-function UserFunctionDialog({id}:{id:string}) {
+function UserFunctionDialog({nodeId}:{nodeId:string}) {
   const dispatch = useDispatch();
-  const inputs = useSelector(flowSelectors.getInputsById(id));
+  const inputs = useSelector(flowSelectors.getInputsById(nodeId));
   if (inputs?.userFunction === undefined) {
     dispatch(
       flowActions.setInput(
         {
-          id,
+          id:nodeId,
           nodeInputs: { userFunction:
 `// Access the incomming message via the msg object
 // Access a cross node global object via global
@@ -34,7 +34,7 @@ function UserFunctionDialog({id}:{id:string}) {
         dispatch(
           flowActions.setInput(
             {
-              id,
+              id:nodeId,
               nodeInputs: { userFunction:value}
             }
           )

@@ -5,11 +5,11 @@ import Mustache from 'mustache';
 import { useState } from "react";
 import styles from '../../styles.module.css'
 
-function TemplateDialog({id}:{id:string}) {
+function TemplateDialog({nodeId}:{nodeId:string}) {
   const dispatch = useDispatch();
-  const inputs = useSelector(flowSelectors.getInputsById(id));
-  const state = useSelector(flowRunnerSelectors.selectState(id));
-  const outputs = useSelector(flowRunnerSelectors.selectOutput(id));
+  const inputs = useSelector(flowSelectors.getInputsById(nodeId));
+  const state = useSelector(flowRunnerSelectors.selectState(nodeId));
+  const outputs = useSelector(flowRunnerSelectors.selectOutput(nodeId));
   const globals = useSelector(flowSelectors.getGlobals);
 
 
@@ -26,7 +26,7 @@ function TemplateDialog({id}:{id:string}) {
     dispatch(
       flowActions.setInput(
         {
-          id,
+          id:nodeId,
           nodeInputs: { template:event.target.value}
         }
       )
@@ -110,7 +110,7 @@ function TemplateDialog({id}:{id:string}) {
               dispatch(
                 flowActions.setInput(
                   {
-                    id,
+                    id:nodeId,
                     nodeInputs: {...inputs,  title:event.target.value}
                   }
                 )

@@ -3,10 +3,10 @@ import ReduxRadioGroup from '../../../lib/ReduxRadioGroup';
 import ReduxTextInput from '../../../lib/ReduxTextInput';
 
 const CallBash = (
-  {id, inputs, customStyles}
+  {nodeId, inputs, customStyles}
   :
   {
-    id:string,
+    nodeId:string,
     inputs:Record<string, unknown> | undefined,
     customStyles?: CSSProperties & { '--highlight': string }
   }) => {
@@ -24,7 +24,7 @@ const bashFunctionModes = [
   return (
     <div title="call-bash"> 
       <ReduxRadioGroup 
-        id={id}
+        nodeId={nodeId}
         inputs={inputs}
         title="Where does the function come from?"
         options={bashFunctionModes}
@@ -35,7 +35,7 @@ const bashFunctionModes = [
       {
         inputs?.bashFunctionMode as string !== 'bash-function-property' &&
         <ReduxTextInput
-          id={id}
+          nodeId={nodeId}
           inputs={inputs}
           placeholder="tree"
           stateKey="bashFunction"
@@ -44,7 +44,7 @@ const bashFunctionModes = [
       {
         inputs?.bashFunctionMode as string === 'bash-function-property' &&
         <ReduxTextInput
-          id={id}
+          nodeId={nodeId}
           inputs={inputs}
           placeholder="msg.payload.function"
           stateKey="bashFunctionPath"

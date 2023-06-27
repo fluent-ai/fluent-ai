@@ -3,10 +3,10 @@ import ReduxRadioGroup from '../../../lib/ReduxRadioGroup';
 import ReduxTextInput from '../../../lib/ReduxTextInput';
 
 const CallJavascript = (
-    {id, inputs, customStyles}
+    {nodeId, inputs, customStyles}
     :
     {
-      id:string,
+      nodeId:string,
       inputs:Record<string, unknown> | undefined,
       customStyles?: CSSProperties & { '--highlight': string }
     }) => {
@@ -25,7 +25,7 @@ const CallJavascript = (
     return (
     <div title="call-javascript"> 
       <ReduxRadioGroup 
-        id={id}
+        nodeId={nodeId}
         inputs={inputs}
         title="Where does the function come from?"
         options={javascriptFunctionModes}
@@ -36,7 +36,7 @@ const CallJavascript = (
       {
         inputs?.javascriptFunctionMode as string !== 'javascript-function-property' &&
         <ReduxTextInput
-          id={id}
+          nodeId={nodeId}
           inputs={inputs}
           placeholder="tree"
           stateKey="javascriptFunction"
@@ -45,7 +45,7 @@ const CallJavascript = (
       {
         inputs?.javascriptFunctionMode as string === 'javascript-function-property' &&
         <ReduxTextInput
-          id={id}
+          nodeId={nodeId}
           inputs={inputs}
           placeholder="msg.payload.function"
           stateKey="javascriptFunctionPath"
