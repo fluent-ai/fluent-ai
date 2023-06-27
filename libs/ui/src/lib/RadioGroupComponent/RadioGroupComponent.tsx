@@ -39,12 +39,12 @@ const RadioGroup = ({value, defaultValue, options, onChange, areaLabel, size='me
                 onValueChange={onChange}
             >
             {options.map((option, index) => (
-                <div key={`${option.value}-${index}`}>
+                <div key={`${id}-${option.value}`}>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <RadioGroupPrimitive.Item className={styles.RadioGroupItem} value={option.value} id={option.value}>
+                        <RadioGroupPrimitive.Item className={styles.RadioGroupItem} value={option.value} id={`${id}-${option.value}`}>
                         <RadioGroupPrimitive.Indicator className={styles.RadioGroupIndicator} />
                         </RadioGroupPrimitive.Item>
-                        <label className={styles.Label} htmlFor={option.value}>
+                        <label className={styles.Label} htmlFor={`${id}-${option.value}`}>
                         {option.label}
                         </label>
                     </div>
