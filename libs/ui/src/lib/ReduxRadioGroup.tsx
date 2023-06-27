@@ -6,7 +6,7 @@ import RadioGroup from "./RadioGroupComponent/RadioGroupComponent";
 
 
 const ReduxRadioGroup = (
-  {id, inputs, title, options, stateKey, defaultValue, customStyles}
+  {id, inputs, title, options, stateKey, defaultValue, customStyles,size}
   :
   {
     id:string,
@@ -14,10 +14,15 @@ const ReduxRadioGroup = (
     title:string,
     options:{value:string, label:string}[],
     stateKey:string,
-    defaultValue:string,
+    defaultValue?:string,
     customStyles?: CSSProperties & { '--highlight': string }
+    size?: 'small' | 'medium' | 'large'
   }) => {
   const dispatch = useDispatch();
+
+  if (!defaultValue) {
+    defaultValue = options[0].value;
+  }
 
 
   return (
@@ -27,7 +32,7 @@ const ReduxRadioGroup = (
       value={inputs?.[stateKey] as string ?? defaultValue}
       customStyles={customStyles}
       onChange={(value) => dispatch(flowActions.setInput({ id, nodeInputs: {...inputs, [stateKey]: value} }))}
-      size="small"
+      size={size ?? 'medium'}
     />
   );
 };
