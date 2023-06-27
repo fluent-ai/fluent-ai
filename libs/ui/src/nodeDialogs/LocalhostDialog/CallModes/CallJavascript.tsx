@@ -11,13 +11,13 @@ const CallJavascript = (
       customStyles?: CSSProperties & { '--highlight': string }
     }) => {
   
-    const javascriptFunctionModes = [
+    const javascriptModes = [
         {
-          value:'javascript-function-direct',
+          value:'javascript-direct',
           label:'Direct',
         },
         {
-          value:'javascript-function-property',
+          value:'javascript-property',
           label:'Via property of msg or globals',
         }
       ]
@@ -27,28 +27,28 @@ const CallJavascript = (
       <ReduxRadioGroup 
         nodeId={nodeId}
         inputs={inputs}
-        title="Where does the function come from?"
-        options={javascriptFunctionModes}
-        stateKey="javascriptFunctionMode"
-        defaultValue="javascript-function-direct"
+        title="Where does the code come from?"
+        options={javascriptModes}
+        stateKey="javascriptMode"
+        defaultValue="javascript-direct"
         customStyles={customStyles}
       />
       {
-        inputs?.javascriptFunctionMode as string !== 'javascript-function-property' &&
+        inputs?.javascriptMode as string !== 'javascript-property' &&
         <ReduxTextInput
           nodeId={nodeId}
           inputs={inputs}
           placeholder="tree"
-          stateKey="javascriptFunction"
+          stateKey="javascript"
         />
       }
       {
-        inputs?.javascriptFunctionMode as string === 'javascript-function-property' &&
+        inputs?.javascriptMode as string === 'javascript-property' &&
         <ReduxTextInput
           nodeId={nodeId}
           inputs={inputs}
-          placeholder="msg.payload.function"
-          stateKey="javascriptFunctionPath"
+          placeholder="msg.payload.code"
+          stateKey="javascriptPath"
         />
       }
     </div>

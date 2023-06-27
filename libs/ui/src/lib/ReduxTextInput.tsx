@@ -12,6 +12,10 @@ const ReduxTextInput = (
   ) => {
   const dispatch = useDispatch();
 
+  if (inputs?.[stateKey] === undefined) {
+    dispatch(flowActions.setInput({ id:nodeId, nodeInputs: {...inputs, [stateKey]: placeholder} }))
+  }
+
   return (
     <div>
       <div style={{height: '5px'}}/>
