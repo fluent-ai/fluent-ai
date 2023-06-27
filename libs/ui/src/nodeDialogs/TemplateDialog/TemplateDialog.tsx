@@ -3,7 +3,7 @@ import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialog
 import { flowActions, flowSelectors, flowRunnerSelectors } from "@tool-ai/state";
 import Mustache from 'mustache';
 import { useState } from "react";
-import styles from '../Dialog.module.css';
+import styles from '../../styles.module.css'
 
 function TemplateDialog({id}:{id:string}) {
   const dispatch = useDispatch();
