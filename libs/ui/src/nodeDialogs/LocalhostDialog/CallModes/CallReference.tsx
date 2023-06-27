@@ -16,9 +16,9 @@ const CallReference = (
     { value:'reference-function-property', label:'Via property of msg or globals' },
   ];
 
-  const referenceArgumentsModes = [
-    { value:'reference-arguments-direct', label:'Direct' },
-    { value:'reference-arguments-property', label:'Via property of msg or globals' },
+  const referenceArgsModes = [
+    { value:'reference-args-direct', label:'Direct' },
+    { value:'reference-args-property', label:'Via property of msg or globals' },
   ];
 
 
@@ -39,7 +39,7 @@ const CallReference = (
           nodeId={nodeId}
           inputs={inputs}
           placeholder="tree"
-          stateKey="functionName"
+          stateKey="referenceFunctionName"
         />
       }
       { inputs?.referenceFunctionMode !== referenceFunctionModes[0].value &&
@@ -47,34 +47,34 @@ const CallReference = (
           nodeId={nodeId}
           inputs={inputs}
           placeholder="msg.payload.function"
-          stateKey="functionPath"
+          stateKey="referenceFunctionPath"
         />
       }
 
       <ReduxRadioGroup
         nodeId={nodeId}
         inputs={inputs}
-        title="Where do the arguments come from?"
-        options={referenceArgumentsModes}
-        stateKey="argumentsMode"
-        defaultValue={referenceArgumentsModes[0].value}
+        title="Where do the args come from?"
+        options={referenceArgsModes}
+        stateKey="referenceArgsMode"
+        defaultValue={referenceArgsModes[0].value}
         customStyles={customStyles}
       />
 
-      { inputs?.argumentsMode === referenceArgumentsModes[0].value && 
+      { inputs?.referenceArgsMode === referenceArgsModes[0].value && 
         <ReduxTextInput
           nodeId={nodeId}
           inputs={inputs}
           placeholder="-P '*[^.]*'"
-          stateKey="argumentsPath"
+          stateKey="referenceArgs"
         />
       }
-      { inputs?.argumentsMode !== referenceArgumentsModes[0].value &&
+      { inputs?.referenceArgsMode !== referenceArgsModes[0].value &&
         <ReduxTextInput
           nodeId={nodeId}
           inputs={inputs}
-          placeholder="msg.payload.arguments"
-          stateKey="argumentsPath"
+          placeholder="msg.payload.args"
+          stateKey="referenceArgsPath"
         />
       }
     </div>

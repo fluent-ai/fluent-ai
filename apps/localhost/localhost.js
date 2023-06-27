@@ -1,4 +1,5 @@
 // Require the websockets and child_process package
+const fs = require('fs');
 const WebSocket = require('ws');
 const exec = require('child_process').exec;
 const getNestedProperty = require('lodash/get');
@@ -11,66 +12,107 @@ wss.on('connection', (ws) => {
   console.log('Client connected');
 
   // Event listener for messages from the client
-  ws.on('message', (message) => {
+  ws.on('message', async (message) => {
     console.log('\n🚧 New call received');
-
-    const msg = JSON.parse(message);
-
-    console.log('Received:', JSON.stringify(msg, null, 2));
-
-    const callMode = msg?.inputs?.callMode;
-
+    const package = JSON.parse(message);
+    console.log('📦 Received package : ', JSON.stringify(package, null, 2));
+    const callMode = package?.settings?.callMode;
     console.log('🤙 Call mode:', callMode);
+    const id = package?.id;
+    console.log('🪪 id is :', id);
 
-    // const { inputs, callMode, functionSource } = msg.inputs;
+    const respondWithError = (error) => {
+      console.warn('🚨 ', error);
+      ws.send(JSON.stringify({ id, error }));
+    };
 
-    // Execute the function based on the call type and function source
+    const respond = (result) => {
+      console.log('✅ Done, sending result :\n', result);
+      ws.send(JSON.stringify({ id, result }));
+    };
+
     switch (callMode) {
+      // ---------------------------------- CALL BASH ----------------------------------
       case 'call-bash': {
-        let command = msg?.inputs?.bashFunction;
-        if (msg?.inputs?.bashFunctionMode === 'bash-function-property') {
-          console.log(
-            `🔎 Getting bash function from property ${msg?.inputs?.bashFunctionPath}`
-          );
-          command = getNestedProperty(msg, msg?.inputs?.bashFunctionPath);
-        }
-        console.log(`🚀 Calling ${command}`);
+        const command = package?.settings?.command;
+        console.log(`🚀 Calling bash command : ${command}`);
         exec(command, (error, stdout, stderr) => {
           if (error) {
-            console.warn(`🚨 Error executing bash function: ${error}`, error);
+            respondWithError(`🚨 Error executing bash function:\n ${error}`);
             return;
           }
-          ws.send(stdout ? stdout : stderr);
+          if (stderr) {
+            respondWithError(`🚨 Error executing bash function:\n ${stderr}`);
+            return;
+          }
+          if (stdout) {
+            respond(stdout);
+            return;
+          }
+          console.warn(`💀 No response! Resolving with empty result`);
+          ws.send(JSON.stringify({ id, result: {} }));
         });
         break;
       }
+      // ---------------------------------- CALL REFERENCE ----------------------------------
       case 'call-reference': {
-        // console.log('💀 Calling by reference not yet implemented');
         try {
-          const func = require(`./functions/${msg?.inputs?.functionName}.js`);
-          const result = func();
-          ws.send(JSON.stringify(result));
+          let funcName = package?.settings?.reference;
+          if (!fs.existsSync(`./functions/${funcName}.js`)) {
+            respondWithError(`🚨 ./functions/${funcName}.js not found`);
+            return;
+          }
+          const func = require(`./functions/${funcName}.js`);
+          if (func === undefined) {
+            respondWithError(`🚨 Function imported ok but is undefined`);
+            return;
+          }
+          let args = package?.settings?.args;
+
+          if (args) {
+            try {
+              args = JSON.parse(args);
+            } catch (error) {
+              console.log(`Parsing args as JSON failed. Using them as is.`);
+            }
+            console.log(`🚀 Calling ${funcName} with args ${args}`);
+            const result = func(args);
+            respond(result);
+          } else {
+            console.log(`🚀 Calling ${funcName}`);
+            const result = func();
+            respond(result);
+          }
         } catch (error) {
-          console.warn(
-            `🚨 Error executing reference function: ${error}`,
-            error
-          );
+          respondWithError(`🚨 Error executing reference function: ${error}`);
         }
         break;
       }
       case 'call-javascript': {
         try {
-          const func =
-            functionSource === 'direct'
-              ? inputs.function
-              : msg[inputs.functionPath];
-          const result = eval(func);
-          ws.send(JSON.stringify(result));
+          let javascript = package?.settings?.javascript;
+          let javascriptFunction;
+          try {
+            javascriptFunction = new Function(
+              'globals',
+              'msg',
+              `return (async function(){ ${javascript} })();`
+            );
+          } catch (error) {
+            respondWithError(`🚨 Error parsing javascript function: ${error}`);
+            return;
+          }
+          console.log(`🚀 Running javascript`);
+          const result = await Promise.resolve(
+            javascriptFunction(package?.globals, package?.msg)
+          ).catch((error) => {
+            respondWithError(
+              `🚨 Error caught by promise wrapper in JavaScript function: ${error}`
+            );
+          });
+          respond(result);
         } catch (error) {
-          console.warn(
-            `🚨 Error executing JavaScript function: ${error}`,
-            error
-          );
+          respondWithError(`🚨 Error executing JavaScript function: ${error}`);
         }
         break;
       }

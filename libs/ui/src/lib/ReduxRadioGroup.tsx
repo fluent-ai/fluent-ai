@@ -24,6 +24,9 @@ const ReduxRadioGroup = (
     defaultValue = options[0].value;
   }
 
+  if (!inputs?.[stateKey]) {
+    dispatch(flowActions.setInput({ id:nodeId, nodeInputs: {...inputs, [stateKey]: defaultValue} }))
+  }
 
   return (
     <RadioGroup
