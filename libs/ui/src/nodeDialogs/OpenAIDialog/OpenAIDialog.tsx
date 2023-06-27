@@ -2,7 +2,7 @@ import { flowActions, flowRunnerSelectors, flowSelectors } from "@tool-ai/state"
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
 import RadioGroup from "../../lib/RadioGroupComponent/RadioGroupComponent";
 import { useDispatch, useSelector } from "react-redux";
-import styles from '../Dialog.module.css';
+import styles from '../../styles.module.css'
 
 function OpenAIDialog({id}:{id:string}){
   const dispatch = useDispatch();

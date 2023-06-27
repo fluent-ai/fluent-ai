@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
 import { flowActions, flowRunnerSelectors, flowSelectors } from "@tool-ai/state";
-import styles from '../Dialog.module.css';
+import styles from '../../styles.module.css'
 
 function JsonDialog({id}:{id:string}) {
   const dispatch = useDispatch();

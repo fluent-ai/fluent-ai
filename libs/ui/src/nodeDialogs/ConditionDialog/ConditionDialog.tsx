@@ -2,8 +2,7 @@ import { flowActions, flowSelectors } from "@tool-ai/state";
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "../../lib/SelectComponent/SelectComponent";
-import styles from '../Dialog.module.css';
-import Switch from "../../lib/SwitchComponent/SwitchComponent";
+import styles from '../../styles.module.css'
 import RadioGroup from "../../lib/RadioGroupComponent/RadioGroupComponent";
 
 function ConditionDialog({id}:{id:string}){

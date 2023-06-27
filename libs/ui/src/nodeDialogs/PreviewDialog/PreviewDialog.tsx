@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
 import { flowActions, flowRunnerSelectors, flowSelectors } from "@tool-ai/state";
 import RadioGroup from "../../lib/RadioGroupComponent/RadioGroupComponent";
-import styles from '../Dialog.module.css';
+import styles from '../../styles.module.css';
 import Switch from "../../lib/SwitchComponent/SwitchComponent";
 import { useState } from "react";
 
