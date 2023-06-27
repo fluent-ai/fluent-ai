@@ -3,8 +3,6 @@
 import { flowActions, flowSelectors } from "@tool-ai/state";
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
 import { useDispatch, useSelector } from 'react-redux';
-import styles from '../../styles.module.css'
-import Switch from "../../lib/SwitchComponent/SwitchComponent";
 import ReduxRadioGroup from "../../lib/ReduxRadioGroup";
 import ReduxTextInput from "../../lib/ReduxTextInput";
 import ReduxSwitch from "../../lib/ReduxSwitch";
@@ -13,8 +11,6 @@ function InputDialog({nodeId}:{nodeId:string}) {
   const dispatch = useDispatch();
   const inputs = useSelector(flowSelectors.getInputsById(nodeId));
   
-  const titleString = inputs?.title as string || 'Text Input';
-
   const titleMode = inputs?.titleMode as string || 'custom';
   const titleModes = [
     {

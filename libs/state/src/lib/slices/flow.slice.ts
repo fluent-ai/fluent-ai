@@ -1,14 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
 import {
-  Connection,
   Edge,
   EdgeChange,
   Node,
   NodeChange,
   addEdge,
-  OnNodesChange,
-  OnEdgesChange,
-  OnConnect,
   applyNodeChanges,
   applyEdgeChanges,
 } from 'reactflow';
@@ -16,7 +12,6 @@ import {
   createEntityAdapter,
   createSelector,
   createSlice,
-  EntityState,
   PayloadAction,
 } from '@reduxjs/toolkit';
 
@@ -90,8 +85,6 @@ export const flowSlice = createSlice({
       state,
       action: PayloadAction<{ id: string; nodeInputs: Record<string, unknown> }>
     ) => {
-      console.log('🧰 setInput', action.payload);
-
       const existingInput = state.inputs.find(
         (input) => input.id === action.payload.id
       );
