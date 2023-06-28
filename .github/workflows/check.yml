@@ -1,0 +1,24 @@
+name: Deploy fluentai
+
+on:
+  push:
+    branches:
+      - development # The branch that triggers the deployment
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install NX
+      run: npm install -g nx
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build NX project
+      run: nx build fluentai
+
