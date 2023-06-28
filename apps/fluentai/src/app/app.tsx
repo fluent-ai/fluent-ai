@@ -20,11 +20,6 @@ const App = () => {
   const session = useSelector(supabaseSelectors.getSession)
 
   useEffect(() => {
-    console.log('session', session)
-  }
-  , [session])
-
-  useEffect(() => {
     if (supabase) {
     supabase.getSession().then(({ data: { session } }) => {
       dispatch(supabaseActions.setSession(session));

@@ -1,8 +1,9 @@
+import { forwardRef } from 'react';
 import { IButtonProps } from "../../types";
 /* eslint-disable-next-line */
 export interface IconButtonComponentProps {}
 
-function IconButtonComponent(props: IButtonProps) {
+const IconButtonComponent = forwardRef((props:IButtonProps, ref) => {
 
   const iconButton=`sidebar-icon
     h-9
@@ -26,6 +27,6 @@ function IconButtonComponent(props: IButtonProps) {
     {props.buttonContent}
   </button>
   );
-}
+})
 
 export {IconButtonComponent};

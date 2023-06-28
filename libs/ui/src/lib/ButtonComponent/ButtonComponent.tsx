@@ -1,4 +1,3 @@
-import { ReactNode } from "react";
 import { IButtonProps } from "../../types";
 
 function ButtonComponent (props: IButtonProps) {
@@ -12,7 +11,7 @@ function ButtonComponent (props: IButtonProps) {
   hover:text-primary
   rounded-md w-full
   py-2.5 mt-[2vw] mb-[1vw]
-  h-[30px] uppercase
+  h-[20px] 
   text-center`;
 
   return(

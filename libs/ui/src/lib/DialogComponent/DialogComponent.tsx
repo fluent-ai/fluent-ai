@@ -2,24 +2,28 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { Cross2Icon } from '@radix-ui/react-icons';
 /* eslint-disable-next-line */
 export interface DialogComponentProps {
-  trigger: JSX.Element;
+  trigger?: JSX.Element;
+  open?: boolean;
   title: string;
   description?: string
   children: JSX.Element;
   closeButton?: JSX.Element;
   onOpenChange?: (open: boolean) => void;
+  width?: string;
 }
 
 function DialogComponent(props: DialogComponentProps) {
-  // console.log('show dialog')
   return (
-    <Dialog.Root onOpenChange={props.onOpenChange}>
-      <Dialog.Trigger asChild>
+    <Dialog.Root
+      open={props.open}
+      onOpenChange={props.onOpenChange}
+    >
+      { props.trigger && <Dialog.Trigger asChild>
         {props.trigger}
-      </Dialog.Trigger>
+      </Dialog.Trigger> }
       <Dialog.Portal>
         <Dialog.Overlay className="bg-gray-600 bg-opacity-40 data-[state=open]:animate-overlayShow absolute z-30 inset-0 " />
-        <Dialog.Content className="bg-white rounded-md shadow-lg fixed z-40 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[50vw] max-w-[500px] max-h-85vh px-6 py-6">
+        <Dialog.Content className={`bg-white ${props.width ? `w-[${props.width}]` : 'w-[50vw]'} max-w-[500px] rounded-md shadow-lg fixed z-30 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]   max-h-85vh px-6 py-6`}>
           <Dialog.Title className="text-black m-0 text-[17px] font-medium">
             {props.title}
           </Dialog.Title>
