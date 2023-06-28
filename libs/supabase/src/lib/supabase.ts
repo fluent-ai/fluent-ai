@@ -83,17 +83,18 @@ class Supabase {
   }
 
   private inflateFlow(db: FlowDeflated[], id: string): FlowInflated {
-    const flowDeflated = db.find((flow) => flow.id === id);
-    if (!flowDeflated) {
+    const flow = db.find((flow) => flow.id === id);
+    if (!flow) {
       throw new Error('Flow not found');
     }
 
-    const flowInflatedJSON = inflate(flowDeflated.flow, { to: 'string' });
+    const flowInflatedJSON = inflate(flow.flow, { to: 'string' });
     const flowInflated = JSON.parse(flowInflatedJSON) as FlowInflated;
+    console.log('inflating flow', { flow });
 
     return {
-      id: flowDeflated.id,
-      displayName: flowDeflated.displayName,
+      id: flow.id,
+      displayName: flow.displayName,
       nodes: flowInflated.nodes,
       edges: flowInflated.edges,
       inputs: flowInflated.inputs,
@@ -185,6 +186,7 @@ class Supabase {
     displayName: string;
     flow: FlowInflated;
   }): Promise<void> {
+    flow.displayName = displayName;
     const deflatedFlow = {
       id,
       userId,

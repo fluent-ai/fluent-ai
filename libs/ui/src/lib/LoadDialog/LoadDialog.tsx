@@ -22,6 +22,10 @@ function LoadDialog(props: LoadDialogProps) {
   const currentFlow = useSelector(flowSelectors.getFlow);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  useEffect(() => {
+    console.log({currentFlow});
+  });
+
 
   // const 
   useEffect(() => {
@@ -48,6 +52,7 @@ function LoadDialog(props: LoadDialogProps) {
     if (!flowData) {
     return;
     }
+    console.log('loadFlow', flowData);
     dispatch(flowActions.setFlow(flowData));
   }
   
@@ -74,7 +79,6 @@ function LoadDialog(props: LoadDialogProps) {
   }
       
 
-
   const newFlow = () => {
     dispatch(flowActions.newFlow());
   }
@@ -83,6 +87,7 @@ function LoadDialog(props: LoadDialogProps) {
     if (!userId) {
       return;
     }
+    console.log('saveFlow', currentFlow);
     supabase.saveFlow({
       id: currentFlow.id,
       userId,

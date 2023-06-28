@@ -62,6 +62,11 @@ export default function FlowListItem({
                 ref={inputRef}
                 value={displayName}
                 onChange={handleNameChange}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    setIsEditing(false);
+                  }
+                }}
                 onBlur={() => setIsEditing(false)}
               />
             ) : (
