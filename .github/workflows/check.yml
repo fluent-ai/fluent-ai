@@ -13,6 +13,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Generate hash and save to file
+    run: |
+      node getHash.js > ./dist/apps/fluentai/hash.txt
+
     - name: Install NX
       run: npm install -g nx
 

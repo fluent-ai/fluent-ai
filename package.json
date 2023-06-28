@@ -31,6 +31,7 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "firebase": "9.21.0",
+    "gitignore-parser": "^0.0.2",
     "http": "^0.0.1-security",
     "jimp": "^0.22.8",
     "lodash": "^4.17.21",
