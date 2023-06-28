@@ -23,7 +23,7 @@ function ConfirmLoad(
       open={open}
       onOpenChange={onOpenChange}
       title="Unsaved Changes"
-      width='60vw'
+      width='50vw'
       >
         <div className="flex flex-col">
           <p>You have unsaved changes</p>
