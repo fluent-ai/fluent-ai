@@ -115,6 +115,7 @@ class Supabase {
           flow.displayName = flow.display_name;
           //@ts-expect-error supabase prefers _ over camelCase
           delete flow.display_name;
+          console.log('updateFlows flow.display_name', flow.displayName);
         });
         return flows;
       }
@@ -138,6 +139,41 @@ class Supabase {
       }));
   }
 
+  public async isFlowChanged({
+    id,
+    userId,
+    displayName,
+    flow,
+  }: {
+    id: string;
+    userId: string;
+    displayName: string;
+    flow: FlowInflated;
+  }): Promise<boolean> {
+    const deflatedFlow = {
+      id,
+      userId,
+      flow: deflate(JSON.stringify(flow)),
+      displayName,
+    };
+    const { data, error } = await this.client
+      .from('flows')
+      .select('flow')
+      .eq('id', deflatedFlow.id)
+      .eq('user_id', deflatedFlow.userId)
+      .eq('display_name', deflatedFlow.displayName);
+    if (error) {
+      console.error('Error checking if flow changed:', error);
+      return false;
+    } else {
+      console.log({ data });
+      console.log('Flow changed:', !data || data.length === 0);
+
+      const flowChanged = !data || data.length === 0;
+      return flowChanged;
+    }
+  }
+
   public async saveFlow({
     id,
     userId,
@@ -155,6 +191,8 @@ class Supabase {
       flow: deflate(JSON.stringify(flow)),
       displayName,
     };
+
+    console.log(`Saving flor with displayName: ${displayName}`);
     const { error } = await this.client.from('flows').upsert(
       {
         id,
@@ -168,11 +206,31 @@ class Supabase {
       console.error('Error saving flow:', error);
     } else {
       console.log('Flow saved successfully!');
+      console.log(`displayName is now: ${deflatedFlow.displayName}`);
       this.flowsDeflated = [
         ...this.flowsDeflated.filter((flow) => flow.id !== id),
         deflatedFlow,
       ];
-      this.updateFlows();
+      await this.updateFlows();
+    }
+  }
+
+  public async renameFlow(id: string, displayName: string): Promise<void> {
+    const { error } = await this.client
+      .from('flows')
+      .update({ display_name: displayName })
+      .eq('id', id);
+    if (error) {
+      console.error('Error renaming flow:', error);
+    } else {
+      console.log('Flow renamed successfully!');
+      this.flowsDeflated = this.flowsDeflated.map((flow) => {
+        if (flow.id === id) {
+          flow.displayName = displayName;
+        }
+        return flow;
+      });
+      await this.updateFlows();
     }
   }
 
@@ -183,7 +241,7 @@ class Supabase {
     } else {
       console.log('Flow deleted successfully!');
       this.flowsDeflated = this.flowsDeflated.filter((flow) => flow.id !== id);
-      this.updateFlows();
+      await this.updateFlows();
     }
   }
 }

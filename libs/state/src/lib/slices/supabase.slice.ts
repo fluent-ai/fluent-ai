@@ -30,7 +30,6 @@ export const supabaseSlice = createSlice({
   initialState: initialSupabaseState,
   reducers: {
     setSession: (state, action: PayloadAction<Session | null>) => {
-      console.log('reducer setSession', action.payload);
       if (action.payload) {
         state.session = action.payload;
       }
