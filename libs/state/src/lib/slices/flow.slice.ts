@@ -96,9 +96,11 @@ export const flowSlice = createSlice({
     },
     setFlow: (state, action: PayloadAction<Flow>) => {
       state.id = action.payload.id;
+      state.displayName = action.payload.displayName;
       state.nodes = action.payload.nodes;
       state.edges = action.payload.edges;
       state.inputs = action.payload.inputs;
+      state.globals = action.payload.globals;
     },
     newFlow: (state) => {
       state.id = uuidv4();
