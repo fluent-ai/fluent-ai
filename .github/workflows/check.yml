@@ -1,4 +1,4 @@
-name: Deploy fluentai
+name: Check and stage fluentai
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - development # The branch that triggers the deployment
 
 jobs:
-  build_and_deploy:
+  build_and_stage:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,3 +22,14 @@ jobs:
     - name: Build NX project
       run: nx build fluentai
 
+    - name: Install rsync
+      run: sudo apt-get -y install rsync
+
+    - name: Copy build to staging area on server
+      env:
+        DEPLOY_KEY: ${{ secrets.SSH_KEY }}
+      run: |
+        mkdir -p ~/.ssh
+        echo "$DEPLOY_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        rsync -avz -e "ssh -o StrictHostKeyChecking=no" ./dist/apps/fluentai/ theron@194.13.83.192:/home/theron/fluentAI/staging/build/public
