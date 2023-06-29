@@ -3,7 +3,7 @@ name: Deploy fluentai
 on:
   push:
     branches:
-      - build-workflow-main
+      - main
 
 jobs:
   build_and_deploy:
