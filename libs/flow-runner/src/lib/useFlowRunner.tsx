@@ -138,7 +138,7 @@ export const useFlowRunner = (): {
         method({
           globals,
           inputs: inputs.find((input) => input.id === node.id)?.nodeInputs || {},
-          msg: inputMsg,
+          msg: structuredClone(inputMsg),
         }).then((msg) => {
           // save the output    
           setOutputs((prevOutputs) => [
