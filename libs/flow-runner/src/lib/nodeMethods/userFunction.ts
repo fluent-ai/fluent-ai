@@ -68,10 +68,14 @@ export function userFunction({
   inputs,
   msg,
 }: IMethodArguments): Promise<Record<string, unknown>> {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     if (typeof inputs?.userFunction === 'string') {
       runUserScript(inputs?.userFunction, { globals, msg }).then((result) => {
-        resolve({ ...msg, ...result });
+        if (result) {
+          resolve({ ...msg, ...result });
+        } else {
+          reject('User functions must return an object to be merged into msg');
+        }
       });
     } else {
       resolve({
