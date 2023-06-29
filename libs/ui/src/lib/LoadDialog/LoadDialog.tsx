@@ -22,11 +22,6 @@ function LoadDialog(props: LoadDialogProps) {
   const currentFlow = useSelector(flowSelectors.getFlow);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    console.log({currentFlow});
-  });
-
-
   // const 
   useEffect(() => {
     if (open) {
