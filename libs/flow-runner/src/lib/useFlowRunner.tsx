@@ -138,7 +138,7 @@ export const useFlowRunner = (): {
         method({
           globals,
           inputs: inputs.find((input) => input.id === node.id)?.nodeInputs || {},
-          msg: inputMsg,
+          msg: structuredClone(inputMsg),
         }).then((msg) => {
           // save the output    
           setOutputs((prevOutputs) => [
@@ -176,6 +176,20 @@ export const useFlowRunner = (): {
           Promise.allSettled(childPromises).then(() => {
             resolve(null)
           })
+        })
+        .catch((error) => {
+          console.warn(`🌊🪝🚨 Error executing node ${node.id}. Stopping Branch`)
+          console.warn(error)
+          setStates((prevStates) => [
+            ...prevStates.filter((state) => state.id !== node.id),
+            { 
+              id: node.id,
+              state: { status: 'error' },
+              inputMsg: structuredClone(inputMsg),
+              error: error as string
+            }
+          ]);
+          resolve(null)
         })
       } else {
         console.warn(`🌊🪝🚨 Method for node type ${node.type} not found`)

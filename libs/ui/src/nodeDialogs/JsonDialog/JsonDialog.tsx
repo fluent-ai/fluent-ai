@@ -145,7 +145,7 @@ function JsonDialog({nodeId}:{nodeId:string}) {
             </div>
           }
           <RadioGroup
-            title="Flow view title behavior "
+            title="Output behavior "
             options={outputModes}
             value={outputMode}
             customStyles={customStyles}

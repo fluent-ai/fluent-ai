@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Editor from '@monaco-editor/react';
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
 import { flowActions, flowSelectors } from "@tool-ai/state";
+import ReduxTextInput from "../../lib/ReduxTextInput";
 
 function UserFunctionDialog({nodeId}:{nodeId:string}) {
   const dispatch = useDispatch();
@@ -26,6 +27,13 @@ function UserFunctionDialog({nodeId}:{nodeId:string}) {
       title="User Function"
       description="user function description"
     >
+      <div>
+          <ReduxTextInput
+          nodeId={nodeId} 
+          inputs={inputs}
+          placeholder="userFunction"
+          stateKey="title"
+          />
       <Editor
       height="90vh"
       defaultLanguage="javascript"
@@ -47,6 +55,8 @@ function UserFunctionDialog({nodeId}:{nodeId:string}) {
           },
         }}
       />
+      </div>
+
     </InnerDialogStructure>
   );
 }

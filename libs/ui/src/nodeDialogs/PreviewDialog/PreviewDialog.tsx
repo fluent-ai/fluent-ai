@@ -12,6 +12,10 @@ function PreviewDialog({nodeId}:{nodeId:string}) {
   const inputs = useSelector(flowSelectors.getInputsById(nodeId));
   const output = useSelector(flowRunnerSelectors.selectOutput(nodeId));
 
+  if (inputs?.titlePath === undefined) {
+    dispatch(flowActions.setInput({id:nodeId, nodeInputs:{...inputs,titlePath:'msg.payload'}}))
+  }
+
   const titlePath = inputs?.titlePath as string || 'msg.payload';
   const titleString = inputs?.title as string || 'Preview';
   const titleMode = inputs?.titleMode as string || 'custom';
@@ -50,6 +54,8 @@ function PreviewDialog({nodeId}:{nodeId:string}) {
       </div>
     }
   ]
+
+
 
 
   const customStyles = {'--highlight': 'hsla(91, 60%, 66%, 1.0)'}
