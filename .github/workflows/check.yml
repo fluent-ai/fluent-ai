@@ -3,7 +3,7 @@ name: Check and stage fluentai
 on:
   push:
     branches:
-      - build-workflow-dev
+      - development
 
 jobs:
   build_and_stage:
