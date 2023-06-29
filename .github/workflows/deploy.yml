@@ -3,7 +3,7 @@ name: Deploy fluentai
 on:
   push:
     branches:
-      - main # The branch that triggers the deployment
+      - build-workflow-main
 
 jobs:
   build_and_deploy:
@@ -13,26 +13,58 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install NX
-      run: npm install -g nx
+    - name: Generate hash and save to file
+      id: generate_hash
+      run: |
+        mkdir -p ./dist/apps/fluentai/
+        node getHash.js > hash.txt
+        echo "::set-output name=hash::$(cat hash.txt)"
 
-    - name: Install dependencies
-      run: npm ci
-
-    - name: Build NX project
-      run: nx build fluentai
-
-    - name: Install rsync
-      run: sudo apt-get -y install rsync
-
-    - name: Copy build to server
+    - name: Fetch previous hash from server
+      id: fetch_previous_hash
       env:
         DEPLOY_KEY: ${{ secrets.SSH_KEY }}
       run: |
         mkdir -p ~/.ssh
         echo "$DEPLOY_KEY" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
+        echo "::set-output name=hash::$(ssh -o StrictHostKeyChecking=no theron@194.13.83.192 'cat /home/theron/fluentAI/staging/hash.txt || echo')"
+
+    - name: Compare hashes
+      id: compare_hashes
+      run: |
+        echo "Current hash: ${steps.generate_hash.outputs.hash}"
+        echo "Previous hash: ${steps.fetch_previous_hash.outputs.hash}"
+        if [ "${steps.generate_hash.outputs.hash}" = "${steps.fetch_previous_hash.outputs.hash}" ]; then
+          echo "::set-output name=match::true"
+        else
+          echo "::set-output name=match::false"
+        fi
+
+    - name: Install NX
+      if: steps.compare_hashes.outputs.match == 'false'
+      run: npm install -g nx
+
+    - name: Install dependencies
+      if: steps.compare_hashes.outputs.match == 'false'
+      run: npm ci
+
+    - name: Build NX project
+      if: steps.compare_hashes.outputs.match == 'false'
+      run: nx build fluentai
+
+    - name: Install rsync
+      if: steps.compare_hashes.outputs.match == 'false'
+      run: sudo apt-get -y install rsync
+
+    - name: Copy build to server
+      if: steps.compare_hashes.outputs.match == 'false'
+      run: |
         rsync -avz -e "ssh -o StrictHostKeyChecking=no" ./dist/apps/fluentai/ theron@194.13.83.192:/home/theron/fluentAI/build/public
 
+    - name: Hash matches, using cached build
+      if: steps.compare_hashes.outputs.match == 'true'
+      run: ssh -o StrictHostKeyChecking=no theron@194.13.83.192 'cp -r staging/build/public/* build/public/'
+  
     - name: Run build script on server
       run: ssh -o StrictHostKeyChecking=no theron@194.13.83.192 'bash /home/theron/fluentAI/build.sh'
