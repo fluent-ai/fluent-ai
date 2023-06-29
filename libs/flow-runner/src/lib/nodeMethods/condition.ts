@@ -37,11 +37,7 @@ export function condition({
         });
         return;
       }
-
-      console.log('🚦 condition inputs', { inputs });
-
       const pathArr = (inputs?.location as string)?.split('.');
-      console.log('🚦 condition pathArr', { pathArr });
       let targetValue;
       try {
         targetValue = getNestedProperty({ msg, globals }, pathArr);
