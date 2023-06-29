@@ -1,32 +1,5 @@
 import { IMethodArguments } from '../useFlowRunner';
-
-function getNestedProperty(
-  obj: Record<string, unknown>,
-  propertyPath: string[]
-): unknown {
-  try {
-    return propertyPath.reduce(
-      (
-        currentObject: Record<string, unknown> | unknown,
-        currentProperty: string
-      ) => {
-        if (
-          typeof currentObject === 'object' &&
-          currentObject !== null &&
-          currentProperty in currentObject
-        ) {
-          return (currentObject as Record<string, unknown>)[currentProperty];
-        } else {
-          throw new Error(`Property ${propertyPath.join('.')} doesn't exist`);
-        }
-      },
-      obj as Record<string, unknown>
-    );
-  } catch (error) {
-    console.error(error);
-    return undefined;
-  }
-}
+import { get as getNestedProperty } from 'lodash';
 
 export function condition({
   globals,
