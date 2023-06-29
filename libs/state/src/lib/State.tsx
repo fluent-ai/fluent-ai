@@ -1,6 +1,7 @@
 /* eslint-disable-next-line */
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
+import { GENERAL_FEATURE_KEY, generalReducer } from './slices/general.slice';
 import {
   FLOW_RUNNER_FEATURE_KEY,
   flowRunnerReducer,
@@ -10,6 +11,7 @@ import { FLOW_FEATURE_KEY, flowReducer } from './slices/flow.slice';
 
 export const store = configureStore({
   reducer: {
+    [GENERAL_FEATURE_KEY]: generalReducer,
     [FLOW_RUNNER_FEATURE_KEY]: flowRunnerReducer,
     [SUPABASE_FEATURE_KEY]: supabaseReducer,
     [FLOW_FEATURE_KEY]: flowReducer,
