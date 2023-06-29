@@ -69,7 +69,7 @@ jobs:
 
     - name: Hash matches, using cached build
       if: env.match == 'true'
-      run: ssh -o StrictHostKeyChecking=no theron@194.13.83.192 'cp -r staging/build/public/* build/public/'
+      run: ssh -o StrictHostKeyChecking=no theron@194.13.83.192 'cp -r /home/theron/fluentAI/staging/build/public/* /home/theron/fluentAI/build/public/'
 
     - name: Run build script on server
       run: ssh -o StrictHostKeyChecking=no theron@194.13.83.192 'bash /home/theron/fluentAI/build.sh'
