@@ -1,20 +1,24 @@
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
-const gitignoreParser = require('gitignore-parser');
 
 function readGitignore(directoryPath) {
   const gitignorePath = path.join(directoryPath, '.gitignore');
+  const gitignoreRules = [];
 
   if (fs.existsSync(gitignorePath)) {
     const gitignoreContent = fs.readFileSync(gitignorePath, 'utf8');
-    return gitignoreParser.compile(gitignoreContent);
-  } else {
-    return {
-      accepts: () => true, // If no .gitignore file, accept all files.
-      denies: () => false, // If no .gitignore file, deny no files.
-    };
+    gitignoreRules.push(...gitignoreContent.split('\n'));
   }
+
+  return {
+    accepts: (file) =>
+      !gitignoreRules.some((rule) => file.startsWith(rule)) ||
+      gitignoreRules.length === 0,
+    denies: (file) =>
+      gitignoreRules.some((rule) => file.startsWith(rule)) &&
+      gitignoreRules.length > 0,
+  };
 }
 
 function calculateDirectoryHash(directoryPath) {
@@ -23,11 +27,11 @@ function calculateDirectoryHash(directoryPath) {
   const files = fs.readdirSync(directoryPath);
 
   files.sort().forEach((file) => {
-    if (!gitignore.accepts(file)) {
+    const filePath = path.join(directoryPath, file);
+    if (gitignore.denies(filePath)) {
       return;
     }
 
-    const filePath = path.join(directoryPath, file);
     const stats = fs.statSync(filePath);
 
     if (stats.isFile()) {
