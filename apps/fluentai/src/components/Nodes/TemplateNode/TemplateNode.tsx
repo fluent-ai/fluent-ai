@@ -91,9 +91,9 @@ export default memo(forwardRef((props:MemoProps, ref) => {
     return groups.find(nodeGroup => nodeGroup.id === data.group);
   }
 
-  function getStatusColor() {
+  function getStatusColor(nodeStatus:string) {
     let color = '#585858';
-    switch (status) {
+    switch (nodeStatus) {
       case 'ready':
         color = '#ffffff';
         break;
@@ -102,6 +102,9 @@ export default memo(forwardRef((props:MemoProps, ref) => {
         break;
       case 'done':
         color = '#c6ffac';
+        break;
+      case 'error':
+        color = 'hsla(0, 100%, 69%, 1.0)';
         break;
     }
     return color;
@@ -159,9 +162,9 @@ export default memo(forwardRef((props:MemoProps, ref) => {
           />
         
         <div
-          className={`bottom-0 right-0 w-10 h-10 rounded-full ${getStatusColor()}`}
+          className={`bottom-0 right-0 w-10 h-10 rounded-full ${getStatusColor(status)}`}
           style={{
-            backgroundColor: getStatusColor(),
+            backgroundColor: getStatusColor(status),
             position: 'absolute',
             bottom: '2px',
             right: '2px',
@@ -171,6 +174,16 @@ export default memo(forwardRef((props:MemoProps, ref) => {
             animation: `${status === 'running' ? 'pulse' : ''} 0.5s infinite ease-in-out alternate`,
           }}
           ></div>
+          <div
+            style={{
+              position: 'absolute',
+              top: '-15px',
+              width: '100%',
+              // height: '100%',
+              fontSize: '10px',
+              color: 'hsla(20, 0%, 69%, 0.815)',
+            }}
+            >{id.split('-')[0] + '...'}</div>
         </div>
       <Handle
         type="source"
