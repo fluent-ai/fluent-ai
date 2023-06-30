@@ -7,6 +7,7 @@ import ReduxTextInput from "../../lib/ReduxTextInput";
 function UserFunctionDialog({nodeId}:{nodeId:string}) {
   const dispatch = useDispatch();
   const inputs = useSelector(flowSelectors.getInputsById(nodeId));
+
   if (inputs?.userFunction === undefined) {
     dispatch(
       flowActions.setInput(
@@ -31,7 +32,7 @@ function UserFunctionDialog({nodeId}:{nodeId:string}) {
           <ReduxTextInput
           nodeId={nodeId} 
           inputs={inputs}
-          placeholder="userFunction"
+          placeholder={inputs?.title as string || 'userFunction'}
           stateKey="title"
           />
       <Editor
@@ -43,7 +44,7 @@ function UserFunctionDialog({nodeId}:{nodeId:string}) {
           flowActions.setInput(
             {
               id:nodeId,
-              nodeInputs: { userFunction:value}
+              nodeInputs: {...inputs,  userFunction:value}
             }
           )
         )
