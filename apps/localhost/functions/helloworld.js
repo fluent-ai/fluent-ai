@@ -1,5 +1,7 @@
 function helloworld(name) {
-  return `Hello ${name}!`;
+  return new Promise((resolve) => {
+    resolve(`Hello ${name}!`);
+  });
 }
 
 module.exports = helloworld;
