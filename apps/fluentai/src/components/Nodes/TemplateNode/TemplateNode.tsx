@@ -1,4 +1,4 @@
-import { memo, forwardRef, useImperativeHandle} from 'react';
+import { memo, forwardRef} from 'react';
 import { Handle, Position } from 'reactflow';
 import '../CustomNodesStyles.css';
 import { NodeData, groups} from '../../../nodeData';
@@ -48,7 +48,6 @@ interface MemoProps {
 export default memo(forwardRef((props:MemoProps, ref) => {
   const { id, data, type, isConnectable } = props;
   const status = useSelector(flowRunnerSelectors.selectState(id))?.state?.status as string || 'ready';
-  const lastMsg = useSelector(flowRunnerSelectors.selectState(id))?.state?.lastMsg as Record<string, unknown> || {};
   const dispatch = useDispatch();
   const inputs = useSelector(flowSelectors.getInputsById(id));
   const output = useSelector(flowRunnerSelectors.selectOutput(id));
