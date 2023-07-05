@@ -4,21 +4,36 @@ import { flowActions, flowRunnerSelectors, flowSelectors } from "@tool-ai/state"
 import RadioGroup from "../../lib/RadioGroupComponent/RadioGroupComponent";
 import styles from '../../styles.module.css';
 import Switch from "../../lib/SwitchComponent/SwitchComponent";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 function PreviewDialog({nodeId}:{nodeId:string}) {
   const dispatch = useDispatch();
   const inputs = useSelector(flowSelectors.getInputsById(nodeId));
   const output = useSelector(flowRunnerSelectors.selectOutput(nodeId));
+  const [display, setDisplay] = useState('undefined');
 
-  if (inputs?.titlePath === undefined) {
-    dispatch(flowActions.setInput({id:nodeId, nodeInputs:{...inputs,titlePath:'msg.payload'}}))
-  }
+  useEffect(() => {
+    if (inputs?.titlePath === undefined) {
+      dispatch(flowActions.setInput({id:nodeId, nodeInputs:{...inputs,titlePath:'msg.payload'}}))
+    }
+  },[inputs, dispatch, nodeId])
+
+  useEffect(() => {
+    if (inputs?.dialogMode === 'simple'){
+      setDisplay(output?.msg?.payload as string || ''); 
+    } else {
+      setDisplay(JSON.stringify(output || '',null,2));
+    }
+  },[inputs, output])
+
+
 
   const titlePath = inputs?.titlePath as string || 'msg.payload';
   const titleString = inputs?.title as string || 'Preview';
   const titleMode = inputs?.titleMode as string || 'custom';
+
+  
 
   const [editingDisabled, setEditingDisabled] = useState(titleMode === 'from-msg');
 
@@ -55,9 +70,6 @@ function PreviewDialog({nodeId}:{nodeId:string}) {
     }
   ]
 
-
-
-
   const customStyles = {'--highlight': 'hsla(91, 60%, 66%, 1.0)'}
 
 
@@ -67,10 +79,8 @@ function PreviewDialog({nodeId}:{nodeId:string}) {
     description="preview description">
       <div title="Preview">
         {
-          output? <pre><code>{
-            JSON.stringify(
-              inputs?.dialogMode === 'full' ?
-              output : output?.msg?.payload,null,2)
+          display ? <pre><code>{
+            display
             .split('\n').map((item, i) => <p key={i}>{item}</p>)
             }</code></pre> : "Nothing to preview"
         }
