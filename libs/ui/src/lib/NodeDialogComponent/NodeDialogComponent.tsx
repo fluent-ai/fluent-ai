@@ -23,9 +23,6 @@ function NodeDialogComponent() {
   const [isExpanded, setIsExpanded] = useState(false); 
 
   const nodeType = useSelector(flowSelectors.getNodeTypeById(activeNodeId));
-  useEffect(() => {
-    setIsExpanded(false);
-  }, [nodeType]); 
 
 
   const shownDialog = () => {
