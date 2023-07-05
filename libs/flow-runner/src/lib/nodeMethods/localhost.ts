@@ -41,7 +41,7 @@ export function localhost({
   inputs,
   msg,
 }: IMethodArguments): Promise<Record<string, unknown>> {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     try {
       console.log('🔌 localhost called', { msg, inputs });
       const id = uuidv4();
@@ -80,11 +80,15 @@ export function localhost({
             break;
           }
           case 'call-reference': {
-            let reference = inputs?.functionName;
-            if (inputs?.functionNameMode === 'reference-function-property') {
+            console.log(`🔌 call-reference`, { inputs });
+
+            let reference = inputs?.referenceFunctionName;
+            if (
+              inputs?.referenceFunctionMode === 'reference-function-property'
+            ) {
               reference = getNestedProperty(
                 { globals, msg },
-                inputs?.functionNamePath as string
+                inputs?.referenceFunctionPath as string
               );
             }
             if (
@@ -94,7 +98,7 @@ export function localhost({
             ) {
               resolve({
                 ...msg,
-                error: `🔌🚨 invalid functionName, reference is ${reference}`,
+                error: `🔌🚨 invalid referenceFunctionName, reference is ${reference}`,
               });
               return;
             }
@@ -102,13 +106,13 @@ export function localhost({
             if (inputs?.referenceArgsMode === 'reference-args-property') {
               args = getNestedProperty(
                 { globals, msg },
-                inputs?.argsPath as string
+                inputs?.referenceArgsPath as string
               );
             }
             if (args !== undefined) {
-              if (typeof args === 'object') {
-                args = JSON.stringify(args);
-              }
+              // if (typeof args === 'object') {
+              //   args = JSON.stringify(args);
+              // }
               send({
                 callMode: 'call-reference',
                 reference,
@@ -151,10 +155,14 @@ export function localhost({
         const data = JSON.parse(message.data as string);
         console.log('🔌 localhost received', { data });
         if (data.id === id) {
-          resolve({
-            ...msg,
-            payload: data,
-          });
+          if (data?.error) {
+            reject(data.error);
+          } else {
+            resolve({
+              ...msg,
+              result: data.result,
+            });
+          }
         }
       };
     } catch (error) {
