@@ -1,15 +1,17 @@
 import { useDispatch, useSelector } from "react-redux";
-import { flowActions, flowSelectors } from "@tool-ai/state";
+import { flowActions, flowRunnerSelectors, flowSelectors } from "@tool-ai/state";
 import { InnerDialogStructure } from "../../lib/InnerDialogStructure/InnerDialogStructure";
 import CallReference from './CallModes/CallReference';
 import CallBash from './CallModes/CallBash';
 import CallJavascript from './CallModes/CallJavascript';
 import ReduxTextInput from "../../lib/ReduxTextInput";
 import ReduxRadioGroup from "../../lib/ReduxRadioGroup";
+import styles from '../../styles.module.css';
 
 function LocalhostDialog({nodeId}:{nodeId:string}){
   const dispatch = useDispatch();
   const inputs = useSelector(flowSelectors.getInputsById(nodeId));
+  const state  = useSelector(flowRunnerSelectors.selectState(nodeId));
 
   if (inputs?.callMode === undefined) { 
     dispatch(
@@ -45,6 +47,13 @@ function LocalhostDialog({nodeId}:{nodeId:string}){
       description="LocalHost Bridge test"
     >
       <div title="Settings">
+      {state?.state?.status as string === 'error' &&
+          <div className={styles.Error}>
+            <b>Error</b>
+            <br/>
+            {state?.state?.error as string}
+          </div>
+        }
         <ReduxRadioGroup 
           nodeId={nodeId} 
           inputs={inputs ?? {}}

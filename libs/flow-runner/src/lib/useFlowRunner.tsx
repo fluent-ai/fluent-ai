@@ -184,7 +184,7 @@ export const useFlowRunner = (): {
             ...prevStates.filter((state) => state.id !== node.id),
             { 
               id: node.id,
-              state: { status: 'error' },
+              state: { status: 'error', error },
               inputMsg: structuredClone(inputMsg),
               error: error as string
             }
