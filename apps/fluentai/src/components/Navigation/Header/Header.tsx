@@ -54,25 +54,26 @@ const Header = (): JSX.Element => {
     .subscribe()
 
 
-  
+
 
   return (
     <div
-      className="w-60 p-2.5 mt-2.5 ml-1.5 absolute 
+      className="w-60 p-2.5 mt-2.5 ml-1.5 mb-2.5 absolute
       rounded-md z-10 text-black flex justify-between items-center group"
     >
     <aside className={`rounded-md bg-white shadow-md w-[45px] overflow-x-hidden transition-all duration-300 ease-in-out group-hover:w-60`}>
-    
+
       <div className="flex flex-start  items-center gap-2">
         <img src="/assets/logo.png" alt="logo" className="h-10 w-10" />
         <div className="sidebar-icon">
           <div className="flex"></div>
-          <div>{user?.email}</div>
-          <div>{credit.toFixed(3)} €</div>
+          <div className="whitespace-nowrap">{user?.email}aina.perez.1996@gmail.com</div>
+          <div className="whitespace-nowrap">{credit.toFixed(3)} €</div>
           <button
               aria-label="logout button"
               type="button"
               onClick={handleLogout}
+              className="whitespace-nowrap"
             >
               Log out
             </button>
