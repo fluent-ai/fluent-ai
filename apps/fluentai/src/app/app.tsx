@@ -36,26 +36,39 @@ const App = () => {
     }
   }, [dispatch])
 
-  if (!session) {
+  if (session) {
     return (
-    <div className="mx-auto w-96 h-screen flex flex-col items-center justify-center">
-      <img src="/assets/logo-text.png" alt="logo" style={{width:'300px'}}/>
+    <div className="mx-auto h-screen flex items-center justify-around">
+      <div className='w-1/2 justify-self-center flex justify-center'>
+      <img src="/assets/logo-text.png" alt="logo" className='w-[200px] justify-self-center '/>
+      </div>
+      <div className='w-1/2 justify-self-left'>
+        <div className='w-[300px]'>
       {supabase&&<Auth
-        supabaseClient={supabase.getClient()}    appearance={{
+        supabaseClient={supabase.getClient()}
+          appearance={{
           theme: ThemeSupa,
           variables: {
             default: {
               colors: {
-                brand: 'hsla(91, 60%, 66%, 1.0)',
+                brand: '#a9dc76',
                 brandAccent: 'hsla(91, 76%, 66%, 1.0)',
               },
             },
           },
+          className: {
+            input: "box-border ",
+            button: "box-border",
+            divider: "",
+            container:"w-[300px] "
+          }
         }}
         providers={['github']}
 
-        
+
         />}
+        </div>
+        </div>
     </div>)
   }
   else {
