@@ -1,9 +1,6 @@
 {
-    "cSpell.words": [
-        "fluentai",
-        "reactflow",
-        "Supabase"
-    ],
-    "deno.enablePaths": ["./apps/supabase/functions"],
-    "deno.importMap": "./apps/supabase/functions/import_map.json"
+  "cSpell.words": ["fluentai", "reactflow", "Supabase"],
+  "deno.enablePaths": ["./apps/supabase/functions"],
+  "deno.importMap": "./apps/supabase/functions/import_map.json",
+  "editor.acceptSuggestionOnEnter": "on"
 }
