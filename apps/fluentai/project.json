@@ -1,0 +1,95 @@
+{
+  "name": "fluentai",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/fluentai/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/apps/fluentai",
+        "index": "apps/fluentai/src/index.html",
+        "baseHref": "/",
+        "main": "apps/fluentai/src/main.tsx",
+        "tsConfig": "apps/fluentai/tsconfig.app.json",
+        "assets": ["apps/fluentai/src/assets/favicon/favicon.ico", "apps/fluentai/src/assets"],
+        "styles": ["apps/fluentai/src/styles.css"],
+        "scripts": [],
+        "postcssConfig": "apps/fluentai/postcss.config.js",
+        "isolatedConfig": true,
+        "webpackConfig": "apps/fluentai/webpack.config.js"
+      },
+      "configurations": {
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
+        },
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/fluentai/src/environments/environment.ts",
+              "with": "apps/fluentai/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/webpack:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "fluentai:build",
+        "hmr": true,
+        "postcssConfig": "apps/fluentai/postcss.config.js"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "fluentai:build:development"
+        },
+        "production": {
+          "buildTarget": "fluentai:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/fluentai/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "fluentai:build"
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/fluentai/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  },
+  "tags": []
+}

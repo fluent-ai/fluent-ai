@@ -1,0 +1,74 @@
+
+/* reset */
+button {
+  all: unset;
+}
+
+.SwitchRoot {
+  --factor: 1;
+  --highlight: black; 
+  width: calc(42px * var(--factor));
+  height: calc(25px * var(--factor));
+  background-color: black;
+  border-radius: 9999px;
+  position: relative;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.SwitchRoot:hover {
+  background-color: var(--highlight);
+}
+
+.SwitchRoot .disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+.size-small {
+  --factor: 0.75;
+}
+
+.size-large {
+  --factor: 1.25;
+}
+
+.SwitchRoot[data-state='checked'] {
+  background-color: black;
+}
+.SwitchRoot[data-state='checked']:hover {
+  background-color: var(--highlight);
+}
+
+.SwitchThumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc( 21px * var(--factor));
+  height: calc(21px * var(--factor));
+  background-color: white;
+  border-radius: 9999px;
+  /* box-shadow: 0 2px 2px var(--blackA7); */
+  transition: transform 100ms;
+  transform: translateX(2px);
+  will-change: transform;
+}
+.SwitchThumb[data-state='checked'] {
+  transform: translateX(calc(19px * var(--factor)));
+}
+
+.SwitchCheckIcon {
+  opacity: 0;
+  transition: opacity 0.1s ease-in-out;
+}
+
+.SwitchThumb[data-state='checked'] .SwitchCheckIcon {
+  opacity: 1;
+}
+
+
+.Label {
+  padding-left: 5px;
+  color: black;
+  font-size: 15px;
+  line-height: 1;
+}

@@ -1,0 +1,47 @@
+name: Check and stage fluentai
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  build_and_stage:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Prepare env for hashing
+      run: |
+        npm install -g gitignore-parser
+      
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Generate hash and save to file
+      run: |
+        mkdir -p ./dist/apps/fluentai/
+        node getHash.js > hash.txt
+        cat hash.txt
+
+    - name: Install NX
+      run: npm install -g nx
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build NX project
+      run: nx build fluentai
+
+    - name: Install rsync
+      run: sudo apt-get -y install rsync
+
+    - name: Copy build to staging area on server
+      env:
+        DEPLOY_KEY: ${{ secrets.SSH_KEY }}
+      run: |
+        mkdir -p ~/.ssh
+        echo "$DEPLOY_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        rsync -avz -e "ssh -o StrictHostKeyChecking=no" hash.txt theron@194.13.83.192:/home/theron/fluentAI/staging
+        rsync -avz -e "ssh -o StrictHostKeyChecking=no" ./dist/apps/fluentai/ theron@194.13.83.192:/home/theron/fluentAI/staging/build/public
+
