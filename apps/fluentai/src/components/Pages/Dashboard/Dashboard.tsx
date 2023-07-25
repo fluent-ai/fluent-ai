@@ -16,7 +16,7 @@ import 'reactflow/dist/style.css';
 import NodeSideBar from '../../Navigation/NodeSideBar/NodeSideBar';
 import TemplateNode from '../../Nodes/TemplateNode/TemplateNode';
 import Header from '../../Navigation/Header/Header';
-import FlowHeader from '../../Navigation/flow-header/flow-header';
+import FlowHeader from '../../Navigation/FlowHeader/FlowHeader';
 import {
   flowRunnerActions,
   flowActions,

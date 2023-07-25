@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 
-import FlowHeader from './flow-header';
+import FlowHeader from './FlowHeader';
 
 describe('FlowHeader', () => {
   it('should render successfully', () => {
