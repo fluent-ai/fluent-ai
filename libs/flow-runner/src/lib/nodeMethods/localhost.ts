@@ -36,14 +36,14 @@ const connect = () => {
 
 connect();
 
-export function localhost({
+export function remoterunner({
   globals,
   inputs,
   msg,
 }: IMethodArguments): Promise<Record<string, unknown>> {
   return new Promise((resolve, reject) => {
     try {
-      console.log('🔌 localhost called', { msg, inputs });
+      console.log('🔌 remoterunner called', { msg, inputs });
       const id = uuidv4();
       console.log(`call id is ${id}`);
 
@@ -153,7 +153,7 @@ export function localhost({
 
       client.onmessage = (message) => {
         const data = JSON.parse(message.data as string);
-        console.log('🔌 localhost received', { data });
+        console.log('🔌 remoterunner received', { data });
         if (data.id === id) {
           if (data?.error) {
             reject(data.error);
@@ -168,7 +168,7 @@ export function localhost({
     } catch (error) {
       resolve({
         ...msg,
-        error: `localhost failed with error : ${error}`,
+        error: `remoterunner failed with error : ${error}`,
       });
     }
   });

@@ -149,4 +149,4 @@ wss.on('connection', (ws) => {
   ws.send('Welcome, client!');
 });
 
-console.log('WebSocket server is running on localhost:8080');
+console.log('WebSocket server is running on remoterunner:8080');
