@@ -16,6 +16,7 @@ import 'reactflow/dist/style.css';
 import NodeSideBar from '../../Navigation/NodeSideBar/NodeSideBar';
 import TemplateNode from '../../Nodes/TemplateNode/TemplateNode';
 import Header from '../../Navigation/Header/Header';
+import FlowHeader from '../../Navigation/flow-header/flow-header';
 import {
   flowRunnerActions,
   flowActions,
@@ -142,6 +143,7 @@ const Dashboard = () => {
   return (
     <>
       <Header/>
+      <FlowHeader/>
       <div
         className="relative flex flex-col grow h-full md:flex-row"
       >

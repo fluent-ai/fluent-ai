@@ -36,7 +36,7 @@ const App = () => {
     }
   }, [dispatch])
 
-  if (session) {
+  if (!session) {
     return (
     <div className="mx-auto h-screen flex items-center justify-around">
       <div className='w-1/2 justify-self-center flex justify-center'>
