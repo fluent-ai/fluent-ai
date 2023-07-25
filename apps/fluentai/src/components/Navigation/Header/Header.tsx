@@ -67,7 +67,7 @@ const Header = (): JSX.Element => {
         <img src="/assets/logo.png" alt="logo" className="h-10 w-10" />
         <div className="sidebar-icon">
           <div className="flex"></div>
-          <div className="whitespace-nowrap">{user?.email}aina.perez.1996@gmail.com</div>
+          <div className="whitespace-nowrap">{user?.email}</div>
           <div className="whitespace-nowrap">{credit.toFixed(3)} €</div>
           <button
               aria-label="logout button"
