@@ -42,6 +42,14 @@ export interface IExecuteFlowArguments {
   globals: Record<string, unknown>;
 }
 
+export interface IExecuteBranchArguments {
+  flow: IFlow;
+  inputs: IFlowRunnerInputs[];
+  globals: Record<string, unknown>;
+  msg: Record<string, unknown>;
+  nodeId: string;
+}
+
 interface IExecuteNodeArguments {
   flow: IFlow;
   relationships: IRelationships[];
@@ -66,6 +74,7 @@ const isRootNode = (edges: Edge[] | undefined, nodeId:string): boolean => {
 
 export const useFlowRunner = (): {
   executeFlow: ({flow, inputs, globals} :IExecuteFlowArguments) => Promise<void>
+  executeBranch: ({flow, inputs, globals, msg, nodeId} :IExecuteBranchArguments) => Promise<void>
   outputs: IFlowRunnerOutputs[]
   states: IFlowRunnerStates[]
 } => {
@@ -168,7 +177,11 @@ export const useFlowRunner = (): {
           relationships.find((nodeChildren) => nodeChildren.id === node.id)?.nodeChildren.forEach((childId) => {
             const childNode = findNode(flow?.nodes, childId)
             if (childNode) {
-              childPromises.push(executeNode({flow, relationships, node:childNode, globals, inputs,msg}))
+              if (childNode.type === 'runner' ) {
+                console.log(`🌊🪝 ${childId} is a runner, pausing for manual continue`)
+              } else {
+                childPromises.push(executeNode({flow, relationships, node:childNode, globals, inputs,msg}))
+              }
             } else {
               console.warn(`🌊🪝🚨 Node ${childId} not found`)
             }
@@ -213,8 +226,20 @@ export const useFlowRunner = (): {
     }
   }
 
+  const executeBranch = async ({flow, inputs, globals, msg, nodeId} :IExecuteBranchArguments) => {
+    console.log(`🌊🪝 executing branch from node `, {nodeId});
+
+    const relationships = buildRelationships(flow)
+
+    const node = findNode(flow?.nodes, nodeId)
+    if (node) {
+      await executeNode({flow, relationships, node, globals, inputs, msg})
+    }
+  }
+
   return {
     executeFlow,
+    executeBranch,
     outputs,
     states,
   }
