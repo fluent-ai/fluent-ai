@@ -19,7 +19,7 @@ const NodeSideBar = ({ runFlow }: { runFlow: () => void }) => {
   };
 
   return (
-    <div className="flex absolute z-10 h-min top-[110px] left-2.5 group">
+    <div className="flex absolute z-10 h-min top-[110px] ml-1.5 p-2.5 group">
       <style>{`.scroll-container::-webkit-scrollbar { display: none; }`}</style>
       <aside
         className={`scroll-container px-2 py-2.5 max-h-[80vh] overflow-y-scroll rounded-md bg-white shadow-md w-[50px] overflow-x-hidden transition-all duration-300 ease-in-out group-hover:w-60`}
