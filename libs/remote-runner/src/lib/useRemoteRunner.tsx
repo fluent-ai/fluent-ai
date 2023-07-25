@@ -8,7 +8,7 @@ interface WebSocketError extends Error {
   type?: string;
 }
 
-export interface UseLocalRunnerProps {
+export interface UseRemoteRunnerProps {
   host?: string;
   port?: number;
   initialReconnectDelay?: number;
@@ -21,13 +21,13 @@ export interface ConnectionState {
   error: WebSocketError | null;
 }
 
-export const useLocalRunner = ({
+export const useRemoteRunner = ({
   host = '127.0.0.1',
   port = 8080,
   initialReconnectDelay = 1000,
   maxReconnectDelay = 5000,
   retryLimit = Infinity
-}: UseLocalRunnerProps = {}) => {
+}: UseRemoteRunnerProps = {}) => {
   const url = `ws://${host}:${port}`;
   const [enabled, setEnabled] = useState(false);
   const [connectionState, setConnectionState] = useState<ConnectionState>({status: "disconnected", error: null});
@@ -91,4 +91,4 @@ export const useLocalRunner = ({
   } 
 }
 
-export default useLocalRunner;
+export default useRemoteRunner;

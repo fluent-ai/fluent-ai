@@ -1,5 +1,5 @@
 {
-  "name": "@tool-ai/local-runner",
+  "name": "@tool-ai/remote-runner",
   "version": "0.0.1",
   "main": "./index.js",
   "types": "./index.d.ts",
