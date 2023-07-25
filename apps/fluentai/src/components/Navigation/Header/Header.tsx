@@ -58,11 +58,10 @@ const Header = (): JSX.Element => {
 
   return (
     <div
-      className="w-60 p-2.5 mt-2.5 ml-1.5 mb-2.5 absolute
+      className="w-72 p-2.5 mt-2.5 ml-1.5 mb-2.5 absolute
       rounded-md z-10 text-black flex justify-between items-center group"
     >
-    <aside className={`rounded-md bg-white shadow-md w-[45px] overflow-x-hidden transition-all duration-300 ease-in-out group-hover:w-60`}>
-
+    <aside className={`rounded-md bg-white shadow-md w-[45px] overflow-x-hidden transition-all duration-300 ease-in-out group-hover:w-72`}>
       <div className="flex flex-start  items-center gap-2">
         <img src="/assets/logo.png" alt="logo" className="h-10 w-10" />
         <div className="sidebar-icon">
