@@ -25,9 +25,12 @@ export function FlowHeader(props: FlowHeaderProps) {
 
   return (
     <div className="w-max right-[10px] p-2.5 mt-2.5 mr-1.5 mb-2.5 absolute
-    rounded-md bg-white z-10 text-black flex gap-2 justify-between items-center shadow-md overflow-x-hidden">
+    rounded-md bg-white z-10 text-black flex gap-5 justify-between items-center shadow-md overflow-x-hidden">
       <p>{currentFlow.displayName}</p>
-      <div className="flex items-center"><BsSave className="w-4/5"/><p onClick={saveFlow}>save</p></div>
+      <div onClick={saveFlow} className="flex gap-0.5 items-center">
+        <button title="save flow" className="h-5"><BsSave className="w-[0.8em] h-[0.8em]"/></button>
+        <p>save</p>
+        </div>
     </div>
   );
 }
