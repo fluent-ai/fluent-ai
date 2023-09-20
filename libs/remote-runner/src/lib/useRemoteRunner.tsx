@@ -36,6 +36,7 @@ export const useRemoteRunner = ({
   const client = useRef<W3CWebSocket | null>(null);
 
   const connect = useCallback(() => {
+    console.log('🔌 Connecting to WebSocket Server...');
     setConnectionState({status: "disconnected", error: null});
     client.current = new W3CWebSocket(url);
 

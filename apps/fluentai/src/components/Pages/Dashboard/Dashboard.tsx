@@ -22,6 +22,7 @@ import {
   flowSelectors,
 } from '@tool-ai/state';
 import { useFlowRunner } from '@tool-ai/flow-runner';
+import { useRemoteRunner } from '@tool-ai/remote-runner';
 import { NodeData } from '../../../nodeData';
 import { NodeDialogComponent } from '@tool-ai/ui';
 
@@ -55,6 +56,22 @@ const Dashboard = () => {
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
   // --------------------------------------     Hooks & State - Flow Runner   --------------------------------------
   const { executeFlow, outputs, states } = useFlowRunner();
+  const {
+    client : runnerClient, 
+    connect, 
+    disconnect,
+    setEnabled,
+    enabled,
+    connectionState,
+    retryCount
+  } = useRemoteRunner({
+    host: '127.0.0.1',
+    port: 3000,
+    initialReconnectDelay: 1000,
+    maxReconnectDelay: 10000,
+    retryLimit: 20
+  });
+
 
   // ------------------------------------------------     React Flow     --------------------------------------------
   // React Flow Events
@@ -137,6 +154,7 @@ const Dashboard = () => {
       flow: { nodes, edges },
       inputs,
       globals: {},
+      context: {runnerClient},
     });
   }
   return (
