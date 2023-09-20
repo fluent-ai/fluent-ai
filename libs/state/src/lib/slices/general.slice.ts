@@ -10,6 +10,12 @@ export const GENERAL_FEATURE_KEY = 'general';
 
 export interface GeneralState {
   id: string;
+  remoteRunner: {
+    enabled: boolean;
+    status: 'disconnected' | 'connecting' | 'connected' | 'error';
+    ip: string;
+    port: number;
+  };
 }
 
 export const generalAdapter = createEntityAdapter<GeneralState>();
@@ -17,6 +23,12 @@ export const generalAdapter = createEntityAdapter<GeneralState>();
 export const initialGeneralState: GeneralState = generalAdapter.getInitialState(
   {
     id: uuidv4(),
+    remoteRunner: {
+      enabled: false,
+      status: 'disconnected',
+      ip: '127.0.0.1',
+      port: 8080,
+    },
   }
 );
 
@@ -27,6 +39,21 @@ export const generalSlice = createSlice({
     setId: (state, action: PayloadAction<string>) => {
       state.id = action.payload;
     },
+    setRemoteRunnerEnabled: (state, action: PayloadAction<boolean>) => {
+      state.remoteRunner.enabled = action.payload;
+    },
+    setRemoteRunnerStatus: (
+      state,
+      action: PayloadAction<GeneralState['remoteRunner']['status']>
+    ) => {
+      state.remoteRunner.status = action.payload;
+    },
+    setRemoteRunnerIp: (state, action: PayloadAction<string>) => {
+      state.remoteRunner.ip = action.payload;
+    },
+    setRemoteRunnerPort: (state, action: PayloadAction<number>) => {
+      state.remoteRunner.port = action.payload;
+    },
   },
 });
 
@@ -36,7 +63,32 @@ export const getGeneralState = (rootState: any): GeneralState =>
   rootState[GENERAL_FEATURE_KEY];
 
 const getId = createSelector(getGeneralState, (state) => state.id);
+const getRemoteRunnerEnabled = createSelector(
+  getGeneralState,
+  (state) => state.remoteRunner.enabled
+);
+const getRemoteRunnerStatus = createSelector(
+  getGeneralState,
+  (state) => state.remoteRunner.status
+);
+const getRemoteRunnerIp = createSelector(
+  getGeneralState,
+  (state) => state.remoteRunner.ip
+);
+const getRemoteRunnerPort = createSelector(
+  getGeneralState,
+  (state) => state.remoteRunner.port
+);
+const getRemoteRunner = createSelector(
+  getGeneralState,
+  (state) => state.remoteRunner
+);
 
 export const generalSelectors = {
   getId,
+  getRemoteRunnerEnabled,
+  getRemoteRunnerStatus,
+  getRemoteRunnerIp,
+  getRemoteRunnerPort,
+  getRemoteRunner,
 };
