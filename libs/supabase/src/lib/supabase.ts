@@ -252,7 +252,13 @@ class Supabase {
     const { error } = await this.client.from('settings').upsert(
       {
         user_id,
-        settings,
+        settings: {
+          openAiUseOwnKey: settings.openAiUseOwnKey,
+          remoteRunnerEnabled: settings.remoteRunnerEnabled,
+          remoteRunnerIp: settings.remoteRunnerIp,
+          remoteRunnerPort: settings.remoteRunnerPort,
+        },
+        openai_key: settings.openAiKey,
       },
       { onConflict: 'user_id' }
     );
@@ -268,7 +274,11 @@ class Supabase {
       console.error(`Error fetching settings:`, error);
       return null;
     } else {
-      return data[0].settings as unknown as Settings;
+      const settings = {
+        ...data[0].settings,
+        openAiKey: data[0].openai_key,
+      };
+      return settings;
     }
   }
 }
