@@ -29,7 +29,11 @@ if (!cwd) {
 }
 
 // Create the WebSocket server
-const wss = new WebSocket.Server({ port: 8080 });
+const wss = new WebSocket.Server({
+  cert: fs.readFileSync('remoterunner-wss-cert.pem'),
+  key: fs.readFileSync('remoterunner-wss-key.pem'),
+  port: 8080,
+});
 
 // Event listener for new connections
 wss.on('connection', (ws) => {
