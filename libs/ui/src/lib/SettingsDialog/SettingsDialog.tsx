@@ -45,9 +45,6 @@ function SettingsDialog(props: SettingsDialogProps) {
         dispatch(
           generalActions.setRemoteRunnerPort(settings.remoteRunnerPort || 8080)
         );
-        console.log(`🍽️ settings updated to `, settings);
-      } else {
-        console.log(`🍽️ settings not found`);
       }
     });
   }, [dispatch]);

@@ -269,7 +269,6 @@ class Supabase {
 
   public async getSettings(): Promise<Settings | null> {
     const { data, error } = await this.client.from('settings').select('*');
-    console.log({ data });
     if (error) {
       console.error(`Error fetching settings:`, error);
       return null;
