@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid';
 import { CheckIcon } from '@radix-ui/react-icons';
 
 interface SwitchProps {
-  label: string;
+  label: string | JSX.Element;
   disabled?: boolean;
   checked: boolean;
   onCheckedChange: (checked: boolean) => void;

@@ -10,6 +10,8 @@ export interface SettingsDialogProps {}
 function SettingsDialog(props: SettingsDialogProps) {
   const dispatch = useDispatch();
   const remoteRunnerState = useSelector(generalSelectors.getRemoteRunner);
+  const openAiUseOwnKey = useSelector(generalSelectors.getOpenAiUseOwnKey);
+  const openAiKey = useSelector(generalSelectors.getOpenAiKey);
 
   return (
     <DialogComponent
@@ -27,12 +29,42 @@ function SettingsDialog(props: SettingsDialogProps) {
     >
       <div>
         <p>
-          <b>Remote Code Runner</b>
+          <b>OpenAI</b>
         </p>
-        <p>Enabled</p>
+        <p></p>
         <Switch
           size={'medium'}
-          label={''}
+          label={'Use your own API key?'}
+          checked={openAiUseOwnKey}
+          onCheckedChange={(value) => {
+            dispatch(generalActions.setOpenAiUseOwnKey(value));
+          }}
+        />
+        <p>
+          Allows faster direct calling via your browser instead of routing via
+          our Supabase Instance, and avoids being part of our rate limiting. The
+          key is encrypted locally and store encryted. However, if our Supabase
+          Instance is compromised, your key could be decrypted. Set limits on
+          your OpenAI account to prevent exposure and remove unused keys
+          periodically.
+        </p>
+        <p>Key</p>
+        <input
+          className={styles.TextInput}
+          placeholder={openAiKey}
+          type="text"
+          value={openAiKey}
+          onChange={(event) =>
+            dispatch(generalActions.setOpenAiKey(event.target.value))
+          }
+        />
+        <p>
+          <b>Remote Code Runner</b>
+        </p>
+
+        <Switch
+          size={'medium'}
+          label={`Enable`}
           checked={remoteRunnerState.enabled}
           onCheckedChange={(value) => {
             dispatch(generalActions.setRemoteRunnerEnabled(value));
