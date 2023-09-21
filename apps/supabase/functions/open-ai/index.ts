@@ -4,7 +4,7 @@ import { corsHeaders } from '../_shared/cors.ts';
 import { calculateTokenPrice } from '../_shared/openAiPricePerToken.ts';
 import { openAi } from '../_shared/openAI.ts';
 
-console.log(`Function "browser-with-cors" up and running!`);
+console.log(`--------------- new request ---------------`);
 
 serve(async (req) => {
   // This is needed if you're planning to invoke your function from a browser.
@@ -112,6 +112,8 @@ serve(async (req) => {
   try {
     response = await openAi(params);
   } catch (error) {
+    console.log('🤖 openAI call failed');
+    console.log(error);
     return new Response(
       JSON.stringify({ error: 'OpenAI call failed', message: error }),
       {
@@ -121,6 +123,13 @@ serve(async (req) => {
     );
   }
   console.log('🤖 response', response);
+
+  if (response?.error) {
+    return new Response(JSON.stringify({ error: error.message }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      status: 400,
+    });
+  }
 
   const cost = calculateTokenPrice(response.model, response.usage);
   console.log('🤑 cost', cost);
@@ -139,7 +148,7 @@ serve(async (req) => {
       raw: response,
     };
 
-    console.log('🚀 Returning data', reply);
+    console.log('🚀 Returning data', JSON.stringify(reply, null, 2));
     return new Response(JSON.stringify(reply), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 200,

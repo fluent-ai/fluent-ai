@@ -23,7 +23,7 @@ export const calculateTokenPrice = (model: string, usage: IUsage) => {
   let inputPrice, outputPrice;
 
   for (const baseModel in prices) {
-    if (model.startsWith(baseModel)) {
+    if (model?.startsWith(baseModel)) {
       inputPrice = prices[baseModel].input;
       outputPrice = prices[baseModel].output;
       break;
@@ -31,7 +31,7 @@ export const calculateTokenPrice = (model: string, usage: IUsage) => {
   }
 
   if (inputPrice === undefined || outputPrice === undefined) {
-    throw new Error('Unknown model');
+    throw new Error(`Unknown model ${model}`);
   }
 
   const inputCost = (usage.prompt_tokens * inputPrice) / 1000;
