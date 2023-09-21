@@ -1,17 +1,7 @@
 import { IMethodArguments } from '../useFlowRunner';
 import { v4 as uuidv4 } from 'uuid';
-import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { get as getNestedProperty } from 'lodash';
 import { useRemoteRunner } from '@tool-ai/remote-runner';
-
-function isValidJSON(jsonString: string) {
-  try {
-    JSON.parse(jsonString);
-    return true;
-  } catch (error) {
-    return false;
-  }
-}
 
 export function remoterunner({
   globals,
@@ -24,7 +14,6 @@ export function remoterunner({
       typeof useRemoteRunner
     >;
     const client = remoteRunner?.client.current;
-    console.log('🔌 remoterunner', { client });
 
     if (!client || client?.readyState !== client.OPEN) {
       reject(
@@ -33,14 +22,10 @@ export function remoterunner({
       return;
     }
     try {
-      console.log('🔌 remoterunner called', { msg, inputs });
       const id = uuidv4();
-      console.log(`call id is ${id}`);
 
       const send = (settings: Record<string, unknown>) => {
         console.log(`🔌 Sending`, { settings });
-        console.log({ client });
-
         client.send(
           JSON.stringify({
             id,

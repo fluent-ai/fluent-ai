@@ -1,8 +1,7 @@
-import { IButtonProps } from "../../types";
+import { IButtonProps } from '../../types';
 
-function ButtonComponent (props: IButtonProps) {
-
-  const primaryButton=`transition
+function ButtonComponent(props: IButtonProps) {
+  const primaryButton = `transition
   eas-in-out
   duration-150
   bg-gray-100
@@ -14,16 +13,16 @@ function ButtonComponent (props: IButtonProps) {
   h-[20px] 
   text-center`;
 
-  return(
+  return (
     <button
       type={props.type}
       aria-label={props.ariaLabel}
       className={primaryButton}
       onClick={props.clickHandler}
     >
-    {props.buttonContent}
-  </button>
+      {props.buttonContent}
+    </button>
   );
 }
 
-export {ButtonComponent};
+export { ButtonComponent };

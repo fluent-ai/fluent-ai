@@ -2,25 +2,30 @@ import React, { CSSProperties } from 'react';
 import ReduxRadioGroup from '../../../lib/ReduxRadioGroup';
 import ReduxTextInput from '../../../lib/ReduxTextInput';
 
-const CallReference = (
-  {nodeId, inputs, customStyles}
-  :
-  {
-    nodeId:string,
-    inputs:Record<string, unknown> | undefined,
-    customStyles?: CSSProperties & { '--highlight': string }
-  }) => {
-
+const CallReference = ({
+  nodeId,
+  inputs,
+  customStyles,
+}: {
+  nodeId: string;
+  inputs: Record<string, unknown> | undefined;
+  customStyles?: CSSProperties & { '--highlight': string };
+}) => {
   const referenceFunctionModes = [
-    { value:'reference-function-direct', label:'Direct' },
-    { value:'reference-function-property', label:'Via property of msg or globals' },
+    { value: 'reference-function-direct', label: 'Direct' },
+    {
+      value: 'reference-function-property',
+      label: 'Via property of msg or globals',
+    },
   ];
 
   const referenceArgsModes = [
-    { value:'reference-args-direct', label:'Direct' },
-    { value:'reference-args-property', label:'Via property of msg or globals' },
+    { value: 'reference-args-direct', label: 'Direct' },
+    {
+      value: 'reference-args-property',
+      label: 'Via property of msg or globals',
+    },
   ];
-
 
   return (
     <div title="call-reference">
@@ -33,23 +38,23 @@ const CallReference = (
         defaultValue={referenceFunctionModes[0].value}
         customStyles={customStyles}
       />
-      
-      { inputs?.referenceFunctionMode === referenceFunctionModes[0].value && 
+
+      {inputs?.referenceFunctionMode === referenceFunctionModes[0].value && (
         <ReduxTextInput
           nodeId={nodeId}
           inputs={inputs}
           placeholder="tree"
           stateKey="referenceFunctionName"
         />
-      }
-      { inputs?.referenceFunctionMode !== referenceFunctionModes[0].value &&
+      )}
+      {inputs?.referenceFunctionMode !== referenceFunctionModes[0].value && (
         <ReduxTextInput
           nodeId={nodeId}
           inputs={inputs}
           placeholder="msg.payload.function"
           stateKey="referenceFunctionPath"
         />
-      }
+      )}
 
       <ReduxRadioGroup
         nodeId={nodeId}
@@ -61,22 +66,22 @@ const CallReference = (
         customStyles={customStyles}
       />
 
-      { inputs?.referenceArgsMode === referenceArgsModes[0].value && 
+      {inputs?.referenceArgsMode === referenceArgsModes[0].value && (
         <ReduxTextInput
           nodeId={nodeId}
           inputs={inputs}
           placeholder="-P '*[^.]*'"
           stateKey="referenceArgs"
         />
-      }
-      { inputs?.referenceArgsMode !== referenceArgsModes[0].value &&
+      )}
+      {inputs?.referenceArgsMode !== referenceArgsModes[0].value && (
         <ReduxTextInput
           nodeId={nodeId}
           inputs={inputs}
           placeholder="msg.payload.args"
           stateKey="referenceArgsPath"
         />
-      }
+      )}
     </div>
   );
 };

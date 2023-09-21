@@ -1,9 +1,0 @@
-{
-  "name": "@libs/socket-server",
-  "version": "0.0.1",
-  "type": "commonjs",
-  "dependencies": {
-    "express": "^4.18.2",
-    "http": "^0.0.1-security"
-  }
-}

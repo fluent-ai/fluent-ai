@@ -10,13 +10,13 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: theme("colors.gray-dark");
-  overflow: hidden
+  color: theme('colors.gray-dark');
+  overflow: hidden;
 }
 
-.sidebar-icon svg{
+.sidebar-icon svg {
   width: 30px;
-  height: 30px
+  height: 30px;
 }
 .nodeItemSideBar svg {
   width: 20px;
@@ -29,9 +29,9 @@ body {
 }
 
 @keyframes pulse {
-	0% {
-		opacity: 0;
-	}
+  0% {
+    opacity: 0;
+  }
   100% {
     opacity: 0;
   }
