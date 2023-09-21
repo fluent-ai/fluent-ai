@@ -1,3 +1,4 @@
+//TODO: this really needs to be a hook...
 import {
   createClient,
   SupabaseClient,
@@ -25,6 +26,14 @@ interface FlowInflated extends FlowReference {
     nodeInputs: Record<string, unknown>;
   }[];
   globals: Record<string, unknown>;
+}
+
+export interface Settings {
+  openAiUseOwnKey: boolean;
+  openAiKey: string;
+  remoteRunnerEnabled: boolean;
+  remoteRunnerIp: string;
+  remoteRunnerPort: number;
 }
 
 class Supabase {
@@ -234,6 +243,32 @@ class Supabase {
     } else {
       this.flowsDeflated = this.flowsDeflated.filter((flow) => flow.id !== id);
       await this.updateFlows();
+    }
+  }
+
+  public async saveSettings(settings: Settings): Promise<void> {
+    const session = await this.getSession();
+    const user_id = session.data?.session?.user?.id;
+    const { error } = await this.client.from('settings').upsert(
+      {
+        user_id,
+        settings,
+      },
+      { onConflict: 'user_id' }
+    );
+    if (error) {
+      console.error('Error saving settings:', error);
+    }
+  }
+
+  public async getSettings(): Promise<Settings | null> {
+    const { data, error } = await this.client.from('settings').select('*');
+    console.log({ data });
+    if (error) {
+      console.error(`Error fetching settings:`, error);
+      return null;
+    } else {
+      return data[0].settings as unknown as Settings;
     }
   }
 }
