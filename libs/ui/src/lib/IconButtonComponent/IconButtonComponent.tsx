@@ -1,11 +1,10 @@
 import { forwardRef } from 'react';
-import { IButtonProps } from "../../types";
+import { IButtonProps } from '../../types';
 /* eslint-disable-next-line */
 export interface IconButtonComponentProps {}
 
-const IconButtonComponent = forwardRef((props:IButtonProps, ref) => {
-
-  const iconButton=`sidebar-icon
+const IconButtonComponent = forwardRef((props: IButtonProps, ref) => {
+  const iconButton = `sidebar-icon
     h-9
     w-9
     inline-flex
@@ -16,7 +15,7 @@ const IconButtonComponent = forwardRef((props:IButtonProps, ref) => {
     focus:outline-none
     `;
 
-  return(
+  return (
     <button
       type={props.type}
       aria-label={props.ariaLabel}
@@ -24,9 +23,9 @@ const IconButtonComponent = forwardRef((props:IButtonProps, ref) => {
       onClick={props.clickHandler}
       style={props.style}
     >
-    {props.buttonContent}
-  </button>
+      {props.buttonContent}
+    </button>
   );
-})
+});
 
-export {IconButtonComponent};
+export { IconButtonComponent };

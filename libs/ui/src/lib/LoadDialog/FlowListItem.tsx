@@ -1,21 +1,21 @@
 import { useState, useEffect, useRef } from 'react';
 import { TrashIcon, InputIcon } from '@radix-ui/react-icons';
-import {BsFolder2Open} from 'react-icons/bs'
+import { BsFolder2Open } from 'react-icons/bs';
 
 export default function FlowListItem({
-  id, 
-  flow, 
-  index, 
-  loadFlow, 
-  deleteFlow, 
-  renameFlow
+  id,
+  flow,
+  index,
+  loadFlow,
+  deleteFlow,
+  renameFlow,
 }: {
-  id: string,
-  flow: any,
-  index: number,
-  loadFlow: () => void,
-  deleteFlow: () => void,
-  renameFlow?: (id: string, name: string) => void,
+  id: string;
+  flow: any;
+  index: number;
+  loadFlow: () => void;
+  deleteFlow: () => void;
+  renameFlow?: (id: string, name: string) => void;
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [displayName, setDisplayName] = useState(flow.displayName);
@@ -26,12 +26,10 @@ export default function FlowListItem({
     displayNameRef.current = displayName;
   }, [displayName]);
 
-    // Focus on the input when the component is mounted
-    useEffect(() => {
-      if (isEditing) inputRef.current && inputRef.current.focus();
-    }, [isEditing]);
-
-
+  // Focus on the input when the component is mounted
+  useEffect(() => {
+    if (isEditing) inputRef.current && inputRef.current.focus();
+  }, [isEditing]);
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDisplayName(event.target.value);
@@ -39,26 +37,27 @@ export default function FlowListItem({
     renameFlow && renameFlow(id, event.target.value);
   };
 
-
-
   return (
-    <li className={`
+    <li
+      className={`
     border-solid border-2  rounded-md
     ${isEditing ? 'border-black' : 'border-white'}
-    ${index % 2 === 1 ? 'bg-gray-100' : ''}`}>
-      <div className='flex justify-between'>
-        <div className='flex justify-between gap-2'>
+    ${index % 2 === 1 ? 'bg-gray-100' : ''}`}
+    >
+      <div className="flex justify-between">
+        <div className="flex justify-between gap-2">
           <button
-            className='h-5'
+            className="h-5"
             type="button"
-            title='Load Flow'
+            title="Load Flow"
             onClick={loadFlow}
           >
-            <BsFolder2Open/>
+            <BsFolder2Open />
           </button>
           <div onDoubleClick={() => setIsEditing(true)}>
             {isEditing ? (
               <input
+                title="Edit Flow Name"
                 ref={inputRef}
                 value={displayName}
                 onChange={handleNameChange}
@@ -70,33 +69,31 @@ export default function FlowListItem({
                 onBlur={() => setIsEditing(false)}
               />
             ) : (
-              <div className="displayName">
-                {displayName}
-              </div>
+              <div className="displayName">{displayName}</div>
             )}
           </div>
         </div>
-        <div className='flex justify-between gap-2'>
-          {!isEditing &&
+        <div className="flex justify-between gap-2">
+          {!isEditing && (
             <button
-              className='h-5'
+              className="h-5"
               type="button"
-              title='Edit Flow'
+              title="Edit Flow"
               onClick={() => setIsEditing(true)}
             >
-              <InputIcon/>
+              <InputIcon />
             </button>
-          }
+          )}
           <button
-            className='h-5'
+            className="h-5"
             type="button"
-            title='Delete Flow'
+            title="Delete Flow"
             onClick={deleteFlow}
           >
-            <TrashIcon/>
+            <TrashIcon />
           </button>
         </div>
       </div>
     </li>
-  )
+  );
 }

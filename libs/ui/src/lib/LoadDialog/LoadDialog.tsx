@@ -1,17 +1,21 @@
 import { v4 as uuidv4 } from 'uuid';
 import { DialogComponent } from '../DialogComponent/DialogComponent';
 import { BackpackIcon } from '@radix-ui/react-icons';
-import { supabase }  from '@tool-ai/supabase';
+import { supabase } from '@tool-ai/supabase';
 import { useDispatch, useSelector } from 'react-redux';
 import { flowActions, flowSelectors, supabaseSelectors } from '@tool-ai/state';
-import { useEffect, useRef, useState, } from 'react';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../AccordionComponent/AccordionComponent';
+import { useEffect, useRef, useState } from 'react';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '../AccordionComponent/AccordionComponent';
 import FlowListItem from './FlowListItem';
 import { ConfirmLoad } from './ConfirmLoad';
 import { ConfirmDelete } from './ConfirmDelete';
-export interface LoadDialogProps {}
 
-function LoadDialog(props: LoadDialogProps) {
+function LoadDialog(props: Record<string, never>) {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [confirmLoad, setConfirmLoad] = useState('');
@@ -22,78 +26,74 @@ function LoadDialog(props: LoadDialogProps) {
   const currentFlow = useSelector(flowSelectors.getFlow);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // const 
+  // const
   useEffect(() => {
     if (open) {
       supabase.updateFlows().then(() => {
-        setFlows(supabase.getFlows('flows'))
-        setExamples(supabase.getFlows('examples'))
-      })
+        setFlows(supabase.getFlows('flows'));
+        setExamples(supabase.getFlows('examples'));
+      });
     }
   }, [open]);
-
 
   const isFlowChanged = async () => {
     return await supabase.isFlowChanged({
       id: currentFlow.id,
-      userId:userId || '',
+      userId: userId || '',
       displayName: currentFlow.displayName,
-      flow: currentFlow
-    })
-  }
+      flow: currentFlow,
+    });
+  };
 
-  const loadFlow = async (id:string) => {
+  const loadFlow = async (id: string) => {
     const flowData = supabase.getFlow(id);
     if (!flowData) {
-    return;
+      return;
     }
     console.log('loadFlow', flowData);
     dispatch(flowActions.setFlow(flowData));
-  }
-  
+  };
 
-  const renameFlow = (id:string, name:string) => {
+  const renameFlow = (id: string, name: string) => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
     timeoutRef.current = setTimeout(() => {
       supabase.renameFlow(id, name).then(() => {
-        const updatedFlows = flows.map(flow => 
+        const updatedFlows = flows.map((flow) =>
           flow.id === id ? { ...flow, displayName: name } : flow
         );
-      setFlows(updatedFlows);
+        setFlows(updatedFlows);
       });
-    }, 1000)
-  }
+    }, 1000);
+  };
 
-  const deleteFlow = (id:string) => {
-    supabase.deleteFlow(id)
-    .then(() => {
-      setFlows(supabase.getFlows())
-    })
-  }
-      
+  const deleteFlow = (id: string) => {
+    supabase.deleteFlow(id).then(() => {
+      setFlows(supabase.getFlows());
+    });
+  };
 
   const newFlow = () => {
     dispatch(flowActions.newFlow());
-  }
+  };
 
   const saveFlow = () => {
     if (!userId) {
       return;
     }
     console.log('saveFlow', currentFlow);
-    supabase.saveFlow({
-      id: currentFlow.id,
-      userId,
-      displayName: currentFlow.displayName,
-      flow: currentFlow
+    supabase
+      .saveFlow({
+        id: currentFlow.id,
+        userId,
+        displayName: currentFlow.displayName,
+        flow: currentFlow,
       })
       .then(() => {
-        setFlows(supabase.getFlows())
-      })
-  }
-
+        setFlows(supabase.getFlows());
+      });
+  };
 
   return (
     <>
@@ -103,7 +103,7 @@ function LoadDialog(props: LoadDialogProps) {
           setConfirmLoad('');
         }}
         onConfirm={() => {
-          loadFlow(confirmLoad)
+          loadFlow(confirmLoad);
           setConfirmLoad('');
         }}
         onCancel={() => {
@@ -111,81 +111,79 @@ function LoadDialog(props: LoadDialogProps) {
         }}
       />
       <ConfirmDelete
-          open={confirmDelete !== ''}
-          onOpenChange={(value) => {
-            setConfirmDelete('');
-          }}
-          onConfirm={() => {
-            deleteFlow(confirmDelete)
-            setConfirmDelete('');
-          }}
-          onCancel={() => {
-            setConfirmDelete('');
-          }}
-        />
+        open={confirmDelete !== ''}
+        onOpenChange={(value) => {
+          setConfirmDelete('');
+        }}
+        onConfirm={() => {
+          deleteFlow(confirmDelete);
+          setConfirmDelete('');
+        }}
+        onCancel={() => {
+          setConfirmDelete('');
+        }}
+      />
       <DialogComponent
-      onOpenChange={setOpen}
-      trigger={
-        <div className='flex gap-x-3'>
-          <div className='sidebar-icon w-[30px] h-[30px]'>
-            <BackpackIcon />
+        onOpenChange={setOpen}
+        trigger={
+          <div className="flex gap-x-3">
+            <div className="sidebar-icon w-[30px] h-[30px]">
+              <BackpackIcon />
+            </div>
+            <p className="w-100" aria-label="Flow Storage">
+              Flows
+            </p>
           </div>
-          <p className='w-100' aria-label="Flow Storage" >Flows</p>
-        </div>
-      }
-      title="Flows"
+        }
+        title="Flows"
       >
         <div>
-        <Accordion type="single" collapsible className="w-full" defaultValue='my-flows'>
-            <AccordionItem  value="my-flows">
+          <Accordion
+            type="single"
+            collapsible
+            className="w-full"
+            defaultValue="my-flows"
+          >
+            <AccordionItem value="my-flows">
               <AccordionTrigger>My Flows</AccordionTrigger>
               <AccordionContent>
-                <ul className='[&>*:nth-child(odd)]:bg-grey-50'>
-                {flows.map((flow, index) => {
-                  return (
-                    <FlowListItem
-                      key={flow.id}
-                      id={flow.id}
-                      index={index}
-                      flow={flow}
-                      loadFlow={async () => {
-                        if (await isFlowChanged()) {
-                        setConfirmLoad(flow.id)
-                        } else {
-                        loadFlow(flow.id)
-                        }
-                      }}
-                      deleteFlow={() => setConfirmDelete(flow.id)}
-                    renameFlow={renameFlow}
-                    />
-                    
-                  );
-                })}
+                <ul className="[&>*:nth-child(odd)]:bg-grey-50">
+                  {flows.map((flow, index) => {
+                    return (
+                      <FlowListItem
+                        key={flow.id}
+                        id={flow.id}
+                        index={index}
+                        flow={flow}
+                        loadFlow={async () => {
+                          if (await isFlowChanged()) {
+                            setConfirmLoad(flow.id);
+                          } else {
+                            loadFlow(flow.id);
+                          }
+                        }}
+                        deleteFlow={() => setConfirmDelete(flow.id)}
+                        renameFlow={renameFlow}
+                      />
+                    );
+                  })}
                   <li>
-                    <button
-                        className='h-5'
-                        type="button"
-                        onClick={saveFlow}
-                      >
+                    <button className="h-5" type="button" onClick={saveFlow}>
                       Save
-                      </button>
+                    </button>
                   </li>
-                <li>
-                  <button
-                      className='h-5'
-                      type="button"
-                      onClick={newFlow}
-                    >
+                  <li>
+                    <button className="h-5" type="button" onClick={newFlow}>
                       New Blank Flow
                     </button>
-                </li>
+                  </li>
                 </ul>
               </AccordionContent>
             </AccordionItem>
-            <AccordionItem  value="example-flows">
+            <AccordionItem value="example-flows">
               <AccordionTrigger>Example Flows</AccordionTrigger>
               <AccordionContent>
-                <ul className='[&>*:nth-child(odd)]:bg-grey-50'>
+                <ul className="[&>*:nth-child(odd)]:bg-grey-50">
                   {examples.map((flow, index) => {
                     return (
                       <FlowListItem
@@ -196,17 +194,16 @@ function LoadDialog(props: LoadDialogProps) {
                         loadFlow={() => {
                           const flowData = supabase.getFlow(flow.id);
                           if (!flowData) {
-                          return;
+                            return;
                           }
-                          flowData.id = uuidv4()
+                          flowData.id = uuidv4();
                           dispatch(flowActions.setFlow(flowData));
                         }}
                         deleteFlow={() => {
-                          supabase.deleteFlow(flow.id)
-                          .then(() => {
-                          setFlows(supabase.getFlows())
-                          })
-                      }}
+                          supabase.deleteFlow(flow.id).then(() => {
+                            setFlows(supabase.getFlows());
+                          });
+                        }}
                       />
                     );
                   })}
@@ -214,11 +211,10 @@ function LoadDialog(props: LoadDialogProps) {
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-        
-      </div>
-    </DialogComponent>
-  </>
+        </div>
+      </DialogComponent>
+    </>
   );
 }
 
-export {LoadDialog};
+export { LoadDialog };

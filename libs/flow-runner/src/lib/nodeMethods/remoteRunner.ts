@@ -1,17 +1,7 @@
 import { IMethodArguments } from '../useFlowRunner';
 import { v4 as uuidv4 } from 'uuid';
-import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { get as getNestedProperty } from 'lodash';
 import { useRemoteRunner } from '@tool-ai/remote-runner';
-
-function isValidJSON(jsonString: string) {
-  try {
-    JSON.parse(jsonString);
-    return true;
-  } catch (error) {
-    return false;
-  }
-}
 
 export function remoterunner({
   globals,

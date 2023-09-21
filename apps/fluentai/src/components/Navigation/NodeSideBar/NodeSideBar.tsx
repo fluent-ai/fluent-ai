@@ -1,9 +1,6 @@
 import React from 'react';
 import NodeItemSideBar from '../NodeItemSideBar/NodeItemSideBar';
-import {
-  PlayIcon,
-  LapTimerIcon,
-} from '@radix-ui/react-icons';
+import { PlayIcon, LapTimerIcon } from '@radix-ui/react-icons';
 import { SettingsDialog, LoadDialog } from '@tool-ai/ui';
 
 import { NodeData } from '../../../nodeData';

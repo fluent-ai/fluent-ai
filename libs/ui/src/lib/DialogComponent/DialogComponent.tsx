@@ -5,7 +5,7 @@ export interface DialogComponentProps {
   trigger?: JSX.Element;
   open?: boolean;
   title: string;
-  description?: string
+  description?: string;
   children: JSX.Element;
   closeButton?: JSX.Element;
   onOpenChange?: (open: boolean) => void;
@@ -14,16 +14,17 @@ export interface DialogComponentProps {
 
 function DialogComponent(props: DialogComponentProps) {
   return (
-    <Dialog.Root
-      open={props.open}
-      onOpenChange={props.onOpenChange}
-    >
-      { props.trigger && <Dialog.Trigger asChild>
-        {props.trigger}
-      </Dialog.Trigger> }
+    <Dialog.Root open={props.open} onOpenChange={props.onOpenChange}>
+      {props.trigger && (
+        <Dialog.Trigger asChild>{props.trigger}</Dialog.Trigger>
+      )}
       <Dialog.Portal>
         <Dialog.Overlay className="bg-gray-600 bg-opacity-40 data-[state=open]:animate-overlayShow absolute z-30 inset-0 " />
-        <Dialog.Content className={`bg-white ${props.width ? `w-[${props.width}]` : 'w-[50vw]'} max-w-[500px] rounded-md shadow-lg fixed z-30 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]   max-h-85vh px-6 py-6`}>
+        <Dialog.Content
+          className={`bg-white ${
+            props.width ? `w-[${props.width}]` : 'w-[50vw]'
+          } max-w-[500px] rounded-md shadow-lg fixed z-30 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]   max-h-85vh px-6 py-6`}
+        >
           <Dialog.Title className="text-black m-0 text-[17px] font-medium">
             {props.title}
           </Dialog.Title>
@@ -33,9 +34,7 @@ function DialogComponent(props: DialogComponentProps) {
           <div>
             {props.children}
 
-            <Dialog.Close asChild>
-              {props.closeButton}
-            </Dialog.Close>
+            <Dialog.Close asChild>{props.closeButton}</Dialog.Close>
           </div>
           <Dialog.Close asChild>
             <button
@@ -49,7 +48,6 @@ function DialogComponent(props: DialogComponentProps) {
       </Dialog.Portal>
     </Dialog.Root>
   );
-
 }
 
-export {DialogComponent};
+export { DialogComponent };

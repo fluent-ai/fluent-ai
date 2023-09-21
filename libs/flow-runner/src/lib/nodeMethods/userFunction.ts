@@ -23,6 +23,7 @@ async function runUserScript(
 
   let scriptFunction;
   try {
+    // eslint-disable-next-line no-new-func -- explicitly allowing user code to be run, so this is fine
     scriptFunction = new Function(
       'globals',
       'msg',
