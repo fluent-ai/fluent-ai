@@ -20,6 +20,7 @@ import {
   flowRunnerActions,
   flowActions,
   flowSelectors,
+  generalSelectors,
 } from '@tool-ai/state';
 import { useFlowRunner } from '@tool-ai/flow-runner';
 import { useRemoteRunner } from '@tool-ai/remote-runner';
@@ -56,21 +57,20 @@ const Dashboard = () => {
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
   // --------------------------------------     Hooks & State - Flow Runner   --------------------------------------
   const { executeFlow, outputs, states } = useFlowRunner();
-  const {
-    client : runnerClient, 
-    connect, 
-    disconnect,
-    setEnabled,
-    enabled,
-    connectionState,
-    retryCount
-  } = useRemoteRunner({
+  // --------------------------------------     Hooks & State - Remote Code Runner   --------------------------------------
+  const remoteRunnerEnabled = useSelector(generalSelectors.getRemoteRunnerEnabled)
+  const remoteRunner = useRemoteRunner({
     host: '127.0.0.1',
-    port: 3000,
+    port: 8080,
     initialReconnectDelay: 1000,
     maxReconnectDelay: 10000,
     retryLimit: 20
   });
+  useEffect(() => {
+    console.log(`Setting remoteRunnerEnabled to ${remoteRunnerEnabled}`);
+    remoteRunner.setEnabled(remoteRunnerEnabled)
+  }, [remoteRunner, remoteRunnerEnabled])
+
 
 
   // ------------------------------------------------     React Flow     --------------------------------------------
@@ -154,7 +154,7 @@ const Dashboard = () => {
       flow: { nodes, edges },
       inputs,
       globals: {},
-      context: {runnerClient},
+      context: {remoteRunner},
     });
   }
   return (

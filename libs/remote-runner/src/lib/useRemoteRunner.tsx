@@ -36,34 +36,24 @@ export const useRemoteRunner = ({
   const client = useRef<W3CWebSocket | null>(null);
 
   const connect = useCallback(() => {
-    console.log('🔌 Connecting to WebSocket Server...');
     setConnectionState({status: "disconnected", error: null});
     client.current = new W3CWebSocket(url);
 
     client.current.onopen = () => {
       setConnectionState({status: "connected", error: null});
-      setRetryCount(0);
       console.log('🔌 WebSocket Client Connected');
     };
 
     client.current.onclose = () => {
       setConnectionState({status: "disconnected", error: null});
-      if (retryCount < retryLimit) {
-        console.log('🔌 WebSocket Connection Closed. Reconnecting...');
-        setTimeout(connect, reconnectDelay);
-        setReconnectDelay(Math.min(maxReconnectDelay, reconnectDelay + initialReconnectDelay));
-        setRetryCount(retryCount + 1);
-        console.log(`🔌 Reconnect in ${reconnectDelay / 1000}s`);
-      } else {
-        console.log('🔌 Retry Limit Reached. Not Reconnecting');
-      }
+      console.log('🔌 WebSocket Connection Closed.');
     };
 
     client.current.onerror = (error: WebSocketError) => {
       setConnectionState({status: "error", error});
       console.log('🔌 WebSocket Error: ', error);
     };
-  }, [url, reconnectDelay, initialReconnectDelay, maxReconnectDelay, retryCount, retryLimit]);
+  }, [url]);
 
   const disconnect = useCallback(() => {
     if (client.current) {

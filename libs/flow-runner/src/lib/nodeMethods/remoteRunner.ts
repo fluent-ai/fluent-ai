@@ -2,6 +2,7 @@ import { IMethodArguments } from '../useFlowRunner';
 import { v4 as uuidv4 } from 'uuid';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { get as getNestedProperty } from 'lodash';
+import { useRemoteRunner } from '@tool-ai/remote-runner';
 
 function isValidJSON(jsonString: string) {
   try {
@@ -12,18 +13,23 @@ function isValidJSON(jsonString: string) {
   }
 }
 
-
 export function remoterunner({
   globals,
   inputs,
   msg,
-  context
-  
+  context,
 }: IMethodArguments): Promise<Record<string, unknown>> {
   return new Promise((resolve, reject) => {
-    const client = context?.runnerClient as W3CWebSocket;
-    if (!client) {
-      reject(`🔌🚨 invalid client`);
+    const remoteRunner = context?.remoteRunner as ReturnType<
+      typeof useRemoteRunner
+    >;
+    const client = remoteRunner?.client.current;
+    console.log('🔌 remoterunner', { client });
+
+    if (!client || client?.readyState !== client.OPEN) {
+      reject(
+        `🔌🚨 client not connected.\nConnect to a remote runner via settings`
+      );
       return;
     }
     try {
@@ -33,6 +39,8 @@ export function remoterunner({
 
       const send = (settings: Record<string, unknown>) => {
         console.log(`🔌 Sending`, { settings });
+        console.log({ client });
+
         client.send(
           JSON.stringify({
             id,
