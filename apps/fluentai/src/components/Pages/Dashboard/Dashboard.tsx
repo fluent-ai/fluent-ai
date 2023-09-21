@@ -21,6 +21,7 @@ import {
   flowActions,
   flowSelectors,
   generalSelectors,
+  generalActions,
 } from '@tool-ai/state';
 import { useFlowRunner } from '@tool-ai/flow-runner';
 import { useRemoteRunner } from '@tool-ai/remote-runner';
@@ -59,6 +60,9 @@ const Dashboard = () => {
   const { executeFlow, outputs, states } = useFlowRunner();
   // --------------------------------------     Hooks & State - Remote Code Runner   --------------------------------------
   const remoteRunnerEnabled = useSelector(generalSelectors.getRemoteRunnerEnabled)
+  const remoteRunnerConnectionState = useSelector(generalSelectors.getRemoteRunnerStatus)
+  const remoteRunnerIp = useSelector(generalSelectors.getRemoteRunnerIp)
+  const remoteRunnerPort = useSelector(generalSelectors.getRemoteRunnerPort)
   const remoteRunner = useRemoteRunner({
     host: '127.0.0.1',
     port: 8080,
@@ -67,9 +71,13 @@ const Dashboard = () => {
     retryLimit: 20
   });
   useEffect(() => {
-    console.log(`Setting remoteRunnerEnabled to ${remoteRunnerEnabled}`);
+    remoteRunner.setUrl(`ws://${remoteRunnerIp}:${remoteRunnerPort}`)
     remoteRunner.setEnabled(remoteRunnerEnabled)
-  }, [remoteRunner, remoteRunnerEnabled])
+  }, [remoteRunner, remoteRunnerEnabled, remoteRunnerIp, remoteRunnerPort])
+  useEffect(() => {
+    dispatch(generalActions.setRemoteRunnerStatus(remoteRunner.connectionState.status))
+  }
+  , [remoteRunner, dispatch, remoteRunnerConnectionState])
 
 
 
