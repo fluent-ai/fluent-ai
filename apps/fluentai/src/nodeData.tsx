@@ -75,8 +75,8 @@ export const NodeData: NodeItemData[] = [
       group: 'group-process',
       icon:<GiChoice />},
     {
-      type: 'localhost',
-      label:'Localhost',
+      type: 'remoterunner',
+      label:'Remote Runner',
       group: 'group-process',
       icon:<PiPlugs />},
     {

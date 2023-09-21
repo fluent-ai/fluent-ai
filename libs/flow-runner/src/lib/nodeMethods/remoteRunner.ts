@@ -1,7 +1,8 @@
 import { IMethodArguments } from '../useFlowRunner';
-import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { v4 as uuidv4 } from 'uuid';
+import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { get as getNestedProperty } from 'lodash';
+import { useRemoteRunner } from '@tool-ai/remote-runner';
 
 function isValidJSON(jsonString: string) {
   try {
@@ -12,43 +13,34 @@ function isValidJSON(jsonString: string) {
   }
 }
 
-let client: W3CWebSocket;
-let reconnectTime = 1000;
-
-const connect = () => {
-  client = new W3CWebSocket('ws://127.0.0.1:8080');
-
-  client.onopen = () => {
-    console.log('🔌 WebSocket Client Connected');
-  };
-
-  client.onclose = () => {
-    console.log('🔌 WebSocket Connection Closed. Reconnecting...');
-    setTimeout(connect, reconnectTime);
-    reconnectTime = Math.min(5000, reconnectTime + 1000);
-    console.log(`🔌 Reconnect in ${reconnectTime / 1000}s`);
-  };
-
-  client.onerror = (error) => {
-    console.log('🔌 WebSocket Error: ', error);
-  };
-};
-
-connect();
-
-export function localhost({
+export function remoterunner({
   globals,
   inputs,
   msg,
+  context,
 }: IMethodArguments): Promise<Record<string, unknown>> {
   return new Promise((resolve, reject) => {
+    const remoteRunner = context?.remoteRunner as ReturnType<
+      typeof useRemoteRunner
+    >;
+    const client = remoteRunner?.client.current;
+    console.log('🔌 remoterunner', { client });
+
+    if (!client || client?.readyState !== client.OPEN) {
+      reject(
+        `🔌🚨 client not connected.\nConnect to a remote runner via settings`
+      );
+      return;
+    }
     try {
-      console.log('🔌 localhost called', { msg, inputs });
+      console.log('🔌 remoterunner called', { msg, inputs });
       const id = uuidv4();
       console.log(`call id is ${id}`);
 
       const send = (settings: Record<string, unknown>) => {
         console.log(`🔌 Sending`, { settings });
+        console.log({ client });
+
         client.send(
           JSON.stringify({
             id,
@@ -153,7 +145,7 @@ export function localhost({
 
       client.onmessage = (message) => {
         const data = JSON.parse(message.data as string);
-        console.log('🔌 localhost received', { data });
+        console.log('🔌 remoterunner received', { data });
         if (data.id === id) {
           if (data?.error) {
             reject(data.error);
@@ -168,7 +160,7 @@ export function localhost({
     } catch (error) {
       resolve({
         ...msg,
-        error: `localhost failed with error : ${error}`,
+        error: `remoterunner failed with error : ${error}`,
       });
     }
   });

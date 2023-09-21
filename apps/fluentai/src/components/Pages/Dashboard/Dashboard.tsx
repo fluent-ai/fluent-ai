@@ -20,8 +20,11 @@ import {
   flowRunnerActions,
   flowActions,
   flowSelectors,
+  generalSelectors,
+  generalActions,
 } from '@tool-ai/state';
 import { useFlowRunner } from '@tool-ai/flow-runner';
+import { useRemoteRunner } from '@tool-ai/remote-runner';
 import { NodeData } from '../../../nodeData';
 import { NodeDialogComponent } from '@tool-ai/ui';
 
@@ -38,7 +41,7 @@ const nodeTypes = {
   dalleGeneration: TemplateNode,
   dalleVariation: TemplateNode,
   download: TemplateNode,
-  localhost: TemplateNode,
+  remoterunner: TemplateNode,
 };
 
 
@@ -55,6 +58,28 @@ const Dashboard = () => {
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
   // --------------------------------------     Hooks & State - Flow Runner   --------------------------------------
   const { executeFlow, outputs, states } = useFlowRunner();
+  // --------------------------------------     Hooks & State - Remote Code Runner   --------------------------------------
+  const remoteRunnerEnabled = useSelector(generalSelectors.getRemoteRunnerEnabled)
+  const remoteRunnerConnectionState = useSelector(generalSelectors.getRemoteRunnerStatus)
+  const remoteRunnerIp = useSelector(generalSelectors.getRemoteRunnerIp)
+  const remoteRunnerPort = useSelector(generalSelectors.getRemoteRunnerPort)
+  const remoteRunner = useRemoteRunner({
+    host: '127.0.0.1',
+    port: 8080,
+    initialReconnectDelay: 1000,
+    maxReconnectDelay: 10000,
+    retryLimit: 20
+  });
+  useEffect(() => {
+    remoteRunner.setUrl(`ws://${remoteRunnerIp}:${remoteRunnerPort}`)
+    remoteRunner.setEnabled(remoteRunnerEnabled)
+  }, [remoteRunner, remoteRunnerEnabled, remoteRunnerIp, remoteRunnerPort])
+  useEffect(() => {
+    dispatch(generalActions.setRemoteRunnerStatus(remoteRunner.connectionState.status))
+  }
+  , [remoteRunner, dispatch, remoteRunnerConnectionState])
+
+
 
   // ------------------------------------------------     React Flow     --------------------------------------------
   // React Flow Events
@@ -137,6 +162,7 @@ const Dashboard = () => {
       flow: { nodes, edges },
       inputs,
       globals: {},
+      context: {remoteRunner},
     });
   }
   return (

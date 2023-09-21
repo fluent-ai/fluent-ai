@@ -8,7 +8,7 @@ import ReduxTextInput from "../../lib/ReduxTextInput";
 import ReduxRadioGroup from "../../lib/ReduxRadioGroup";
 import styles from '../../styles.module.css';
 
-function LocalhostDialog({nodeId}:{nodeId:string}){
+function RemoteRunnerDialog({nodeId}:{nodeId:string}){
   const dispatch = useDispatch();
   const inputs = useSelector(flowSelectors.getInputsById(nodeId));
   const state  = useSelector(flowRunnerSelectors.selectState(nodeId));
@@ -44,7 +44,7 @@ function LocalhostDialog({nodeId}:{nodeId:string}){
   return (
     <InnerDialogStructure
       title="Local Host"
-      description="LocalHost Bridge test"
+      description="RemoteRunner Bridge test"
     >
       <div title="Settings">
       {state?.state?.status as string === 'error' &&
@@ -73,7 +73,7 @@ function LocalhostDialog({nodeId}:{nodeId:string}){
         <ReduxTextInput
           nodeId={nodeId}
           inputs={inputs ?? {}}
-          placeholder="Localhost"
+          placeholder="RemoteRunner"
           stateKey="title"
         />
       </div>
@@ -81,4 +81,4 @@ function LocalhostDialog({nodeId}:{nodeId:string}){
   );
 }
 
-export {LocalhostDialog};
+export {RemoteRunnerDialog};

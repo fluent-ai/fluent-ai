@@ -33,6 +33,7 @@ export interface IMethodArguments<TInputs = Record<string, unknown>> {
   globals?: Record<string, unknown>;
   inputs?: TInputs;
   msg: Record<string, unknown>;
+  context?: Record<string, unknown>;
 }
 
 
@@ -40,6 +41,16 @@ export interface IExecuteFlowArguments {
   flow: IFlow;
   inputs: IFlowRunnerInputs[];
   globals: Record<string, unknown>;
+  context: Record<string, unknown>;
+}
+
+export interface IExecuteBranchArguments {
+  flow: IFlow;
+  inputs: IFlowRunnerInputs[];
+  globals: Record<string, unknown>;
+  context: Record<string, unknown>;
+  msg: Record<string, unknown>;
+  nodeId: string;
 }
 
 interface IExecuteNodeArguments {
@@ -49,6 +60,7 @@ interface IExecuteNodeArguments {
   globals: Record<string, unknown>;
   inputs: IFlowRunnerInputs[];
   msg: Record<string, unknown>;
+  context: Record<string, unknown>;
 }
 
 // structuredClone pollyfill for Jest
@@ -66,6 +78,7 @@ const isRootNode = (edges: Edge[] | undefined, nodeId:string): boolean => {
 
 export const useFlowRunner = (): {
   executeFlow: ({flow, inputs, globals} :IExecuteFlowArguments) => Promise<void>
+  executeBranch: ({flow, inputs, globals, msg, nodeId} :IExecuteBranchArguments) => Promise<void>
   outputs: IFlowRunnerOutputs[]
   states: IFlowRunnerStates[]
 } => {
@@ -118,10 +131,11 @@ export const useFlowRunner = (): {
       msg: inputMsg,
       inputs,
       globals,
+      context
     } : IExecuteNodeArguments ) => {
     return new Promise((resolve) => {
       // look up the node method
-      let method;
+      let method: ((args: IMethodArguments) => Promise<Record<string, unknown>>) | undefined;
       try {
         method = nodeMethods[node.type as keyof typeof nodeMethods]
       } catch (error) {
@@ -139,6 +153,7 @@ export const useFlowRunner = (): {
           globals,
           inputs: inputs.find((input) => input.id === node.id)?.nodeInputs || {},
           msg: structuredClone(inputMsg),
+          context
         }).then((msg) => {
           // save the output    
           setOutputs((prevOutputs) => [
@@ -168,7 +183,11 @@ export const useFlowRunner = (): {
           relationships.find((nodeChildren) => nodeChildren.id === node.id)?.nodeChildren.forEach((childId) => {
             const childNode = findNode(flow?.nodes, childId)
             if (childNode) {
-              childPromises.push(executeNode({flow, relationships, node:childNode, globals, inputs,msg}))
+              if (childNode.type === 'runner' ) {
+                console.log(`🌊🪝 ${childId} is a runner, pausing for manual continue`)
+              } else {
+                childPromises.push(executeNode({flow, relationships, node:childNode, globals, inputs,msg, context}))
+              }
             } else {
               console.warn(`🌊🪝🚨 Node ${childId} not found`)
             }
@@ -200,7 +219,7 @@ export const useFlowRunner = (): {
   /**
    * Execute the flow.
    */
-  const executeFlow = async ({flow, inputs, globals} :IExecuteFlowArguments) => {
+  const executeFlow = async ({flow, inputs, globals, context} :IExecuteFlowArguments) => {
     console.log(`🌊🪝 executing flow with inputs:`, {inputs});
     
     const relationships = buildRelationships(flow)
@@ -208,13 +227,25 @@ export const useFlowRunner = (): {
     const rootNodes = flow?.nodes.filter((node) => isRootNode(flow?.edges, node.id))
     // Start the execution by triggering executeNode on each root
     if (rootNodes) {
-      const promises = rootNodes.map((rootNode) => executeNode({flow, relationships, node:rootNode, globals, inputs,msg:{}}));
+      const promises = rootNodes.map((rootNode) => executeNode({flow, relationships, node:rootNode, globals, inputs,msg:{}, context}));
       await Promise.allSettled(promises);
+    }
+  }
+
+  const executeBranch = async ({flow, inputs, globals, msg, nodeId, context} :IExecuteBranchArguments) => {
+    console.log(`🌊🪝 executing branch from node `, {nodeId});
+
+    const relationships = buildRelationships(flow)
+
+    const node = findNode(flow?.nodes, nodeId)
+    if (node) {
+      await executeNode({flow, relationships, node, globals, inputs, msg, context})
     }
   }
 
   return {
     executeFlow,
+    executeBranch,
     outputs,
     states,
   }
