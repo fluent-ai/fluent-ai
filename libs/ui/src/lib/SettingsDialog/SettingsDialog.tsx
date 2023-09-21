@@ -14,6 +14,7 @@ function SettingsDialog(props: SettingsDialogProps) {
   const remoteRunnerState = useSelector(generalSelectors.getRemoteRunner);
   const openAiUseOwnKey = useSelector(generalSelectors.getOpenAiUseOwnKey);
   const openAiKey = useSelector(generalSelectors.getOpenAiKey);
+  const [showKey, setShowKey] = useState(false);
 
   const [settings, setSettings] = useState({
     openAiUseOwnKey: false,
@@ -83,9 +84,11 @@ function SettingsDialog(props: SettingsDialogProps) {
           }}
         />
         <p>
-          Allows faster direct calling via your browser instead of routing via
-          our Supabase Instance, and avoids being part of our rate limiting. The
-          key is encrypted locally and stored encrypted. However, if our
+          Generate a API key in your OpenAI account{' '}
+          <u>
+            <a href="https://platform.openai.com/account/api-keys">here</a>
+          </u>
+          . Your key is stored in an encrypted Supabase column. However, if our
           Supabase Instance is compromised, your key could be decrypted. Set
           limits on your OpenAI account to prevent exposure and remove unused
           keys periodically.
@@ -94,7 +97,11 @@ function SettingsDialog(props: SettingsDialogProps) {
         <input
           className={styles.TextInput}
           placeholder={openAiKey}
-          type="text"
+          type={showKey ? 'text' : 'password'}
+          onMouseEnter={() => setShowKey(true)}
+          onMouseLeave={() => setShowKey(false)}
+          onFocus={() => setShowKey(true)}
+          onBlur={() => setShowKey(false)}
           value={openAiKey}
           onChange={(event) => {
             dispatch(generalActions.setOpenAiKey(event.target.value));
