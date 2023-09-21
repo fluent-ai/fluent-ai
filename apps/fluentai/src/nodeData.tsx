@@ -37,11 +37,6 @@ export const groups = [
     label: 'open AI',
     color: "#ffd866"
   },
-  {
-    id: 'group-deepl',
-    label: 'Deepl',
-    color: "#ab9df2"
-  }
 ]
 export const NodeData: NodeItemData[] = [
     {
@@ -86,33 +81,9 @@ export const NodeData: NodeItemData[] = [
       icon:<SiOpenai />
     },
     {
-      type: 'dalleVariation',
-      label:'Dall.e Variations',
-      group: 'group-openai',
-      icon:<IoImagesOutline />
-    },
-    {
-      type: 'dalleGeneration',
-      label:'Dall.e Generation',
-      group: 'group-openai',
-      icon:<IoImageOutline />
-    },
-    {
-      type: 'deepl',
-      label:'DeepL',
-      group: 'group-deepl',
-      icon:<BsTranslate />
-    },
-    {
       type: 'preview',
       label:'Preview',
       group: 'group-outputs',
       icon:<BsEye />
-    },
-    {
-      type: 'download',
-      label:'Download',
-      group: 'group-outputs',
-      icon:<BsDownload />
     },
   ]

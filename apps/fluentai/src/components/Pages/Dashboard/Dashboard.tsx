@@ -45,7 +45,6 @@ const nodeTypes = {
 };
 
 
-
 const Dashboard = () => {
   const dispatch = useDispatch();
   // --------------------------------------     Hooks & State - React Flow    --------------------------------------
@@ -78,7 +77,6 @@ const Dashboard = () => {
     dispatch(generalActions.setRemoteRunnerStatus(remoteRunner.connectionState.status))
   }
   , [remoteRunner, dispatch, remoteRunnerConnectionState])
-
 
 
   // ------------------------------------------------     React Flow     --------------------------------------------
