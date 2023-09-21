@@ -14,3 +14,16 @@
     outline: 1px solid black;
     width: 60%;
 }
+
+.Spacer {
+    height: 5px
+}
+
+.Error {
+    color: red;
+    margin: 0;
+    padding: 10px;
+    margin: 10px 10px 10px 0;
+    border: red 1px solid;
+    border-radius: 4px;
+}

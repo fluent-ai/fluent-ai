@@ -61,14 +61,12 @@ export const flowRunnerSlice = createSlice({
         { id: string; nodeInputs: Record<string, unknown> }[]
       >
     ) => {
-      console.log('setting inputs', action.payload);
       state.inputs = action.payload;
     },
     setInput: (
       state,
       action: PayloadAction<{ id: string; nodeInputs: Record<string, unknown> }>
     ) => {
-      console.log('setting input', action.payload);
 
       // if the input exists, update it, otherwise add it
       const input = state.inputs.find(

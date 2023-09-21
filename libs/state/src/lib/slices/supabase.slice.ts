@@ -7,7 +7,6 @@ import {
   EntityState,
   PayloadAction,
 } from '@reduxjs/toolkit';
-import { log } from 'console';
 
 export const SUPABASE_FEATURE_KEY = 'supabase';
 

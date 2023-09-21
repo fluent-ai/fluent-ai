@@ -23,17 +23,17 @@ async function runUserScript(
 
   let scriptFunction;
   try {
+    // eslint-disable-next-line no-new-func -- explicitly allowing user code to be run, so this is fine
     scriptFunction = new Function(
       'globals',
       'msg',
       `return (async function(){ ${userScript} })();`
     );
   } catch (error) {
-    console.log('🚨 Error parsing user script', error);
     return { error: 'Error parsing user script\n' + error };
   }
 
-  let result;
+  let response = {};
 
   try {
     // Save original handler
@@ -44,11 +44,10 @@ async function runUserScript(
       // Prevent the default handler from running
       event.preventDefault();
       // Now, we can handle it:
-      console.log('🚨 Unhandled promise rejection', event.reason);
-      result = { error: 'Error running user script\n' + event.reason };
+      response = { error: 'Error running user script\n' + event.reason };
     };
 
-    result = await Promise.resolve(
+    response = await Promise.resolve(
       scriptFunction(context.globals, context.msg)
     ).catch((error) => {
       throw error;
@@ -57,10 +56,9 @@ async function runUserScript(
     // Restore the original handler
     window.onunhandledrejection = originalHandler;
   } catch (error) {
-    console.log('🚨 Error running user script', error);
     return { error: 'Error running user script\n' + error };
   }
-  return result;
+  return { response };
 }
 
 export function userFunction({
@@ -71,15 +69,18 @@ export function userFunction({
   return new Promise((resolve, reject) => {
     if (typeof inputs?.userFunction === 'string') {
       runUserScript(inputs?.userFunction, { globals, msg }).then((result) => {
-        if (result) {
-          resolve({ ...msg, ...result });
+        if (result.error) {
+          reject(result.error);
+          return;
+        } else if (typeof result.response !== 'object') {
+          reject('userFunction must return an object');
+          return;
         } else {
-          reject('User functions must return an object to be merged into msg');
+          resolve(result.response as Record<string, unknown>);
         }
       });
     } else {
       resolve({
-        ...msg,
         error: 'inputs.userFunction either doesnt exist or is not a string',
       });
     }

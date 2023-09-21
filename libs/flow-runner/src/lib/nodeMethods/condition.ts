@@ -8,7 +8,6 @@ export function condition({
 }: IMethodArguments): Promise<Record<string, unknown>> {
   return new Promise((resolve, reject) => {
     try {
-      console.log('🚦 condition called', { msg });
       if (!inputs?.location && typeof inputs?.location !== 'string') {
         resolve({
           error: `location must exist and be a string`,

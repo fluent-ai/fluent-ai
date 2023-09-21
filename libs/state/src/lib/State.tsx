@@ -15,7 +15,6 @@ export const store = configureStore({
     [FLOW_RUNNER_FEATURE_KEY]: flowRunnerReducer,
     [SUPABASE_FEATURE_KEY]: supabaseReducer,
     [FLOW_FEATURE_KEY]: flowReducer,
-    
   },
   // Additional middleware can be passed to this array
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),

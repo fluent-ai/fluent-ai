@@ -5,9 +5,7 @@ const TooltipComponent = (props: ITooltipProps) => {
   return (
     <Tooltip.Provider>
       <Tooltip.Root>
-        <Tooltip.Trigger asChild>
-          {props.children}
-        </Tooltip.Trigger>
+        <Tooltip.Trigger asChild>{props.children}</Tooltip.Trigger>
         <Tooltip.Portal>
           <Tooltip.Content
             className="border border-gray-200 shadow-md p-2 text-sm text-black bg-white rounded-lg select-none z-20"

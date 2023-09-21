@@ -42,7 +42,12 @@ export const flowAdapter = createEntityAdapter<FlowEntity>();
 
 export const initialFlowState: FlowState = flowAdapter.getInitialState({
   id: uuidv4(),
-  displayName: 'My Flow',
+  displayName: `New Flow - ${new Date().toLocaleString('en-US', {
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  })}`,
   nodes: [],
   edges: [],
   inputs: [],

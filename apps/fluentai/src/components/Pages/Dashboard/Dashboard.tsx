@@ -20,8 +20,11 @@ import {
   flowRunnerActions,
   flowActions,
   flowSelectors,
+  generalSelectors,
+  generalActions,
 } from '@tool-ai/state';
 import { useFlowRunner } from '@tool-ai/flow-runner';
+import { useRemoteRunner } from '@tool-ai/remote-runner';
 import { NodeData } from '../../../nodeData';
 import { NodeDialogComponent } from '@tool-ai/ui';
 
@@ -38,10 +41,8 @@ const nodeTypes = {
   dalleGeneration: TemplateNode,
   dalleVariation: TemplateNode,
   download: TemplateNode,
-  localhost: TemplateNode,
+  remoterunner: TemplateNode,
 };
-
-
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -51,33 +52,56 @@ const Dashboard = () => {
   const edges = useSelector(flowSelectors.getEdges);
   const inputs = useSelector(flowSelectors.getInputs);
 
-
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
   // --------------------------------------     Hooks & State - Flow Runner   --------------------------------------
   const { executeFlow, outputs, states } = useFlowRunner();
+  // --------------------------------------     Hooks & State - Remote Code Runner   --------------------------------------
+  const remoteRunnerEnabled = useSelector(
+    generalSelectors.getRemoteRunnerEnabled
+  );
+  const remoteRunnerConnectionState = useSelector(
+    generalSelectors.getRemoteRunnerStatus
+  );
+  const remoteRunnerIp = useSelector(generalSelectors.getRemoteRunnerIp);
+  const remoteRunnerPort = useSelector(generalSelectors.getRemoteRunnerPort);
+  const remoteRunner = useRemoteRunner({
+    host: '127.0.0.1',
+    port: 8080,
+    initialReconnectDelay: 1000,
+    maxReconnectDelay: 10000,
+    retryLimit: 20,
+  });
+  useEffect(() => {
+    remoteRunner.setUrl(`ws://${remoteRunnerIp}:${remoteRunnerPort}`);
+    remoteRunner.setEnabled(remoteRunnerEnabled);
+  }, [remoteRunner, remoteRunnerEnabled, remoteRunnerIp, remoteRunnerPort]);
+  useEffect(() => {
+    dispatch(
+      generalActions.setRemoteRunnerStatus(remoteRunner.connectionState.status)
+    );
+  }, [remoteRunner, dispatch, remoteRunnerConnectionState]);
 
   // ------------------------------------------------     React Flow     --------------------------------------------
   // React Flow Events
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => {
       dispatch(flowActions.applyNodeChanges(changes));
-      const primary = changes.find((change) => change.type === 'select' && change.selected) as NodeSelectionChange;
-      if(primary) {
-        dispatch(flowActions.setIsDialogOpen(true))
-        dispatch(flowActions.setActiveNodeId(primary.id))
+      const primary = changes.find(
+        (change) => change.type === 'select' && change.selected
+      ) as NodeSelectionChange;
+      if (primary) {
+        dispatch(flowActions.setIsDialogOpen(true));
+        dispatch(flowActions.setActiveNodeId(primary.id));
       }
-    }
-    ,
+    },
     [dispatch]
   );
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
       dispatch(flowActions.applyEdgeChanges(changes));
-    }
-    ,
+    },
     [dispatch]
   );
-
 
   const onConnect = useCallback(
     (params: any) => dispatch(flowActions.addEdge(params)),
@@ -95,7 +119,6 @@ const Dashboard = () => {
       const reactFlowBounds =
         reactFlowWrapper?.current?.getBoundingClientRect();
       const type = event.dataTransfer.getData('application/reactflow');
-      // check if the dropped element is valid
       if (typeof type === 'undefined' || !type) {
         return;
       }
@@ -106,11 +129,11 @@ const Dashboard = () => {
       const getData = (type: string) => {
         const item = NodeData.find((nodeItem) => nodeItem.type === type);
         if (item)
-        return {
-          type: item.type,
-          label:item.label,
-          group:item.group
-        };
+          return {
+            type: item.type,
+            label: item.label,
+            group: item.group,
+          };
       };
 
       const newNode = {
@@ -137,44 +160,43 @@ const Dashboard = () => {
       flow: { nodes, edges },
       inputs,
       globals: {},
+      context: { remoteRunner },
     });
   }
   return (
     <>
-      <Header/>
-      <div
-        className="relative flex flex-col grow h-full md:flex-row"
-      >
+      <Header />
+      <div className="relative flex flex-col grow h-full md:flex-row">
         <ReactFlowProvider>
-          <NodeSideBar runFlow={runFlow}/>
-            <div
-              className="flex-grow h-screen w-screen relative z-0"
-              ref={reactFlowWrapper}
+          <NodeSideBar runFlow={runFlow} />
+          <div
+            className="flex-grow h-screen w-screen relative z-0"
+            ref={reactFlowWrapper}
+          >
+            <ReactFlow
+              onInit={setReactFlowInstance}
+              nodes={nodes}
+              edges={edges}
+              onNodesChange={onNodesChange}
+              onEdgesChange={onEdgesChange}
+              onNodesDelete={() => dispatch(flowActions.setIsDialogOpen(false))}
+              onConnect={onConnect}
+              onDrop={onDrop}
+              selectionOnDrag
+              onDragOver={onDragOver}
+              nodeTypes={nodeTypes}
+              fitView
+              defaultViewport={{ x: 0, y: 0, zoom: -2 }}
             >
-              <ReactFlow
-                  onInit={setReactFlowInstance}
-                  nodes={nodes}
-                  edges={edges}
-                  onNodesChange={onNodesChange}
-                  onEdgesChange={onEdgesChange}
-                  onNodesDelete={() => dispatch(flowActions.setIsDialogOpen(false))}
-                  onConnect={onConnect}
-                  onDrop={onDrop}
-                  selectionOnDrag
-                  onDragOver={onDragOver}
-                  nodeTypes={nodeTypes}
-                  fitView
-                  defaultViewport={{ x: 0, y: 0, zoom: -2 }}
-              >
-                  <Background
-                  variant={'dots' as BackgroundVariant}
-                  gap={12}
-                  size={1}
-                  />
-                  <Controls position="bottom-right" />
-              </ReactFlow>
-            </div>
-            <NodeDialogComponent />
+              <Background
+                variant={'dots' as BackgroundVariant}
+                gap={12}
+                size={1}
+              />
+              <Controls position="bottom-right" />
+            </ReactFlow>
+          </div>
+          <NodeDialogComponent />
         </ReactFlowProvider>
       </div>
     </>
