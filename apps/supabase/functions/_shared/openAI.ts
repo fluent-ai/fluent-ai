@@ -30,7 +30,5 @@ export async function openAi(params = {}) {
 
   const data = await response.json();
 
-  console.log('🤙 raw response', data);
-
   return data;
 }

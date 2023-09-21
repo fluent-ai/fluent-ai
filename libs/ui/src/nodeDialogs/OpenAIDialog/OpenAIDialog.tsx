@@ -70,7 +70,6 @@ function OpenAIDialog({ nodeId }: { nodeId: string }) {
           options={modes}
           value={mode}
           onChange={(value) => {
-            console.log('change', value);
             dispatch(
               flowActions.setInput({
                 id: nodeId,

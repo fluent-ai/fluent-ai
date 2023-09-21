@@ -12,12 +12,6 @@ export function textInput({
   msg,
 }: IMethodArguments<IInputs>): Promise<Record<string, unknown>> {
   return new Promise((resolve) => {
-    console.log('📝 textInput called', {
-      globals,
-      inputs,
-      msg,
-    });
-
     const { input, pathMode, path } = inputs ?? {};
 
     // Check for valid input
@@ -31,8 +25,6 @@ export function textInput({
 
     // For 'path' mode
     if (pathMode === 'custom') {
-      console.log('📝 textInput custom mode called');
-
       // Check for valid path
       if (!path || typeof path !== 'string') {
         resolve({

@@ -14,7 +14,6 @@ export function remoterunner({
       typeof useRemoteRunner
     >;
     const client = remoteRunner?.client.current;
-    console.log('🔌 remoterunner', { client });
 
     if (!client || client?.readyState !== client.OPEN) {
       reject(
@@ -23,14 +22,10 @@ export function remoterunner({
       return;
     }
     try {
-      console.log('🔌 remoterunner called', { msg, inputs });
       const id = uuidv4();
-      console.log(`call id is ${id}`);
 
       const send = (settings: Record<string, unknown>) => {
         console.log(`🔌 Sending`, { settings });
-        console.log({ client });
-
         client.send(
           JSON.stringify({
             id,

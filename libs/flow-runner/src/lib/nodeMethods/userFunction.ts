@@ -30,7 +30,6 @@ async function runUserScript(
       `return (async function(){ ${userScript} })();`
     );
   } catch (error) {
-    console.log('🚨 Error parsing user script', error);
     return { error: 'Error parsing user script\n' + error };
   }
 
@@ -45,7 +44,6 @@ async function runUserScript(
       // Prevent the default handler from running
       event.preventDefault();
       // Now, we can handle it:
-      console.log('🚨 Unhandled promise rejection', event.reason);
       response = { error: 'Error running user script\n' + event.reason };
     };
 
@@ -58,7 +56,6 @@ async function runUserScript(
     // Restore the original handler
     window.onunhandledrejection = originalHandler;
   } catch (error) {
-    console.log('🚨 Error running user script', error);
     return { error: 'Error running user script\n' + error };
   }
   return { response };

@@ -50,7 +50,6 @@ function LoadDialog(props: Record<string, never>) {
     if (!flowData) {
       return;
     }
-    console.log('loadFlow', flowData);
     dispatch(flowActions.setFlow(flowData));
   };
 
@@ -82,7 +81,6 @@ function LoadDialog(props: Record<string, never>) {
     if (!userId) {
       return;
     }
-    console.log('saveFlow', currentFlow);
     supabase
       .saveFlow({
         id: currentFlow.id,

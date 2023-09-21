@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 const Header = (): JSX.Element => {
   const dispatch = useDispatch();
   function handleLogout() {
-    console.log('logout');
     dispatch(supabaseActions.logout());
     setTimeout(() => {
       window.location.reload();
@@ -25,7 +24,7 @@ const Header = (): JSX.Element => {
           .eq('user_id', user.id)
           .single();
         if (error) {
-          console.log(error);
+          console.error(error);
           return;
         }
         setCredit(data?.credit);

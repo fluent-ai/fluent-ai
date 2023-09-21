@@ -5,11 +5,8 @@ function updateNode(
   eventValue: string,
   property: string
 ) {
-  // console.log('eventValue', eventValue)
-  console.log('activeId', activeNodeId);
   return nodes.map((node) => {
     if (node.id === activeNodeId) {
-      console.log(property, eventValue, property);
       return {
         ...node,
         props: { [property]: eventValue },
@@ -29,5 +26,4 @@ export async function handleChange(
   property: string
 ) {
   await setNodes(updateNode(nodes, activeNodeId, eventValue, property));
-  console.log(updateNode(nodes, activeNodeId, eventValue, property));
 }

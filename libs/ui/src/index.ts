@@ -7,7 +7,6 @@ export * from './nodeDialogs/JsonDialog/JsonDialog';
 export * from './nodeDialogs/InputDialog/InputDialog';
 export * from './lib/TooltipComponent/TooltipComponent';
 export * from './lib/AvatarComponent/AvatarComponent';
-export * from './lib/FormFieldComponent/FormFieldComponent';
 export * from './lib/NodeDialogComponent/NodeDialogComponent';
 export * from './lib/ButtonComponent/ButtonComponent';
 export * from './lib/IconButtonComponent/IconButtonComponent';
