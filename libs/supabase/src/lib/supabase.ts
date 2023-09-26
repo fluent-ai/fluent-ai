@@ -249,33 +249,32 @@ class Supabase {
   public async saveSettings(settings: Settings): Promise<void> {
     const session = await this.getSession();
     const user_id = session.data?.session?.user?.id;
-    const { error } = await this.client.from('settings').upsert(
-      {
-        user_id,
-        settings: {
-          openAiUseOwnKey: settings.openAiUseOwnKey,
-          remoteRunnerEnabled: settings.remoteRunnerEnabled,
-          remoteRunnerIp: settings.remoteRunnerIp,
-          remoteRunnerPort: settings.remoteRunnerPort,
-        },
-        openai_key: settings.openAiKey,
+    const { error } = await this.client.from('settings').upsert({
+      user_id,
+      settings: {
+        openAiUseOwnKey: settings.openAiUseOwnKey,
+        remoteRunnerEnabled: settings.remoteRunnerEnabled,
+        remoteRunnerIp: settings.remoteRunnerIp,
+        remoteRunnerPort: settings.remoteRunnerPort,
+        openai: settings.openAiKey,
       },
-      { onConflict: 'user_id' }
-    );
+    });
     if (error) {
       console.error('Error saving settings:', error);
     }
   }
 
   public async getSettings(): Promise<Settings | null> {
-    const { data, error } = await this.client.from('settings').select('*');
+    const { data, error } = await this.client
+      .from('decrypted_settings')
+      .select('*');
     if (error) {
       console.error(`Error fetching settings:`, error);
       return null;
     } else {
       const settings = {
         ...data[0].settings,
-        openAiKey: data[0].openai_key,
+        openAiKey: data[0].settings.openai,
       };
       return settings;
     }

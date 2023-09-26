@@ -145,7 +145,7 @@ serve(async (req) => {
   try {
     const reply = {
       content: response?.choices[0].message?.content,
-      raw: response,
+      ...response,
     };
 
     console.log('🚀 Returning data', JSON.stringify(reply, null, 2));
