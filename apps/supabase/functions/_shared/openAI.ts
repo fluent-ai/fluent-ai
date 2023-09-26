@@ -4,7 +4,8 @@ export async function openAi(params = {}) {
     model: 'gpt-3.5-turbo',
     temperature: 0.7,
     max_tokens: 1024,
-    top_p: 1,
+    // top_p: 1,
+    temperature: 1.5,
     frequency_penalty: 0,
     presence_penalty: 0,
   };

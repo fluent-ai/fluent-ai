@@ -29,25 +29,37 @@ export interface IFlowRunnerStates {
   error?: string;
 }
 
+type DeepPartial<T> = {
+  [P in keyof T]?: DeepPartial<T[P]>;
+};
+
+interface Context {
+  remoteRunner: unknown;
+  openAi: {
+    key: string;
+    useOwnKey: boolean;
+  };
+}
+
 export interface IMethodArguments<TInputs = Record<string, unknown>> {
   globals?: Record<string, unknown>;
   inputs?: TInputs;
   msg: Record<string, unknown>;
-  context?: Record<string, unknown>;
+  context?: DeepPartial<Context>;
 }
 
 export interface IExecuteFlowArguments {
   flow: IFlow;
   inputs: IFlowRunnerInputs[];
   globals: Record<string, unknown>;
-  context: Record<string, unknown>;
+  context?: DeepPartial<Context>;
 }
 
 export interface IExecuteBranchArguments {
   flow: IFlow;
   inputs: IFlowRunnerInputs[];
   globals: Record<string, unknown>;
-  context: Record<string, unknown>;
+  context?: DeepPartial<Context>;
   msg: Record<string, unknown>;
   nodeId: string;
 }
@@ -59,7 +71,7 @@ interface IExecuteNodeArguments {
   globals: Record<string, unknown>;
   inputs: IFlowRunnerInputs[];
   msg: Record<string, unknown>;
-  context: Record<string, unknown>;
+  context?: DeepPartial<Context>;
 }
 
 // structuredClone pollyfill for Jest
