@@ -1,3 +1,4 @@
+//TODO: this really needs to be a hook...
 import {
   createClient,
   SupabaseClient,
@@ -25,6 +26,14 @@ interface FlowInflated extends FlowReference {
     nodeInputs: Record<string, unknown>;
   }[];
   globals: Record<string, unknown>;
+}
+
+export interface Settings {
+  openAiUseOwnKey: boolean;
+  openAiKey: string;
+  remoteRunnerEnabled: boolean;
+  remoteRunnerIp: string;
+  remoteRunnerPort: number;
 }
 
 class Supabase {
@@ -234,6 +243,40 @@ class Supabase {
     } else {
       this.flowsDeflated = this.flowsDeflated.filter((flow) => flow.id !== id);
       await this.updateFlows();
+    }
+  }
+
+  public async saveSettings(settings: Settings): Promise<void> {
+    const session = await this.getSession();
+    const user_id = session.data?.session?.user?.id;
+    const { error } = await this.client.from('settings').upsert({
+      user_id,
+      settings: {
+        openAiUseOwnKey: settings.openAiUseOwnKey,
+        remoteRunnerEnabled: settings.remoteRunnerEnabled,
+        remoteRunnerIp: settings.remoteRunnerIp,
+        remoteRunnerPort: settings.remoteRunnerPort,
+        openai: settings.openAiKey,
+      },
+    });
+    if (error) {
+      console.error('Error saving settings:', error);
+    }
+  }
+
+  public async getSettings(): Promise<Settings | null> {
+    const { data, error } = await this.client
+      .from('decrypted_settings')
+      .select('*');
+    if (error) {
+      console.error(`Error fetching settings:`, error);
+      return null;
+    } else {
+      const settings = {
+        ...data[0].settings,
+        openAiKey: data[0].settings.openai,
+      };
+      return settings;
     }
   }
 }

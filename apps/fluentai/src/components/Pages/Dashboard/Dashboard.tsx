@@ -55,6 +55,8 @@ const Dashboard = () => {
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
   // --------------------------------------     Hooks & State - Flow Runner   --------------------------------------
   const { executeFlow, outputs, states } = useFlowRunner();
+  const openAiUseOwnKey = useSelector(generalSelectors.getOpenAiUseOwnKey);
+  const openAiKey = useSelector(generalSelectors.getOpenAiKey);
   // --------------------------------------     Hooks & State - Remote Code Runner   --------------------------------------
   const remoteRunnerEnabled = useSelector(
     generalSelectors.getRemoteRunnerEnabled
@@ -160,7 +162,10 @@ const Dashboard = () => {
       flow: { nodes, edges },
       inputs,
       globals: {},
-      context: { remoteRunner },
+      context: {
+        remoteRunner,
+        openAi: { key: openAiKey, useOwnKey: openAiUseOwnKey },
+      },
     });
   }
   return (

@@ -5,6 +5,7 @@ import {
   createSlice,
   PayloadAction,
 } from '@reduxjs/toolkit';
+import { getFips } from 'crypto';
 
 export const GENERAL_FEATURE_KEY = 'general';
 
@@ -15,6 +16,10 @@ export interface GeneralState {
     status: 'disconnected' | 'connecting' | 'connected' | 'error';
     ip: string;
     port: number;
+  };
+  openAi: {
+    useOwnKey: boolean;
+    key: string;
   };
 }
 
@@ -28,6 +33,10 @@ export const initialGeneralState: GeneralState = generalAdapter.getInitialState(
       status: 'disconnected',
       ip: '127.0.0.1',
       port: 8080,
+    },
+    openAi: {
+      useOwnKey: false,
+      key: '',
     },
   }
 );
@@ -53,6 +62,12 @@ export const generalSlice = createSlice({
     },
     setRemoteRunnerPort: (state, action: PayloadAction<number>) => {
       state.remoteRunner.port = action.payload;
+    },
+    setOpenAiUseOwnKey: (state, action: PayloadAction<boolean>) => {
+      state.openAi.useOwnKey = action.payload;
+    },
+    setOpenAiKey: (state, action: PayloadAction<string>) => {
+      state.openAi.key = action.payload;
     },
   },
 });
@@ -83,6 +98,14 @@ const getRemoteRunner = createSelector(
   getGeneralState,
   (state) => state.remoteRunner
 );
+const getOpenAiUseOwnKey = createSelector(
+  getGeneralState,
+  (state) => state.openAi.useOwnKey
+);
+const getOpenAiKey = createSelector(
+  getGeneralState,
+  (state) => state.openAi.key
+);
 
 export const generalSelectors = {
   getId,
@@ -91,4 +114,6 @@ export const generalSelectors = {
   getRemoteRunnerIp,
   getRemoteRunnerPort,
   getRemoteRunner,
+  getOpenAiUseOwnKey,
+  getOpenAiKey,
 };
