@@ -74,7 +74,7 @@ const Dashboard = () => {
     retryLimit: 20,
   });
   useEffect(() => {
-    remoteRunner.setUrl(`ws://${remoteRunnerIp}:${remoteRunnerPort}`);
+    remoteRunner.setUrl(`wss://${remoteRunnerIp}:${remoteRunnerPort}`);
     remoteRunner.setEnabled(remoteRunnerEnabled);
   }, [remoteRunner, remoteRunnerEnabled, remoteRunnerIp, remoteRunnerPort]);
   useEffect(() => {
