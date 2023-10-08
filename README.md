@@ -1,84 +1,59 @@
 # fluentAI
 
-A highly customizable AI-powered automation tool using flowchart methodology
+A low code / no code tool for automating interactions with large language models. Check it out over at [fluentAI.io](http://fluentai.io),
 
-## Demo of the App
+![demo video](./demo.gif)
 
-Run `nx serve fluentai` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
+## Stack
 
-[Full Demo on YouTube](https://youtu.be/1iVAP0cKqBk)
+We're using a NX Monorepo to encourage breaking code out as libraries. The core application is `apps/fleuntai`
 
-## Installation
+For auth and db were using Supabase.
 
-### NX Monorepo
+The app is serverless, calling supabase edge functions for traditional backend tasks. The supabase code is in the apps/supabase project
 
-The repository is built with [NX Monorepo](https://nx.dev/). In order to run the app locally, you need to install `NX` globally and run `NX commands` or install the VS Code extension [NX Console](https://marketplace.visualstudio.com/items?itemName=nrwl.angular-console) and serve the app from there.
+For testing stuff out your're welcome to use our openAI key, called via supabase edge functions. Each new account gets 20c credit on creation. However as stripe billing is still in the works you can use your own API key via the un app settings.
 
-### Understand the NX workspace
+The UI built using ReactFlow for the workflows and Radix for components.
 
-Run `nx graph` to see a diagram of the dependencies of the projects.
+## Structure
 
-### Firebase
+The UI is made up of two main parts. The flow builder uses ReactFlow and controls and dialogs use RadixUI.
 
-This app uses `Firebase authentication` and `Firestore Database`. In order to run the app locally, you need to create a `Firebase` project and link your credentials to your workspace. [Check the documentation](https://firebase.google.com/) in order to setup your `Firebase` project.
+To keep things scalable and avoid server costs fluent executes user flows in browser.
 
-### Environment Variables
+The architecture adopts a similar paradigm to Node-Red, where each node manipulates a msg object and passes it along.
 
-In order to authenticate for cloud services, you will need to specify API keys that associate with your account. We used services from Firebase and OpenAI.
-Your `.env` file should be in your root folder and will have to look like this:
+ReactFlow provides a non-hierarchical flat array of nodes. To execute the flow, edges are first used to build a relationship graph. Nodes without an upstream connection serve as roots, while downstream nodes form branching trees.
 
-| ENVIRONMENT VARIABLE   | VALUE                    |
-| ---------------------- | ------------------------ |
-| NX_FIREBASE_KEY        | your_firebase_auth_key   |
-| NX_FIREBASE_DOMAIN     | your_firebase_domain     |
-| NX_FIREBASE_PROJECT_ID | your_firebase_project_id |
-| NX_FIREBASE_SENDER_ID  | your_firebase_sender_id  |
-| NX_FIREBASE_APP_ID     | your_firebase_app_id     |
-| NX_OPENAI_API_KEY      | your_openai_api_key      |
+> follow along in [useFlowRunner.tsx](https://github.com/fluent-ai/fluent-ai/blob/development/libs/flow-runner/src/lib/useFlowRunner.tsx)
 
-Note that because we are developing in an NX environment, which is why we will have to follow [NX's guidelines](https://nx.dev/recipes/environment-variables/define-environment-variables) on how it reads environment variables.
+Nodes are structured as promise wrapped modular code. Special care is taken to catch errors and report them to the UI, because as a kind of IDE, we should report errors to the user and not actually fire an exception.
 
-## Serve the app locally
+Once built a promise chain traverses the trees and is considered done when all promises are settled.
 
-### Development server
+Each node is executed with:
 
-Run `nx serve toolai` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
+- the incoming msg object
+- its settings / inputs from the UI
+- a shared global scope
+- a context for plugins like the remote code runner
 
-### Remote caching
+## Next steps
 
-Run `npx nx connect-to-nx-cloud` to enable [remote caching](https://nx.app) and make CI faster.
+### Simplifying the UX for interacting with openAI
 
-### Live Collaboration
+As a proof of concept providing functions to an agent works. However manually building the call is overly complex. Ideally functions should be automatically added to the call. A smart paradigm is needed to route the chain without putting the onus on the user to deal with routing.
 
-To enable live collaboration, run `npm run start-socket` to start a websocket connection. You will be able to simultaneously collaborate with multiple users that share the same board.
+### Migrating to an event based architecture.
 
-## API Reference
+Promise chains are great for simple flows, but limit the flow to synchronous execution. Moving to an event based model would make sense. Instead of an execution graph, maybe downstream nodes subscribe to event emitters on upstream nodes.
 
-### React Flow
+### More modular nodes
 
-[Check out the documentation](https://reactflow.dev/)
+At the moment, nodes have code in multiple places. The UI code lives in the UI library and the execution code lives within the flowRunner.
+Ideally nodes should be centrally described.
 
-### AI tools
+## Running locally
 
-- [ChatGPT](https://openai.com/blog/chatgpt)
-- [Dall-E](https://openai.com/product/dall-e-2)
-- [DeepL](https://www.deepl.com/docs-api)
-
-### Functional Flow Components
-
-These Nodes are built to fulfill fundamental tasks that deal with data flows and user input:
-
-- JSON reader
-- File Input
-- User Functions
-- Template
-- Text Input
-- Preview
-- Download
-
-## Authors
-
-- [Aina Perez Serra](https://github.com/ainaperez)
-- [Tarik Azale](https://github.com/Deftool66)
-- [Theron Burger](https://github.com/theronburger)
-- [Julien Look](https://www.github.com/juice1000)
+Run `nx serve fluentai` for a dev server.
